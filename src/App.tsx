@@ -10,6 +10,14 @@ import InstructorProfile from "./pages/InstructorProfile";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
+import { HostProvider } from "./contexts/HostContext";
+
+// Host Portal Pages
+import HostLogin from "./pages/host/HostLogin";
+import HostRegister from "./pages/host/HostRegister";
+import HostDashboard from "./pages/host/HostDashboard";
+import HostRetreats from "./pages/host/HostRetreats";
+import HostSpaces from "./pages/host/HostSpaces";
 
 const queryClient = new QueryClient();
 
@@ -19,15 +27,26 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/retreat/:id" element={<RetreatDetails />} />
-          <Route path="/instructor/:id" element={<InstructorProfile />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <HostProvider>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Index />} />
+            <Route path="/retreat/:id" element={<RetreatDetails />} />
+            <Route path="/instructor/:id" element={<InstructorProfile />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            
+            {/* Host Portal Routes */}
+            <Route path="/host/login" element={<HostLogin />} />
+            <Route path="/host/register" element={<HostRegister />} />
+            <Route path="/host/dashboard" element={<HostDashboard />} />
+            <Route path="/host/retreats" element={<HostRetreats />} />
+            <Route path="/host/spaces" element={<HostSpaces />} />
+            
+            {/* Catch-all Route */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </HostProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
