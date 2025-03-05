@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -77,10 +77,12 @@ const Header = () => {
           >
             Instructors
           </NavLink>
-          <Button size="sm" variant="outline" className="ml-4">
-            Sign In
+          <Button size="sm" variant="outline" asChild className="ml-4">
+            <Link to="/login">Sign In</Link>
           </Button>
-          <Button size="sm">Join Sanghos</Button>
+          <Button size="sm" asChild>
+            <Link to="/signup">Join Sanghos</Link>
+          </Button>
         </nav>
 
         {/* Mobile Menu Button */}
@@ -135,11 +137,11 @@ const Header = () => {
             Instructors
           </NavLink>
           <div className="flex flex-col space-y-4 pt-4">
-            <Button variant="outline" className="w-full">
-              Sign In
+            <Button variant="outline" asChild className="w-full">
+              <Link to="/login">Sign In</Link>
             </Button>
-            <Button className="w-full">
-              Join Sanghos
+            <Button asChild className="w-full">
+              <Link to="/signup">Join Sanghos</Link>
             </Button>
           </div>
         </nav>
