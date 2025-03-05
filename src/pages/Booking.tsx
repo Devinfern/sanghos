@@ -51,14 +51,14 @@ const Booking = () => {
 
   const validateStep1 = () => {
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
-      toast.error("Please fill in all required fields");
+      toast({ variant: "destructive", title: "Error", description: "Please fill in all required fields" });
       return false;
     }
     
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      toast.error("Please enter a valid email address");
+      toast({ variant: "destructive", title: "Error", description: "Please enter a valid email address" });
       return false;
     }
     
@@ -84,7 +84,7 @@ const Booking = () => {
     setTimeout(() => {
       setIsSubmitting(false);
       navigate(`/booking-confirmation/${id}`);
-      toast.success("Your booking has been confirmed!");
+      toast({ title: "Success", description: "Your booking has been confirmed!" });
     }, 1500);
   };
 

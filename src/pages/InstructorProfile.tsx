@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { Calendar, ArrowRight } from "lucide-react";
+import { Calendar, ArrowLeft, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -10,6 +10,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import RetreatCard from "@/components/RetreatCard";
 import { instructors, retreats } from "@/lib/data";
+import { cn } from "@/lib/utils";
 
 const InstructorProfile = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,7 +22,7 @@ const InstructorProfile = () => {
 
   useEffect(() => {
     if (!instructor) {
-      navigate("/instructors");
+      navigate("/");
       return;
     }
 
@@ -45,10 +46,21 @@ const InstructorProfile = () => {
 
       <main className="pt-24 pb-16">
         <div className="container px-4 md:px-6">
+          {/* Back Button */}
+          <div className="mb-6">
+            <Button asChild variant="ghost" size="sm" className="group">
+              <Link to="/">
+                <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
+                Back to Home
+              </Link>
+            </Button>
+          </div>
+
           <div 
-            className={`grid grid-cols-1 lg:grid-cols-3 gap-12 transition-opacity duration-700 ${
+            className={cn(
+              "grid grid-cols-1 lg:grid-cols-3 gap-12 transition-opacity duration-700",
               isLoaded ? "opacity-100" : "opacity-0"
-            }`}
+            )}
           >
             {/* Instructor Info */}
             <div className="lg:col-span-1">
@@ -80,13 +92,6 @@ const InstructorProfile = () => {
                     <span className="font-medium">{instructor.yearsExperience}+</span> years experience
                   </div>
                 </div>
-
-                <Button className="w-full" asChild>
-                  <Link to={`/contact?instructor=${instructor.id}`} className="group">
-                    Contact {instructor.name.split(' ')[0]}
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Link>
-                </Button>
               </div>
             </div>
 
@@ -118,7 +123,7 @@ const InstructorProfile = () => {
                       {instructor.name} doesn't have any scheduled retreats at the moment.
                     </p>
                     <Button variant="outline" asChild>
-                      <Link to="/retreats">Browse Other Retreats</Link>
+                      <Link to="/">Browse Other Retreats</Link>
                     </Button>
                   </div>
                 )}
