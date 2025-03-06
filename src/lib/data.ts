@@ -34,143 +34,118 @@ export type Retreat = {
   featured: boolean;
 };
 
+// This is where you modify the data with your own instructors
 export const instructors: Instructor[] = [
   {
     id: "inst-1",
-    name: "Maya Johnson",
-    title: "Yoga Therapist & Meditation Guide",
-    bio: "Maya has been teaching yoga and meditation for over 15 years. Her approach combines traditional yogic practices with modern therapeutic techniques, creating a unique experience that nurtures both body and mind. She specializes in helping individuals navigate stress and anxiety through mindful movement and breath.",
-    specialties: ["Hatha Yoga", "Meditation", "Stress Reduction", "Breathwork"],
-    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-    yearsExperience: 15
+    name: "Emily Rodriguez",
+    title: "Mindfulness Coach & Yoga Instructor",
+    bio: "Emily has been practicing mindfulness meditation and yoga for over 12 years. She combines traditional yogic teachings with modern psychological approaches to help students develop greater self-awareness and inner calm.",
+    specialties: ["Vinyasa Yoga", "Mindfulness Meditation", "Stress Reduction", "Corporate Wellness"],
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+    yearsExperience: 12
   },
   {
     id: "inst-2",
-    name: "David Chen",
-    title: "Breathwork Specialist & Sound Healer",
-    bio: "David discovered the transformative power of breathwork during his own healing journey. Now, he guides others through profound breathing experiences combined with sound healing. His sessions are known for creating deep states of relaxation and emotional release.",
-    specialties: ["Pranayama", "Sound Baths", "Wim Hof Method", "Meditation"],
-    image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07",
+    name: "Marcus Johnson",
+    title: "Sound Healer & Breathwork Facilitator",
+    bio: "Marcus discovered sound healing during his journey recovering from burnout. He now combines therapeutic sound practices with breathwork techniques to create deeply restorative experiences for participants at all levels.",
+    specialties: ["Sound Baths", "Breathwork", "Stress Release", "Gong Meditation"],
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
     yearsExperience: 8
   },
   {
     id: "inst-3",
-    name: "Sarah Williams",
-    title: "Mindfulness Coach & Forest Therapy Guide",
-    bio: "Sarah combines her background in psychology with certified training in mindfulness and forest therapy. Her retreats emphasize the healing connection between humans and nature, guiding participants to slow down and awaken their senses to the natural world.",
-    specialties: ["Forest Bathing", "Mindfulness", "Ecotherapy", "Nature Connection"],
-    image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04",
-    yearsExperience: 10
+    name: "Sophia Chang",
+    title: "Nature Connection Guide & Qigong Teacher",
+    bio: "With a background in environmental science and traditional Chinese medicine, Sophia specializes in helping people reconnect with nature through mindful practices. Her retreats focus on finding balance and energy through gentle movement and nature immersion.",
+    specialties: ["Qigong", "Nature Therapy", "Forest Bathing", "Traditional Chinese Medicine"],
+    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80",
+    yearsExperience: 15
   }
 ];
 
+// This is where you modify the data with your own retreats
 export const retreats: Retreat[] = [
   {
     id: "ret-1",
-    title: "Day of Calm: Meditation & Movement Retreat",
-    description: "Escape the hustle and immerse yourself in a day of mindful movement and guided meditation. This retreat balances gentle yoga with sitting and walking meditation practices, helping you cultivate a sense of inner peace that extends beyond the retreat day. Suitable for all levels, including beginners.",
-    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+    title: "Weekend Mindfulness Immersion",
+    description: "Disconnect from the digital world and reconnect with yourself in this rejuvenating weekend retreat. Through guided meditation, mindful movement, and nature connection practices, you'll learn practical tools to bring greater presence and peace into your everyday life.",
+    image: "https://images.unsplash.com/photo-1518002171953-a080ee817e1f",
     additionalImages: [
-      "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07",
-      "https://images.unsplash.com/photo-1721322800607-8c38375eef04"
+      "https://images.unsplash.com/photo-1510137600163-2729bc6959e4",
+      "https://images.unsplash.com/photo-1604881991720-f91add269bed"
     ],
     location: {
-      name: "Hillside Haven",
-      address: "123 Tranquil Lane",
-      city: "Berkeley",
+      name: "Cedar Ridge Retreat Center",
+      address: "142 Mountain View Road",
+      city: "Malibu",
       state: "CA",
-      description: "A modern hillside home with panoramic views of the bay. The space features floor-to-ceiling windows, a spacious deck for outdoor practice, and a peaceful garden."
+      description: "Nestled in the Santa Monica Mountains with stunning ocean views, this peaceful property features meditation gardens, hiking trails, and comfortable eco-friendly accommodations."
     },
-    instructor: instructors[0],
-    date: "2023-11-15",
-    time: "9:00 AM - 4:00 PM",
-    duration: "7 hours",
-    price: 225,
-    capacity: 12,
-    remaining: 4,
-    category: ["Meditation", "Yoga", "Mindfulness"],
-    amenities: ["Organic lunch provided", "Tea & refreshments", "Meditation cushions", "Yoga mats available"],
+    instructor: instructors[0], // Reference to Emily Rodriguez
+    date: "2023-12-08",
+    time: "5:00 PM Friday - 2:00 PM Sunday",
+    duration: "2 days",
+    price: 695,
+    capacity: 15,
+    remaining: 6,
+    category: ["Meditation", "Mindfulness", "Yoga"],
+    amenities: ["Organic meals included", "Private and shared rooms", "Hot tub", "Hiking trails", "Meditation cushions provided"],
     featured: true
   },
   {
     id: "ret-2",
-    title: "Breathe & Restore: Pranayama & Sound Bath Experience",
-    description: "This transformative day retreat focuses on the healing power of breath and sound. You'll learn powerful breathing techniques to increase vitality and reduce stress, followed by a deeply restorative sound bath experience. The day concludes with integration practices to bring these tools into your daily life.",
-    image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07",
+    title: "Sound Healing Journey",
+    description: "Experience the profound healing effects of sound vibration in this immersive day retreat. Using Tibetan singing bowls, gongs, and other instruments, Marcus will guide you through a sound journey combined with breathwork to release tension, reduce stress, and promote deep relaxation.",
+    image: "https://images.unsplash.com/photo-1578091879915-33e3a8338cde",
     additionalImages: [
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-      "https://images.unsplash.com/photo-1721322800607-8c38375eef04"
+      "https://images.unsplash.com/photo-1504417930654-1aa74d1cb4d8",
+      "https://images.unsplash.com/photo-1616897350333-fd12b303e234"
     ],
     location: {
-      name: "Redwood Retreat",
-      address: "456 Forest Way",
-      city: "Mill Valley",
+      name: "Urban Sanctuary",
+      address: "521 Oak Street",
+      city: "San Francisco",
       state: "CA",
-      description: "A secluded mid-century home nestled among redwood trees. Features include a meditation room with wooden floors, a cozy fireplace, and a private garden patio."
+      description: "A tranquil space in the heart of the city with hardwood floors, floor-to-ceiling windows, and a peaceful courtyard garden."
     },
-    instructor: instructors[1],
-    date: "2023-11-22",
-    time: "10:00 AM - 5:00 PM",
-    duration: "7 hours",
-    price: 250,
-    capacity: 10,
-    remaining: 2,
-    category: ["Breathwork", "Sound Healing", "Relaxation"],
-    amenities: ["Plant-based lunch", "Herbal teas", "Meditation cushions", "Blankets & bolsters"],
+    instructor: instructors[1], // Reference to Marcus Johnson
+    date: "2023-11-18",
+    time: "10:00 AM - 4:00 PM",
+    duration: "6 hours",
+    price: 185,
+    capacity: 20,
+    remaining: 8,
+    category: ["Sound Healing", "Breathwork", "Stress Reduction"],
+    amenities: ["Plant-based lunch", "Tea service", "Yoga mats and blankets provided", "Journal for reflection"],
     featured: true
   },
   {
     id: "ret-3",
-    title: "Forest Immersion: Nature Connection & Mindfulness Retreat",
-    description: "Connect deeply with the natural world in this forest immersion retreat. Through guided sensory activities, mindfulness practices, and gentle movement, you'll experience the healing benefits of nature connection. This retreat is perfect for those seeking to slow down and rediscover their place within the natural world.",
-    image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04",
+    title: "Forest Qigong Retreat",
+    description: "Connect with the healing energy of the forest through gentle qigong practices, guided forest bathing, and mindful awareness exercises. This retreat is perfect for anyone seeking to recharge their energy and deepen their relationship with the natural world.",
+    image: "https://images.unsplash.com/photo-1513806562344-c75007ad303d",
     additionalImages: [
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb", 
-      "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07"
+      "https://images.unsplash.com/photo-1599901860904-17e6ed7083a0",
+      "https://images.unsplash.com/photo-1636407689567-393eb213c0c4"
     ],
     location: {
-      name: "Woodland Sanctuary",
-      address: "789 Oak Drive",
-      city: "Woodside",
+      name: "Redwood Sanctuary",
+      address: "789 Forest Way",
+      city: "Santa Cruz",
       state: "CA",
-      description: "A rustic-modern home surrounded by oak and madrone trees. Featuring a wraparound deck with forest views, a spacious living area with a vaulted ceiling, and direct access to hiking trails."
+      description: "A serene property surrounded by ancient redwood trees with meandering paths, a flowing creek, and a spacious indoor practice space with forest views."
     },
-    instructor: instructors[2],
-    date: "2023-12-03",
-    time: "9:30 AM - 4:30 PM",
-    duration: "7 hours",
+    instructor: instructors[2], // Reference to Sophia Chang
+    date: "2023-12-02",
+    time: "9:00 AM - 5:00 PM",
+    duration: "8 hours",
     price: 210,
-    capacity: 8,
-    remaining: 3,
-    category: ["Nature Connection", "Forest Therapy", "Mindfulness"],
-    amenities: ["Local, seasonal lunch", "Wildcrafted teas", "Journal materials", "Rain gear if needed"],
-    featured: false
-  },
-  {
-    id: "ret-4",
-    title: "Inner Balance: Yoga & Meditation Day Retreat",
-    description: "Find your inner balance through a day of harmonizing yoga and meditation practices. This retreat offers a blend of dynamic and restorative yoga, complemented by guided meditations that foster self-awareness and inner peace. Suitable for yoga practitioners of all levels.",
-    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-    additionalImages: [
-      "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07",
-      "https://images.unsplash.com/photo-1721322800607-8c38375eef04"
-    ],
-    location: {
-      name: "Bayview Studio",
-      address: "101 Marina Boulevard",
-      city: "Sausalito",
-      state: "CA",
-      description: "A light-filled contemporary home with stunning bay views. Features include a spacious practice room with hardwood floors, an outdoor deck, and a peaceful meditation garden."
-    },
-    instructor: instructors[0],
-    date: "2023-12-10",
-    time: "8:00 AM - 3:00 PM",
-    duration: "7 hours",
-    price: 230,
-    capacity: 15,
-    remaining: 7,
-    category: ["Yoga", "Meditation", "Wellness"],
-    amenities: ["Nutritious lunch", "Kombucha & teas", "Yoga props provided", "Journal for reflections"],
+    capacity: 12,
+    remaining: 5,
+    category: ["Qigong", "Forest Bathing", "Nature Connection"],
+    amenities: ["Local seasonal lunch", "Herbal teas", "Rain gear if needed", "Qigong props provided"],
     featured: false
   }
 ];
