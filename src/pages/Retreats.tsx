@@ -84,13 +84,13 @@ const Retreats = () => {
             <div>
               <Select 
                 value={selectedCategory || ""} 
-                onValueChange={(value) => setSelectedCategory(value || null)}
+                onValueChange={(value) => setSelectedCategory(value === "all" ? null : value)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Filter by category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Categories</SelectItem>
+                  <SelectItem value="all">All Categories</SelectItem>
                   {allCategories.map(category => (
                     <SelectItem key={category} value={category}>
                       {category}
