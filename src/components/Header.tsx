@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { NavLink, useLocation, Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
@@ -21,12 +20,10 @@ const Header = () => {
 
   // Handle route changes
   useEffect(() => {
-    // Reset mobile menu and body overflow when route changes
-    if (mobileMenuOpen) {
-      setMobileMenuOpen(false);
-      document.body.style.removeProperty('overflow');
-    }
-  }, [location.pathname, mobileMenuOpen]);
+    // Close mobile menu when route changes
+    setMobileMenuOpen(false);
+    document.body.style.removeProperty('overflow');
+  }, [location.pathname]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -39,6 +36,7 @@ const Header = () => {
     const newMenuState = !mobileMenuOpen;
     setMobileMenuOpen(newMenuState);
     
+    // Set body overflow based on menu state
     if (newMenuState) {
       document.body.style.overflow = 'hidden';
     } else {
