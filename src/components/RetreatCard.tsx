@@ -1,45 +1,87 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Calendar, Users } from "lucide-react";
+import { MapPin, Calendar, Users, Clock } from "lucide-react";
 import { Retreat, formatCurrency, getRemainingText } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import OptimizedImage from "./OptimizedImage";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import EmailSignupForm from "./EmailSignupForm";
 
 interface RetreatCardProps {
   retreat: Retreat;
   index?: number;
+  comingSoon?: boolean;
 }
 
-const RetreatCard = ({ retreat, index = 0 }: RetreatCardProps) => {
+const RetreatCard = ({ retreat, index = 0, comingSoon = false }: RetreatCardProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   // Animation delay based on index
   const getAnimationDelay = () => {
     return `${100 + index * 100}ms`;
   };
 
+  // If coming soon, we'll use a Dialog instead of a Link
+  const CardWrapper = ({ children }: { children: React.ReactNode }) => {
+    if (comingSoon) {
+      return (
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger asChild>
+            <div className="cursor-pointer">{children}</div>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Get notified when available</DialogTitle>
+            </DialogHeader>
+            <EmailSignupForm 
+              retreatTitle={retreat.title} 
+              onSuccess={() => setDialogOpen(false)}
+            />
+          </DialogContent>
+        </Dialog>
+      );
+    }
+    
+    return <Link to={`/retreat/${retreat.id}`}>{children}</Link>;
+  };
+
   return (
-    <Link to={`/retreat/${retreat.id}`}>
+    <CardWrapper>
       <div
         className={cn(
-          "retreat-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300",
+          "retreat-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 relative",
           "opacity-0 animate-fade-up"
         )}
         style={{ animationDelay: getAnimationDelay() }}
       >
+        {/* Blurred overlay for coming soon */}
+        {comingSoon && (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm">
+            <div className="bg-primary/90 text-white px-4 py-2 rounded-full flex items-center mb-3">
+              <Clock className="h-4 w-4 mr-2" />
+              <span className="font-medium">Coming Soon</span>
+            </div>
+            <p className="text-sm text-center px-4">
+              Sign up to be notified when this retreat becomes available
+            </p>
+          </div>
+        )}
+
         <OptimizedImage
           src={retreat.image}
           alt={retreat.title}
           aspectRatio="video"
-          className="rounded-t-xl"
+          className={cn("rounded-t-xl", comingSoon && "filter blur-[2px]")}
           onLoad={() => setImageLoaded(true)}
         />
         
         {retreat.featured && (
           <Badge
-            className="absolute top-3 right-3 bg-primary/90 hover:bg-primary/90"
+            className="absolute top-3 right-3 bg-primary/90 hover:bg-primary/90 z-20"
             variant="default"
           >
             Featured
@@ -94,7 +136,7 @@ const RetreatCard = ({ retreat, index = 0 }: RetreatCardProps) => {
           </div>
         </div>
       </div>
-    </Link>
+    </CardWrapper>
   );
 };
 

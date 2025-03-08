@@ -34,6 +34,10 @@ const FeaturedRetreats = () => {
   }, []);
 
   const featuredRetreats = retreats.filter((retreat) => retreat.featured);
+  
+  // Mark a couple of retreats as "coming soon" for demonstration
+  // In a real app, this would come from your data source
+  const comingSoonIds = [featuredRetreats[featuredRetreats.length - 1].id];
 
   return (
     <section 
@@ -57,7 +61,12 @@ const FeaturedRetreats = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {featuredRetreats.map((retreat, index) => (
-            <RetreatCard key={retreat.id} retreat={retreat} index={index} />
+            <RetreatCard 
+              key={retreat.id} 
+              retreat={retreat} 
+              index={index} 
+              comingSoon={comingSoonIds.includes(retreat.id)}
+            />
           ))}
         </div>
 
