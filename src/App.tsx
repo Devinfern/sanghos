@@ -11,6 +11,7 @@ import RetreatDetails from "./pages/RetreatDetails";
 import InstructorProfile from "./pages/InstructorProfile";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import { HostProvider } from "./contexts/HostContext";
 
@@ -37,6 +38,7 @@ const App = () => (
             <Route path="/instructors" element={<Instructors />} />
             <Route path="/retreat/:id" element={<RetreatDetails />} />
             <Route path="/instructor/:id" element={<InstructorProfile />} />
+            <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             

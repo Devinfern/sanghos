@@ -77,6 +77,17 @@ const Header = () => {
           >
             Instructors
           </NavLink>
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              cn(
+                "text-sm font-medium transition-colors hover:text-primary",
+                isActive ? "text-primary" : "text-muted-foreground"
+              )
+            }
+          >
+            About Us
+          </NavLink>
           <Button size="sm" variant="outline" asChild className="ml-4">
             <Link to="/login">Sign In</Link>
           </Button>
@@ -135,6 +146,17 @@ const Header = () => {
             }
           >
             Instructors
+          </NavLink>
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              cn(
+                "text-lg font-medium py-2 transition-colors",
+                isActive ? "text-primary" : "text-muted-foreground"
+              )
+            }
+          >
+            About Us
           </NavLink>
           <div className="flex flex-col space-y-4 pt-4">
             <Button variant="outline" asChild className="w-full">
