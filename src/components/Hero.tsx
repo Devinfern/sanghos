@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Search, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import OptimizedImage from "./OptimizedImage";
 
 const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -26,12 +27,14 @@ const Hero = () => {
       {/* Background image with overlay */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-transparent z-10"></div>
-        <img
+        <OptimizedImage
           src="https://images.unsplash.com/photo-1506744038136-46273834b3fb"
           alt="Peaceful retreat setting"
-          className={`w-full h-full object-cover transition-all duration-1000 ${
-            isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-105"
-          }`}
+          className="w-full h-full"
+          aspectRatio="custom"
+          objectFit="cover"
+          priority={true}
+          onLoad={() => setIsLoaded(true)}
         />
       </div>
 

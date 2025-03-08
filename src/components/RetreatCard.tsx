@@ -5,6 +5,7 @@ import { MapPin, Calendar, Users } from "lucide-react";
 import { Retreat, formatCurrency, getRemainingText } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import OptimizedImage from "./OptimizedImage";
 
 interface RetreatCardProps {
   retreat: Retreat;
@@ -28,28 +29,22 @@ const RetreatCard = ({ retreat, index = 0 }: RetreatCardProps) => {
         )}
         style={{ animationDelay: getAnimationDelay() }}
       >
-        <div className="relative image-wrapper aspect-[4/3]">
-          {!imageLoaded && (
-            <div className="absolute inset-0 bg-muted loading-image rounded-t-xl" />
-          )}
-          <img
-            src={retreat.image}
-            alt={retreat.title}
-            className={cn(
-              "w-full h-full object-cover",
-              !imageLoaded && "opacity-0"
-            )}
-            onLoad={() => setImageLoaded(true)}
-          />
-          {retreat.featured && (
-            <Badge
-              className="absolute top-3 right-3 bg-primary/90 hover:bg-primary/90"
-              variant="default"
-            >
-              Featured
-            </Badge>
-          )}
-        </div>
+        <OptimizedImage
+          src={retreat.image}
+          alt={retreat.title}
+          aspectRatio="video"
+          className="rounded-t-xl"
+          onLoad={() => setImageLoaded(true)}
+        />
+        
+        {retreat.featured && (
+          <Badge
+            className="absolute top-3 right-3 bg-primary/90 hover:bg-primary/90"
+            variant="default"
+          >
+            Featured
+          </Badge>
+        )}
 
         <div className="p-5">
           <div className="flex items-center mb-2">
@@ -87,10 +82,11 @@ const RetreatCard = ({ retreat, index = 0 }: RetreatCardProps) => {
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <img
+              <OptimizedImage
                 src={retreat.instructor.image}
                 alt={retreat.instructor.name}
-                className="w-8 h-8 rounded-full object-cover"
+                className="w-8 h-8 rounded-full"
+                priority={true}
               />
               <span className="text-sm">{retreat.instructor.name}</span>
             </div>

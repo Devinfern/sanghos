@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Instructor } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import OptimizedImage from "./OptimizedImage";
 
 interface InstructorCardProps {
   instructor: Instructor;
@@ -27,20 +28,13 @@ const InstructorCard = ({ instructor, index = 0 }: InstructorCardProps) => {
         )}
         style={{ animationDelay: getAnimationDelay() }}
       >
-        <div className="relative image-wrapper aspect-square">
-          {!imageLoaded && (
-            <div className="absolute inset-0 bg-muted loading-image rounded-t-xl" />
-          )}
-          <img
-            src={instructor.image}
-            alt={instructor.name}
-            className={cn(
-              "w-full h-full object-cover",
-              !imageLoaded && "opacity-0"
-            )}
-            onLoad={() => setImageLoaded(true)}
-          />
-        </div>
+        <OptimizedImage
+          src={instructor.image}
+          alt={instructor.name}
+          aspectRatio="square"
+          className="rounded-t-xl"
+          onLoad={() => setImageLoaded(true)}
+        />
 
         <div className="p-5">
           <h3 className="text-xl font-semibold mb-1">{instructor.name}</h3>
