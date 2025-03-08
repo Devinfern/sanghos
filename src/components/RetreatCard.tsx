@@ -16,7 +16,7 @@ interface RetreatCardProps {
   comingSoon?: boolean;
 }
 
-const RetreatCard = ({ retreat, index = 0, comingSoon = false }: RetreatCardProps) => {
+const RetreatCard = ({ retreat, index = 0, comingSoon = true }: RetreatCardProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 

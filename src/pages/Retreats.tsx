@@ -120,7 +120,8 @@ const Retreats = () => {
                 <RetreatCard 
                   key={retreat.id} 
                   retreat={retreat} 
-                  index={index} 
+                  index={index}
+                  comingSoon={true}
                 />
               ))}
             </div>

@@ -34,10 +34,6 @@ const FeaturedRetreats = () => {
   }, []);
 
   const featuredRetreats = retreats.filter((retreat) => retreat.featured);
-  
-  // Mark a couple of retreats as "coming soon" for demonstration
-  // In a real app, this would come from your data source
-  const comingSoonIds = [featuredRetreats[featuredRetreats.length - 1].id];
 
   return (
     <section 
@@ -64,8 +60,8 @@ const FeaturedRetreats = () => {
             <RetreatCard 
               key={retreat.id} 
               retreat={retreat} 
-              index={index} 
-              comingSoon={comingSoonIds.includes(retreat.id)}
+              index={index}
+              comingSoon={true}
             />
           ))}
         </div>
