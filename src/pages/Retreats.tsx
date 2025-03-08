@@ -1,61 +1,59 @@
 
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { Search } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Search from "@/components/Search";
 import RetreatCard from "@/components/RetreatCard";
 import { retreats } from "@/lib/data";
+import { Input } from "@/components/ui/input";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+
+// Extract unique categories from retreats
+const allCategories = Array.from(
+  new Set(retreats.flatMap((retreat) => retreat.category))
+).sort();
 
 const Retreats = () => {
-  const location = useLocation();
-  const [filteredRetreats, setFilteredRetreats] = useState(retreats);
-  const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Parse search parameters
-    const searchParams = new URLSearchParams(location.search);
-    const searchQuery = searchParams.get("search") || "";
-    const categories = searchParams.getAll("category");
-
-    // Filter retreats based on search parameters
-    const filtered = retreats.filter((retreat) => {
-      // Search query filter
-      const matchesQuery =
-        searchQuery === "" ||
-        retreat.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        retreat.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        retreat.instructor.name.toLowerCase().includes(searchQuery.toLowerCase());
-
-      // Category filter
-      const matchesCategory =
-        categories.length === 0 ||
-        categories.some((category) =>
-          retreat.category.includes(category)
-        );
-
-      return matchesQuery && matchesCategory;
-    });
-
-    setFilteredRetreats(filtered);
-    
-    // Simulate loading for smooth transitions
-    setIsLoading(true);
     const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 300);
+      setIsLoaded(true);
+    }, 100);
 
     return () => clearTimeout(timer);
-  }, [location.search]);
+  }, []);
+
+  // Filter retreats based on search query and selected category
+  const filteredRetreats = retreats.filter(retreat => {
+    const matchesSearch = searchQuery === "" || 
+      retreat.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      retreat.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      retreat.location.city.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesCategory = selectedCategory === null || 
+      retreat.category.includes(selectedCategory);
+    
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <>
       <Helmet>
         <title>Retreats | Sanghos</title>
-        <meta
-          name="description"
-          content="Browse and book daylong wellness retreats in unique private spaces with expert instructors."
+        <meta 
+          name="description" 
+          content="Discover our mindfulness and wellness retreats to reconnect with yourself."
         />
       </Helmet>
 
@@ -63,61 +61,80 @@ const Retreats = () => {
 
       <main className="pt-24 pb-16">
         <div className="container px-4 md:px-6">
-          <div className="max-w-2xl mx-auto text-center mb-12">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">Discover Retreats</h1>
-            <p className="text-muted-foreground">
-              Find the perfect daylong retreat to nourish your mind, body, and soul
+          <div className="mb-12 text-center">
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">Discover Our Retreats</h1>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Explore our curated selection of mindfulness and wellness retreats designed to help you 
+              reconnect with yourself and find balance in your life.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <div className="lg:col-span-1">
-              <div className="sticky top-24">
-                <Search />
-              </div>
+          {/* Search and Filter */}
+          <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="relative md:col-span-2">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+              <Input
+                type="search"
+                placeholder="Search retreats..."
+                className="pl-10"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
-
-            <div className="lg:col-span-3">
-              {isLoading ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                  {[...Array(4)].map((_, index) => (
-                    <div
-                      key={index}
-                      className="bg-white rounded-xl overflow-hidden shadow-sm h-[400px] animate-pulse"
-                    >
-                      <div className="bg-muted h-48 w-full"></div>
-                      <div className="p-5 space-y-4">
-                        <div className="h-4 bg-muted rounded w-1/4"></div>
-                        <div className="h-6 bg-muted rounded w-3/4"></div>
-                        <div className="h-4 bg-muted rounded w-full"></div>
-                        <div className="h-4 bg-muted rounded w-full"></div>
-                        <div className="flex justify-between">
-                          <div className="h-5 bg-muted rounded w-1/3"></div>
-                          <div className="h-5 bg-muted rounded w-1/4"></div>
-                        </div>
-                      </div>
-                    </div>
+            <div>
+              <Select 
+                value={selectedCategory || ""} 
+                onValueChange={(value) => setSelectedCategory(value || null)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Filter by category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">All Categories</SelectItem>
+                  {allCategories.map(category => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
                   ))}
-                </div>
-              ) : filteredRetreats.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                  {filteredRetreats.map((retreat, index) => (
-                    <RetreatCard key={retreat.id} retreat={retreat} index={index} />
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-16">
-                  <h3 className="text-xl font-semibold mb-2">No retreats found</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Try adjusting your search or filters to find what you're looking for.
-                  </p>
-                </div>
-              )}
+                </SelectContent>
+              </Select>
             </div>
           </div>
+
+          {/* Results Count */}
+          <div className="mb-6">
+            <p className="text-muted-foreground">
+              {filteredRetreats.length} {filteredRetreats.length === 1 ? 'retreat' : 'retreats'} found
+            </p>
+          </div>
+
+          {/* Retreats Grid */}
+          {filteredRetreats.length > 0 ? (
+            <div 
+              className={cn(
+                "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-opacity duration-700",
+                isLoaded ? "opacity-100" : "opacity-0"
+              )}
+            >
+              {filteredRetreats.map((retreat, index) => (
+                <RetreatCard 
+                  key={retreat.id} 
+                  retreat={retreat} 
+                  index={index} 
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16 bg-muted/20 rounded-lg">
+              <h3 className="text-xl font-medium mb-2">No retreats found</h3>
+              <p className="text-muted-foreground mb-4">
+                Try adjusting your search or filter criteria
+              </p>
+            </div>
+          )}
         </div>
       </main>
-
+      
       <Footer />
     </>
   );
