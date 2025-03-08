@@ -19,23 +19,31 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Update the useEffect to ensure body overflow is reset when navigating
+  // Handle route changes
   useEffect(() => {
-    setMobileMenuOpen(false);
-    // Always reset body overflow when route changes
-    document.body.style.overflow = "auto";
-  }, [location.pathname]);
+    // Reset mobile menu and body overflow when route changes
+    if (mobileMenuOpen) {
+      setMobileMenuOpen(false);
+      document.body.style.removeProperty('overflow');
+    }
+  }, [location.pathname, mobileMenuOpen]);
 
-  // Also ensure overflow is reset when component unmounts
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.removeProperty('overflow');
     };
   }, []);
 
   const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-    document.body.style.overflow = !mobileMenuOpen ? "hidden" : "auto";
+    const newMenuState = !mobileMenuOpen;
+    setMobileMenuOpen(newMenuState);
+    
+    if (newMenuState) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.removeProperty('overflow');
+    }
   };
 
   return (
