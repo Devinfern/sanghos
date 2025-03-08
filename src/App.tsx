@@ -11,6 +11,7 @@ import RetreatDetails from "./pages/RetreatDetails";
 import InstructorProfile from "./pages/InstructorProfile";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import JoinNow from "./pages/JoinNow";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import { HostProvider } from "./contexts/HostContext";
@@ -41,6 +42,7 @@ const App = () => (
             <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/join" element={<JoinNow />} />
             
             {/* Host Portal Routes */}
             <Route path="/host/login" element={<HostLogin />} />

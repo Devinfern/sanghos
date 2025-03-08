@@ -92,7 +92,7 @@ const Header = () => {
             <Link to="/login">Sign In</Link>
           </Button>
           <Button size="sm" asChild>
-            <Link to="/signup">Join Sanghos</Link>
+            <Link to="/join">Join Sanghos</Link>
           </Button>
         </nav>
 
@@ -163,7 +163,7 @@ const Header = () => {
               <Link to="/login">Sign In</Link>
             </Button>
             <Button asChild className="w-full">
-              <Link to="/signup">Join Sanghos</Link>
+              <Link to="/join">Join Sanghos</Link>
             </Button>
           </div>
         </nav>
