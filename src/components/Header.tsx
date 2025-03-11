@@ -74,7 +74,9 @@ const Header = () => {
           onSignOut={handleSignOut} 
           onCommunityClick={handleCommunityClick}
         />
-        <MobileMenuToggle isOpen={mobileMenuOpen} onToggle={toggleMobileMenu} />
+        {!mobileMenuOpen && (
+          <MobileMenuToggle isOpen={mobileMenuOpen} onToggle={toggleMobileMenu} />
+        )}
       </div>
       
       <MobileNavigation 

@@ -1,5 +1,5 @@
 
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 
 interface MobileMenuToggleProps {
   isOpen: boolean;
@@ -11,9 +11,9 @@ const MobileMenuToggle = ({ isOpen, onToggle }: MobileMenuToggleProps) => {
     <button 
       onClick={onToggle} 
       className="md:hidden flex items-center"
-      aria-label={isOpen ? "Close menu" : "Open menu"}
+      aria-label="Open menu"
     >
-      {isOpen ? <X size={24} /> : <Menu size={24} />}
+      <Menu size={24} />
     </button>
   );
 };
