@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate, Link } from "react-router-dom";
@@ -22,12 +21,12 @@ import { Textarea } from "@/components/ui/textarea";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
-import { forumSpaces, forumPosts as initialPosts, forumEvents, trendingPosts } from "@/lib/forumData";
-import ForumPostEditor from "@/components/ForumPostEditor";
+import { forumSpaces, forumPosts as initialPosts, forumEvents, trendingPosts } from "@/lib/communityData";
+import CommunityPostEditor from "@/components/CommunityPostEditor";
 import ForumCMS from "@/components/ForumCMS";
-import { ForumPost } from "@/lib/forumData";
+import { ForumPost } from "@/lib/communityData";
 
-const ForumPage = () => {
+const CommunityPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [newPostContent, setNewPostContent] = useState<string>("");
@@ -57,7 +56,7 @@ const ForumPage = () => {
       }
       
       if (!mockLoggedIn) {
-        toast.error("You need to be logged in to access the forum");
+        toast.error("You need to be logged in to access the community");
         navigate("/login");
       }
     };
@@ -134,14 +133,14 @@ const ForumPage = () => {
     return (
       <>
         <Helmet>
-          <title>Forum Management | Sanghos</title>
+          <title>Community Management | Sanghos</title>
         </Helmet>
         <Header />
         <main className="pt-24 pb-16 min-h-screen bg-slate-50">
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center mb-6">
-              <h1 className="text-2xl font-bold">Forum Management</h1>
-              <Button onClick={toggleCMS}>Back to Forum</Button>
+              <h1 className="text-2xl font-bold">Community Management</h1>
+              <Button onClick={toggleCMS}>Back to Community</Button>
             </div>
             <ForumCMS />
           </div>
@@ -173,8 +172,8 @@ const ForumPage = () => {
   return (
     <>
       <Helmet>
-        <title>Community Forum | Sanghos</title>
-        <meta name="description" content="Join our community forum for discussions, events, and more" />
+        <title>Community | Sanghos</title>
+        <meta name="description" content="Join our community for discussions, events, and more" />
       </Helmet>
 
       <Header />
@@ -196,7 +195,7 @@ const ForumPage = () => {
                           {category.spaces.map((space, spaceIndex) => (
                             <Link 
                               key={spaceIndex}
-                              to={`/forum/space/${createSlug(space.name)}`}
+                              to={`/community/space/${createSlug(space.name)}`}
                               className="flex items-center justify-between rounded-md p-2 hover:bg-slate-100"
                             >
                               <div className="flex items-center">
@@ -229,7 +228,7 @@ const ForumPage = () => {
                       Manage Content
                     </Button>
                   )}
-                  <ForumPostEditor 
+                  <CommunityPostEditor 
                     onPostCreated={handleNewPostCreated}
                     buttonLabel="New post"
                   />
@@ -370,4 +369,4 @@ const ForumPage = () => {
   );
 };
 
-export default ForumPage;
+export default CommunityPage;

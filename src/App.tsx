@@ -14,8 +14,8 @@ import SignUp from "./pages/SignUp";
 import JoinNow from "./pages/JoinNow";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
-import Forum from "./pages/Forum";
-import ForumSpaceDetails from "./pages/ForumSpaceDetails";
+import Community from "./pages/Community";
+import CommunitySpaceDetails from "./pages/CommunitySpaceDetails";
 import { HostProvider } from "./contexts/HostContext";
 
 // Host Portal Pages
@@ -45,8 +45,8 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/join" element={<JoinNow />} />
-            <Route path="/forum" element={<Forum />} />
-            <Route path="/forum/space/:slug" element={<ForumSpaceDetails />} />
+            <Route path="/community" element={<Community />} />
+            <Route path="/community/space/:slug" element={<CommunitySpaceDetails />} />
             
             {/* Host Portal Routes */}
             <Route path="/host/login" element={<HostLogin />} />
