@@ -5,9 +5,9 @@ const Logo = () => {
   return (
     <Link to="/" className="flex items-center">
       <img 
-        src="/lovable-uploads/e36dbc23-7334-48c8-afe8-4027497207fe.png" 
+        src="/lovable-uploads/e38deb47-fbee-4a9f-9466-0ad53f2d7a19.png" 
         alt="Sanghos Logo" 
-        className="h-12 w-auto" // Increased from h-10 to h-12
+        className="h-12 w-auto"
       />
     </Link>
   );
