@@ -1,3 +1,4 @@
+
 // Community data types
 import { supabase } from "@/integrations/supabase/client";
 
@@ -492,11 +493,11 @@ const seedTrendingPosts = async () => {
 // Update functions to modify the data in Supabase
 export const updateForumSpaces = async (newSpaces: typeof forumSpaces) => {
   try {
-    // First, delete all existing spaces
+    // First, delete all existing spaces - fixed method that avoids using neq('id', 'dummy')
     const { error: deleteError } = await supabase
       .from('forum_spaces')
       .delete()
-      .neq('id', 'dummy'); // This is a trick to delete all rows
+      .gte('id', '00000000-0000-0000-0000-000000000000');
       
     if (deleteError) {
       console.error('Error deleting forum spaces:', deleteError);
@@ -529,6 +530,8 @@ export const updateForumSpaces = async (newSpaces: typeof forumSpaces) => {
     // Update the local variable
     forumSpaces = [...newSpaces];
     
+    console.log('Forum spaces updated successfully:', spacesToInsert.length, 'spaces inserted');
+    
     // Reload the data
     await loadForumSpaces();
   } catch (error) {
@@ -538,11 +541,11 @@ export const updateForumSpaces = async (newSpaces: typeof forumSpaces) => {
 
 export const updateForumPosts = async (newPosts: typeof forumPosts) => {
   try {
-    // First, delete all existing posts
+    // First, delete all existing posts - fixed method that avoids using neq('id', 'dummy')
     const { error: deleteError } = await supabase
       .from('forum_posts')
       .delete()
-      .neq('id', 'dummy'); // This is a trick to delete all rows
+      .gte('id', '00000000-0000-0000-0000-000000000000');
       
     if (deleteError) {
       console.error('Error deleting forum posts:', deleteError);
@@ -575,6 +578,8 @@ export const updateForumPosts = async (newPosts: typeof forumPosts) => {
     // Update the local variable
     forumPosts = [...newPosts];
     
+    console.log('Forum posts updated successfully:', postsToInsert.length, 'posts inserted');
+    
     // Reload the data
     await loadForumPosts();
   } catch (error) {
@@ -584,11 +589,11 @@ export const updateForumPosts = async (newPosts: typeof forumPosts) => {
 
 export const updateForumEvents = async (newEvents: typeof forumEvents) => {
   try {
-    // First, delete all existing events
+    // First, delete all existing events - fixed method that avoids using neq('id', 'dummy')
     const { error: deleteError } = await supabase
       .from('forum_events')
       .delete()
-      .neq('id', 'dummy'); // This is a trick to delete all rows
+      .gte('id', '00000000-0000-0000-0000-000000000000');
       
     if (deleteError) {
       console.error('Error deleting forum events:', deleteError);
@@ -615,6 +620,8 @@ export const updateForumEvents = async (newEvents: typeof forumEvents) => {
     // Update the local variable
     forumEvents = [...newEvents];
     
+    console.log('Forum events updated successfully:', eventsToInsert.length, 'events inserted');
+    
     // Reload the data
     await loadForumEvents();
   } catch (error) {
@@ -624,11 +631,11 @@ export const updateForumEvents = async (newEvents: typeof forumEvents) => {
 
 export const updateTrendingPosts = async (newTrendingPosts: typeof trendingPosts) => {
   try {
-    // First, delete all existing trending posts
+    // First, delete all existing trending posts - fixed method that avoids using neq('id', 'dummy')
     const { error: deleteError } = await supabase
       .from('trending_posts')
       .delete()
-      .neq('id', 'dummy'); // This is a trick to delete all rows
+      .gte('id', '00000000-0000-0000-0000-000000000000');
       
     if (deleteError) {
       console.error('Error deleting trending posts:', deleteError);
@@ -653,6 +660,8 @@ export const updateTrendingPosts = async (newTrendingPosts: typeof trendingPosts
     
     // Update the local variable
     trendingPosts = [...newTrendingPosts];
+    
+    console.log('Trending posts updated successfully:', postsToInsert.length, 'posts inserted');
     
     // Reload the data
     await loadTrendingPosts();
@@ -699,4 +708,3 @@ const loadAllData = async () => {
 
 // Call this function to initialize data
 loadAllData();
-
