@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { 
   MessageSquare, 
   Calendar, 
@@ -32,6 +32,7 @@ const ForumPage = () => {
   const [newPostContent, setNewPostContent] = useState<string>("");
   const [posts, setPosts] = useState<ForumPost[]>(initialPosts);
   const [showCMS, setShowCMS] = useState<boolean>(false);
+  const [currentEvents, setCurrentEvents] = useState(forumEvents);
   const navigate = useNavigate();
 
   // Check login status
@@ -50,6 +51,11 @@ const ForumPage = () => {
     
     checkLoginStatus();
   }, [navigate]);
+
+  // Update events when forumEvents changes
+  useEffect(() => {
+    setCurrentEvents(forumEvents);
+  }, [forumEvents]);
 
   const handlePostSubmit = () => {
     if (!newPostContent.trim()) {
@@ -142,6 +148,11 @@ const ForumPage = () => {
     }
   };
 
+  // Helper function to create URL-friendly slug
+  const createSlug = (text: string) => {
+    return text.toLowerCase().replace(/\s+/g, '-');
+  };
+
   return (
     <>
       <Helmet>
@@ -166,9 +177,9 @@ const ForumPage = () => {
                         <h4 className="text-sm font-medium text-muted-foreground">{category.name}</h4>
                         <div className="space-y-1">
                           {category.spaces.map((space, spaceIndex) => (
-                            <a 
+                            <Link 
                               key={spaceIndex}
-                              href="#" 
+                              to={`/forum/space/${createSlug(space.name)}`}
                               className="flex items-center justify-between rounded-md p-2 hover:bg-slate-100"
                             >
                               <div className="flex items-center">
@@ -178,7 +189,7 @@ const ForumPage = () => {
                               {space.count !== null && (
                                 <span className="text-xs text-muted-foreground">{space.count}</span>
                               )}
-                            </a>
+                            </Link>
                           ))}
                         </div>
                       </div>
@@ -295,7 +306,7 @@ const ForumPage = () => {
                     <h3 className="font-semibold">Upcoming events</h3>
                   </div>
                   <div className="divide-y">
-                    {forumEvents.map((event) => (
+                    {currentEvents.map((event) => (
                       <div key={event.id} className="p-4 flex gap-3">
                         <div className="text-center w-12">
                           <div className="text-lg font-bold">{event.date.day}</div>

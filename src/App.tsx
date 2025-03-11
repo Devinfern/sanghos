@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,6 +14,8 @@ import JoinNow from "./pages/JoinNow";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import Forum from "./pages/Forum";
+import ForumPage from "./pages/ForumPage";
+import ForumSpaceDetails from "./pages/ForumSpaceDetails";
 import { HostProvider } from "./contexts/HostContext";
 
 // Host Portal Pages
@@ -44,7 +45,8 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/join" element={<JoinNow />} />
-            <Route path="/forum" element={<Forum />} />
+            <Route path="/forum" element={<ForumPage />} />
+            <Route path="/forum/space/:slug" element={<ForumSpaceDetails />} />
             
             {/* Host Portal Routes */}
             <Route path="/host/login" element={<HostLogin />} />
