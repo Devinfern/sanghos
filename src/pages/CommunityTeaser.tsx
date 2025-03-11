@@ -6,18 +6,12 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Users, MessageCircle, Calendar, Check } from "lucide-react";
 import OptimizedImage from "@/components/OptimizedImage";
 import { Card, CardContent } from "@/components/ui/card";
-
 const CommunityTeaser = () => {
   const navigate = useNavigate();
-
-  return (
-    <>
+  return <>
       <Helmet>
         <title>Join Our Community | Sanghos</title>
-        <meta
-          name="description"
-          content="Join the Sanghos community to connect with like-minded individuals, share experiences, and deepen your wellness journey."
-        />
+        <meta name="description" content="Join the Sanghos community to connect with like-minded individuals, share experiences, and deepen your wellness journey." />
       </Helmet>
 
       <Header />
@@ -27,14 +21,7 @@ const CommunityTeaser = () => {
         <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden mb-16">
           <div className="absolute inset-0 z-0">
             <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-transparent z-10"></div>
-            <OptimizedImage
-              src="/lovable-uploads/d119458d-9251-4956-9c76-ec663432c449.png"
-              alt="Modern retreat space with pool"
-              className="w-full h-full"
-              aspectRatio="custom"
-              objectFit="cover"
-              priority={true}
-            />
+            <OptimizedImage src="/lovable-uploads/d119458d-9251-4956-9c76-ec663432c449.png" alt="Modern retreat space with pool" className="w-full h-full" aspectRatio="custom" objectFit="cover" priority={true} />
           </div>
 
           <div className="container relative z-20 px-4 md:px-6 py-16 sm:py-24">
@@ -151,28 +138,13 @@ const CommunityTeaser = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="aspect-[4/3] rounded-2xl overflow-hidden group">
-                <OptimizedImage 
-                  src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" 
-                  alt="Community retreat" 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                  aspectRatio="custom"
-                />
+                <OptimizedImage src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="Community retreat" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" aspectRatio="custom" />
               </div>
               <div className="aspect-[4/3] rounded-2xl overflow-hidden group">
-                <OptimizedImage 
-                  src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07" 
-                  alt="Group meditation" 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                  aspectRatio="custom"
-                />
+                <OptimizedImage src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07" alt="Group meditation" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" aspectRatio="custom" />
               </div>
               <div className="aspect-[4/3] rounded-2xl overflow-hidden group">
-                <OptimizedImage 
-                  src="https://images.unsplash.com/photo-1518495973542-4542c06a5843" 
-                  alt="Wellness workshop" 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                  aspectRatio="custom"
-                />
+                <OptimizedImage src="https://images.unsplash.com/photo-1518495973542-4542c06a5843" alt="Wellness workshop" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" aspectRatio="custom" />
               </div>
             </div>
           </div>
@@ -188,21 +160,14 @@ const CommunityTeaser = () => {
                 <CardContent className="p-6">
                   <div className="flex flex-col h-full">
                     <div className="mb-4 text-primary">
-                      {[...Array(5)].map((_, i) => (
-                        <span key={i} className="text-primary text-lg">★</span>
-                      ))}
+                      {[...Array(5)].map((_, i) => <span key={i} className="text-primary text-lg">★</span>)}
                     </div>
                     <p className="italic mb-6 flex-grow">
                       "Joining the Sanghos community has been transformative for my wellness journey. I've found so many like-minded individuals who support and inspire me."
                     </p>
                     <div className="flex items-center">
                       <div className="w-10 h-10 bg-primary/20 rounded-full mr-3 overflow-hidden">
-                        <OptimizedImage
-                          src="https://i.pravatar.cc/100?u=sarah"
-                          alt="Sarah J."
-                          className="w-full h-full object-cover"
-                          aspectRatio="square"
-                        />
+                        <OptimizedImage src="https://i.pravatar.cc/100?u=sarah" alt="Sarah J." className="w-full h-full object-cover" aspectRatio="square" />
                       </div>
                       <div>
                         <p className="font-medium">Sarah J.</p>
@@ -217,21 +182,14 @@ const CommunityTeaser = () => {
                 <CardContent className="p-6">
                   <div className="flex flex-col h-full">
                     <div className="mb-4 text-primary">
-                      {[...Array(5)].map((_, i) => (
-                        <span key={i} className="text-primary text-lg">★</span>
-                      ))}
+                      {[...Array(5)].map((_, i) => <span key={i} className="text-primary text-lg">★</span>)}
                     </div>
                     <p className="italic mb-6 flex-grow">
                       "The community forums have been an incredible resource. I've learned so much from other members and found practices that work for me."
                     </p>
                     <div className="flex items-center">
                       <div className="w-10 h-10 bg-primary/20 rounded-full mr-3 overflow-hidden">
-                        <OptimizedImage
-                          src="https://i.pravatar.cc/100?u=michael"
-                          alt="Michael T."
-                          className="w-full h-full object-cover"
-                          aspectRatio="square"
-                        />
+                        <OptimizedImage src="https://i.pravatar.cc/100?u=michael" alt="Michael T." className="w-full h-full object-cover" aspectRatio="square" />
                       </div>
                       <div>
                         <p className="font-medium">Michael T.</p>
@@ -246,42 +204,10 @@ const CommunityTeaser = () => {
         </section>
 
         {/* CTA */}
-        <section className="py-16 my-12 relative overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-primary/90 mix-blend-multiply z-10"></div>
-            <OptimizedImage
-              src="/lovable-uploads/d119458d-9251-4956-9c76-ec663432c449.png"
-              alt="Modern retreat space"
-              className="w-full h-full"
-              aspectRatio="custom"
-              objectFit="cover"
-            />
-          </div>
-          
-          <div className="container px-4 md:px-6 relative z-10">
-            <div className="max-w-2xl mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-6 text-white">Ready to Join Our Community?</h2>
-              <p className="text-xl mb-8 text-white/90">
-                Create your Sanghos account today and start connecting with our community of wellness enthusiasts.
-              </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" onClick={() => navigate("/join")} className="bg-white text-primary hover:bg-white/90 flex items-center mx-auto">
-                  Join Now
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-                <Button size="lg" variant="outline" onClick={() => navigate("/login")} className="border-white text-white hover:bg-white/10">
-                  Sign In
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
+        
       </main>
 
       <Footer />
-    </>
-  );
+    </>;
 };
-
 export default CommunityTeaser;
-
