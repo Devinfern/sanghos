@@ -58,6 +58,11 @@ const Header = () => {
     }
   };
 
+  const handleCloseMenu = () => {
+    setMobileMenuOpen(false);
+    document.body.style.removeProperty('overflow');
+  };
+
   return (
     <header
       className={cn(
@@ -84,7 +89,7 @@ const Header = () => {
         isLoggedIn={isLoggedIn} 
         onSignOut={handleSignOut}
         onCommunityClick={handleCommunityClick}
-        onClose={() => setMobileMenuOpen(false)}
+        onClose={handleCloseMenu}
       />
     </header>
   );

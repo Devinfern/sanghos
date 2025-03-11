@@ -17,7 +17,7 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick, onC
   return (
     <div
       className={cn(
-        "fixed inset-0 bg-white z-40 flex flex-col transition-transform duration-300 ease-in-out md:hidden",
+        "fixed inset-0 bg-white z-[100] flex flex-col transition-transform duration-300 ease-in-out md:hidden",
         isOpen ? "translate-x-0" : "translate-x-full"
       )}
     >
