@@ -21,91 +21,14 @@ import { Textarea } from "@/components/ui/textarea";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
-
-const mockPosts = [
-  {
-    id: 1,
-    author: {
-      name: "Sarita Walsh",
-      role: "Admin",
-      avatar: "/lovable-uploads/91da0c1f-b9f1-4310-aea3-1afbfe1358f7.png",
-      tag: "Being° Coach"
-    },
-    postedIn: "Open Conversation",
-    timeAgo: "4h",
-    title: "Tired of Feeling Disappointed?",
-    content: `Join us for a LIVE session where we'll explore a simple but powerful distinction: Agreements vs. Expectations. This one shift can change how you navigate relationships, communicate your needs, and move through life with more clarity and ease.
-
-This is ...`,
-    likes: 2,
-    comments: 0,
-    bookmarked: false
-  },
-  {
-    id: 2,
-    author: {
-      name: "Maya Johnson",
-      role: "Host",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      tag: "Retreat Host"
-    },
-    postedIn: "Meditation Circle",
-    timeAgo: "1d",
-    title: "Mindfulness Practice for Beginners",
-    content: `I'm excited to share some simple mindfulness techniques that anyone can practice, regardless of experience level. These have been incredibly helpful for my retreat participants.
-
-Would you like me to host a free online session to walk through these techniques together?`,
-    likes: 15,
-    comments: 7,
-    bookmarked: true
-  }
-];
-
-const mockEvents = [
-  {
-    id: 1,
-    date: { day: 11, month: "MAR" },
-    title: "Support Our Event Test + Discover a Powerful Distinction",
-    time: "9:00 - 10:00 AM PDT"
-  },
-  {
-    id: 2,
-    date: { day: 14, month: "MAR" },
-    title: "Masterclass: How to Break the Cycle of Doubt & Overthinking and Take Clear, Confident Action",
-    time: "9:00 - 10:30 AM PDT"
-  },
-  {
-    id: 3,
-    date: { day: 16, month: "MAR" },
-    title: "Workshop: Update Your Operating System → Break Patterns of Doubt & Overthinking and Take Aligned Action",
-    time: "9:00 - 10:30 AM PDT"
-  },
-  {
-    id: 4,
-    date: { day: 22, month: "APR" },
-    title: "Quarterly Being° Gathering (Q2)",
-    time: "9:00 - 10:30 AM PDT"
-  },
-  {
-    id: 5,
-    date: { day: 22, month: "JUL" },
-    title: "Quarterly Being° Gathering (Q3)",
-    time: "9:00 - 10:30 AM PDT"
-  }
-];
-
-const trendingPosts = [
-  {
-    id: 1,
-    title: "An Invitation to Slow Down and Return to Yourself",
-    author: "Sarita Walsh",
-    avatar: "/lovable-uploads/91da0c1f-b9f1-4310-aea3-1afbfe1358f7.png"
-  }
-];
+import { forumSpaces, forumPosts as initialPosts, forumEvents, trendingPosts } from "@/lib/forumData";
+import ForumPostEditor from "@/components/ForumPostEditor";
+import { ForumPost } from "@/lib/forumData";
 
 const ForumPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [newPostContent, setNewPostContent] = useState<string>("");
+  const [posts, setPosts] = useState<ForumPost[]>(initialPosts);
   const navigate = useNavigate();
 
   // Check login status
@@ -131,14 +54,65 @@ const ForumPage = () => {
       return;
     }
     
+    // Create a quick post with just the content
+    const newPost: ForumPost = {
+      id: Date.now(), // Use timestamp as temporary ID
+      author: {
+        name: "You",
+        role: "Member",
+        avatar: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+      },
+      postedIn: "Open Conversation",
+      timeAgo: "just now",
+      title: "Quick post", // For quick posts, we use a default title
+      content: newPostContent,
+      likes: 0,
+      comments: 0,
+      bookmarked: false
+    };
+    
+    setPosts([newPost, ...posts]);
     toast.success("Post created successfully!");
     setNewPostContent("");
-    // In a real app, this would save the post to the database
+  };
+
+  const handleNewPostCreated = (newPost: Partial<ForumPost>) => {
+    const fullPost: ForumPost = {
+      id: Date.now(), // Use timestamp as temporary ID
+      author: {
+        name: "You",
+        role: "Member",
+        avatar: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+      },
+      postedIn: newPost.postedIn || "Open Conversation",
+      timeAgo: "just now",
+      title: newPost.title || "Untitled",
+      content: newPost.content || "",
+      likes: 0,
+      comments: 0,
+      bookmarked: false
+    };
+    
+    setPosts([fullPost, ...posts]);
   };
 
   if (!isLoggedIn) {
     return null; // Don't render anything if not logged in
   }
+
+  // Helper function to render the correct icon
+  const renderSpaceIcon = (iconName: string) => {
+    switch (iconName) {
+      case "MessageSquare":
+        return <MessageSquare className="h-4 w-4 mr-2 text-muted-foreground" />;
+      case "Calendar":
+        return <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />;
+      case "Users":
+        return <Users className="h-4 w-4 mr-2 text-muted-foreground" />;
+      default:
+        return <MessageSquare className="h-4 w-4 mr-2 text-muted-foreground" />;
+    }
+  };
 
   return (
     <>
@@ -159,56 +133,28 @@ const ForumPage = () => {
                   <h3 className="font-semibold text-lg mb-4">Spaces</h3>
                   
                   <div className="space-y-4">
-                    <div className="space-y-2">
-                      <h4 className="text-sm font-medium text-muted-foreground">Open Space</h4>
-                      <div className="space-y-1">
-                        <a href="#" className="flex items-center justify-between rounded-md p-2 hover:bg-slate-100">
-                          <div className="flex items-center">
-                            <MessageSquare className="h-4 w-4 mr-2 text-muted-foreground" />
-                            <span className="text-sm">Open Here</span>
-                          </div>
-                          <span className="text-xs text-muted-foreground">4</span>
-                        </a>
-                        <a href="#" className="flex items-center justify-between rounded-md p-2 hover:bg-slate-100">
-                          <div className="flex items-center">
-                            <MessageSquare className="h-4 w-4 mr-2 text-muted-foreground" />
-                            <span className="text-sm">Open Conversation</span>
-                          </div>
-                          <span className="text-xs text-muted-foreground">2</span>
-                        </a>
-                        <a href="#" className="flex items-center justify-between rounded-md p-2 hover:bg-slate-100">
-                          <div className="flex items-center">
-                            <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
-                            <span className="text-sm">Open Events</span>
-                          </div>
-                          <span className="text-xs text-muted-foreground">2</span>
-                        </a>
+                    {forumSpaces.map((category, index) => (
+                      <div key={index} className="space-y-2">
+                        <h4 className="text-sm font-medium text-muted-foreground">{category.name}</h4>
+                        <div className="space-y-1">
+                          {category.spaces.map((space, spaceIndex) => (
+                            <a 
+                              key={spaceIndex}
+                              href="#" 
+                              className="flex items-center justify-between rounded-md p-2 hover:bg-slate-100"
+                            >
+                              <div className="flex items-center">
+                                {renderSpaceIcon(space.icon)}
+                                <span className="text-sm">{space.name}</span>
+                              </div>
+                              {space.count !== null && (
+                                <span className="text-xs text-muted-foreground">{space.count}</span>
+                              )}
+                            </a>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <h4 className="text-sm font-medium text-muted-foreground">Loving Yourself Forward</h4>
-                      <div className="space-y-1">
-                        <a href="#" className="flex items-center rounded-md p-2 hover:bg-slate-100">
-                          <MessageSquare className="h-4 w-4 mr-2 text-muted-foreground" />
-                          <span className="text-sm">LYF Course</span>
-                        </a>
-                        <a href="#" className="flex items-center rounded-md p-2 hover:bg-slate-100">
-                          <Users className="h-4 w-4 mr-2 text-muted-foreground" />
-                          <span className="text-sm">LYF Community</span>
-                        </a>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <h4 className="text-sm font-medium text-muted-foreground">Links</h4>
-                      <div className="space-y-1">
-                        <a href="#" className="flex items-center rounded-md p-2 hover:bg-slate-100">
-                          <MessageSquare className="h-4 w-4 mr-2 text-muted-foreground" />
-                          <span className="text-sm">Circle Knowledge Base</span>
-                        </a>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -221,7 +167,10 @@ const ForumPage = () => {
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium mr-2">Latest</span>
                   <ChevronDown className="h-4 w-4" />
-                  <Button className="ml-2">New post</Button>
+                  <ForumPostEditor 
+                    onPostCreated={handleNewPostCreated}
+                    buttonLabel="New post"
+                  />
                 </div>
               </div>
 
@@ -254,7 +203,7 @@ const ForumPage = () => {
 
               {/* Posts Feed */}
               <div className="space-y-6">
-                {mockPosts.map((post) => (
+                {posts.map((post) => (
                   <Card key={post.id} className="overflow-hidden border border-slate-200">
                     <div className="p-4">
                       <div className="flex justify-between items-start mb-3">
@@ -266,7 +215,9 @@ const ForumPage = () => {
                             <div className="flex items-center gap-2">
                               <span className="font-medium">{post.author.name}</span>
                               <span className="text-xs px-2 py-1 bg-slate-100 rounded-full">{post.author.role}</span>
-                              <span className="text-xs px-2 py-1 bg-slate-100 rounded-full">{post.author.tag}</span>
+                              {post.author.tag && (
+                                <span className="text-xs px-2 py-1 bg-slate-100 rounded-full">{post.author.tag}</span>
+                              )}
                             </div>
                             <div className="text-xs text-muted-foreground">
                               Posted in {post.postedIn} · {post.timeAgo}
@@ -312,7 +263,7 @@ const ForumPage = () => {
                     <h3 className="font-semibold">Upcoming events</h3>
                   </div>
                   <div className="divide-y">
-                    {mockEvents.map((event) => (
+                    {forumEvents.map((event) => (
                       <div key={event.id} className="p-4 flex gap-3">
                         <div className="text-center w-12">
                           <div className="text-lg font-bold">{event.date.day}</div>
