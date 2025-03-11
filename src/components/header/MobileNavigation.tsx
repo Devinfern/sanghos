@@ -7,9 +7,10 @@ interface MobileNavigationProps {
   isOpen: boolean;
   isLoggedIn: boolean;
   onSignOut: () => void;
+  onCommunityClick: (e: React.MouseEvent) => void;
 }
 
-const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut }: MobileNavigationProps) => {
+const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick }: MobileNavigationProps) => {
   return (
     <div
       className={cn(
@@ -62,7 +63,7 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut }: MobileNavigationPro
         >
           About Us
         </NavLink>
-        {isLoggedIn && (
+        {isLoggedIn ? (
           <NavLink
             to="/community"
             className={({ isActive }) =>
@@ -74,6 +75,14 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut }: MobileNavigationPro
           >
             Community
           </NavLink>
+        ) : (
+          <Link
+            to="/community"
+            className="text-lg font-medium py-2 transition-colors text-muted-foreground"
+            onClick={onCommunityClick}
+          >
+            Community
+          </Link>
         )}
         <div className="flex flex-col space-y-4 pt-4">
           {isLoggedIn ? (

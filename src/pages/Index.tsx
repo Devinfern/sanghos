@@ -1,5 +1,6 @@
 
 import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import FeaturedRetreats from "@/components/FeaturedRetreats";
@@ -10,6 +11,17 @@ import { Link } from "react-router-dom";
 import { ArrowRight, MapPin, Calendar, Users } from "lucide-react";
 
 const Index = () => {
+  const navigate = useNavigate();
+  const isLoggedIn = localStorage.getItem("sanghos_user") !== null;
+
+  const handleCommunityClick = () => {
+    if (isLoggedIn) {
+      navigate('/community');
+    } else {
+      navigate('/join');
+    }
+  };
+
   return (
     <>
       <Helmet>
@@ -138,10 +150,19 @@ const Index = () => {
               Sign up for Sanghos to be the first to know about new retreats, receive exclusive offers, and connect with like-minded individuals.
             </p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-              <Button size="lg" className="bg-white text-primary hover:bg-white/90 hover:text-primary">
+              <Button 
+                size="lg" 
+                className="bg-white text-primary hover:bg-white/90 hover:text-primary"
+                onClick={() => navigate('/join')}
+              >
                 Create Account
               </Button>
-              <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="text-white border-white hover:bg-white/10"
+                onClick={handleCommunityClick}
+              >
                 Learn More
               </Button>
             </div>

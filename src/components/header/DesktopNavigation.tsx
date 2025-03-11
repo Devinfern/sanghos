@@ -6,9 +6,10 @@ import { cn } from "@/lib/utils";
 interface DesktopNavigationProps {
   isLoggedIn: boolean;
   onSignOut: () => void;
+  onCommunityClick: (e: React.MouseEvent) => void;
 }
 
-const DesktopNavigation = ({ isLoggedIn, onSignOut }: DesktopNavigationProps) => {
+const DesktopNavigation = ({ isLoggedIn, onSignOut, onCommunityClick }: DesktopNavigationProps) => {
   return (
     <nav className="hidden md:flex items-center space-x-8">
       <NavLink
@@ -55,7 +56,7 @@ const DesktopNavigation = ({ isLoggedIn, onSignOut }: DesktopNavigationProps) =>
       >
         About Us
       </NavLink>
-      {isLoggedIn && (
+      {isLoggedIn ? (
         <NavLink
           to="/community"
           className={({ isActive }) =>
@@ -67,6 +68,14 @@ const DesktopNavigation = ({ isLoggedIn, onSignOut }: DesktopNavigationProps) =>
         >
           Community
         </NavLink>
+      ) : (
+        <Link
+          to="/community"
+          className="text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
+          onClick={onCommunityClick}
+        >
+          Community
+        </Link>
       )}
       {isLoggedIn ? (
         <Button size="sm" variant="outline" onClick={onSignOut}>

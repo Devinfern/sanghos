@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import Logo from "./header/Logo";
 import DesktopNavigation from "./header/DesktopNavigation";
@@ -11,6 +11,7 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,6 +51,13 @@ const Header = () => {
     window.location.href = "/";
   };
 
+  const handleCommunityClick = (e) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      navigate('/join');
+    }
+  };
+
   return (
     <header
       className={cn(
@@ -61,7 +69,11 @@ const Header = () => {
     >
       <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
         <Logo />
-        <DesktopNavigation isLoggedIn={isLoggedIn} onSignOut={handleSignOut} />
+        <DesktopNavigation 
+          isLoggedIn={isLoggedIn} 
+          onSignOut={handleSignOut} 
+          onCommunityClick={handleCommunityClick}
+        />
         <MobileMenuToggle isOpen={mobileMenuOpen} onToggle={toggleMobileMenu} />
       </div>
       
@@ -69,6 +81,7 @@ const Header = () => {
         isOpen={mobileMenuOpen} 
         isLoggedIn={isLoggedIn} 
         onSignOut={handleSignOut}
+        onCommunityClick={handleCommunityClick}
       />
     </header>
   );
