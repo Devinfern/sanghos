@@ -12,7 +12,8 @@ import {
   MessageCircle, 
   Bookmark,
   ChevronDown,
-  Search
+  Search,
+  Settings
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -23,12 +24,14 @@ import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import { forumSpaces, forumPosts as initialPosts, forumEvents, trendingPosts } from "@/lib/forumData";
 import ForumPostEditor from "@/components/ForumPostEditor";
+import ForumCMS from "@/components/ForumCMS";
 import { ForumPost } from "@/lib/forumData";
 
 const ForumPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [newPostContent, setNewPostContent] = useState<string>("");
   const [posts, setPosts] = useState<ForumPost[]>(initialPosts);
+  const [showCMS, setShowCMS] = useState<boolean>(false);
   const navigate = useNavigate();
 
   // Check login status
@@ -96,8 +99,33 @@ const ForumPage = () => {
     setPosts([fullPost, ...posts]);
   };
 
+  const toggleCMS = () => {
+    setShowCMS(!showCMS);
+  };
+
   if (!isLoggedIn) {
     return null; // Don't render anything if not logged in
+  }
+
+  if (showCMS) {
+    return (
+      <>
+        <Helmet>
+          <title>Forum Management | Sanghos</title>
+        </Helmet>
+        <Header />
+        <main className="pt-24 pb-16 min-h-screen bg-slate-50">
+          <div className="container mx-auto px-4">
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-2xl font-bold">Forum Management</h1>
+              <Button onClick={toggleCMS}>Back to Forum</Button>
+            </div>
+            <ForumCMS />
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
   }
 
   // Helper function to render the correct icon
@@ -167,6 +195,10 @@ const ForumPage = () => {
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium mr-2">Latest</span>
                   <ChevronDown className="h-4 w-4" />
+                  <Button variant="outline" onClick={toggleCMS}>
+                    <Settings className="h-4 w-4 mr-2" />
+                    Manage Content
+                  </Button>
                   <ForumPostEditor 
                     onPostCreated={handleNewPostCreated}
                     buttonLabel="New post"
