@@ -28,7 +28,7 @@ const Hero = () => {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-transparent z-10"></div>
         <OptimizedImage
-          src="https://cdn.prod.website-files.com/5ff4fbd49286ac4facd6bbce/60240331ed4b7ca5b959284b_dwell-2.jpg"
+          src="https://cdn.prod.website-files.com/5ff4fbd49286ac4facd6bbce/67cfb7f2209d30734388654a_HEROIMG.jpg"
           alt="Peaceful retreat setting"
           className="w-full h-full"
           aspectRatio="custom"
