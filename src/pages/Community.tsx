@@ -74,7 +74,7 @@ const CommunityPage = () => {
       if (mockLoggedIn && userString) {
         try {
           const userData = JSON.parse(userString);
-          setIsAdmin(userData.email === "demo@example.com");
+          setIsAdmin(userData.isAdmin || userData.email === "admin@sanghos.com");
         } catch (error) {
           console.error("Error parsing user data:", error);
         }

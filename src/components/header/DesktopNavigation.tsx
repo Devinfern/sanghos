@@ -65,6 +65,7 @@ const DesktopNavigation = ({ isLoggedIn, onSignOut, onCommunityClick }: DesktopN
               isActive ? "text-primary" : "text-muted-foreground"
             )
           }
+          onClick={onCommunityClick}
         >
           Community
         </NavLink>

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -9,6 +8,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -34,27 +34,66 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      // Simulate API call with timeout
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // This is a mock authentication
-      // In a real app, you would verify credentials with your backend
-      if (email === "demo@example.com" && password === "password") {
-        // Store user info in localStorage
-        localStorage.setItem("sanghos_user", JSON.stringify({
-          id: "user123",
+      // Check if it's an admin login
+      if (email === "admin@sanghos.com") {
+        // Use Supabase auth for admin
+        const { data, error: authError } = await supabase.auth.signInWithPassword({
           email,
-          name: "Demo User",
-          avatar: "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
-        }));
-        
-        toast.success("Successfully logged in!");
-        navigate(fromPath);
+          password
+        });
+
+        if (authError) {
+          throw new Error(authError.message);
+        }
+
+        if (data?.user) {
+          // Check if the user is in the admin_users table
+          const { data: adminData, error: adminError } = await supabase
+            .from('admin_users')
+            .select('*')
+            .eq('email', email)
+            .single();
+
+          if (adminError || !adminData) {
+            // Sign out if not an admin
+            await supabase.auth.signOut();
+            throw new Error("Unauthorized access");
+          }
+
+          // Store admin info in localStorage
+          localStorage.setItem("sanghos_user", JSON.stringify({
+            id: data.user.id,
+            email: data.user.email,
+            name: "Admin",
+            isAdmin: true,
+            avatar: "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+          }));
+          
+          toast.success("Admin login successful!");
+          navigate(fromPath);
+        }
       } else {
-        setError("Invalid email or password");
+        // Regular user login - keep the existing mock authentication
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        if (email === "demo@example.com" && password === "password") {
+          // Store user info in localStorage
+          localStorage.setItem("sanghos_user", JSON.stringify({
+            id: "user123",
+            email,
+            name: "Demo User",
+            isAdmin: false,
+            avatar: "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+          }));
+          
+          toast.success("Successfully logged in!");
+          navigate(fromPath);
+        } else {
+          setError("Invalid email or password");
+        }
       }
     } catch (err) {
-      setError("An error occurred while logging in");
+      setError(err instanceof Error ? err.message : "An error occurred while logging in");
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -140,11 +179,13 @@ const Login = () => {
               {isLoading ? "Signing in..." : "Sign In"}
             </Button>
 
-            <div className="pt-4 text-center text-sm text-muted-foreground">
-              <p className="mb-2">For demo purposes, use:</p>
-              <p className="font-medium">Email: demo@example.com</p>
-              <p className="font-medium">Password: password</p>
-            </div>
+            {email !== "admin@sanghos.com" && (
+              <div className="pt-4 text-center text-sm text-muted-foreground">
+                <p className="mb-2">For demo purposes, use:</p>
+                <p className="font-medium">Email: demo@example.com</p>
+                <p className="font-medium">Password: password</p>
+              </div>
+            )}
           </form>
 
           <div className="mt-8 text-center text-sm">
