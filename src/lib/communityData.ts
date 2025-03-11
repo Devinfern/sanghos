@@ -37,7 +37,7 @@ export type TrendingPost = {
 };
 
 // Community Spaces
-export const forumSpaces = [
+export let forumSpaces = [
   {
     name: "Open Space",
     spaces: [
@@ -70,7 +70,7 @@ export const forumSpaces = [
 ];
 
 // Posts data
-export const forumPosts: ForumPost[] = [
+export let forumPosts: ForumPost[] = [
   {
     id: 1,
     author: {
@@ -150,7 +150,7 @@ What helps you stay consistent with your practice?`,
 ];
 
 // Events data
-export const forumEvents: ForumEvent[] = [
+export let forumEvents: ForumEvent[] = [
   {
     id: 1,
     date: { day: 11, month: "MAR" },
@@ -184,7 +184,7 @@ export const forumEvents: ForumEvent[] = [
 ];
 
 // Trending posts data
-export const trendingPosts: TrendingPost[] = [
+export let trendingPosts: TrendingPost[] = [
   {
     id: 1,
     title: "An Invitation to Slow Down and Return to Yourself",
@@ -204,3 +204,20 @@ export const trendingPosts: TrendingPost[] = [
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   }
 ];
+
+// Update functions to modify the data
+export const updateForumSpaces = (newSpaces: typeof forumSpaces) => {
+  forumSpaces = [...newSpaces];
+};
+
+export const updateForumPosts = (newPosts: typeof forumPosts) => {
+  forumPosts = [...newPosts];
+};
+
+export const updateForumEvents = (newEvents: typeof forumEvents) => {
+  forumEvents = [...newEvents];
+};
+
+export const updateTrendingPosts = (newTrendingPosts: typeof trendingPosts) => {
+  trendingPosts = [...newTrendingPosts];
+};

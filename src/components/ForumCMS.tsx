@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Tabs,
   TabsContent,
@@ -21,6 +21,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -47,7 +48,11 @@ import {
   forumPosts,
   forumEvents,
   trendingPosts,
-} from "@/lib/forumData";
+  updateForumSpaces,
+  updateForumPosts,
+  updateForumEvents,
+  updateTrendingPosts,
+} from "@/lib/communityData";
 
 const ForumCMS = () => {
   // State for all forum data
@@ -125,6 +130,7 @@ const ForumCMS = () => {
     }
     
     setSpaces(newSpaces);
+    updateForumSpaces(newSpaces);
     setSpaceDialogOpen(false);
     toast.success(editingSpace.spaceIndex === -1 ? "Space added successfully" : "Space updated successfully");
   };
@@ -133,6 +139,7 @@ const ForumCMS = () => {
     const newSpaces = [...spaces];
     newSpaces[categoryIndex].spaces.splice(spaceIndex, 1);
     setSpaces(newSpaces);
+    updateForumSpaces(newSpaces);
     toast.success("Space deleted successfully");
   };
 
@@ -150,6 +157,7 @@ const ForumCMS = () => {
     
     const newSpaces = [...spaces, { name: newCategory.name, spaces: [] }];
     setSpaces(newSpaces);
+    updateForumSpaces(newSpaces);
     setCategoryDialogOpen(false);
     toast.success("Category added successfully");
   };
@@ -158,6 +166,7 @@ const ForumCMS = () => {
     const newSpaces = [...spaces];
     newSpaces.splice(categoryIndex, 1);
     setSpaces(newSpaces);
+    updateForumSpaces(newSpaces);
     toast.success("Category deleted successfully");
   };
 
@@ -206,6 +215,7 @@ const ForumCMS = () => {
     }
     
     setPosts(newPosts);
+    updateForumPosts(newPosts);
     setPostDialogOpen(false);
     toast.success(postIndex === -1 ? "Post added successfully" : "Post updated successfully");
   };
@@ -213,6 +223,7 @@ const ForumCMS = () => {
   const handleDeletePost = (postId: number) => {
     const newPosts = posts.filter(p => p.id !== postId);
     setPosts(newPosts);
+    updateForumPosts(newPosts);
     toast.success("Post deleted successfully");
   };
 
@@ -256,6 +267,7 @@ const ForumCMS = () => {
     }
     
     setEvents(newEvents);
+    updateForumEvents(newEvents);
     setEventDialogOpen(false);
     toast.success(eventIndex === -1 ? "Event added successfully" : "Event updated successfully");
   };
@@ -263,6 +275,7 @@ const ForumCMS = () => {
   const handleDeleteEvent = (eventId: number) => {
     const newEvents = events.filter(e => e.id !== eventId);
     setEvents(newEvents);
+    updateForumEvents(newEvents);
     toast.success("Event deleted successfully");
   };
 
@@ -302,6 +315,7 @@ const ForumCMS = () => {
     }
     
     setTrending(newTrending);
+    updateTrendingPosts(newTrending);
     setTrendingDialogOpen(false);
     toast.success(postIndex === -1 ? "Trending post added successfully" : "Trending post updated successfully");
   };
@@ -309,13 +323,18 @@ const ForumCMS = () => {
   const handleDeleteTrending = (postId: number) => {
     const newTrending = trending.filter(p => p.id !== postId);
     setTrending(newTrending);
+    updateTrendingPosts(newTrending);
     toast.success("Trending post deleted successfully");
   };
 
   // Function to save all changes back to forumData.ts
   const handleSaveAll = () => {
-    // In a real application, this would send the data to a backend API
-    // For now, we'll just show a success message
+    // Update all the data sources
+    updateForumSpaces(spaces);
+    updateForumPosts(posts);
+    updateForumEvents(events);
+    updateTrendingPosts(trending);
+    
     toast.success("All changes saved successfully");
     console.log("Spaces:", spaces);
     console.log("Posts:", posts);
@@ -337,6 +356,7 @@ const ForumCMS = () => {
     [newSpaces[index], newSpaces[targetIndex]] = [newSpaces[targetIndex], newSpaces[index]];
     
     setSpaces(newSpaces);
+    updateForumSpaces(newSpaces);
   };
 
   // Function to move space up or down within a category
@@ -356,6 +376,7 @@ const ForumCMS = () => {
     [newSpaces[categoryIndex].spaces[targetIndex], newSpaces[categoryIndex].spaces[spaceIndex]];
     
     setSpaces(newSpaces);
+    updateForumSpaces(newSpaces);
   };
 
   return (
