@@ -1,8 +1,11 @@
+
 import { useState, useEffect } from "react";
-import { NavLink, useLocation, Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import Logo from "./header/Logo";
+import DesktopNavigation from "./header/DesktopNavigation";
+import MobileNavigation from "./header/MobileNavigation";
+import MobileMenuToggle from "./header/MobileMenuToggle";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -41,6 +44,11 @@ const Header = () => {
   };
 
   const isLoggedIn = localStorage.getItem("sanghos_user") !== null;
+  
+  const handleSignOut = () => {
+    localStorage.removeItem("sanghos_user");
+    window.location.href = "/";
+  };
 
   return (
     <header
@@ -52,181 +60,16 @@ const Header = () => {
       )}
     >
       <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
-        <NavLink to="/" className="text-2xl font-semibold">
-          Sanghos
-        </NavLink>
-
-        <nav className="hidden md:flex items-center space-x-8">
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              cn(
-                "text-sm font-medium transition-colors hover:text-primary",
-                isActive ? "text-primary" : "text-muted-foreground"
-              )
-            }
-          >
-            Home
-          </NavLink>
-          <NavLink
-            to="/retreats"
-            className={({ isActive }) =>
-              cn(
-                "text-sm font-medium transition-colors hover:text-primary",
-                isActive ? "text-primary" : "text-muted-foreground"
-              )
-            }
-          >
-            Retreats
-          </NavLink>
-          <NavLink
-            to="/instructors"
-            className={({ isActive }) =>
-              cn(
-                "text-sm font-medium transition-colors hover:text-primary",
-                isActive ? "text-primary" : "text-muted-foreground"
-              )
-            }
-          >
-            Instructors
-          </NavLink>
-          <NavLink
-            to="/about"
-            className={({ isActive }) =>
-              cn(
-                "text-sm font-medium transition-colors hover:text-primary",
-                isActive ? "text-primary" : "text-muted-foreground"
-              )
-            }
-          >
-            About Us
-          </NavLink>
-          {isLoggedIn && (
-            <NavLink
-              to="/community"
-              className={({ isActive }) =>
-                cn(
-                  "text-sm font-medium transition-colors hover:text-primary",
-                  isActive ? "text-primary" : "text-muted-foreground"
-                )
-              }
-            >
-              Community
-            </NavLink>
-          )}
-          {isLoggedIn ? (
-            <Button size="sm" variant="outline" onClick={() => {
-              localStorage.removeItem("sanghos_user");
-              window.location.href = "/";
-            }}>
-              Sign Out
-            </Button>
-          ) : (
-            <>
-              <Button size="sm" variant="outline" asChild className="ml-4">
-                <Link to="/login">Sign In</Link>
-              </Button>
-              <Button size="sm" asChild>
-                <Link to="/join">Join Sanghos</Link>
-              </Button>
-            </>
-          )}
-        </nav>
-
-        <button 
-          onClick={toggleMobileMenu} 
-          className="md:hidden flex items-center"
-          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-        >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <Logo />
+        <DesktopNavigation isLoggedIn={isLoggedIn} onSignOut={handleSignOut} />
+        <MobileMenuToggle isOpen={mobileMenuOpen} onToggle={toggleMobileMenu} />
       </div>
-
-      <div
-        className={cn(
-          "fixed inset-0 bg-white z-40 flex flex-col transition-transform duration-300 ease-in-out md:hidden pt-20",
-          mobileMenuOpen ? "translate-x-0" : "translate-x-full"
-        )}
-      >
-        <nav className="flex flex-col space-y-6 px-8 py-8">
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              cn(
-                "text-lg font-medium py-2 transition-colors",
-                isActive ? "text-primary" : "text-muted-foreground"
-              )
-            }
-          >
-            Home
-          </NavLink>
-          <NavLink
-            to="/retreats"
-            className={({ isActive }) =>
-              cn(
-                "text-lg font-medium py-2 transition-colors",
-                isActive ? "text-primary" : "text-muted-foreground"
-              )
-            }
-          >
-            Retreats
-          </NavLink>
-          <NavLink
-            to="/instructors"
-            className={({ isActive }) =>
-              cn(
-                "text-lg font-medium py-2 transition-colors",
-                isActive ? "text-primary" : "text-muted-foreground"
-              )
-            }
-          >
-            Instructors
-          </NavLink>
-          <NavLink
-            to="/about"
-            className={({ isActive }) =>
-              cn(
-                "text-lg font-medium py-2 transition-colors",
-                isActive ? "text-primary" : "text-muted-foreground"
-              )
-            }
-          >
-            About Us
-          </NavLink>
-          {isLoggedIn && (
-            <NavLink
-              to="/community"
-              className={({ isActive }) =>
-                cn(
-                  "text-lg font-medium py-2 transition-colors",
-                  isActive ? "text-primary" : "text-muted-foreground"
-                )
-              }
-            >
-              Community
-            </NavLink>
-          )}
-          <div className="flex flex-col space-y-4 pt-4">
-            {isLoggedIn ? (
-              <Button variant="outline" onClick={() => {
-                localStorage.removeItem("sanghos_user");
-                window.location.href = "/";
-              }}>
-                Sign Out
-              </Button>
-            ) : (
-              <>
-                <Button variant="outline" asChild className="w-full">
-                  <Link to="/login">Sign In</Link>
-                </Button>
-                <Button asChild className="w-full">
-                  <Link to="/join">Join Sanghos</Link>
-                </Button>
-              </>
-            )}
-          </div>
-        </nav>
-      </div>
+      
+      <MobileNavigation 
+        isOpen={mobileMenuOpen} 
+        isLoggedIn={isLoggedIn} 
+        onSignOut={handleSignOut}
+      />
     </header>
   );
 };
