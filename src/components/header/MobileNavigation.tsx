@@ -1,6 +1,7 @@
 
 import { NavLink, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface MobileNavigationProps {
@@ -8,9 +9,10 @@ interface MobileNavigationProps {
   isLoggedIn: boolean;
   onSignOut: () => void;
   onCommunityClick: (e: React.MouseEvent) => void;
+  onClose: () => void;
 }
 
-const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick }: MobileNavigationProps) => {
+const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick, onClose }: MobileNavigationProps) => {
   return (
     <div
       className={cn(
@@ -18,6 +20,17 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick }: M
         isOpen ? "translate-x-0" : "translate-x-full"
       )}
     >
+      <div className="absolute top-4 right-4">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={onClose}
+          aria-label="Close menu"
+        >
+          <X size={24} />
+        </Button>
+      </div>
+      
       <nav className="flex flex-col space-y-6 px-8 py-8">
         <NavLink
           to="/"

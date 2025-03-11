@@ -82,6 +82,7 @@ const Header = () => {
         isLoggedIn={isLoggedIn} 
         onSignOut={handleSignOut}
         onCommunityClick={handleCommunityClick}
+        onClose={toggleMobileMenu}
       />
     </header>
   );
