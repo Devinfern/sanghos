@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate, Link } from "react-router-dom";
@@ -55,14 +56,12 @@ const CommunityPage = () => {
         }
       }
       
-      if (!mockLoggedIn) {
-        toast.error("You need to be logged in to access the community");
-        navigate("/login");
-      }
+      // Don't redirect if not logged in, just update the state
+      // This allows the page to load and show appropriate UI
     };
     
     checkLoginStatus();
-  }, [navigate]);
+  }, []);
 
   // Update events when forumEvents changes
   useEffect(() => {
@@ -70,6 +69,12 @@ const CommunityPage = () => {
   }, [forumEvents]);
 
   const handlePostSubmit = () => {
+    if (!isLoggedIn) {
+      toast.error("You need to be logged in to post");
+      navigate("/login");
+      return;
+    }
+    
     if (!newPostContent.trim()) {
       toast.error("Please enter some content for your post");
       return;
@@ -98,6 +103,12 @@ const CommunityPage = () => {
   };
 
   const handleNewPostCreated = (newPost: Partial<ForumPost>) => {
+    if (!isLoggedIn) {
+      toast.error("You need to be logged in to post");
+      navigate("/login");
+      return;
+    }
+    
     const fullPost: ForumPost = {
       id: Date.now(), // Use timestamp as temporary ID
       author: {
@@ -125,9 +136,9 @@ const CommunityPage = () => {
     setShowCMS(!showCMS);
   };
 
-  if (!isLoggedIn) {
-    return null; // Don't render anything if not logged in
-  }
+  const handleLogin = () => {
+    navigate("/login");
+  };
 
   if (showCMS && isAdmin) {
     return (
@@ -180,6 +191,17 @@ const CommunityPage = () => {
 
       <main className="pt-24 pb-16 min-h-screen bg-slate-50">
         <div className="container px-4 md:px-6 mx-auto">
+          {!isLoggedIn && (
+            <div className="mb-8 bg-white p-6 rounded-lg shadow-sm">
+              <h2 className="text-xl font-semibold mb-2">Join Our Community</h2>
+              <p className="mb-4">To participate in discussions, create posts, and interact with our community, please sign in or create an account.</p>
+              <div className="flex gap-3">
+                <Button onClick={handleLogin}>Sign In</Button>
+                <Button variant="outline" onClick={() => navigate("/join")}>Join Sanghos</Button>
+              </div>
+            </div>
+          )}
+          
           <div className="flex flex-col lg:flex-row gap-6">
             {/* Sidebar */}
             <div className="lg:w-64 w-full shrink-0">
@@ -236,31 +258,33 @@ const CommunityPage = () => {
               </div>
 
               {/* New Post Input */}
-              <Card className="p-4 mb-6 border border-slate-200">
-                <div className="flex gap-3">
-                  <Avatar className="h-10 w-10">
-                    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="User" />
-                  </Avatar>
-                  <div className="flex-1">
-                    <Textarea 
-                      placeholder="Start a post" 
-                      className="resize-none mb-3"
-                      value={newPostContent}
-                      onChange={(e) => setNewPostContent(e.target.value)}
-                    />
-                    <div className="flex justify-end">
-                      <Button 
-                        size="sm" 
-                        onClick={handlePostSubmit}
-                        disabled={!newPostContent.trim()}
-                      >
-                        <Plus className="h-4 w-4 mr-1" />
-                        Post
-                      </Button>
+              {isLoggedIn && (
+                <Card className="p-4 mb-6 border border-slate-200">
+                  <div className="flex gap-3">
+                    <Avatar className="h-10 w-10">
+                      <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="User" />
+                    </Avatar>
+                    <div className="flex-1">
+                      <Textarea 
+                        placeholder="Start a post" 
+                        className="resize-none mb-3"
+                        value={newPostContent}
+                        onChange={(e) => setNewPostContent(e.target.value)}
+                      />
+                      <div className="flex justify-end">
+                        <Button 
+                          size="sm" 
+                          onClick={handlePostSubmit}
+                          disabled={!newPostContent.trim()}
+                        >
+                          <Plus className="h-4 w-4 mr-1" />
+                          Post
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Card>
+                </Card>
+              )}
 
               {/* Posts Feed */}
               <div className="space-y-6">
@@ -298,14 +322,17 @@ const CommunityPage = () => {
 
                       <div className="pt-4 flex justify-between items-center border-t">
                         <div className="flex items-center gap-4">
-                          <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+                          <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground" 
+                                  onClick={() => !isLoggedIn ? toast.error("Please log in to like posts") : null}>
                             <Heart className="h-4 w-4" /> {post.likes}
                           </button>
-                          <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+                          <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+                                  onClick={() => !isLoggedIn ? toast.error("Please log in to comment") : null}>
                             <MessageCircle className="h-4 w-4" /> {post.comments}
                           </button>
                         </div>
-                        <button className={`${post.bookmarked ? 'text-primary' : 'text-muted-foreground'} hover:text-primary`}>
+                        <button className={`${post.bookmarked ? 'text-primary' : 'text-muted-foreground'} hover:text-primary`}
+                                onClick={() => !isLoggedIn ? toast.error("Please log in to bookmark posts") : null}>
                           <Bookmark className="h-4 w-4" />
                         </button>
                       </div>
