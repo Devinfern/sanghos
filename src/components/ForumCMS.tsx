@@ -206,7 +206,11 @@ const ForumCMS = () => {
 
   // Functions to handle posts
   const handleEditPost = (post: ForumPost) => {
-    setEditingPost({ ...post });
+    const typedPost = {
+      ...post,
+      id: typeof post.id === 'string' ? parseInt(post.id) : post.id
+    };
+    setEditingPost(typedPost);
     setPostDialogOpen(true);
   };
 
@@ -263,7 +267,11 @@ const ForumCMS = () => {
 
   // Functions to handle events
   const handleEditEvent = (event: ForumEvent) => {
-    setEditingEvent({ ...event });
+    const typedEvent = {
+      ...event,
+      id: typeof event.id === 'string' ? parseInt(event.id) : event.id
+    };
+    setEditingEvent(typedEvent);
     setEventDialogOpen(true);
   };
 
@@ -315,7 +323,11 @@ const ForumCMS = () => {
 
   // Functions to handle trending posts
   const handleEditTrending = (post: TrendingPost) => {
-    setEditingTrending({ ...post });
+    const typedPost = {
+      ...post,
+      id: typeof post.id === 'string' ? parseInt(post.id) : post.id
+    };
+    setEditingTrending(typedPost);
     setTrendingDialogOpen(true);
   };
 
