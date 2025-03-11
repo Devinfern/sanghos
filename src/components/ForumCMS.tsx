@@ -56,7 +56,7 @@ import {
   loadForumPosts,
   loadForumEvents,
   loadTrendingPosts
-} from "@/lib/communityData";
+} from "@/lib/forumData";
 
 const ForumCMS = () => {
   // State for all forum data
@@ -258,8 +258,14 @@ const ForumCMS = () => {
     toast.success(postIndex === -1 ? "Post added successfully" : "Post updated successfully");
   };
 
-  const handleDeletePost = (postId: number) => {
-    const newPosts = posts.filter(p => p.id !== postId);
+  const handleDeletePost = (postId: string | number) => {
+    const idToDelete = typeof postId === 'string' ? postId : postId;
+    
+    const newPosts = posts.filter(p => {
+      const currentId = p.id;
+      return currentId !== idToDelete;
+    });
+    
     setPosts(newPosts);
     updateForumPosts(newPosts);
     toast.success("Post deleted successfully");
@@ -314,8 +320,14 @@ const ForumCMS = () => {
     toast.success(eventIndex === -1 ? "Event added successfully" : "Event updated successfully");
   };
 
-  const handleDeleteEvent = (eventId: number) => {
-    const newEvents = events.filter(e => e.id !== eventId);
+  const handleDeleteEvent = (eventId: string | number) => {
+    const idToDelete = typeof eventId === 'string' ? eventId : eventId;
+    
+    const newEvents = events.filter(e => {
+      const currentId = e.id;
+      return currentId !== idToDelete;
+    });
+    
     setEvents(newEvents);
     updateForumEvents(newEvents);
     toast.success("Event deleted successfully");
@@ -366,8 +378,14 @@ const ForumCMS = () => {
     toast.success(postIndex === -1 ? "Trending post added successfully" : "Trending post updated successfully");
   };
 
-  const handleDeleteTrending = (postId: number) => {
-    const newTrending = trending.filter(p => p.id !== postId);
+  const handleDeleteTrending = (postId: string | number) => {
+    const idToDelete = typeof postId === 'string' ? postId : postId;
+    
+    const newTrending = trending.filter(p => {
+      const currentId = p.id;
+      return currentId !== idToDelete;
+    });
+    
     setTrending(newTrending);
     updateTrendingPosts(newTrending);
     toast.success("Trending post deleted successfully");
