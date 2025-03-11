@@ -9,6 +9,144 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      forum_events: {
+        Row: {
+          created_at: string
+          date_day: number
+          date_month: string
+          id: string
+          time: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          date_day: number
+          date_month: string
+          id?: string
+          time: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          date_day?: number
+          date_month?: string
+          id?: string
+          time?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      forum_posts: {
+        Row: {
+          author_avatar: string
+          author_id: string | null
+          author_name: string
+          author_role: string
+          author_tag: string | null
+          bookmarked: boolean | null
+          comments: number | null
+          content: string
+          created_at: string
+          id: string
+          likes: number | null
+          posted_in: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_avatar: string
+          author_id?: string | null
+          author_name: string
+          author_role: string
+          author_tag?: string | null
+          bookmarked?: boolean | null
+          comments?: number | null
+          content: string
+          created_at?: string
+          id?: string
+          likes?: number | null
+          posted_in: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_avatar?: string
+          author_id?: string | null
+          author_name?: string
+          author_role?: string
+          author_tag?: string | null
+          bookmarked?: boolean | null
+          comments?: number | null
+          content?: string
+          created_at?: string
+          id?: string
+          likes?: number | null
+          posted_in?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      forum_spaces: {
+        Row: {
+          category: string
+          count: number | null
+          created_at: string
+          icon: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          count?: number | null
+          created_at?: string
+          icon: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          count?: number | null
+          created_at?: string
+          icon?: string
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      trending_posts: {
+        Row: {
+          author: string
+          avatar: string
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author: string
+          avatar: string
+          created_at?: string
+          id?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string
+          avatar?: string
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       wellness_events: {
         Row: {
           category: string | null

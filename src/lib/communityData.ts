@@ -1,5 +1,6 @@
-
 // Community data types
+import { supabase } from "@/integrations/supabase/client";
+
 export type ForumAuthor = {
   name: string;
   role: string; // Admin, Host, Member
@@ -8,7 +9,7 @@ export type ForumAuthor = {
 };
 
 export type ForumPost = {
-  id: number;
+  id: number | string;
   author: ForumAuthor;
   postedIn: string;
   timeAgo: string;
@@ -20,7 +21,7 @@ export type ForumPost = {
 };
 
 export type ForumEvent = {
-  id: number;
+  id: number | string;
   date: {
     day: number;
     month: string;
@@ -30,13 +31,13 @@ export type ForumEvent = {
 };
 
 export type TrendingPost = {
-  id: number;
+  id: number | string;
   title: string;
   author: string;
   avatar: string;
 };
 
-// Community Spaces
+// Default community data (used until data is loaded from Supabase)
 export let forumSpaces = [
   {
     name: "Open Space",
@@ -205,21 +206,459 @@ export let trendingPosts: TrendingPost[] = [
   }
 ];
 
-// Update functions to modify the data
-export const updateForumSpaces = (newSpaces: typeof forumSpaces) => {
-  forumSpaces = [...newSpaces];
+// Format timeAgo from timestamp
+const formatTimeAgo = (timestamp: string) => {
+  const now = new Date();
+  const date = new Date(timestamp);
+  const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  
+  let interval = Math.floor(seconds / 31536000);
+  if (interval >= 1) {
+    return interval === 1 ? "1y" : interval + "y";
+  }
+  
+  interval = Math.floor(seconds / 2592000);
+  if (interval >= 1) {
+    return interval === 1 ? "1mo" : interval + "mo";
+  }
+  
+  interval = Math.floor(seconds / 86400);
+  if (interval >= 1) {
+    return interval === 1 ? "1d" : interval + "d";
+  }
+  
+  interval = Math.floor(seconds / 3600);
+  if (interval >= 1) {
+    return interval === 1 ? "1h" : interval + "h";
+  }
+  
+  interval = Math.floor(seconds / 60);
+  if (interval >= 1) {
+    return interval === 1 ? "1m" : interval + "m";
+  }
+  
+  return Math.floor(seconds) + "s";
 };
 
-export const updateForumPosts = (newPosts: typeof forumPosts) => {
-  forumPosts = [...newPosts];
+// Function to load forum spaces from Supabase
+export const loadForumSpaces = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('forum_spaces')
+      .select('*')
+      .order('created_at', { ascending: true });
+      
+    if (error) {
+      console.error('Error loading forum spaces:', error);
+      return;
+    }
+    
+    if (data && data.length > 0) {
+      // Transform data to match our format
+      const categorizedSpaces: any = {};
+      
+      data.forEach(space => {
+        if (!categorizedSpaces[space.category]) {
+          categorizedSpaces[space.category] = [];
+        }
+        
+        categorizedSpaces[space.category].push({
+          name: space.name,
+          icon: space.icon,
+          count: space.count
+        });
+      });
+      
+      const transformedSpaces = Object.keys(categorizedSpaces).map(category => ({
+        name: category,
+        spaces: categorizedSpaces[category]
+      }));
+      
+      forumSpaces = transformedSpaces;
+    } else {
+      // If no data, seed the database with our initial data
+      await seedForumSpaces();
+    }
+  } catch (error) {
+    console.error('Error in loadForumSpaces:', error);
+  }
 };
 
-export const updateForumEvents = (newEvents: typeof forumEvents) => {
-  forumEvents = [...newEvents];
+// Function to load forum posts from Supabase
+export const loadForumPosts = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('forum_posts')
+      .select('*')
+      .order('created_at', { ascending: false });
+      
+    if (error) {
+      console.error('Error loading forum posts:', error);
+      return;
+    }
+    
+    if (data && data.length > 0) {
+      // Transform data to match our format
+      const transformedPosts = data.map(post => ({
+        id: post.id,
+        author: {
+          name: post.author_name,
+          role: post.author_role,
+          avatar: post.author_avatar,
+          tag: post.author_tag
+        },
+        postedIn: post.posted_in,
+        timeAgo: formatTimeAgo(post.created_at),
+        title: post.title,
+        content: post.content,
+        likes: post.likes,
+        comments: post.comments,
+        bookmarked: post.bookmarked
+      }));
+      
+      forumPosts = transformedPosts;
+    } else {
+      // If no data, seed the database with our initial data
+      await seedForumPosts();
+    }
+  } catch (error) {
+    console.error('Error in loadForumPosts:', error);
+  }
 };
 
-export const updateTrendingPosts = (newTrendingPosts: typeof trendingPosts) => {
-  trendingPosts = [...newTrendingPosts];
+// Function to load forum events from Supabase
+export const loadForumEvents = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('forum_events')
+      .select('*')
+      .order('created_at', { ascending: true });
+      
+    if (error) {
+      console.error('Error loading forum events:', error);
+      return;
+    }
+    
+    if (data && data.length > 0) {
+      // Transform data to match our format
+      const transformedEvents = data.map(event => ({
+        id: event.id,
+        date: {
+          day: event.date_day,
+          month: event.date_month
+        },
+        title: event.title,
+        time: event.time
+      }));
+      
+      forumEvents = transformedEvents;
+    } else {
+      // If no data, seed the database with our initial data
+      await seedForumEvents();
+    }
+  } catch (error) {
+    console.error('Error in loadForumEvents:', error);
+  }
+};
+
+// Function to load trending posts from Supabase
+export const loadTrendingPosts = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('trending_posts')
+      .select('*')
+      .order('created_at', { ascending: true });
+      
+    if (error) {
+      console.error('Error loading trending posts:', error);
+      return;
+    }
+    
+    if (data && data.length > 0) {
+      // Transform data to match our format
+      const transformedPosts = data.map(post => ({
+        id: post.id,
+        title: post.title,
+        author: post.author,
+        avatar: post.avatar
+      }));
+      
+      trendingPosts = transformedPosts;
+    } else {
+      // If no data, seed the database with our initial data
+      await seedTrendingPosts();
+    }
+  } catch (error) {
+    console.error('Error in loadTrendingPosts:', error);
+  }
+};
+
+// Seed functions to populate the database with initial data
+const seedForumSpaces = async () => {
+  try {
+    const spacesToInsert = [];
+    
+    for (const category of forumSpaces) {
+      for (const space of category.spaces) {
+        spacesToInsert.push({
+          name: space.name,
+          category: category.name,
+          icon: space.icon,
+          count: space.count
+        });
+      }
+    }
+    
+    const { error } = await supabase
+      .from('forum_spaces')
+      .insert(spacesToInsert);
+      
+    if (error) {
+      console.error('Error seeding forum spaces:', error);
+    }
+  } catch (error) {
+    console.error('Error in seedForumSpaces:', error);
+  }
+};
+
+const seedForumPosts = async () => {
+  try {
+    const postsToInsert = forumPosts.map(post => ({
+      author_name: post.author.name,
+      author_role: post.author.role,
+      author_avatar: post.author.avatar,
+      author_tag: post.author.tag,
+      posted_in: post.postedIn,
+      title: post.title,
+      content: post.content,
+      likes: post.likes,
+      comments: post.comments,
+      bookmarked: post.bookmarked
+    }));
+    
+    const { error } = await supabase
+      .from('forum_posts')
+      .insert(postsToInsert);
+      
+    if (error) {
+      console.error('Error seeding forum posts:', error);
+    }
+  } catch (error) {
+    console.error('Error in seedForumPosts:', error);
+  }
+};
+
+const seedForumEvents = async () => {
+  try {
+    const eventsToInsert = forumEvents.map(event => ({
+      title: event.title,
+      date_day: event.date.day,
+      date_month: event.date.month,
+      time: event.time
+    }));
+    
+    const { error } = await supabase
+      .from('forum_events')
+      .insert(eventsToInsert);
+      
+    if (error) {
+      console.error('Error seeding forum events:', error);
+    }
+  } catch (error) {
+    console.error('Error in seedForumEvents:', error);
+  }
+};
+
+const seedTrendingPosts = async () => {
+  try {
+    const postsToInsert = trendingPosts.map(post => ({
+      title: post.title,
+      author: post.author,
+      avatar: post.avatar
+    }));
+    
+    const { error } = await supabase
+      .from('trending_posts')
+      .insert(postsToInsert);
+      
+    if (error) {
+      console.error('Error seeding trending posts:', error);
+    }
+  } catch (error) {
+    console.error('Error in seedTrendingPosts:', error);
+  }
+};
+
+// Update functions to modify the data in Supabase
+export const updateForumSpaces = async (newSpaces: typeof forumSpaces) => {
+  try {
+    // First, delete all existing spaces
+    const { error: deleteError } = await supabase
+      .from('forum_spaces')
+      .delete()
+      .neq('id', 'dummy'); // This is a trick to delete all rows
+      
+    if (deleteError) {
+      console.error('Error deleting forum spaces:', deleteError);
+      return;
+    }
+    
+    // Then insert the new spaces
+    const spacesToInsert = [];
+    
+    for (const category of newSpaces) {
+      for (const space of category.spaces) {
+        spacesToInsert.push({
+          name: space.name,
+          category: category.name,
+          icon: space.icon,
+          count: space.count
+        });
+      }
+    }
+    
+    const { error: insertError } = await supabase
+      .from('forum_spaces')
+      .insert(spacesToInsert);
+      
+    if (insertError) {
+      console.error('Error updating forum spaces:', insertError);
+      return;
+    }
+    
+    // Update the local variable
+    forumSpaces = [...newSpaces];
+    
+    // Reload the data
+    await loadForumSpaces();
+  } catch (error) {
+    console.error('Error in updateForumSpaces:', error);
+  }
+};
+
+export const updateForumPosts = async (newPosts: typeof forumPosts) => {
+  try {
+    // First, delete all existing posts
+    const { error: deleteError } = await supabase
+      .from('forum_posts')
+      .delete()
+      .neq('id', 'dummy'); // This is a trick to delete all rows
+      
+    if (deleteError) {
+      console.error('Error deleting forum posts:', deleteError);
+      return;
+    }
+    
+    // Then insert the new posts
+    const postsToInsert = newPosts.map(post => ({
+      author_name: post.author.name,
+      author_role: post.author.role,
+      author_avatar: post.author.avatar,
+      author_tag: post.author.tag,
+      posted_in: post.postedIn,
+      title: post.title,
+      content: post.content,
+      likes: post.likes,
+      comments: post.comments,
+      bookmarked: post.bookmarked
+    }));
+    
+    const { error: insertError } = await supabase
+      .from('forum_posts')
+      .insert(postsToInsert);
+      
+    if (insertError) {
+      console.error('Error updating forum posts:', insertError);
+      return;
+    }
+    
+    // Update the local variable
+    forumPosts = [...newPosts];
+    
+    // Reload the data
+    await loadForumPosts();
+  } catch (error) {
+    console.error('Error in updateForumPosts:', error);
+  }
+};
+
+export const updateForumEvents = async (newEvents: typeof forumEvents) => {
+  try {
+    // First, delete all existing events
+    const { error: deleteError } = await supabase
+      .from('forum_events')
+      .delete()
+      .neq('id', 'dummy'); // This is a trick to delete all rows
+      
+    if (deleteError) {
+      console.error('Error deleting forum events:', deleteError);
+      return;
+    }
+    
+    // Then insert the new events
+    const eventsToInsert = newEvents.map(event => ({
+      title: event.title,
+      date_day: event.date.day,
+      date_month: event.date.month,
+      time: event.time
+    }));
+    
+    const { error: insertError } = await supabase
+      .from('forum_events')
+      .insert(eventsToInsert);
+      
+    if (insertError) {
+      console.error('Error updating forum events:', insertError);
+      return;
+    }
+    
+    // Update the local variable
+    forumEvents = [...newEvents];
+    
+    // Reload the data
+    await loadForumEvents();
+  } catch (error) {
+    console.error('Error in updateForumEvents:', error);
+  }
+};
+
+export const updateTrendingPosts = async (newTrendingPosts: typeof trendingPosts) => {
+  try {
+    // First, delete all existing trending posts
+    const { error: deleteError } = await supabase
+      .from('trending_posts')
+      .delete()
+      .neq('id', 'dummy'); // This is a trick to delete all rows
+      
+    if (deleteError) {
+      console.error('Error deleting trending posts:', deleteError);
+      return;
+    }
+    
+    // Then insert the new trending posts
+    const postsToInsert = newTrendingPosts.map(post => ({
+      title: post.title,
+      author: post.author,
+      avatar: post.avatar
+    }));
+    
+    const { error: insertError } = await supabase
+      .from('trending_posts')
+      .insert(postsToInsert);
+      
+    if (insertError) {
+      console.error('Error updating trending posts:', insertError);
+      return;
+    }
+    
+    // Update the local variable
+    trendingPosts = [...newTrendingPosts];
+    
+    // Reload the data
+    await loadTrendingPosts();
+  } catch (error) {
+    console.error('Error in updateTrendingPosts:', error);
+  }
 };
 
 // Demo login helper
@@ -247,3 +686,17 @@ export const getDemoUser = () => {
   }
   return null;
 };
+
+// Load all data on module import
+const loadAllData = async () => {
+  await Promise.all([
+    loadForumSpaces(),
+    loadForumPosts(),
+    loadForumEvents(),
+    loadTrendingPosts()
+  ]);
+};
+
+// Call this function to initialize data
+loadAllData();
+

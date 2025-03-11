@@ -1,24 +1,48 @@
+
 import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { forumSpaces, forumPosts } from "@/lib/communityData";
-import { MessageSquare, Calendar, Users, Plus } from "lucide-react";
+import { forumSpaces, forumPosts, loadForumSpaces, loadForumPosts, updateForumPosts } from "@/lib/communityData";
+import { MessageSquare, Calendar, Users, Plus, Loader2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
 import CommunityPostEditor from "@/components/CommunityPostEditor";
-import { useState } from "react";
 import { ForumPost } from "@/lib/communityData";
 import { toast } from "sonner";
 
 const CommunitySpaceDetails = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [spacePosts, setSpacePosts] = useState<ForumPost[]>(() => {
-    // Filter posts for this space
-    const spaceName = getSpaceName(slug || "").name;
-    return forumPosts.filter(post => post.postedIn.toLowerCase() === spaceName.toLowerCase());
-  });
+  const [spacePosts, setSpacePosts] = useState<ForumPost[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Load data from Supabase
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      
+      try {
+        await Promise.all([loadForumSpaces(), loadForumPosts()]);
+        
+        // Filter posts for this space
+        const spaceName = getSpaceName(slug || "").name;
+        const filteredPosts = forumPosts.filter(
+          post => post.postedIn.toLowerCase() === spaceName.toLowerCase()
+        );
+        
+        setSpacePosts(filteredPosts);
+      } catch (error) {
+        console.error('Error loading space data:', error);
+        toast.error('Failed to load space data');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    loadData();
+  }, [slug]);
   
   // Function to convert slug back to space name
   const getSpaceName = (slug: string) => {
@@ -44,9 +68,9 @@ const CommunitySpaceDetails = () => {
   
   const space = getSpaceName(slug || "");
 
-  const handleNewPostCreated = (newPost: Partial<ForumPost>) => {
+  const handleNewPostCreated = async (newPost: Partial<ForumPost>) => {
     const fullPost: ForumPost = {
-      id: Date.now(),
+      id: Date.now(), // Temporary ID before saved to Supabase
       author: {
         name: "You",
         role: "Member",
@@ -61,7 +85,14 @@ const CommunitySpaceDetails = () => {
       bookmarked: false
     };
     
-    setSpacePosts([fullPost, ...spacePosts]);
+    // Update local state
+    const updatedPosts = [fullPost, ...spacePosts];
+    setSpacePosts(updatedPosts);
+    
+    // Update all forum posts with the new post
+    const allUpdatedPosts = [fullPost, ...forumPosts];
+    await updateForumPosts(allUpdatedPosts);
+    
     toast.success("Post created successfully!");
   };
   
@@ -78,6 +109,23 @@ const CommunitySpaceDetails = () => {
         return <MessageSquare className="h-6 w-6 mr-2" />;
     }
   };
+
+  if (isLoading) {
+    return (
+      <>
+        <Header />
+        <main className="pt-24 pb-16 min-h-screen bg-slate-50">
+          <div className="container mx-auto px-4 text-center py-12">
+            <div className="flex items-center justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <span className="ml-2">Loading space content...</span>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>

@@ -1,3 +1,4 @@
+
 // Forum data types
 export type ForumAuthor = {
   name: string;
@@ -7,7 +8,7 @@ export type ForumAuthor = {
 };
 
 export type ForumPost = {
-  id: number;
+  id: number | string;
   author: ForumAuthor;
   postedIn: string;
   timeAgo: string;
@@ -19,7 +20,7 @@ export type ForumPost = {
 };
 
 export type ForumEvent = {
-  id: number;
+  id: number | string;
   date: {
     day: number;
     month: string;
@@ -29,7 +30,7 @@ export type ForumEvent = {
 };
 
 export type TrendingPost = {
-  id: number;
+  id: number | string;
   title: string;
   author: string;
   avatar: string;
@@ -44,7 +45,11 @@ import {
   updateForumSpaces,
   updateForumPosts,
   updateForumEvents,
-  updateTrendingPosts
+  updateTrendingPosts,
+  loadForumSpaces,
+  loadForumPosts,
+  loadForumEvents,
+  loadTrendingPosts
 } from "./communityData";
 
 // Export the same data and update functions
@@ -56,5 +61,9 @@ export {
   updateForumSpaces,
   updateForumPosts,
   updateForumEvents,
-  updateTrendingPosts
+  updateTrendingPosts,
+  loadForumSpaces,
+  loadForumPosts,
+  loadForumEvents,
+  loadTrendingPosts
 };

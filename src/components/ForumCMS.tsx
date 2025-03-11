@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import {
   Tabs,
@@ -37,6 +36,7 @@ import {
   Users,
   ChevronDown,
   ChevronUp,
+  Loader2
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -52,6 +52,10 @@ import {
   updateForumPosts,
   updateForumEvents,
   updateTrendingPosts,
+  loadForumSpaces,
+  loadForumPosts,
+  loadForumEvents,
+  loadTrendingPosts
 } from "@/lib/communityData";
 
 const ForumCMS = () => {
@@ -60,6 +64,8 @@ const ForumCMS = () => {
   const [posts, setPosts] = useState<ForumPost[]>([...forumPosts]);
   const [events, setEvents] = useState([...forumEvents]);
   const [trending, setTrending] = useState([...trendingPosts]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   // State for editing/creating items
   const [editingSpace, setEditingSpace] = useState<{
@@ -83,6 +89,34 @@ const ForumCMS = () => {
   
   // New category state
   const [newCategory, setNewCategory] = useState({ name: "" });
+
+  // Load data from Supabase on component mount
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        await Promise.all([
+          loadForumSpaces(),
+          loadForumPosts(),
+          loadForumEvents(),
+          loadTrendingPosts()
+        ]);
+        
+        // Update state with the loaded data
+        setSpaces([...forumSpaces]);
+        setPosts([...forumPosts]);
+        setEvents([...forumEvents]);
+        setTrending([...trendingPosts]);
+      } catch (error) {
+        console.error('Error loading data:', error);
+        toast.error('Failed to load content. Please try again.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    loadData();
+  }, []);
 
   // Functions to handle spaces
   const handleEditSpace = (categoryIndex: number, spaceIndex: number) => {
@@ -327,19 +361,25 @@ const ForumCMS = () => {
     toast.success("Trending post deleted successfully");
   };
 
-  // Function to save all changes back to forumData.ts
-  const handleSaveAll = () => {
-    // Update all the data sources
-    updateForumSpaces(spaces);
-    updateForumPosts(posts);
-    updateForumEvents(events);
-    updateTrendingPosts(trending);
-    
-    toast.success("All changes saved successfully");
-    console.log("Spaces:", spaces);
-    console.log("Posts:", posts);
-    console.log("Events:", events);
-    console.log("Trending posts:", trending);
+  // Function to save all changes back to Supabase
+  const handleSaveAll = async () => {
+    setIsSaving(true);
+    try {
+      // Update all the data sources in Supabase
+      await Promise.all([
+        updateForumSpaces(spaces),
+        updateForumPosts(posts),
+        updateForumEvents(events),
+        updateTrendingPosts(trending)
+      ]);
+      
+      toast.success("All changes saved successfully");
+    } catch (error) {
+      console.error('Error saving data:', error);
+      toast.error('Failed to save changes. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   // Function to move category up or down
@@ -379,6 +419,15 @@ const ForumCMS = () => {
     updateForumSpaces(newSpaces);
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2">Loading content...</span>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto py-4">
       <Card className="mb-6">
@@ -389,7 +438,16 @@ const ForumCMS = () => {
           </CardDescription>
         </CardHeader>
         <CardFooter>
-          <Button onClick={handleSaveAll}>Save All Changes</Button>
+          <Button onClick={handleSaveAll} disabled={isSaving}>
+            {isSaving ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Saving Changes...
+              </>
+            ) : (
+              'Save All Changes'
+            )}
+          </Button>
         </CardFooter>
       </Card>
 

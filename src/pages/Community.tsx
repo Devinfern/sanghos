@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate, Link } from "react-router-dom";
@@ -22,7 +21,17 @@ import { Textarea } from "@/components/ui/textarea";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
-import { forumSpaces, forumPosts as initialPosts, forumEvents, trendingPosts } from "@/lib/communityData";
+import { 
+  forumSpaces, 
+  forumPosts as initialPosts, 
+  forumEvents, 
+  trendingPosts,
+  loadForumSpaces,
+  loadForumPosts,
+  loadForumEvents,
+  loadTrendingPosts,
+  updateForumPosts
+} from "@/lib/communityData";
 import CommunityPostEditor from "@/components/CommunityPostEditor";
 import ForumCMS from "@/components/ForumCMS";
 import { ForumPost } from "@/lib/communityData";
@@ -34,30 +43,42 @@ const CommunityPage = () => {
   const [posts, setPosts] = useState<ForumPost[]>(initialPosts);
   const [showCMS, setShowCMS] = useState<boolean>(false);
   const [currentEvents, setCurrentEvents] = useState(forumEvents);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
+
+  // Load data from Supabase on component mount
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      await Promise.all([
+        loadForumSpaces(),
+        loadForumPosts(),
+        loadForumEvents(),
+        loadTrendingPosts()
+      ]);
+      setPosts(initialPosts); // Update with the loaded data
+      setCurrentEvents(forumEvents);
+      setIsLoading(false);
+    };
+    
+    loadData();
+  }, []);
 
   // Check login status
   useEffect(() => {
-    // In a real app, this would check your authentication system
     const checkLoginStatus = () => {
-      // Mock authentication - replace with your actual auth check
       const userString = localStorage.getItem("sanghos_user");
       const mockLoggedIn = userString !== null;
       setIsLoggedIn(mockLoggedIn);
       
-      // Check if user is admin
       if (mockLoggedIn && userString) {
         try {
           const userData = JSON.parse(userString);
-          // Check if the user has admin role - in a real app, this would be part of the user data
-          setIsAdmin(userData.email === "demo@example.com"); // For demo purposes, only the demo user is admin
+          setIsAdmin(userData.email === "demo@example.com");
         } catch (error) {
           console.error("Error parsing user data:", error);
         }
       }
-      
-      // Don't redirect if not logged in, just update the state
-      // This allows the page to load and show appropriate UI
     };
     
     checkLoginStatus();
@@ -68,7 +89,7 @@ const CommunityPage = () => {
     setCurrentEvents(forumEvents);
   }, [forumEvents]);
 
-  const handlePostSubmit = () => {
+  const handlePostSubmit = async () => {
     if (!isLoggedIn) {
       toast.error("You need to be logged in to post");
       navigate("/login");
@@ -80,9 +101,8 @@ const CommunityPage = () => {
       return;
     }
     
-    // Create a quick post with just the content
     const newPost: ForumPost = {
-      id: Date.now(), // Use timestamp as temporary ID
+      id: Date.now(),
       author: {
         name: "You",
         role: "Member",
@@ -90,19 +110,21 @@ const CommunityPage = () => {
       },
       postedIn: "Open Conversation",
       timeAgo: "just now",
-      title: "Quick post", // For quick posts, we use a default title
+      title: "Quick post",
       content: newPostContent,
       likes: 0,
       comments: 0,
       bookmarked: false
     };
     
-    setPosts([newPost, ...posts]);
+    const updatedPosts = [newPost, ...posts];
+    setPosts(updatedPosts);
+    await updateForumPosts(updatedPosts);
     toast.success("Post created successfully!");
     setNewPostContent("");
   };
 
-  const handleNewPostCreated = (newPost: Partial<ForumPost>) => {
+  const handleNewPostCreated = async (newPost: Partial<ForumPost>) => {
     if (!isLoggedIn) {
       toast.error("You need to be logged in to post");
       navigate("/login");
@@ -110,7 +132,7 @@ const CommunityPage = () => {
     }
     
     const fullPost: ForumPost = {
-      id: Date.now(), // Use timestamp as temporary ID
+      id: Date.now(),
       author: {
         name: "You",
         role: "Member",
@@ -125,7 +147,9 @@ const CommunityPage = () => {
       bookmarked: false
     };
     
-    setPosts([fullPost, ...posts]);
+    const updatedPosts = [fullPost, ...posts];
+    setPosts(updatedPosts);
+    await updateForumPosts(updatedPosts);
   };
 
   const toggleCMS = () => {
@@ -161,7 +185,6 @@ const CommunityPage = () => {
     );
   }
 
-  // Helper function to render the correct icon
   const renderSpaceIcon = (iconName: string) => {
     switch (iconName) {
       case "MessageSquare":
@@ -175,10 +198,27 @@ const CommunityPage = () => {
     }
   };
 
-  // Helper function to create URL-friendly slug
   const createSlug = (text: string) => {
     return text.toLowerCase().replace(/\s+/g, '-');
   };
+
+  if (isLoading) {
+    return (
+      <>
+        <Header />
+        <main className="pt-24 pb-16 min-h-screen bg-slate-50">
+          <div className="container mx-auto px-4 text-center py-12">
+            <div className="animate-pulse">
+              <div className="h-8 bg-slate-200 rounded w-1/3 mx-auto mb-4"></div>
+              <div className="h-4 bg-slate-200 rounded w-1/2 mx-auto mb-8"></div>
+              <div className="h-32 bg-slate-200 rounded w-full max-w-md mx-auto"></div>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
@@ -203,7 +243,6 @@ const CommunityPage = () => {
           )}
           
           <div className="flex flex-col lg:flex-row gap-6">
-            {/* Sidebar */}
             <div className="lg:w-64 w-full shrink-0">
               <div className="sticky top-24 space-y-8">
                 <div className="bg-white rounded-lg shadow-sm p-4">
@@ -237,7 +276,6 @@ const CommunityPage = () => {
               </div>
             </div>
 
-            {/* Main Content */}
             <div className="flex-1">
               <div className="mb-6 flex justify-between items-center">
                 <h1 className="text-2xl font-bold">Feed</h1>
@@ -257,7 +295,6 @@ const CommunityPage = () => {
                 </div>
               </div>
 
-              {/* New Post Input */}
               {isLoggedIn && (
                 <Card className="p-4 mb-6 border border-slate-200">
                   <div className="flex gap-3">
@@ -286,7 +323,6 @@ const CommunityPage = () => {
                 </Card>
               )}
 
-              {/* Posts Feed */}
               <div className="space-y-6">
                 {posts.map((post) => (
                   <Card key={post.id} className="overflow-hidden border border-slate-200">
@@ -342,10 +378,8 @@ const CommunityPage = () => {
               </div>
             </div>
 
-            {/* Right Sidebar */}
             <div className="lg:w-80 w-full shrink-0">
               <div className="sticky top-24 space-y-6">
-                {/* Upcoming Events */}
                 <Card className="overflow-hidden border border-slate-200">
                   <div className="p-4 border-b">
                     <h3 className="font-semibold">Upcoming events</h3>
@@ -366,7 +400,6 @@ const CommunityPage = () => {
                   </div>
                 </Card>
 
-                {/* Trending Posts */}
                 <Card className="overflow-hidden border border-slate-200">
                   <div className="p-4 border-b">
                     <h3 className="font-semibold">Trending Posts</h3>
