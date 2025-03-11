@@ -1,4 +1,3 @@
-
 import { Helmet } from "react-helmet";
 import { useNavigate, Link } from "react-router-dom";
 import Header from "@/components/Header";
@@ -29,8 +28,8 @@ const CommunityTeaser = () => {
           <div className="absolute inset-0 z-0">
             <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-transparent z-10"></div>
             <OptimizedImage
-              src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05"
-              alt="Community gathering"
+              src="/lovable-uploads/d119458d-9251-4956-9c76-ec663432c449.png"
+              alt="Modern retreat space with pool"
               className="w-full h-full"
               aspectRatio="custom"
               objectFit="cover"
@@ -251,8 +250,8 @@ const CommunityTeaser = () => {
           <div className="absolute inset-0 z-0">
             <div className="absolute inset-0 bg-primary/90 mix-blend-multiply z-10"></div>
             <OptimizedImage
-              src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05"
-              alt="Community background"
+              src="/lovable-uploads/d119458d-9251-4956-9c76-ec663432c449.png"
+              alt="Modern retreat space"
               className="w-full h-full"
               aspectRatio="custom"
               objectFit="cover"
@@ -285,3 +284,4 @@ const CommunityTeaser = () => {
 };
 
 export default CommunityTeaser;
+
