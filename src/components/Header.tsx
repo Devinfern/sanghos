@@ -54,7 +54,7 @@ const Header = () => {
   const handleCommunityClick = (e) => {
     if (!isLoggedIn) {
       e.preventDefault();
-      navigate('/join');
+      navigate('/community-teaser');
     }
   };
 

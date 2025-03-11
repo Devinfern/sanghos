@@ -70,9 +70,8 @@ const DesktopNavigation = ({ isLoggedIn, onSignOut, onCommunityClick }: DesktopN
         </NavLink>
       ) : (
         <Link
-          to="/community"
+          to="/community-teaser"
           className="text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
-          onClick={onCommunityClick}
         >
           Community
         </Link>

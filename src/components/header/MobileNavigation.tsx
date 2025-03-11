@@ -98,12 +98,9 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick, onC
           </NavLink>
         ) : (
           <Link
-            to="/community"
+            to="/community-teaser"
             className="text-lg font-medium py-2 transition-colors text-muted-foreground"
-            onClick={(e) => {
-              onCommunityClick(e);
-              onClose();
-            }}
+            onClick={onClose}
           >
             Community
           </Link>
