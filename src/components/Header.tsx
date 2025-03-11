@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { NavLink, useLocation, Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
@@ -43,6 +44,9 @@ const Header = () => {
       document.body.style.removeProperty('overflow');
     }
   };
+
+  // Check if user is logged in
+  const isLoggedIn = localStorage.getItem("sanghos_user") !== null;
 
   return (
     <header
@@ -104,12 +108,36 @@ const Header = () => {
           >
             About Us
           </NavLink>
-          <Button size="sm" variant="outline" asChild className="ml-4">
-            <Link to="/login">Sign In</Link>
-          </Button>
-          <Button size="sm" asChild>
-            <Link to="/join">Join Sanghos</Link>
-          </Button>
+          {isLoggedIn && (
+            <NavLink
+              to="/forum"
+              className={({ isActive }) =>
+                cn(
+                  "text-sm font-medium transition-colors hover:text-primary",
+                  isActive ? "text-primary" : "text-muted-foreground"
+                )
+              }
+            >
+              Forum
+            </NavLink>
+          )}
+          {isLoggedIn ? (
+            <Button size="sm" variant="outline" onClick={() => {
+              localStorage.removeItem("sanghos_user");
+              window.location.href = "/";
+            }}>
+              Sign Out
+            </Button>
+          ) : (
+            <>
+              <Button size="sm" variant="outline" asChild className="ml-4">
+                <Link to="/login">Sign In</Link>
+              </Button>
+              <Button size="sm" asChild>
+                <Link to="/join">Join Sanghos</Link>
+              </Button>
+            </>
+          )}
         </nav>
 
         {/* Mobile Menu Button */}
@@ -174,13 +202,37 @@ const Header = () => {
           >
             About Us
           </NavLink>
+          {isLoggedIn && (
+            <NavLink
+              to="/forum"
+              className={({ isActive }) =>
+                cn(
+                  "text-lg font-medium py-2 transition-colors",
+                  isActive ? "text-primary" : "text-muted-foreground"
+                )
+              }
+            >
+              Forum
+            </NavLink>
+          )}
           <div className="flex flex-col space-y-4 pt-4">
-            <Button variant="outline" asChild className="w-full">
-              <Link to="/login">Sign In</Link>
-            </Button>
-            <Button asChild className="w-full">
-              <Link to="/join">Join Sanghos</Link>
-            </Button>
+            {isLoggedIn ? (
+              <Button variant="outline" onClick={() => {
+                localStorage.removeItem("sanghos_user");
+                window.location.href = "/";
+              }}>
+                Sign Out
+              </Button>
+            ) : (
+              <>
+                <Button variant="outline" asChild className="w-full">
+                  <Link to="/login">Sign In</Link>
+                </Button>
+                <Button asChild className="w-full">
+                  <Link to="/join">Join Sanghos</Link>
+                </Button>
+              </>
+            )}
           </div>
         </nav>
       </div>

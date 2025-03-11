@@ -1,0 +1,360 @@
+
+import { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router-dom";
+import { 
+  MessageSquare, 
+  Calendar, 
+  Users, 
+  Plus, 
+  MoreHorizontal, 
+  Heart, 
+  MessageCircle, 
+  Bookmark,
+  ChevronDown,
+  Search
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Avatar } from "@/components/ui/avatar";
+import { Textarea } from "@/components/ui/textarea";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { toast } from "sonner";
+
+const mockPosts = [
+  {
+    id: 1,
+    author: {
+      name: "Sarita Walsh",
+      role: "Admin",
+      avatar: "/lovable-uploads/91da0c1f-b9f1-4310-aea3-1afbfe1358f7.png",
+      tag: "Being° Coach"
+    },
+    postedIn: "Open Conversation",
+    timeAgo: "4h",
+    title: "Tired of Feeling Disappointed?",
+    content: `Join us for a LIVE session where we'll explore a simple but powerful distinction: Agreements vs. Expectations. This one shift can change how you navigate relationships, communicate your needs, and move through life with more clarity and ease.
+
+This is ...`,
+    likes: 2,
+    comments: 0,
+    bookmarked: false
+  },
+  {
+    id: 2,
+    author: {
+      name: "Maya Johnson",
+      role: "Host",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      tag: "Retreat Host"
+    },
+    postedIn: "Meditation Circle",
+    timeAgo: "1d",
+    title: "Mindfulness Practice for Beginners",
+    content: `I'm excited to share some simple mindfulness techniques that anyone can practice, regardless of experience level. These have been incredibly helpful for my retreat participants.
+
+Would you like me to host a free online session to walk through these techniques together?`,
+    likes: 15,
+    comments: 7,
+    bookmarked: true
+  }
+];
+
+const mockEvents = [
+  {
+    id: 1,
+    date: { day: 11, month: "MAR" },
+    title: "Support Our Event Test + Discover a Powerful Distinction",
+    time: "9:00 - 10:00 AM PDT"
+  },
+  {
+    id: 2,
+    date: { day: 14, month: "MAR" },
+    title: "Masterclass: How to Break the Cycle of Doubt & Overthinking and Take Clear, Confident Action",
+    time: "9:00 - 10:30 AM PDT"
+  },
+  {
+    id: 3,
+    date: { day: 16, month: "MAR" },
+    title: "Workshop: Update Your Operating System → Break Patterns of Doubt & Overthinking and Take Aligned Action",
+    time: "9:00 - 10:30 AM PDT"
+  },
+  {
+    id: 4,
+    date: { day: 22, month: "APR" },
+    title: "Quarterly Being° Gathering (Q2)",
+    time: "9:00 - 10:30 AM PDT"
+  },
+  {
+    id: 5,
+    date: { day: 22, month: "JUL" },
+    title: "Quarterly Being° Gathering (Q3)",
+    time: "9:00 - 10:30 AM PDT"
+  }
+];
+
+const trendingPosts = [
+  {
+    id: 1,
+    title: "An Invitation to Slow Down and Return to Yourself",
+    author: "Sarita Walsh",
+    avatar: "/lovable-uploads/91da0c1f-b9f1-4310-aea3-1afbfe1358f7.png"
+  }
+];
+
+const ForumPage = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [newPostContent, setNewPostContent] = useState<string>("");
+  const navigate = useNavigate();
+
+  // Check login status
+  useEffect(() => {
+    // In a real app, this would check your authentication system
+    const checkLoginStatus = () => {
+      // Mock authentication - replace with your actual auth check
+      const mockLoggedIn = localStorage.getItem("sanghos_user") !== null;
+      setIsLoggedIn(mockLoggedIn);
+      
+      if (!mockLoggedIn) {
+        toast.error("You need to be logged in to access the forum");
+        navigate("/login");
+      }
+    };
+    
+    checkLoginStatus();
+  }, [navigate]);
+
+  const handlePostSubmit = () => {
+    if (!newPostContent.trim()) {
+      toast.error("Please enter some content for your post");
+      return;
+    }
+    
+    toast.success("Post created successfully!");
+    setNewPostContent("");
+    // In a real app, this would save the post to the database
+  };
+
+  if (!isLoggedIn) {
+    return null; // Don't render anything if not logged in
+  }
+
+  return (
+    <>
+      <Helmet>
+        <title>Community Forum | Sanghos</title>
+        <meta name="description" content="Join our community forum for discussions, events, and more" />
+      </Helmet>
+
+      <Header />
+
+      <main className="pt-24 pb-16 min-h-screen bg-slate-50">
+        <div className="container px-4 md:px-6 mx-auto">
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* Sidebar */}
+            <div className="lg:w-64 w-full shrink-0">
+              <div className="sticky top-24 space-y-8">
+                <div className="bg-white rounded-lg shadow-sm p-4">
+                  <h3 className="font-semibold text-lg mb-4">Spaces</h3>
+                  
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <h4 className="text-sm font-medium text-muted-foreground">Open Space</h4>
+                      <div className="space-y-1">
+                        <a href="#" className="flex items-center justify-between rounded-md p-2 hover:bg-slate-100">
+                          <div className="flex items-center">
+                            <MessageSquare className="h-4 w-4 mr-2 text-muted-foreground" />
+                            <span className="text-sm">Open Here</span>
+                          </div>
+                          <span className="text-xs text-muted-foreground">4</span>
+                        </a>
+                        <a href="#" className="flex items-center justify-between rounded-md p-2 hover:bg-slate-100">
+                          <div className="flex items-center">
+                            <MessageSquare className="h-4 w-4 mr-2 text-muted-foreground" />
+                            <span className="text-sm">Open Conversation</span>
+                          </div>
+                          <span className="text-xs text-muted-foreground">2</span>
+                        </a>
+                        <a href="#" className="flex items-center justify-between rounded-md p-2 hover:bg-slate-100">
+                          <div className="flex items-center">
+                            <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
+                            <span className="text-sm">Open Events</span>
+                          </div>
+                          <span className="text-xs text-muted-foreground">2</span>
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <h4 className="text-sm font-medium text-muted-foreground">Loving Yourself Forward</h4>
+                      <div className="space-y-1">
+                        <a href="#" className="flex items-center rounded-md p-2 hover:bg-slate-100">
+                          <MessageSquare className="h-4 w-4 mr-2 text-muted-foreground" />
+                          <span className="text-sm">LYF Course</span>
+                        </a>
+                        <a href="#" className="flex items-center rounded-md p-2 hover:bg-slate-100">
+                          <Users className="h-4 w-4 mr-2 text-muted-foreground" />
+                          <span className="text-sm">LYF Community</span>
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <h4 className="text-sm font-medium text-muted-foreground">Links</h4>
+                      <div className="space-y-1">
+                        <a href="#" className="flex items-center rounded-md p-2 hover:bg-slate-100">
+                          <MessageSquare className="h-4 w-4 mr-2 text-muted-foreground" />
+                          <span className="text-sm">Circle Knowledge Base</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Main Content */}
+            <div className="flex-1">
+              <div className="mb-6 flex justify-between items-center">
+                <h1 className="text-2xl font-bold">Feed</h1>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium mr-2">Latest</span>
+                  <ChevronDown className="h-4 w-4" />
+                  <Button className="ml-2">New post</Button>
+                </div>
+              </div>
+
+              {/* New Post Input */}
+              <Card className="p-4 mb-6 border border-slate-200">
+                <div className="flex gap-3">
+                  <Avatar className="h-10 w-10">
+                    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="User" />
+                  </Avatar>
+                  <div className="flex-1">
+                    <Textarea 
+                      placeholder="Start a post" 
+                      className="resize-none mb-3"
+                      value={newPostContent}
+                      onChange={(e) => setNewPostContent(e.target.value)}
+                    />
+                    <div className="flex justify-end">
+                      <Button 
+                        size="sm" 
+                        onClick={handlePostSubmit}
+                        disabled={!newPostContent.trim()}
+                      >
+                        <Plus className="h-4 w-4 mr-1" />
+                        Post
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Posts Feed */}
+              <div className="space-y-6">
+                {mockPosts.map((post) => (
+                  <Card key={post.id} className="overflow-hidden border border-slate-200">
+                    <div className="p-4">
+                      <div className="flex justify-between items-start mb-3">
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-10 w-10">
+                            <img src={post.author.avatar} alt={post.author.name} />
+                          </Avatar>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium">{post.author.name}</span>
+                              <span className="text-xs px-2 py-1 bg-slate-100 rounded-full">{post.author.role}</span>
+                              <span className="text-xs px-2 py-1 bg-slate-100 rounded-full">{post.author.tag}</span>
+                            </div>
+                            <div className="text-xs text-muted-foreground">
+                              Posted in {post.postedIn} · {post.timeAgo}
+                            </div>
+                          </div>
+                        </div>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      
+                      <h2 className="text-xl font-semibold mb-2">{post.title}</h2>
+                      <div className="text-sm mb-3 whitespace-pre-line">
+                        {post.content}
+                        <button className="text-primary hover:underline block mt-1">See more</button>
+                      </div>
+
+                      <div className="pt-4 flex justify-between items-center border-t">
+                        <div className="flex items-center gap-4">
+                          <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+                            <Heart className="h-4 w-4" /> {post.likes}
+                          </button>
+                          <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+                            <MessageCircle className="h-4 w-4" /> {post.comments}
+                          </button>
+                        </div>
+                        <button className={`${post.bookmarked ? 'text-primary' : 'text-muted-foreground'} hover:text-primary`}>
+                          <Bookmark className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Right Sidebar */}
+            <div className="lg:w-80 w-full shrink-0">
+              <div className="sticky top-24 space-y-6">
+                {/* Upcoming Events */}
+                <Card className="overflow-hidden border border-slate-200">
+                  <div className="p-4 border-b">
+                    <h3 className="font-semibold">Upcoming events</h3>
+                  </div>
+                  <div className="divide-y">
+                    {mockEvents.map((event) => (
+                      <div key={event.id} className="p-4 flex gap-3">
+                        <div className="text-center w-12">
+                          <div className="text-lg font-bold">{event.date.day}</div>
+                          <div className="text-xs text-muted-foreground">{event.date.month}</div>
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-medium">{event.title}</h4>
+                          <p className="text-xs text-muted-foreground mt-1">{event.time}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+
+                {/* Trending Posts */}
+                <Card className="overflow-hidden border border-slate-200">
+                  <div className="p-4 border-b">
+                    <h3 className="font-semibold">Trending Posts</h3>
+                  </div>
+                  <div className="divide-y">
+                    {trendingPosts.map((post) => (
+                      <div key={post.id} className="p-4 flex items-center gap-3">
+                        <Avatar className="h-10 w-10">
+                          <img src={post.avatar} alt={post.author} />
+                        </Avatar>
+                        <div>
+                          <h4 className="text-sm font-medium">{post.title}</h4>
+                          <p className="text-xs text-muted-foreground">{post.author}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+    </>
+  );
+};
+
+export default ForumPage;

@@ -14,6 +14,7 @@ import SignUp from "./pages/SignUp";
 import JoinNow from "./pages/JoinNow";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import Forum from "./pages/Forum";
 import { HostProvider } from "./contexts/HostContext";
 
 // Host Portal Pages
@@ -43,6 +44,7 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/join" element={<JoinNow />} />
+            <Route path="/forum" element={<Forum />} />
             
             {/* Host Portal Routes */}
             <Route path="/host/login" element={<HostLogin />} />

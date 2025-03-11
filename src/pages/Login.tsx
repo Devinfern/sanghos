@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { ArrowLeft, Mail, Lock, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,10 +12,21 @@ import { cn } from "@/lib/utils";
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Check if there's a redirect destination in the URL
+  const fromPath = new URLSearchParams(location.search).get("from") || "/";
+
+  // Check if already logged in
+  useEffect(() => {
+    if (localStorage.getItem("sanghos_user")) {
+      navigate(fromPath);
+    }
+  }, [navigate, fromPath]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,8 +40,16 @@ const Login = () => {
       // This is a mock authentication
       // In a real app, you would verify credentials with your backend
       if (email === "demo@example.com" && password === "password") {
+        // Store user info in localStorage
+        localStorage.setItem("sanghos_user", JSON.stringify({
+          id: "user123",
+          email,
+          name: "Demo User",
+          avatar: "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+        }));
+        
         toast.success("Successfully logged in!");
-        navigate("/");
+        navigate(fromPath);
       } else {
         setError("Invalid email or password");
       }
@@ -120,6 +139,12 @@ const Login = () => {
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Signing in..." : "Sign In"}
             </Button>
+
+            <div className="pt-4 text-center text-sm text-muted-foreground">
+              <p className="mb-2">For demo purposes, use:</p>
+              <p className="font-medium">Email: demo@example.com</p>
+              <p className="font-medium">Password: password</p>
+            </div>
           </form>
 
           <div className="mt-8 text-center text-sm">
