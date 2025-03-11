@@ -3,6 +3,7 @@ import { NavLink, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Logo from "./Logo";
 
 interface MobileNavigationProps {
   isOpen: boolean;
@@ -16,22 +17,24 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick, onC
   return (
     <div
       className={cn(
-        "fixed inset-0 bg-white z-40 flex flex-col transition-transform duration-300 ease-in-out md:hidden pt-20",
+        "fixed inset-0 bg-white z-40 flex flex-col transition-transform duration-300 ease-in-out md:hidden",
         isOpen ? "translate-x-0" : "translate-x-full"
       )}
     >
-      <div className="absolute top-4 right-4">
+      <div className="flex items-center justify-between p-4 border-b border-gray-100">
+        <Logo />
         <Button 
           variant="ghost" 
           size="icon" 
           onClick={onClose}
           aria-label="Close menu"
+          className="focus:outline-none"
         >
           <X size={24} />
         </Button>
       </div>
       
-      <nav className="flex flex-col space-y-6 px-8 py-8">
+      <nav className="flex flex-col space-y-6 px-8 py-8 overflow-y-auto">
         <NavLink
           to="/"
           className={({ isActive }) =>
@@ -40,6 +43,7 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick, onC
               isActive ? "text-primary" : "text-muted-foreground"
             )
           }
+          onClick={onClose}
         >
           Home
         </NavLink>
@@ -51,6 +55,7 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick, onC
               isActive ? "text-primary" : "text-muted-foreground"
             )
           }
+          onClick={onClose}
         >
           Retreats
         </NavLink>
@@ -62,6 +67,7 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick, onC
               isActive ? "text-primary" : "text-muted-foreground"
             )
           }
+          onClick={onClose}
         >
           Instructors
         </NavLink>
@@ -73,6 +79,7 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick, onC
               isActive ? "text-primary" : "text-muted-foreground"
             )
           }
+          onClick={onClose}
         >
           About Us
         </NavLink>
@@ -85,6 +92,7 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick, onC
                 isActive ? "text-primary" : "text-muted-foreground"
               )
             }
+            onClick={onClose}
           >
             Community
           </NavLink>
@@ -92,23 +100,29 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick, onC
           <Link
             to="/community"
             className="text-lg font-medium py-2 transition-colors text-muted-foreground"
-            onClick={onCommunityClick}
+            onClick={(e) => {
+              onCommunityClick(e);
+              onClose();
+            }}
           >
             Community
           </Link>
         )}
         <div className="flex flex-col space-y-4 pt-4">
           {isLoggedIn ? (
-            <Button variant="outline" onClick={onSignOut}>
+            <Button variant="outline" onClick={() => {
+              onSignOut();
+              onClose();
+            }}>
               Sign Out
             </Button>
           ) : (
             <>
               <Button variant="outline" asChild className="w-full">
-                <Link to="/login">Sign In</Link>
+                <Link to="/login" onClick={onClose}>Sign In</Link>
               </Button>
               <Button asChild className="w-full">
-                <Link to="/join">Join Sanghos</Link>
+                <Link to="/join" onClick={onClose}>Join Sanghos</Link>
               </Button>
             </>
           )}
