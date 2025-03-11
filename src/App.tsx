@@ -18,6 +18,7 @@ import Community from "./pages/Community";
 import CommunityTeaser from "./pages/CommunityTeaser";
 import CommunitySpaceDetails from "./pages/CommunitySpaceDetails";
 import { HostProvider } from "./contexts/HostContext";
+import ScrollToTop from "./components/ScrollToTop";
 
 // Host Portal Pages
 import HostLogin from "./pages/host/HostLogin";
@@ -43,6 +44,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollToTop />
         <HostProvider>
           <Routes>
             {/* Public Routes */}
