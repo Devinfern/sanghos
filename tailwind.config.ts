@@ -95,6 +95,15 @@ export default {
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
 			},
+			spacing: {
+				// Standardized spacing scale
+				'section': '5rem',
+				'section-sm': '3rem',
+				'section-lg': '8rem',
+				'content': '2.5rem',
+				'content-sm': '1.5rem',
+				'content-lg': '4rem',
+			},
 			keyframes: {
 				'accordion-down': {
 					from: {
@@ -133,6 +142,10 @@ export default {
 						filter: 'blur(0)',
 						opacity: '1'
 					}
+				},
+				'button-pulse': {
+					'0%, 100%': { transform: 'scale(1)' },
+					'50%': { transform: 'scale(1.02)' }
 				}
 			},
 			animation: {
@@ -141,7 +154,8 @@ export default {
 				'slide-up': 'slide-up 0.4s ease-out forwards',
 				'fade-in': 'fade-in 0.6s ease-out forwards',
 				'fade-up': 'fade-up 0.6s ease-out forwards',
-				'blur-in': 'blur-in 0.6s ease-out forwards'
+				'blur-in': 'blur-in 0.6s ease-out forwards',
+				'button-pulse': 'button-pulse 2s ease-in-out infinite'
 			}
 		}
 	},

@@ -16,7 +16,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 24 10% 10%;
 
-    --primary: 197 37% 24%;
+    /* Slightly adjusted primary color for better harmony */
+    --primary: 195 38% 24%;
     --primary-foreground: 60 9% 98%;
 
     --secondary: 60 9% 98%;
@@ -33,7 +34,7 @@
 
     --border: 20 6% 90%;
     --input: 20 6% 90%;
-    --ring: 24 5% 40%;
+    --ring: 195 38% 34%;
 
     --radius: 0.5rem;
 
@@ -76,11 +77,28 @@
   }
 
   p {
-    @apply leading-relaxed;
+    @apply leading-relaxed text-base md:text-lg;
   }
 
   a {
     @apply transition-colors duration-200;
+  }
+
+  /* Standardized spacing */
+  .section {
+    @apply py-12 md:py-16 lg:py-20;
+  }
+  
+  .section-sm {
+    @apply py-8 md:py-10 lg:py-12;
+  }
+  
+  .section-lg {
+    @apply py-16 md:py-20 lg:py-24;
+  }
+  
+  .container {
+    @apply px-4 md:px-6 lg:px-8;
   }
 
   ::-webkit-scrollbar {
@@ -96,6 +114,7 @@
   }
 }
 
+/* Page transition animation */
 .page-transition-enter {
   opacity: 0;
   transform: translateY(8px);
@@ -107,9 +126,9 @@
   transition: opacity 400ms, transform 400ms;
 }
 
-/* Card hover effect */
+/* Enhanced card hover effect */
 .retreat-card {
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .retreat-card:hover {
@@ -125,19 +144,20 @@
 }
 
 .image-wrapper img {
-  transition: transform 0.7s ease;
+  transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .retreat-card:hover .image-wrapper img {
-  transform: scale(1.03);
+  transform: scale(1.05);
 }
 
-/* Glass effect */
+/* Glass effect with improved styling */
 .glass-panel {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.05);
 }
 
 /* Loading image animation */
@@ -154,9 +174,9 @@
   }
 }
 
-/* Enhanced button styles */
+/* Enhanced button styles with improved animations */
 .btn-hover-effect {
-  @apply relative overflow-hidden;
+  @apply relative overflow-hidden transition-all duration-300;
 }
 
 .btn-hover-effect::after {
@@ -168,9 +188,13 @@
   @apply opacity-20;
 }
 
-/* Enhanced card styles */
+.btn-hover-effect:active {
+  transform: translateY(1px);
+}
+
+/* Enhanced card styles with standardized spacing */
 .enhanced-card {
-  @apply transition-all duration-300 hover:shadow-lg border border-transparent hover:border-sand-200;
+  @apply transition-all duration-300 hover:shadow-lg border border-transparent hover:border-sand-200 p-6 md:p-8 rounded-xl;
 }
 
 /* Enhanced form elements */
@@ -211,14 +235,31 @@ input:focus, select:focus, textarea:focus {
   }
 }
 
-/* Section transitions */
+/* Section transitions with standardized timing */
 .section-transition {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .section-transition.in-view {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* New standardized component spacing */
+.card-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8;
+}
+
+.card-grid-2 {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8;
+}
+
+.flex-center {
+  @apply flex items-center justify-center;
+}
+
+.flex-between {
+  @apply flex items-center justify-between;
 }
