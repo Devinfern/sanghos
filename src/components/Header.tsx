@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { NavLink, useLocation, Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
@@ -19,14 +18,11 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Handle route changes
   useEffect(() => {
-    // Close mobile menu when route changes
     setMobileMenuOpen(false);
     document.body.style.removeProperty('overflow');
   }, [location.pathname]);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       document.body.style.removeProperty('overflow');
@@ -37,7 +33,6 @@ const Header = () => {
     const newMenuState = !mobileMenuOpen;
     setMobileMenuOpen(newMenuState);
     
-    // Set body overflow based on menu state
     if (newMenuState) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -45,7 +40,6 @@ const Header = () => {
     }
   };
 
-  // Check if user is logged in
   const isLoggedIn = localStorage.getItem("sanghos_user") !== null;
 
   return (
@@ -62,7 +56,6 @@ const Header = () => {
           Sanghos
         </NavLink>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8">
           <NavLink
             to="/"
@@ -110,7 +103,7 @@ const Header = () => {
           </NavLink>
           {isLoggedIn && (
             <NavLink
-              to="/forum"
+              to="/community"
               className={({ isActive }) =>
                 cn(
                   "text-sm font-medium transition-colors hover:text-primary",
@@ -118,7 +111,7 @@ const Header = () => {
                 )
               }
             >
-              Forum
+              Community
             </NavLink>
           )}
           {isLoggedIn ? (
@@ -140,7 +133,6 @@ const Header = () => {
           )}
         </nav>
 
-        {/* Mobile Menu Button */}
         <button 
           onClick={toggleMobileMenu} 
           className="md:hidden flex items-center"
@@ -150,7 +142,6 @@ const Header = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       <div
         className={cn(
           "fixed inset-0 bg-white z-40 flex flex-col transition-transform duration-300 ease-in-out md:hidden pt-20",
@@ -204,7 +195,7 @@ const Header = () => {
           </NavLink>
           {isLoggedIn && (
             <NavLink
-              to="/forum"
+              to="/community"
               className={({ isActive }) =>
                 cn(
                   "text-lg font-medium py-2 transition-colors",
@@ -212,7 +203,7 @@ const Header = () => {
                 )
               }
             >
-              Forum
+              Community
             </NavLink>
           )}
           <div className="flex flex-col space-y-4 pt-4">
