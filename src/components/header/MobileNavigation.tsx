@@ -17,11 +17,11 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick, onC
   return (
     <div
       className={cn(
-        "fixed inset-0 bg-white z-[100] flex flex-col transition-transform duration-300 ease-in-out md:hidden",
+        "fixed inset-0 bg-white z-[9999] flex flex-col transition-transform duration-300 ease-in-out md:hidden",
         isOpen ? "translate-x-0" : "translate-x-full"
       )}
     >
-      <div className="flex items-center justify-between p-4 border-b border-gray-100">
+      <div className="flex items-center justify-between p-4 border-b border-gray-100 sticky top-0 bg-white">
         <Logo />
         <Button 
           variant="ghost" 

@@ -72,7 +72,7 @@ const Header = () => {
           : "bg-transparent"
       )}
     >
-      <div className="container mx-auto px-4 md:px-6 flex justify-between items-center relative z-50">
+      <div className="container mx-auto px-4 md:px-6 flex justify-between items-center relative">
         <Logo />
         <DesktopNavigation 
           isLoggedIn={isLoggedIn} 
