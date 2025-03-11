@@ -24,7 +24,7 @@ const OptimizedImage = ({
   src,
   alt,
   className = "",
-  loadingClassName = "bg-muted",
+  loadingClassName = "bg-muted animate-pulse",
   aspectRatio = "square",
   priority = false,
   objectFit = "cover",
@@ -57,19 +57,20 @@ const OptimizedImage = ({
     <div className={cn(
       aspectClass,
       !isLoaded && !error && loadingClassName,
+      "overflow-hidden", // Add overflow hidden for cleaner edges
       className
     )}>
       <img
         src={src}
         alt={alt}
         className={cn(
-          "w-full h-full transition-opacity duration-300",
+          "w-full h-full transition-all duration-500", // Smoother transition
           objectFit === "cover" && "object-cover",
           objectFit === "contain" && "object-contain",
           objectFit === "fill" && "object-fill",
           objectFit === "none" && "object-none",
           objectFit === "scale-down" && "object-scale-down",
-          !isLoaded && !error ? "opacity-0" : "opacity-100"
+          !isLoaded && !error ? "opacity-0 scale-[1.02]" : "opacity-100 scale-100" // Subtle zoom effect on load
         )}
         loading={priority ? "eager" : "lazy"}
         onLoad={handleLoad}
