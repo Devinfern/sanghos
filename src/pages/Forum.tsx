@@ -29,6 +29,7 @@ import { ForumPost } from "@/lib/forumData";
 
 const ForumPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [newPostContent, setNewPostContent] = useState<string>("");
   const [posts, setPosts] = useState<ForumPost[]>(initialPosts);
   const [showCMS, setShowCMS] = useState<boolean>(false);
@@ -40,8 +41,20 @@ const ForumPage = () => {
     // In a real app, this would check your authentication system
     const checkLoginStatus = () => {
       // Mock authentication - replace with your actual auth check
-      const mockLoggedIn = localStorage.getItem("sanghos_user") !== null;
+      const userString = localStorage.getItem("sanghos_user");
+      const mockLoggedIn = userString !== null;
       setIsLoggedIn(mockLoggedIn);
+      
+      // Check if user is admin
+      if (mockLoggedIn && userString) {
+        try {
+          const userData = JSON.parse(userString);
+          // Check if the user has admin role - in a real app, this would be part of the user data
+          setIsAdmin(userData.email === "demo@example.com"); // For demo purposes, only the demo user is admin
+        } catch (error) {
+          console.error("Error parsing user data:", error);
+        }
+      }
       
       if (!mockLoggedIn) {
         toast.error("You need to be logged in to access the forum");
@@ -106,6 +119,10 @@ const ForumPage = () => {
   };
 
   const toggleCMS = () => {
+    if (!isAdmin) {
+      toast.error("You need admin privileges to access the CMS");
+      return;
+    }
     setShowCMS(!showCMS);
   };
 
@@ -113,7 +130,7 @@ const ForumPage = () => {
     return null; // Don't render anything if not logged in
   }
 
-  if (showCMS) {
+  if (showCMS && isAdmin) {
     return (
       <>
         <Helmet>
@@ -206,10 +223,12 @@ const ForumPage = () => {
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium mr-2">Latest</span>
                   <ChevronDown className="h-4 w-4" />
-                  <Button variant="outline" onClick={toggleCMS}>
-                    <Settings className="h-4 w-4 mr-2" />
-                    Manage Content
-                  </Button>
+                  {isAdmin && (
+                    <Button variant="outline" onClick={toggleCMS}>
+                      <Settings className="h-4 w-4 mr-2" />
+                      Manage Content
+                    </Button>
+                  )}
                   <ForumPostEditor 
                     onPostCreated={handleNewPostCreated}
                     buttonLabel="New post"
