@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Calendar, Users, Clock } from "lucide-react";
@@ -21,12 +20,10 @@ const RetreatCard = ({ retreat, index = 0, comingSoon = true }: RetreatCardProps
   const [imageLoaded, setImageLoaded] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  // Animation delay based on index
   const getAnimationDelay = () => {
     return `${100 + index * 100}ms`;
   };
 
-  // If coming soon, we'll use a Dialog instead of a Link
   const CardWrapper = ({ children }: { children: React.ReactNode }) => {
     if (comingSoon) {
       return (
@@ -59,7 +56,6 @@ const RetreatCard = ({ retreat, index = 0, comingSoon = true }: RetreatCardProps
         )}
         style={{ animationDelay: getAnimationDelay() }}
       >
-        {/* Blurred overlay for coming soon */}
         {comingSoon && (
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm">
             <div className="bg-primary/90 text-white px-4 py-2 rounded-full flex items-center mb-3">
@@ -94,7 +90,7 @@ const RetreatCard = ({ retreat, index = 0, comingSoon = true }: RetreatCardProps
               className="bg-sage-500/90 hover:bg-sage-500/90 flex items-center"
               variant="default"
             >
-              <SanghosIcon className="mr-1 h-3 w-3 fill-white" /> Sanghos
+              <SanghosIcon className="mr-1 h-3.5 w-3.5" /> Sanghos
             </Badge>
           )}
         </div>
