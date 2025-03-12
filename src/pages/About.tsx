@@ -3,15 +3,7 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-
-// Import refactored components
 import AboutHero from "@/components/about/AboutHero";
-import AboutMission from "@/components/about/AboutMission";
-import RetreatTypes from "@/components/about/RetreatTypes";
-import CompanyValues from "@/components/about/CompanyValues";
-import CompanyTimeline from "@/components/about/CompanyTimeline";
-import TeamSection from "@/components/about/TeamSection";
-import JoinCTA from "@/components/about/JoinCTA";
 
 const About = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -36,27 +28,8 @@ const About = () => {
 
       <Header />
 
-      <main className="pt-24 pb-16">
-        {/* Hero Section */}
+      <main className="pt-24 pb-16 bg-background">
         <AboutHero isLoaded={isLoaded} />
-
-        {/* Mission Section */}
-        <AboutMission isLoaded={isLoaded} />
-
-        {/* Retreat Types Section */}
-        <RetreatTypes isLoaded={isLoaded} />
-
-        {/* Our Values Section */}
-        <CompanyValues isLoaded={isLoaded} />
-
-        {/* Timeline Section */}
-        <CompanyTimeline isLoaded={isLoaded} />
-
-        {/* Team Section */}
-        <TeamSection isLoaded={isLoaded} />
-
-        {/* Join Us CTA Section */}
-        <JoinCTA isLoaded={isLoaded} />
       </main>
 
       <Footer />
