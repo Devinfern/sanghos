@@ -125,7 +125,7 @@ const About = () => {
     icon: <HandHeart className="h-6 w-6 text-white" />,
     title: "Therapy + Somatic Day Long Retreats",
     description: "Integrate body-based healing approaches with therapeutic practices for holistic emotional wellbeing.",
-    image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=4608&q=80"
+    image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=4608&q=80"
   }];
 
   const teamMembers = [{
@@ -231,7 +231,7 @@ const About = () => {
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-sage-50/80 to-transparent z-0"></div>
           <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10">
-            <ScrollButton targetId="mission" label="Discover Our Story" />
+            <ScrollButton scrollTo="mission" />
           </div>
         </section>
 
