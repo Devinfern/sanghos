@@ -146,6 +146,24 @@ export default {
 				'button-pulse': {
 					'0%, 100%': { transform: 'scale(1)' },
 					'50%': { transform: 'scale(1.02)' }
+				},
+				'button-bounce': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-4px)' }
+				},
+				'button-ripple': {
+					'0%': { 
+						transform: 'scale(0)',
+						opacity: '0.7'
+					},
+					'100%': { 
+						transform: 'scale(1.5)',
+						opacity: '0'
+					}
+				},
+				'wiggle': {
+					'0%, 100%': { transform: 'rotate(-3deg)' },
+					'50%': { transform: 'rotate(3deg)' }
 				}
 			},
 			animation: {
@@ -155,7 +173,10 @@ export default {
 				'fade-in': 'fade-in 0.6s ease-out forwards',
 				'fade-up': 'fade-up 0.6s ease-out forwards',
 				'blur-in': 'blur-in 0.6s ease-out forwards',
-				'button-pulse': 'button-pulse 2s ease-in-out infinite'
+				'button-pulse': 'button-pulse 2s ease-in-out infinite',
+				'button-bounce': 'button-bounce 1s ease-in-out infinite',
+				'button-ripple': 'button-ripple 0.6s linear',
+				'wiggle': 'wiggle 0.3s ease-in-out'
 			}
 		}
 	},

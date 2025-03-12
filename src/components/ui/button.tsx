@@ -10,15 +10,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 after:absolute after:inset-0 after:bg-white after:opacity-0 after:transition-opacity after:duration-300 hover:after:opacity-10 hover:shadow-md",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 after:absolute after:inset-0 after:bg-white after:opacity-0 after:transition-opacity after:duration-300 hover:after:opacity-10 hover:shadow-md hover:translate-y-[-2px] active:translate-y-0 active:scale-[0.98] [&_svg]:transition-transform hover:[&_svg]:translate-x-0.5",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90 hover:shadow-md",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 hover:shadow-md hover:translate-y-[-2px] active:translate-y-0 active:scale-[0.98]",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground hover:border-accent hover:shadow-sm",
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground hover:border-accent hover:shadow-sm hover:translate-y-[-1px] active:translate-y-0 [&_svg]:transition-transform hover:[&_svg]:translate-x-0.5",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:shadow-sm",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:shadow-sm hover:translate-y-[-1px] active:translate-y-0 [&_svg]:transition-transform hover:[&_svg]:translate-x-0.5",
+        ghost: "hover:bg-accent hover:text-accent-foreground [&_svg]:transition-transform hover:[&_svg]:translate-x-0.5",
+        link: "text-primary underline-offset-4 hover:underline hover:text-primary/80 [&_svg]:transition-transform hover:[&_svg]:translate-x-0.5",
       },
       size: {
         default: "h-10 px-4 py-2",
