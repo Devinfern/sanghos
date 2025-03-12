@@ -188,8 +188,211 @@ const About = () => {
     description: "Reached 10,000 retreat participants and launched our host certification program for quality experiences."
   }];
 
+  return (
+    <>
+      <Helmet>
+        <title>About Sanghos | Our Mission & Values</title>
+        <meta name="description" content="Learn about Sanghos, our mission to make mindfulness accessible, our values, and the team behind our community-focused retreat platform." />
+      </Helmet>
+      
+      <Header />
+      
+      <main className="bg-white">
+        <section id="hero" className="min-h-[100vh] py-16 md:py-24 px-4 relative overflow-hidden flex items-center">
+          <div className="container mx-auto relative z-10">
+            <motion.div 
+              className="max-w-4xl mx-auto text-center"
+              initial="hidden"
+              animate={isLoaded ? "visible" : "hidden"}
+              variants={staggerChildren}
+            >
+              <motion.h1 
+                className="text-4xl md:text-6xl font-bold text-gray-900 mb-6"
+                variants={fadeIn}
+              >
+                Making Mindfulness <span className="text-sage-600">Accessible</span> to All
+              </motion.h1>
+              <motion.p 
+                className="text-xl md:text-2xl text-gray-700 mb-8"
+                variants={fadeIn}
+              >
+                We're creating a world where transformative retreat experiences are within everyone's reach.
+              </motion.p>
+              <motion.div variants={fadeIn}>
+                <Button 
+                  size="lg" 
+                  className="bg-sage-600 hover:bg-sage-700 text-white"
+                  asChild
+                >
+                  <a href="/join-now">Join Our Community</a>
+                </Button>
+              </motion.div>
+            </motion.div>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-b from-sage-50/80 to-transparent z-0"></div>
+          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10">
+            <ScrollButton targetId="mission" label="Discover Our Story" />
+          </div>
+        </section>
 
+        <section id="mission" className="py-16 md:py-24 px-4 bg-white">
+          <div className="container mx-auto">
+            <div className="max-w-3xl mx-auto text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Mission</h2>
+              <p className="text-xl text-gray-700">We're building the infrastructure to make mindfulness practices more accessible, connecting people seeking transformative experiences with expert facilitators and welcoming spaces.</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+              {missionCards.map((card, index) => (
+                <Card key={index} className={cn("p-8 h-full", card.className)}>
+                  {card.icon}
+                  <h3 className="text-2xl font-semibold text-gray-900 mb-3">{card.title}</h3>
+                  <p className="text-gray-700">{card.description}</p>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+        
+        <section className="py-16 md:py-24 px-4 bg-sand-50">
+          <div className="container mx-auto">
+            <div className="max-w-3xl mx-auto text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Values</h2>
+              <p className="text-xl text-gray-700">These principles guide everything we do at Sanghos, from how we build our platform to how we interact with our community.</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {valueCards.map((card, index) => (
+                <Card key={index} className={cn("p-6 h-full flex flex-col", card.className)}>
+                  <div className="bg-gray-50 p-3 rounded-full w-fit mb-4">
+                    {card.icon}
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{card.title}</h3>
+                  <p className="text-gray-700 mt-auto">{card.description}</p>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
 
+        <section className="py-16 md:py-24 px-4 bg-white">
+          <div className="container mx-auto">
+            <div className="max-w-3xl mx-auto text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Retreats</h2>
+              <p className="text-xl text-gray-700">Discover the different types of transformative experiences we offer through our platform.</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {retreatTypeCards.map((card) => (
+                <Card key={card.id} className="overflow-hidden h-full group">
+                  <div className="relative h-48 overflow-hidden">
+                    <OptimizedImage
+                      src={card.image}
+                      alt={card.title}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+                      <div className="flex items-center gap-3">
+                        <div className="bg-sage-600/90 p-2 rounded-full">
+                          {card.icon}
+                        </div>
+                        <h3 className="text-xl font-semibold text-white">{card.title}</h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-gray-700">{card.description}</p>
+                    <Button variant="link" className="text-sage-600 hover:text-sage-700 p-0 mt-4" asChild>
+                      <a href="/retreats">View Retreats</a>
+                    </Button>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
 
+        <section className="py-16 md:py-24 px-4 bg-sand-50">
+          <div className="container mx-auto">
+            <div className="max-w-3xl mx-auto text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Team</h2>
+              <p className="text-xl text-gray-700">Meet the passionate people dedicated to making Sanghos a reality.</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {teamMembers.map((member, index) => (
+                <Card key={index} className={cn("overflow-hidden h-full", member.className)}>
+                  <div className="relative h-64 overflow-hidden">
+                    <OptimizedImage
+                      src={member.image}
+                      alt={member.name}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-1">{member.name}</h3>
+                    <p className="text-sage-600 mb-4">{member.role}</p>
+                    <p className="text-gray-700">{member.bio}</p>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
 
+        <section className="py-16 md:py-24 px-4 bg-white">
+          <div className="container mx-auto">
+            <div className="max-w-3xl mx-auto text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Journey</h2>
+              <p className="text-xl text-gray-700">The story of Sanghos and how we've grown over the years.</p>
+            </div>
+            
+            <div className="max-w-4xl mx-auto relative">
+              <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-sage-200"></div>
+              
+              {timelineMilestones.map((milestone, index) => (
+                <div key={index} className="relative z-10 mb-12 last:mb-0">
+                  <div className={`flex items-center ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+                    <div className="w-full md:w-1/2">
+                      <Card className={`p-6 ${index % 2 === 0 ? 'md:mr-8' : 'md:ml-8'}`}>
+                        <div className="bg-sage-100 text-sage-800 text-sm font-medium py-1 px-3 rounded-full inline-block mb-2">
+                          {milestone.year}
+                        </div>
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2">{milestone.title}</h3>
+                        <p className="text-gray-700">{milestone.description}</p>
+                      </Card>
+                    </div>
+                    <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/4 flex flex-col items-center">
+                      <div className="h-6 w-6 rounded-full bg-sage-500 border-4 border-white"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
+        <section className="py-16 md:py-24 px-4 bg-gradient-to-r from-sage-500 to-sage-700 text-white">
+          <div className="container mx-auto">
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">Join Our Growing Community</h2>
+              <p className="text-xl mb-8">Whether you're seeking mindfulness experiences, hosting spaces, or sharing your expertise, there's a place for you at Sanghos.</p>
+              <Button 
+                size="lg" 
+                variant="outline"
+                className="bg-transparent text-white border-white hover:bg-white hover:text-sage-700"
+                asChild
+              >
+                <a href="/join-now">Get Started Today</a>
+              </Button>
+            </div>
+          </div>
+        </section>
+      </main>
+      
+      <Footer />
+    </>
+  );
+};
+
+export default About;
