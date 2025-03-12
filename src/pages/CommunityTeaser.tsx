@@ -1,4 +1,3 @@
-
 import { Helmet } from "react-helmet";
 import { useNavigate, Link } from "react-router-dom";
 import Header from "@/components/Header";
@@ -7,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Users, MessageCircle, Calendar, Check, Heart, Star } from "lucide-react";
 import OptimizedImage from "@/components/OptimizedImage";
 import { Card, CardContent } from "@/components/ui/card";
+
 const CommunityTeaser = () => {
   const navigate = useNavigate();
   return <>
@@ -18,46 +18,46 @@ const CommunityTeaser = () => {
       <Header />
 
       <main className="pt-16 pb-16">
-        {/* Hero Section with updated styling and animations */}
-        <section className="relative min-h-[100vh] flex items-center justify-center overflow-hidden mb-16">
+        {/* Hero Section with improved spacing and reduced congestion */}
+        <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden mb-16">
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-transparent z-10"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/10 z-10"></div>
             <OptimizedImage src="/lovable-uploads/d119458d-9251-4956-9c76-ec663432c449.png" alt="Modern retreat space with pool" className="w-full h-full" aspectRatio="custom" objectFit="cover" priority={true} />
           </div>
 
-          <div className="container relative z-20 px-4 md:px-6 py-16 sm:py-24">
-            <div className="max-w-3xl mx-auto text-center">
-              <span className="inline-block bg-white/20 backdrop-blur-sm text-white px-4 py-1 rounded-full text-sm font-medium mb-4 animate-fade-in" style={{
+          <div className="container relative z-20 px-4 md:px-6 py-16 sm:py-24 max-w-5xl">
+            <div className="mx-auto text-center">
+              <span className="inline-block bg-white/20 backdrop-blur-sm text-white px-4 py-1 rounded-full text-sm font-medium mb-6 animate-fade-in" style={{
               animationDelay: "300ms"
-            }}>Join 200+ Sanghos members on their wellness journey</span>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 animate-fade-in" style={{
+            }}>Join 200+ Sanghos members</span>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight animate-fade-in" style={{
               animationDelay: "400ms"
             }}>
                 Find Your Community on Sanghos
               </h1>
-              <p className="text-xl text-white/90 mb-8 animate-fade-in" style={{
+              <p className="text-xl md:text-2xl text-white/90 mb-10 max-w-2xl mx-auto animate-fade-in" style={{
               animationDelay: "500ms"
             }}>
-                Connect with like-minded individuals, share your wellness journey, and access exclusive content and events.
+                Connect with like-minded individuals and access exclusive content
               </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in" style={{
+              <div className="flex flex-col sm:flex-row justify-center gap-6 animate-fade-in" style={{
               animationDelay: "600ms"
             }}>
-                <Button size="lg" onClick={() => navigate("/join")} className="bg-primary hover:bg-primary/90 group shadow-lg hover:shadow-xl transition-all">
+                <Button size="lg" onClick={() => navigate("/join")} className="bg-primary hover:bg-primary/90 group shadow-lg hover:shadow-xl transition-all text-lg py-6">
                   Join Sanghos
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
-                <Button size="lg" variant="outline" onClick={() => navigate("/login")} className="bg-white/10 text-white hover:bg-white/20 border-white/30 backdrop-blur-sm">
+                <Button size="lg" variant="outline" onClick={() => navigate("/login")} className="bg-white/10 text-white hover:bg-white/20 border-white/30 backdrop-blur-sm text-lg py-6">
                   Sign In
                 </Button>
               </div>
             </div>
           </div>
 
-          {/* Decorative elements */}
-          <div className="absolute bottom-8 left-0 right-0 flex justify-center animate-bounce">
+          {/* Decorative element moved to bottom */}
+          <div className="absolute bottom-12 left-0 right-0 flex justify-center animate-bounce">
             <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-              <ArrowRight className="h-5 w-5 text-white -rotate-1" />
+              <ArrowRight className="h-5 w-5 text-white rotate-90" />
             </div>
           </div>
         </section>
