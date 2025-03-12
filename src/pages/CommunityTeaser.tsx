@@ -1,3 +1,4 @@
+
 import { Helmet } from "react-helmet";
 import { useNavigate, Link } from "react-router-dom";
 import Header from "@/components/Header";
@@ -32,7 +33,7 @@ const CommunityTeaser = () => {
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 animate-fade-in" style={{
               animationDelay: "400ms"
             }}>
-                Find Your <span className="bg-primary/80 px-2 rounded font-extrabold text-sand-300">Community</span> on Sanghos
+                Find Your Community on Sanghos
               </h1>
               <p className="text-xl text-white/90 mb-8 animate-fade-in" style={{
               animationDelay: "500ms"
