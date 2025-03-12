@@ -36,12 +36,14 @@ const About = () => {
 
       <main className="pt-24 pb-16 bg-background">
         <AboutHero isLoaded={isLoaded} />
-        <AboutMission isLoaded={isLoaded} />
-        <CompanyValues isLoaded={isLoaded} />
-        <RetreatTypes isLoaded={isLoaded} />
-        <CompanyTimeline isLoaded={isLoaded} />
-        <TeamSection isLoaded={isLoaded} />
-        <JoinCTA isLoaded={isLoaded} />
+        <div className="space-y-24">
+          <AboutMission isLoaded={isLoaded} />
+          <CompanyValues isLoaded={isLoaded} />
+          <RetreatTypes isLoaded={isLoaded} />
+          <CompanyTimeline isLoaded={isLoaded} />
+          <TeamSection isLoaded={isLoaded} />
+          <JoinCTA isLoaded={isLoaded} />
+        </div>
       </main>
 
       <Footer />
