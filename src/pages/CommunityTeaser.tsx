@@ -1,4 +1,3 @@
-
 import { Helmet } from "react-helmet";
 import { useNavigate, Link } from "react-router-dom";
 import Header from "@/components/Header";
@@ -7,12 +6,9 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Users, MessageCircle, Calendar, Check } from "lucide-react";
 import OptimizedImage from "@/components/OptimizedImage";
 import { Card, CardContent } from "@/components/ui/card";
-
 const CommunityTeaser = () => {
   const navigate = useNavigate();
-  
-  return (
-    <>
+  return <>
       <Helmet>
         <title>Join Our Community | Sanghos</title>
         <meta name="description" content="Join the Sanghos community to connect with like-minded individuals, share experiences, and deepen your wellness journey." />
@@ -22,17 +18,10 @@ const CommunityTeaser = () => {
 
       <main className="pt-16 pb-16">
         {/* Hero Section with background image */}
-        <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden mb-16">
+        <section className="relative min-h-[100vh] flex items-center justify-center overflow-hidden mb-16">
           <div className="absolute inset-0 z-0">
             <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-transparent z-10"></div>
-            <OptimizedImage 
-              src="/lovable-uploads/d119458d-9251-4956-9c76-ec663432c449.png" 
-              alt="Modern retreat space with pool" 
-              className="w-full h-full" 
-              aspectRatio="custom" 
-              objectFit="cover" 
-              priority={true} 
-            />
+            <OptimizedImage src="/lovable-uploads/d119458d-9251-4956-9c76-ec663432c449.png" alt="Modern retreat space with pool" className="w-full h-full" aspectRatio="custom" objectFit="cover" priority={true} />
           </div>
 
           <div className="container relative z-20 px-4 md:px-6 py-16 sm:py-24">
@@ -44,20 +33,11 @@ const CommunityTeaser = () => {
                 Connect with like-minded individuals, share your wellness journey, and access exclusive content and events.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in">
-                <Button 
-                  size="lg" 
-                  onClick={() => navigate("/join")} 
-                  className="bg-primary/90 hover:bg-primary group"
-                >
+                <Button size="lg" onClick={() => navigate("/join")} className="bg-primary/90 hover:bg-primary group">
                   Join Sanghos
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  onClick={() => navigate("/login")} 
-                  className="bg-white/10 text-white hover:bg-white/20 border-white/30"
-                >
+                <Button size="lg" variant="outline" onClick={() => navigate("/login")} className="bg-white/10 text-white hover:bg-white/20 border-white/30">
                   Sign In
                 </Button>
               </div>
@@ -158,28 +138,13 @@ const CommunityTeaser = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="aspect-[4/3] rounded-2xl overflow-hidden group shadow-md">
-                <OptimizedImage 
-                  src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" 
-                  alt="Community retreat" 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                  aspectRatio="custom" 
-                />
+                <OptimizedImage src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="Community retreat" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" aspectRatio="custom" />
               </div>
               <div className="aspect-[4/3] rounded-2xl overflow-hidden group shadow-md">
-                <OptimizedImage 
-                  src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07" 
-                  alt="Group meditation" 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                  aspectRatio="custom" 
-                />
+                <OptimizedImage src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07" alt="Group meditation" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" aspectRatio="custom" />
               </div>
               <div className="aspect-[4/3] rounded-2xl overflow-hidden group shadow-md">
-                <OptimizedImage 
-                  src="https://images.unsplash.com/photo-1518495973542-4542c06a5843" 
-                  alt="Wellness workshop" 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                  aspectRatio="custom" 
-                />
+                <OptimizedImage src="https://images.unsplash.com/photo-1518495973542-4542c06a5843" alt="Wellness workshop" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" aspectRatio="custom" />
               </div>
             </div>
           </div>
@@ -202,12 +167,7 @@ const CommunityTeaser = () => {
                     </p>
                     <div className="flex items-center">
                       <div className="w-12 h-12 bg-primary/20 rounded-full mr-3 overflow-hidden">
-                        <OptimizedImage 
-                          src="https://i.pravatar.cc/100?u=sarah" 
-                          alt="Sarah J." 
-                          className="w-full h-full object-cover" 
-                          aspectRatio="square" 
-                        />
+                        <OptimizedImage src="https://i.pravatar.cc/100?u=sarah" alt="Sarah J." className="w-full h-full object-cover" aspectRatio="square" />
                       </div>
                       <div>
                         <p className="font-medium">Sarah J.</p>
@@ -229,12 +189,7 @@ const CommunityTeaser = () => {
                     </p>
                     <div className="flex items-center">
                       <div className="w-12 h-12 bg-primary/20 rounded-full mr-3 overflow-hidden">
-                        <OptimizedImage 
-                          src="https://i.pravatar.cc/100?u=michael" 
-                          alt="Michael T." 
-                          className="w-full h-full object-cover" 
-                          aspectRatio="square" 
-                        />
+                        <OptimizedImage src="https://i.pravatar.cc/100?u=michael" alt="Michael T." className="w-full h-full object-cover" aspectRatio="square" />
                       </div>
                       <div>
                         <p className="font-medium">Michael T.</p>
@@ -256,11 +211,7 @@ const CommunityTeaser = () => {
               <p className="text-lg text-muted-foreground mb-8">
                 Take the first step toward a more connected wellness journey. Join Sanghos today and become part of our growing community.
               </p>
-              <Button 
-                size="lg" 
-                onClick={() => navigate("/join")} 
-                className="group"
-              >
+              <Button size="lg" onClick={() => navigate("/join")} className="group">
                 Join Sanghos Now
                 <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
@@ -270,8 +221,6 @@ const CommunityTeaser = () => {
       </main>
 
       <Footer />
-    </>
-  );
+    </>;
 };
-
 export default CommunityTeaser;
