@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import OptimizedImage from "@/components/OptimizedImage";
 
 interface AboutHeroProps {
   isLoaded: boolean;
@@ -41,6 +42,19 @@ const AboutHero = ({ isLoaded }: AboutHeroProps) => {
           initial="hidden"
           animate={isLoaded ? "visible" : "hidden"}
           variants={fadeIn}
+          className="mb-16 text-center"
+        >
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">About Sanghos</h1>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+            We're on a mission to make mindfulness and wellness retreats accessible to everyone, 
+            creating spaces for transformation and community.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial="hidden"
+          animate={isLoaded ? "visible" : "hidden"}
+          variants={fadeIn}
           className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6"
         >
           {cards.map((card, index) => (
@@ -52,10 +66,12 @@ const AboutHero = ({ isLoaded }: AboutHeroProps) => {
               )}
             >
               <div className="absolute inset-0">
-                <img 
+                <OptimizedImage 
                   src={card.image} 
                   alt={card.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-full"
+                  objectFit="cover"
+                  aspectRatio="custom"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               </div>
