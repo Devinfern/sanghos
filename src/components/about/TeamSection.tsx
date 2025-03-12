@@ -23,10 +23,10 @@ const TeamSection = ({ isLoaded }: TeamSectionProps) => {
 
   const team = [
     {
-      name: "Maya Johnson",
-      role: "Founder & CEO",
-      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80",
-      bio: "With over 15 years in wellness practice and a background in mindfulness education, Maya founded Sanghos to make transformative experiences more accessible."
+      name: "Devin Fernandez",
+      role: "Founder",
+      image: "/lovable-uploads/f1e50ebf-84dd-47ec-9f51-e4ef3f49b992.png",
+      bio: "Having had a meditation practice spanning over 10 years, Devin discovered early on how clunky and user-unfriendly the retreat experience was, so he founded Sanghos to make transformative experiences more accessible."
     },
     {
       name: "Raj Patel",
