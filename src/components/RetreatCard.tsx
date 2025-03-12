@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Calendar, Users, Clock, CheckCircle, Star } from "lucide-react";
+import { MapPin, Calendar, Users, Clock } from "lucide-react";
 import { Retreat, formatCurrency, getRemainingText } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -9,6 +9,7 @@ import OptimizedImage from "./OptimizedImage";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import EmailSignupForm from "./EmailSignupForm";
+import SanghosIcon from "./SanghosIcon";
 
 interface RetreatCardProps {
   retreat: Retreat;
@@ -93,7 +94,7 @@ const RetreatCard = ({ retreat, index = 0, comingSoon = true }: RetreatCardProps
               className="bg-sage-500/90 hover:bg-sage-500/90 flex items-center"
               variant="default"
             >
-              <Star className="mr-1 h-3 w-3 fill-white/30" /> Sanghos
+              <SanghosIcon className="mr-1 h-3 w-3 fill-white" /> Sanghos
             </Badge>
           )}
         </div>

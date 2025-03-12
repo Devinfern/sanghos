@@ -1,9 +1,11 @@
+
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Search, Info, Star } from "lucide-react";
+import { Search, Info } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import RetreatCard from "@/components/RetreatCard";
+import SanghosIcon from "@/components/SanghosIcon";
 import { retreats } from "@/lib/data";
 import { Input } from "@/components/ui/input";
 import { 
@@ -88,7 +90,7 @@ const Retreats = () => {
                   <TabsTrigger value="sanghos" className="relative overflow-hidden group">
                     <span className="flex items-center gap-1">
                       Sanghos 
-                      <Star className="ml-0.5 w-3 h-3 text-primary/90 fill-primary/30" />
+                      <SanghosIcon className="ml-0.5 w-4 h-4 text-primary/90 fill-primary/60" />
                     </span>
                     <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-data-[state=active]:scale-x-100 transition-transform origin-left duration-300"></span>
                   </TabsTrigger>
