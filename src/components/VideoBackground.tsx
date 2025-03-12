@@ -71,10 +71,10 @@ const VideoBackground: React.FC<VideoBackgroundProps> = ({
     <div className="absolute inset-0 w-full h-full overflow-hidden -z-10">
       <div className={`absolute inset-0 ${overlayOpacity} z-10`} />
       
-      {isImageUsed && imageUrl ? (
+      {isImageUsed ? (
         <div className="absolute inset-0 w-full h-full">
           <OptimizedImage 
-            src={imageUrl} 
+            src={imageUrl || ''} 
             alt="Background" 
             className="w-full h-full" 
             aspectRatio="custom"
