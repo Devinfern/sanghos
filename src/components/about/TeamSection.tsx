@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 
 interface TeamSectionProps {
@@ -26,7 +25,7 @@ const TeamSection = ({ isLoaded }: TeamSectionProps) => {
       name: "Devin Fernandez",
       role: "Founder",
       image: "/lovable-uploads/f1e50ebf-84dd-47ec-9f51-e4ef3f49b992.png",
-      bio: "Having had a meditation practice spanning over 10 years, Devin discovered early on how clunky and user-unfriendly the retreat experience was, so he founded Sanghos to make transformative experiences more accessible."
+      bio: "Devin's 10+ years of meditation revealed the need for a more seamless retreat experience. This insight sparked the creation of Sanghos, aimed at making transformative journeys more attainable."
     },
     {
       name: "Raj Patel",
