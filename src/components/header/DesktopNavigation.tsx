@@ -125,7 +125,9 @@ const DesktopNavigation = ({
             asChild 
             className={cn(
               "ml-4", 
-              isOnDarkBackground ? "border-white text-white hover:bg-white/10" : ""
+              isOnDarkBackground 
+                ? "border-white text-slate-900 bg-white hover:bg-white/90 hover:text-slate-900" 
+                : "text-slate-900"
             )}
           >
             <Link to="/login">Sign In</Link>
