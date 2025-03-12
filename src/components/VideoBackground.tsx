@@ -1,18 +1,30 @@
 
 import React, { useState, useEffect } from 'react';
+import OptimizedImage from './OptimizedImage';
 
 interface VideoBackgroundProps {
-  videoUrl: string;
+  videoUrl?: string;
+  imageUrl?: string;
   overlayOpacity?: string;
 }
 
 const VideoBackground: React.FC<VideoBackgroundProps> = ({ 
   videoUrl, 
+  imageUrl,
   overlayOpacity = "bg-black/40" // default 40% opacity black overlay
 }) => {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [isImageUsed, setIsImageUsed] = useState(false);
 
   useEffect(() => {
+    // If imageUrl is provided, use image instead of video
+    if (imageUrl) {
+      setIsImageUsed(true);
+      return;
+    }
+    
+    if (!videoUrl) return;
+
     // Create a prefetch mechanism for the video
     const videoElement = document.createElement('video');
     videoElement.src = videoUrl;
@@ -27,12 +39,23 @@ const VideoBackground: React.FC<VideoBackgroundProps> = ({
       videoElement.onloadeddata = null;
       videoElement.onerror = null;
     };
-  }, [videoUrl]);
+  }, [videoUrl, imageUrl]);
 
   return (
     <div className="absolute inset-0 w-full h-full overflow-hidden -z-10">
       <div className={`absolute inset-0 ${overlayOpacity} z-10`} />
-      {isVideoLoaded ? (
+      
+      {isImageUsed && imageUrl ? (
+        <div className="absolute inset-0 w-full h-full">
+          <OptimizedImage 
+            src={imageUrl} 
+            alt="Background" 
+            className="w-full h-full" 
+            aspectRatio="custom"
+            objectFit="cover"
+          />
+        </div>
+      ) : isVideoLoaded && videoUrl ? (
         <video
           autoPlay
           loop

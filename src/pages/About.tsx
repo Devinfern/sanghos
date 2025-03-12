@@ -36,7 +36,6 @@ const About = () => {
     }
   };
 
-  // Hero section cards
   const heroCards = [
     {
       title: "Our Mission",
@@ -59,7 +58,6 @@ const About = () => {
     }
   ];
 
-  // Mission section cards
   const missionCards = [
     {
       icon: <Users className="h-12 w-12 text-sage-600 mb-4" />,
@@ -81,7 +79,6 @@ const About = () => {
     }
   ];
 
-  // Values section cards
   const valueCards = [
     {
       icon: <Heart className="h-10 w-10 text-rose-500" />,
@@ -115,7 +112,6 @@ const About = () => {
     }
   ];
 
-  // Retreat Types cards
   const retreatTypeCards = [
     {
       id: 1,
@@ -155,7 +151,6 @@ const About = () => {
     }
   ];
 
-  // Team Members
   const teamMembers = [
     {
       name: "Maya Johnson",
@@ -174,7 +169,7 @@ const About = () => {
     {
       name: "Zoe Chen",
       role: "Community Director",
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80",
+      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80",
       bio: "As our Community Director, Zoe fosters meaningful connections between hosts, instructors, and participants to create a thriving ecosystem of wellness.",
       className: "md:col-span-1"
     },
@@ -201,7 +196,6 @@ const About = () => {
     }
   ];
 
-  // Company Timeline
   const timelineMilestones = [
     {
       year: "2019",
@@ -243,11 +237,11 @@ const About = () => {
       <Header />
 
       <main className="bg-white">
-        {/* Hero Section - With Video Background */}
+        {/* Hero Section - With Image Background */}
         <section className="min-h-[80vh] py-16 md:py-24 px-4 relative overflow-hidden flex items-center">
           <VideoBackground 
-            videoUrl="https://cdn.coverr.co/videos/coverr-hiking-in-the-forest-2527/1080p.mp4"
-            overlayOpacity="bg-black/60"
+            imageUrl="/lovable-uploads/6e9e763a-364b-4dbf-a17e-8f13d82681fa.png"
+            overlayOpacity="bg-black/70"
           />
           <div className="max-w-7xl mx-auto relative z-10 w-full">
             <div className="text-center max-w-3xl mx-auto">
