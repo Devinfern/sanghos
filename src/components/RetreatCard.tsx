@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Calendar, Users, Clock } from "lucide-react";
@@ -90,7 +91,7 @@ const RetreatCard = ({ retreat, index = 0, comingSoon = true }: RetreatCardProps
               className="bg-sage-500/90 hover:bg-sage-500/90 flex items-center"
               variant="default"
             >
-              <SanghosIcon className="mr-1 h-3.5 w-3.5" /> Sanghos
+              <SanghosIcon className="mr-1 h-4 w-4" /> Sanghos
             </Badge>
           )}
         </div>

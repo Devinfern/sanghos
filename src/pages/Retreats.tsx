@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { Search, Info } from "lucide-react";
@@ -90,7 +89,7 @@ const Retreats = () => {
                   <TabsTrigger value="sanghos" className="relative overflow-hidden group">
                     <span className="flex items-center gap-1">
                       Sanghos 
-                      <SanghosIcon className="ml-0.5 w-4 h-4 text-primary/90 fill-primary/60" />
+                      <SanghosIcon className="ml-0.5 w-4 h-4" />
                     </span>
                     <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-data-[state=active]:scale-x-100 transition-transform origin-left duration-300"></span>
                   </TabsTrigger>
