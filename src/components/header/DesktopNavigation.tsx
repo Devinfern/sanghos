@@ -7,9 +7,15 @@ interface DesktopNavigationProps {
   isLoggedIn: boolean;
   onSignOut: () => void;
   onCommunityClick: (e: React.MouseEvent) => void;
+  isOnDarkBackground?: boolean;
 }
 
-const DesktopNavigation = ({ isLoggedIn, onSignOut, onCommunityClick }: DesktopNavigationProps) => {
+const DesktopNavigation = ({ 
+  isLoggedIn, 
+  onSignOut, 
+  onCommunityClick, 
+  isOnDarkBackground = false 
+}: DesktopNavigationProps) => {
   return (
     <nav className="hidden md:flex items-center space-x-8">
       <NavLink
@@ -17,7 +23,11 @@ const DesktopNavigation = ({ isLoggedIn, onSignOut, onCommunityClick }: DesktopN
         className={({ isActive }) =>
           cn(
             "text-sm font-medium transition-colors hover:text-primary",
-            isActive ? "text-primary" : "text-muted-foreground"
+            isActive 
+              ? "text-primary" 
+              : isOnDarkBackground 
+                ? "text-white" 
+                : "text-muted-foreground"
           )
         }
       >
@@ -28,7 +38,11 @@ const DesktopNavigation = ({ isLoggedIn, onSignOut, onCommunityClick }: DesktopN
         className={({ isActive }) =>
           cn(
             "text-sm font-medium transition-colors hover:text-primary",
-            isActive ? "text-primary" : "text-muted-foreground"
+            isActive 
+              ? "text-primary" 
+              : isOnDarkBackground 
+                ? "text-white" 
+                : "text-muted-foreground"
           )
         }
       >
@@ -39,7 +53,11 @@ const DesktopNavigation = ({ isLoggedIn, onSignOut, onCommunityClick }: DesktopN
         className={({ isActive }) =>
           cn(
             "text-sm font-medium transition-colors hover:text-primary",
-            isActive ? "text-primary" : "text-muted-foreground"
+            isActive 
+              ? "text-primary" 
+              : isOnDarkBackground 
+                ? "text-white" 
+                : "text-muted-foreground"
           )
         }
       >
@@ -50,7 +68,11 @@ const DesktopNavigation = ({ isLoggedIn, onSignOut, onCommunityClick }: DesktopN
         className={({ isActive }) =>
           cn(
             "text-sm font-medium transition-colors hover:text-primary",
-            isActive ? "text-primary" : "text-muted-foreground"
+            isActive 
+              ? "text-primary" 
+              : isOnDarkBackground 
+                ? "text-white" 
+                : "text-muted-foreground"
           )
         }
       >
@@ -62,7 +84,11 @@ const DesktopNavigation = ({ isLoggedIn, onSignOut, onCommunityClick }: DesktopN
           className={({ isActive }) =>
             cn(
               "text-sm font-medium transition-colors hover:text-primary",
-              isActive ? "text-primary" : "text-muted-foreground"
+              isActive 
+                ? "text-primary" 
+                : isOnDarkBackground 
+                  ? "text-white" 
+                  : "text-muted-foreground"
             )
           }
           onClick={onCommunityClick}
@@ -72,21 +98,43 @@ const DesktopNavigation = ({ isLoggedIn, onSignOut, onCommunityClick }: DesktopN
       ) : (
         <Link
           to="/community-teaser"
-          className="text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
+          className={cn(
+            "text-sm font-medium transition-colors hover:text-primary",
+            isOnDarkBackground 
+              ? "text-white" 
+              : "text-muted-foreground"
+          )}
         >
           Community
         </Link>
       )}
       {isLoggedIn ? (
-        <Button size="sm" variant="outline" onClick={onSignOut}>
+        <Button 
+          size="sm" 
+          variant={isOnDarkBackground ? "outline" : "outline"}
+          className={isOnDarkBackground ? "border-white text-white hover:bg-white/10" : ""}
+          onClick={onSignOut}
+        >
           Sign Out
         </Button>
       ) : (
         <>
-          <Button size="sm" variant="outline" asChild className="ml-4">
+          <Button 
+            size="sm" 
+            variant="outline" 
+            asChild 
+            className={cn(
+              "ml-4", 
+              isOnDarkBackground ? "border-white text-white hover:bg-white/10" : ""
+            )}
+          >
             <Link to="/login">Sign In</Link>
           </Button>
-          <Button size="sm" asChild>
+          <Button 
+            size="sm" 
+            asChild
+            className={isOnDarkBackground ? "bg-white text-sage-900 hover:bg-white/90" : ""}
+          >
             <Link to="/join">Join Sanghos</Link>
           </Button>
         </>

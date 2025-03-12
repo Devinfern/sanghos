@@ -12,6 +12,9 @@ const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  
+  // Check if current page has dark background hero
+  const hasDarkHero = location.pathname === "/about" || location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -78,6 +81,7 @@ const Header = () => {
           isLoggedIn={isLoggedIn} 
           onSignOut={handleSignOut} 
           onCommunityClick={handleCommunityClick}
+          isOnDarkBackground={!isScrolled && hasDarkHero}
         />
         {!mobileMenuOpen && (
           <MobileMenuToggle isOpen={mobileMenuOpen} onToggle={toggleMobileMenu} />

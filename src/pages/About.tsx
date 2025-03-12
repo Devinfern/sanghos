@@ -237,7 +237,7 @@ const About = () => {
 
       <main className="bg-white">
         {/* Hero Section - With Direct Image Background */}
-        <section className="min-h-[80vh] py-16 md:py-24 px-4 relative overflow-hidden flex items-center">
+        <section className="min-h-[90vh] py-16 md:py-24 px-4 relative overflow-hidden flex items-center">
           {/* Background Image with Overlay */}
           <div className="absolute inset-0 w-full h-full">
             <div className="absolute inset-0 bg-black/70 z-10"></div>
