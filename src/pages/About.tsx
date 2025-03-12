@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
@@ -9,6 +8,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import OptimizedImage from "@/components/OptimizedImage";
 import { Heart, Compass, Target, Globe, Leaf, Users, Clock, Flower2, Cloud, Droplets, Plus } from "lucide-react";
+import VideoBackground from "@/components/VideoBackground";
 
 const About = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -181,21 +181,21 @@ const About = () => {
     {
       name: "David Torres",
       role: "Technology Lead",
-      image: "https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1160&q=80",
+      image: "https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1160&q=80",
       bio: "David ensures our platform connects people seamlessly, with a focus on creating intuitive and accessible digital experiences for our community.",
       className: "md:col-span-1"
     },
     {
       name: "Amara Wilson",
       role: "Host Relations",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1088&q=80",
+      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1088&q=80",
       bio: "Amara works closely with our host community, helping them create welcoming and transformative spaces for our retreat participants.",
       className: "md:col-span-1"
     },
     {
       name: "Leo Kim",
       role: "Marketing Director",
-      image: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1087&q=80",
+      image: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1087&q=80",
       bio: "Leo crafts our brand story and connects Sanghos with mindfulness seekers who are looking for authentic experiences and community.",
       className: "md:col-span-1"
     }
@@ -243,18 +243,26 @@ const About = () => {
       <Header />
 
       <main className="bg-white">
-        {/* Hero Section - Insight Timer Style */}
-        <section className="py-16 md:py-24 px-4 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[#F7F3EE] -z-10"></div>
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 text-sage-950">About Sanghos</h1>
-              <p className="text-xl md:text-2xl text-sage-800 leading-relaxed">
+        {/* Hero Section - With Video Background */}
+        <section className="min-h-[80vh] py-16 md:py-24 px-4 relative overflow-hidden flex items-center">
+          <VideoBackground 
+            videoUrl="https://cdn.coverr.co/videos/coverr-hiking-in-the-forest-2527/1080p.mp4"
+            overlayOpacity="bg-black/50"
+          />
+          <div className="max-w-7xl mx-auto relative z-10 w-full">
+            <div className="text-center max-w-3xl mx-auto">
+              <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">About Sanghos</h1>
+              <p className="text-xl md:text-2xl text-white/90 leading-relaxed">
                 We're on a mission to make mindfulness and wellness retreats accessible to everyone, 
                 creating spaces for transformation and community.
               </p>
             </div>
-            
+          </div>
+        </section>
+
+        {/* Rest of the sections */}
+        <section className="py-20 md:py-28 px-4">
+          <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
               {missionCards.map((card, index) => (
                 <div key={index} className="text-center p-8 rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300">
