@@ -15,11 +15,26 @@ const VideoBackground: React.FC<VideoBackgroundProps> = ({
 }) => {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [isImageUsed, setIsImageUsed] = useState(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     // If imageUrl is provided, use image instead of video
     if (imageUrl) {
       setIsImageUsed(true);
+      
+      // Preload the image to check if it loads
+      const img = new Image();
+      img.onload = () => {
+        setIsImageLoaded(true);
+        setHasError(false);
+      };
+      img.onerror = () => {
+        console.error('Error loading image:', imageUrl);
+        setHasError(true);
+      };
+      img.src = imageUrl;
+      
       return;
     }
     
@@ -32,6 +47,7 @@ const VideoBackground: React.FC<VideoBackgroundProps> = ({
     videoElement.onerror = () => {
       console.error('Error loading video:', videoUrl);
       setIsVideoLoaded(false);
+      setHasError(true);
     };
     
     // Clean up
@@ -40,6 +56,16 @@ const VideoBackground: React.FC<VideoBackgroundProps> = ({
       videoElement.onerror = null;
     };
   }, [videoUrl, imageUrl]);
+
+  // Add console logs to debug
+  console.log({
+    isImageUsed,
+    isImageLoaded,
+    isVideoLoaded,
+    hasError,
+    imageUrl,
+    videoUrl
+  });
 
   return (
     <div className="absolute inset-0 w-full h-full overflow-hidden -z-10">
@@ -53,6 +79,7 @@ const VideoBackground: React.FC<VideoBackgroundProps> = ({
             className="w-full h-full" 
             aspectRatio="custom"
             objectFit="cover"
+            onLoad={() => console.log("OptimizedImage loaded successfully")}
           />
         </div>
       ) : isVideoLoaded && videoUrl ? (
