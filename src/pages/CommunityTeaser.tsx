@@ -1,5 +1,7 @@
+
 import { Helmet } from "react-helmet";
 import { useNavigate, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -9,6 +11,12 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const CommunityTeaser = () => {
   const navigate = useNavigate();
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
   return <>
       <Helmet>
         <title>Join Our Community | Sanghos</title>
@@ -18,31 +26,42 @@ const CommunityTeaser = () => {
       <Header />
 
       <main className="pt-16 pb-16">
-        {/* Hero Section with improved spacing and reduced congestion */}
+        {/* Hero Section with improved spacing and animations */}
         <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden mb-16">
           <div className="absolute inset-0 z-0">
             <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/10 z-10"></div>
-            <OptimizedImage src="/lovable-uploads/d119458d-9251-4956-9c76-ec663432c449.png" alt="Modern retreat space with pool" className="w-full h-full" aspectRatio="custom" objectFit="cover" priority={true} />
+            <OptimizedImage 
+              src="/lovable-uploads/d119458d-9251-4956-9c76-ec663432c449.png" 
+              alt="Modern retreat space with pool" 
+              className={`w-full h-full transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+              aspectRatio="custom" 
+              objectFit="cover" 
+              priority={true} 
+              onLoad={() => setIsLoaded(true)}
+            />
           </div>
 
           <div className="container relative z-20 px-4 md:px-6 py-16 sm:py-24 max-w-5xl">
             <div className="mx-auto text-center">
-              <span className="inline-block bg-white/20 backdrop-blur-sm text-white px-4 py-1 rounded-full text-sm font-medium mb-6 animate-fade-in" style={{
-              animationDelay: "300ms"
-            }}>Join 200+ Sanghos members</span>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight animate-fade-in" style={{
-              animationDelay: "400ms"
-            }}>
-                Find Your Community on Sanghos
-              </h1>
-              <p className="text-xl md:text-2xl text-white/90 mb-10 max-w-2xl mx-auto animate-fade-in" style={{
-              animationDelay: "500ms"
-            }}>
-                Connect with like-minded individuals and access exclusive content
-              </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-6 animate-fade-in" style={{
-              animationDelay: "600ms"
-            }}>
+              <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{transitionDelay: "300ms"}}>
+                <span className="inline-block bg-white/20 backdrop-blur-sm text-white px-4 py-1 rounded-full text-sm font-medium mb-6">
+                  Join 200+ Sanghos members
+                </span>
+              </div>
+              
+              <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{transitionDelay: "400ms"}}>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight">
+                  Find Your Community on Sanghos
+                </h1>
+              </div>
+              
+              <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{transitionDelay: "500ms"}}>
+                <p className="text-xl md:text-2xl text-white/90 mb-10 max-w-2xl mx-auto">
+                  Connect with like-minded individuals and access exclusive content
+                </p>
+              </div>
+              
+              <div className={`flex flex-col sm:flex-row justify-center gap-6 transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{transitionDelay: "600ms"}}>
                 <Button size="lg" onClick={() => navigate("/join")} className="bg-primary hover:bg-primary/90 group shadow-lg hover:shadow-xl transition-all text-lg py-6">
                   Join Sanghos
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -54,9 +73,9 @@ const CommunityTeaser = () => {
             </div>
           </div>
 
-          {/* Decorative element moved to bottom */}
-          <div className="absolute bottom-12 left-0 right-0 flex justify-center animate-bounce">
-            <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
+          {/* Decorative element moved to bottom with animation */}
+          <div className={`absolute bottom-12 left-0 right-0 flex justify-center transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`} style={{transitionDelay: "800ms"}}>
+            <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center animate-bounce">
               <ArrowRight className="h-5 w-5 text-white rotate-90" />
             </div>
           </div>
