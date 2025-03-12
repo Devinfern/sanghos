@@ -244,21 +244,35 @@ const About = () => {
             <OptimizedImage 
               src="/lovable-uploads/6e9e763a-364b-4dbf-a17e-8f13d82681fa.png"
               alt="About Sanghos background" 
-              className="w-full h-full" 
+              className={`w-full h-full transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
               aspectRatio="custom"
               objectFit="cover"
-              onLoad={() => console.log("Hero background image loaded")}
+              priority={true}
+              onLoad={() => setIsLoaded(true)}
             />
           </div>
           
           <div className="max-w-7xl mx-auto relative z-10 w-full">
-            <div className="text-center max-w-3xl mx-auto">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">About Sanghos</h1>
-              <p className="text-xl md:text-2xl text-white/90 leading-relaxed">
+            <motion.div 
+              className="text-center max-w-3xl mx-auto"
+              initial="hidden"
+              animate={isLoaded ? "visible" : "hidden"}
+              variants={staggerChildren}
+            >
+              <motion.h1 
+                className="text-4xl md:text-6xl font-bold mb-6 text-white"
+                variants={fadeIn}
+              >
+                About Sanghos
+              </motion.h1>
+              <motion.p 
+                className="text-xl md:text-2xl text-white/90 leading-relaxed"
+                variants={fadeIn}
+              >
                 We're on a mission to make mindfulness and wellness retreats accessible to everyone, 
                 creating spaces for transformation and community.
-              </p>
-            </div>
+              </motion.p>
+            </motion.div>
           </div>
         </section>
 
