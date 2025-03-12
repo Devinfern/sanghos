@@ -8,7 +8,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import OptimizedImage from "@/components/OptimizedImage";
 import { Heart, Compass, Target, Globe, Leaf, Users, Clock, Flower2, Cloud, Droplets, Plus } from "lucide-react";
-import VideoBackground from "@/components/VideoBackground";
 
 const About = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -237,12 +236,21 @@ const About = () => {
       <Header />
 
       <main className="bg-white">
-        {/* Hero Section - With Image Background */}
+        {/* Hero Section - With Direct Image Background */}
         <section className="min-h-[80vh] py-16 md:py-24 px-4 relative overflow-hidden flex items-center">
-          <VideoBackground 
-            imageUrl="/lovable-uploads/6e9e763a-364b-4dbf-a17e-8f13d82681fa.png"
-            overlayOpacity="bg-black/70"
-          />
+          {/* Background Image with Overlay */}
+          <div className="absolute inset-0 w-full h-full">
+            <div className="absolute inset-0 bg-black/70 z-10"></div>
+            <OptimizedImage 
+              src="/lovable-uploads/6e9e763a-364b-4dbf-a17e-8f13d82681fa.png"
+              alt="About Sanghos background" 
+              className="w-full h-full" 
+              aspectRatio="custom"
+              objectFit="cover"
+              onLoad={() => console.log("Hero background image loaded")}
+            />
+          </div>
+          
           <div className="max-w-7xl mx-auto relative z-10 w-full">
             <div className="text-center max-w-3xl mx-auto">
               <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">About Sanghos</h1>
