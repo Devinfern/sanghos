@@ -9,14 +9,17 @@ import Footer from "@/components/Footer";
 import OptimizedImage from "@/components/OptimizedImage";
 import ScrollButton from "@/components/ScrollButton";
 import { Heart, Compass, Target, Globe, Leaf, Users, Clock, Wind, Cloud, Brain, HandHeart } from "lucide-react";
+
 const About = () => {
   const [isLoaded, setIsLoaded] = useState(false);
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(true);
     }, 100);
     return () => clearTimeout(timer);
   }, []);
+  
   const fadeIn = {
     hidden: {
       opacity: 0,
@@ -30,6 +33,7 @@ const About = () => {
       }
     }
   };
+  
   const staggerChildren = {
     hidden: {
       opacity: 0
@@ -41,6 +45,7 @@ const About = () => {
       }
     }
   };
+  
   const heroCards = [{
     title: "Our Mission",
     description: "Making mindfulness accessible to everyone",
@@ -58,6 +63,7 @@ const About = () => {
     image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3",
     className: ""
   }];
+  
   const missionCards = [{
     icon: <Users className="h-12 w-12 text-sage-600 mb-4" />,
     title: "Connect",
@@ -74,6 +80,7 @@ const About = () => {
     description: "We nurture a growing ecosystem of mindfulness that's accessible and welcoming to everyone.",
     className: "bg-sage-50 md:col-span-1"
   }];
+  
   const valueCards = [{
     icon: <Heart className="h-10 w-10 text-rose-500" />,
     title: "Compassion",
@@ -100,6 +107,7 @@ const About = () => {
     description: "We make choices that honor and protect the natural environment and promote long-term wellbeing.",
     className: "bg-white border border-sand-100 md:col-span-1"
   }];
+  
   const retreatTypeCards = [{
     id: 1,
     icon: <Wind className="h-6 w-6 text-white" />,
@@ -120,6 +128,7 @@ const About = () => {
     description: "Integrate body-based healing approaches with therapeutic practices for holistic emotional wellbeing.",
     image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=4608&q=80"
   }];
+  
   const teamMembers = [{
     name: "Maya Johnson",
     role: "Founder & CEO",
@@ -157,6 +166,7 @@ const About = () => {
     bio: "Leo crafts our brand story and connects Sanghos with mindfulness seekers who are looking for authentic experiences and community.",
     className: "md:col-span-1"
   }];
+  
   const timelineMilestones = [{
     year: "2019",
     title: "The Beginning",
@@ -178,6 +188,7 @@ const About = () => {
     title: "Community Growth",
     description: "Reached 10,000 retreat participants and launched our host certification program for quality experiences."
   }];
+  
   return <>
       <Helmet>
         <title>About Us | Sanghos</title>
@@ -196,7 +207,7 @@ const About = () => {
           <div className="max-w-7xl mx-auto relative z-10 w-full">
             <motion.div initial="hidden" animate={isLoaded ? "visible" : "hidden"} variants={staggerChildren} className="text-center max-w-3xl mx-auto px-4">
               <motion.h1 variants={fadeIn} className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl mb-6 text-zinc-50 font-bold">
-                Give us a day.<br />We'll shift your perspective.
+                <span className="text-amber-500">Give us a day.</span><br />We'll shift your perspective.
               </motion.h1>
               <motion.p variants={fadeIn} className="text-lg sm:text-xl md:text-2xl text-white/90 leading-relaxed my-[10px] py-[20px]">We're on a mission to make wellness retreats accessible to everyone, creating spaces for transformation and community.</motion.p>
             </motion.div>
@@ -334,4 +345,5 @@ const About = () => {
       <Footer />
     </>;
 };
+
 export default About;
