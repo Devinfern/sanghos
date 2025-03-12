@@ -9,17 +9,14 @@ import Footer from "@/components/Footer";
 import OptimizedImage from "@/components/OptimizedImage";
 import ScrollButton from "@/components/ScrollButton";
 import { Heart, Compass, Target, Globe, Leaf, Users, Clock, Flower2, Cloud, Droplets, Plus } from "lucide-react";
-
 const About = () => {
   const [isLoaded, setIsLoaded] = useState(false);
-  
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(true);
     }, 100);
     return () => clearTimeout(timer);
   }, []);
-  
   const fadeIn = {
     hidden: {
       opacity: 0,
@@ -33,7 +30,6 @@ const About = () => {
       }
     }
   };
-  
   const staggerChildren = {
     hidden: {
       opacity: 0
@@ -45,7 +41,6 @@ const About = () => {
       }
     }
   };
-
   const heroCards = [{
     title: "Our Mission",
     description: "Making mindfulness accessible to everyone",
@@ -63,7 +58,6 @@ const About = () => {
     image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3",
     className: ""
   }];
-
   const missionCards = [{
     icon: <Users className="h-12 w-12 text-sage-600 mb-4" />,
     title: "Connect",
@@ -80,7 +74,6 @@ const About = () => {
     description: "We nurture a growing ecosystem of mindfulness that's accessible and welcoming to everyone.",
     className: "bg-sage-50 md:col-span-1"
   }];
-
   const valueCards = [{
     icon: <Heart className="h-10 w-10 text-rose-500" />,
     title: "Compassion",
@@ -107,7 +100,6 @@ const About = () => {
     description: "We make choices that honor and protect the natural environment and promote long-term wellbeing.",
     className: "bg-white border border-sand-100 md:col-span-1"
   }];
-
   const retreatTypeCards = [{
     id: 1,
     icon: <Leaf className="h-6 w-6 text-white" />,
@@ -140,7 +132,6 @@ const About = () => {
     description: "Revitalize your body and mind with holistic health and wellness programs.",
     image: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=5909&q=80"
   }];
-
   const teamMembers = [{
     name: "Maya Johnson",
     role: "Founder & CEO",
@@ -178,7 +169,6 @@ const About = () => {
     bio: "Leo crafts our brand story and connects Sanghos with mindfulness seekers who are looking for authentic experiences and community.",
     className: "md:col-span-1"
   }];
-
   const timelineMilestones = [{
     year: "2019",
     title: "The Beginning",
@@ -200,7 +190,6 @@ const About = () => {
     title: "Community Growth",
     description: "Reached 10,000 retreat participants and launched our host certification program for quality experiences."
   }];
-
   return <>
       <Helmet>
         <title>About Us | Sanghos</title>
@@ -211,28 +200,15 @@ const About = () => {
 
       <main className="bg-white">
         {/* Hero Section - With Direct Image Background */}
-        <section id="hero" className="min-h-[90vh] py-16 md:py-24 px-4 relative overflow-hidden flex items-center">
+        <section id="hero" className="min-h-[100vh] py-16 md:py-24 px-4 relative overflow-hidden flex items-center">
           {/* Background Image with Overlay */}
           <div className="absolute inset-0 w-full h-full">
             <div className="absolute inset-0 bg-black/70 z-10"></div>
-            <OptimizedImage 
-              src="/lovable-uploads/6e9e763a-364b-4dbf-a17e-8f13d82681fa.png" 
-              alt="About Sanghos background" 
-              className={`w-full h-full transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`} 
-              aspectRatio="custom" 
-              objectFit="cover" 
-              priority={true} 
-              onLoad={() => setIsLoaded(true)} 
-            />
+            <OptimizedImage src="/lovable-uploads/6e9e763a-364b-4dbf-a17e-8f13d82681fa.png" alt="About Sanghos background" className={`w-full h-full transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`} aspectRatio="custom" objectFit="cover" priority={true} onLoad={() => setIsLoaded(true)} />
           </div>
           
           <div className="max-w-7xl mx-auto relative z-10 w-full">
-            <motion.div 
-              className="text-center max-w-3xl mx-auto" 
-              initial="hidden" 
-              animate={isLoaded ? "visible" : "hidden"} 
-              variants={staggerChildren}
-            >
+            <motion.div className="text-center max-w-3xl mx-auto" initial="hidden" animate={isLoaded ? "visible" : "hidden"} variants={staggerChildren}>
               <motion.h1 className="text-4xl md:text-6xl font-bold mb-6 text-white" variants={fadeIn}>
                 About Sanghos
               </motion.h1>
@@ -417,5 +393,4 @@ const About = () => {
       <Footer />
     </>;
 };
-
 export default About;
