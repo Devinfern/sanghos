@@ -157,7 +157,7 @@ const About = () => {
     {
       name: "Raj Patel",
       role: "Head of Retreat Curation",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80",
       bio: "Raj brings his expertise in retreat design and facilitation to curate experiences that balance introspection, connection, and transformation.",
       className: "md:col-span-1"
     },
@@ -348,39 +348,6 @@ We'll shift your perspective.</motion.h1>
               <Button variant="outline" size="lg" className="text-sage-800 border-sage-200 hover:bg-sage-50">
                 View All Team Members
               </Button>
-            </div>
-          </div>
-        </section>
-
-        <section className="py-20 px-4">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl md:text-5xl font-bold mb-6 text-sage-950">Our Journey</h2>
-              <p className="text-xl text-sage-700">
-                From a small community gathering to a thriving platform
-              </p>
-            </div>
-
-            <div className="relative">
-              <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-sage-200 z-0"></div>
-              
-              <div className="space-y-16 relative z-10">
-                {timelineMilestones.map((milestone, index) => <div key={milestone.year} className="flex flex-col md:flex-row items-center gap-8">
-                    <div className={`md:w-1/2 flex ${index % 2 === 0 ? 'md:justify-end' : 'md:order-2'}`}>
-                      <div className="bg-white p-6 md:p-8 rounded-xl shadow-sm max-w-lg">
-                        <div className="text-2xl font-bold text-sage-500 mb-2">{milestone.year}</div>
-                        <h3 className="text-xl font-semibold mb-3 text-sage-900">{milestone.title}</h3>
-                        <p className="text-sage-700">{milestone.description}</p>
-                      </div>
-                    </div>
-                    
-                    <div className={`md:w-1/2 ${index % 2 === 0 ? 'md:order-2' : ''}`}>
-                      <div className="w-12 h-12 rounded-full bg-sage-100 border-4 border-white flex items-center justify-center mx-auto md:mx-0">
-                        <div className="w-4 h-4 rounded-full bg-sage-500"></div>
-                      </div>
-                    </div>
-                  </div>)}
-              </div>
             </div>
           </div>
         </section>
