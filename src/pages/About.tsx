@@ -247,7 +247,7 @@ const About = () => {
         <section className="min-h-[80vh] py-16 md:py-24 px-4 relative overflow-hidden flex items-center">
           <VideoBackground 
             videoUrl="https://cdn.coverr.co/videos/coverr-hiking-in-the-forest-2527/1080p.mp4"
-            overlayOpacity="bg-black/50"
+            overlayOpacity="bg-black/60"
           />
           <div className="max-w-7xl mx-auto relative z-10 w-full">
             <div className="text-center max-w-3xl mx-auto">
