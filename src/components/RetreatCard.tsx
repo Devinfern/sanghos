@@ -91,7 +91,7 @@ const RetreatCard = ({ retreat, index = 0, comingSoon = true }: RetreatCardProps
               className="bg-sage-500/90 hover:bg-sage-500/90 flex items-center"
               variant="default"
             >
-              <SanghosIcon className="mr-1 h-4 w-4" /> Sanghos
+              <SanghosIcon className="mr-1 h-4 w-4" opacity={0.85} /> Sanghos
             </Badge>
           )}
         </div>
