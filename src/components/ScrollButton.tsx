@@ -82,7 +82,7 @@ const ScrollButton = ({
   return (
     <motion.div
       className={cn(
-        "absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50 cursor-pointer flex flex-col items-center",
+        "fixed bottom-8 left-0 right-0 mx-auto w-fit z-50 cursor-pointer flex flex-col items-center",
         className
       )}
       variants={buttonVariants}
