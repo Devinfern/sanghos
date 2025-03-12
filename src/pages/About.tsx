@@ -208,11 +208,10 @@ const About = () => {
           </div>
           
           <div className="max-w-7xl mx-auto relative z-10 w-full">
-            <motion.div className="text-center max-w-3xl mx-auto" initial="hidden" animate={isLoaded ? "visible" : "hidden"} variants={staggerChildren}>
-              <motion.h1 className="text-4xl md:text-6xl font-bold mb-6 text-white" variants={fadeIn}>
-                About Sanghos
-              </motion.h1>
-              <motion.p className="text-xl md:text-2xl text-white/90 leading-relaxed" variants={fadeIn}>
+            <motion.div initial="hidden" animate={isLoaded ? "visible" : "hidden"} variants={staggerChildren} className="text-center max-w-3xl mx-auto">
+              <motion.h1 variants={fadeIn} className="text-4xl mb-6 text-zinc-50 font-bold md:text-7xl">Give us a day.
+We'll shift your perspective.</motion.h1>
+              <motion.p variants={fadeIn} className="text-xl md:text-2xl text-white/90 leading-relaxed my-[10px] py-[20px]">
                 We're on a mission to make mindfulness and wellness retreats accessible to everyone, 
                 creating spaces for transformation and community.
               </motion.p>
