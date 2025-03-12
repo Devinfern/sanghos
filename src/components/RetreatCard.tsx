@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Calendar, Users, Clock, CheckCircle } from "lucide-react";
+import { MapPin, Calendar, Users, Clock, CheckCircle, Star } from "lucide-react";
 import { Retreat, formatCurrency, getRemainingText } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -93,7 +93,7 @@ const RetreatCard = ({ retreat, index = 0, comingSoon = true }: RetreatCardProps
               className="bg-sage-500/90 hover:bg-sage-500/90 flex items-center"
               variant="default"
             >
-              <CheckCircle className="mr-1 h-3 w-3" /> Sanghos
+              <Star className="mr-1 h-3 w-3 fill-white/30" /> Sanghos
             </Badge>
           )}
         </div>

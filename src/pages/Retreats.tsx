@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Search, Info } from "lucide-react";
+import { Search, Info, Star } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import RetreatCard from "@/components/RetreatCard";
@@ -18,7 +17,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-// Extract unique categories from retreats
 const allCategories = Array.from(
   new Set(retreats.flatMap((retreat) => retreat.category))
 ).sort();
@@ -37,7 +35,6 @@ const Retreats = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Filter retreats based on search query and selected category and active tab
   const filteredRetreats = retreats.filter(retreat => {
     const matchesSearch = searchQuery === "" || 
       retreat.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -80,7 +77,6 @@ const Retreats = () => {
             </p>
           </div>
 
-          {/* Tabs for retreat types */}
           <div className="mb-8">
             <Tabs defaultValue="all" onValueChange={setActiveTab} className="w-full">
               <div className="flex justify-center mb-6">
@@ -92,7 +88,7 @@ const Retreats = () => {
                   <TabsTrigger value="sanghos" className="relative overflow-hidden group">
                     <span className="flex items-center gap-1">
                       Sanghos 
-                      <div className="ml-0.5 w-2 h-2 rounded-full bg-primary/80"></div>
+                      <Star className="ml-0.5 w-3 h-3 text-primary/90 fill-primary/30" />
                     </span>
                     <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-data-[state=active]:scale-x-100 transition-transform origin-left duration-300"></span>
                   </TabsTrigger>
@@ -103,7 +99,6 @@ const Retreats = () => {
                 </TabsList>
               </div>
 
-              {/* Tab content */}
               <TabsContent value="all" className="animate-fade-up">
                 {activeTab === "all" && (
                   <div className="mb-2 flex justify-center">
@@ -137,7 +132,6 @@ const Retreats = () => {
             </Tabs>
           </div>
 
-          {/* Search and Filter */}
           <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="relative md:col-span-2">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -169,14 +163,12 @@ const Retreats = () => {
             </div>
           </div>
 
-          {/* Results Count */}
           <div className="mb-6">
             <p className="text-muted-foreground">
               {filteredRetreats.length} {filteredRetreats.length === 1 ? 'retreat' : 'retreats'} found
             </p>
           </div>
 
-          {/* Retreats Grid */}
           {filteredRetreats.length > 0 ? (
             <div 
               className={cn(
