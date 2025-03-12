@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Calendar, Users, Clock } from "lucide-react";
+import { MapPin, Calendar, Users, Clock, CheckCircle } from "lucide-react";
 import { Retreat, formatCurrency, getRemainingText } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -79,14 +79,24 @@ const RetreatCard = ({ retreat, index = 0, comingSoon = true }: RetreatCardProps
           onLoad={() => setImageLoaded(true)}
         />
         
-        {retreat.featured && (
-          <Badge
-            className="absolute top-3 right-3 bg-primary/90 hover:bg-primary/90 z-20"
-            variant="default"
-          >
-            Featured
-          </Badge>
-        )}
+        <div className="absolute top-3 right-3 flex flex-col gap-2 z-20">
+          {retreat.featured && (
+            <Badge
+              className="bg-primary/90 hover:bg-primary/90"
+              variant="default"
+            >
+              Featured
+            </Badge>
+          )}
+          {retreat.isSanghos && (
+            <Badge 
+              className="bg-sage-500/90 hover:bg-sage-500/90 flex items-center"
+              variant="default"
+            >
+              <CheckCircle className="mr-1 h-3 w-3" /> Sanghos
+            </Badge>
+          )}
+        </div>
 
         <div className="p-5">
           <div className="flex items-center mb-2">

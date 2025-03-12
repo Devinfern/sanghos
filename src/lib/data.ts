@@ -32,6 +32,7 @@ export type Retreat = {
   category: string[];
   amenities: string[];
   featured: boolean;
+  isSanghos: boolean; // New field to distinguish retreat types
 };
 
 // This is where you modify the data with your own instructors
@@ -92,7 +93,8 @@ export const retreats: Retreat[] = [
     remaining: 6,
     category: ["Meditation", "Mindfulness", "Yoga"],
     amenities: ["Organic meals included", "Private and shared rooms", "Hot tub", "Hiking trails", "Meditation cushions provided"],
-    featured: true
+    featured: true,
+    isSanghos: true
   },
   {
     id: "ret-2",
@@ -119,7 +121,8 @@ export const retreats: Retreat[] = [
     remaining: 8,
     category: ["Sound Healing", "Breathwork", "Stress Reduction"],
     amenities: ["Plant-based lunch", "Tea service", "Yoga mats and blankets provided", "Journal for reflection"],
-    featured: true
+    featured: true,
+    isSanghos: true
   },
   {
     id: "ret-3",
@@ -146,7 +149,36 @@ export const retreats: Retreat[] = [
     remaining: 5,
     category: ["Qigong", "Forest Bathing", "Nature Connection"],
     amenities: ["Local seasonal lunch", "Herbal teas", "Rain gear if needed", "Qigong props provided"],
-    featured: false
+    featured: false,
+    isSanghos: false
+  },
+  {
+    id: "ret-4",
+    title: "Mountain Yoga Escape",
+    description: "Rejuvenate your body and mind with daily yoga sessions overlooking breathtaking mountain vistas. This retreat combines energizing vinyasa flows, gentle restorative practices, and guided meditation to help you find balance and inner peace.",
+    image: "https://images.unsplash.com/photo-1540208677736-7ea5368a5263",
+    additionalImages: [
+      "https://images.unsplash.com/photo-1506126613408-eca07ce68773",
+      "https://images.unsplash.com/photo-1531685250784-7569952593d2"
+    ],
+    location: {
+      name: "Mountain View Lodge",
+      address: "456 Highland Road",
+      city: "Boulder",
+      state: "CO",
+      description: "A cozy mountain lodge with panoramic views, spacious yoga deck, hot springs, and hiking trails just steps from your door."
+    },
+    instructor: instructors[0],
+    date: "2024-01-15",
+    time: "3:00 PM Friday - 11:00 AM Monday",
+    duration: "3 days",
+    price: 850,
+    capacity: 18,
+    remaining: 10,
+    category: ["Yoga", "Meditation", "Nature"],
+    amenities: ["Farm-to-table meals", "Hot springs access", "Yoga equipment provided", "Guided hikes"],
+    featured: false,
+    isSanghos: false
   }
 ];
 

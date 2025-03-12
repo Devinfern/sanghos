@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Search } from "lucide-react";
+import { Search, Info } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import RetreatCard from "@/components/RetreatCard";
@@ -14,7 +14,9 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 // Extract unique categories from retreats
 const allCategories = Array.from(
@@ -25,6 +27,7 @@ const Retreats = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [activeTab, setActiveTab] = useState("all");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -34,7 +37,7 @@ const Retreats = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Filter retreats based on search query and selected category
+  // Filter retreats based on search query and selected category and active tab
   const filteredRetreats = retreats.filter(retreat => {
     const matchesSearch = searchQuery === "" || 
       retreat.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -44,8 +47,16 @@ const Retreats = () => {
     const matchesCategory = selectedCategory === null || 
       retreat.category.includes(selectedCategory);
     
-    return matchesSearch && matchesCategory;
+    const matchesTab = 
+      activeTab === "all" || 
+      (activeTab === "sanghos" && retreat.isSanghos) ||
+      (activeTab === "thirdparty" && !retreat.isSanghos);
+    
+    return matchesSearch && matchesCategory && matchesTab;
   });
+
+  const sanghoRetreats = retreats.filter(retreat => retreat.isSanghos);
+  const thirdPartyRetreats = retreats.filter(retreat => !retreat.isSanghos);
 
   return (
     <>
@@ -67,6 +78,63 @@ const Retreats = () => {
               Explore our curated selection of mindfulness and wellness retreats designed to help you 
               reconnect with yourself and find balance in your life.
             </p>
+          </div>
+
+          {/* Tabs for retreat types */}
+          <div className="mb-8">
+            <Tabs defaultValue="all" onValueChange={setActiveTab} className="w-full">
+              <div className="flex justify-center mb-6">
+                <TabsList className="grid grid-cols-3 w-full max-w-md">
+                  <TabsTrigger value="all" className="relative overflow-hidden group">
+                    All Retreats
+                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-data-[state=active]:scale-x-100 transition-transform origin-left duration-300"></span>
+                  </TabsTrigger>
+                  <TabsTrigger value="sanghos" className="relative overflow-hidden group">
+                    <span className="flex items-center gap-1">
+                      Sanghos 
+                      <div className="ml-0.5 w-2 h-2 rounded-full bg-primary/80"></div>
+                    </span>
+                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-data-[state=active]:scale-x-100 transition-transform origin-left duration-300"></span>
+                  </TabsTrigger>
+                  <TabsTrigger value="thirdparty" className="relative overflow-hidden group">
+                    Partners
+                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-data-[state=active]:scale-x-100 transition-transform origin-left duration-300"></span>
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+
+              {/* Tab content */}
+              <TabsContent value="all" className="animate-fade-up">
+                {activeTab === "all" && (
+                  <div className="mb-2 flex justify-center">
+                    <div className="inline-flex items-center bg-muted/60 rounded-full px-3 py-1 text-sm text-muted-foreground">
+                      <Info className="w-3.5 h-3.5 mr-1" />
+                      Showing all {retreats.length} retreats
+                    </div>
+                  </div>
+                )}
+              </TabsContent>
+              <TabsContent value="sanghos" className="animate-fade-up">
+                {activeTab === "sanghos" && (
+                  <div className="mb-2 flex justify-center">
+                    <div className="inline-flex items-center bg-muted/60 rounded-full px-3 py-1 text-sm text-muted-foreground">
+                      <Info className="w-3.5 h-3.5 mr-1" />
+                      Showing {sanghoRetreats.length} retreats organized by Sanghos
+                    </div>
+                  </div>
+                )}
+              </TabsContent>
+              <TabsContent value="thirdparty" className="animate-fade-up">
+                {activeTab === "thirdparty" && (
+                  <div className="mb-2 flex justify-center">
+                    <div className="inline-flex items-center bg-muted/60 rounded-full px-3 py-1 text-sm text-muted-foreground">
+                      <Info className="w-3.5 h-3.5 mr-1" />
+                      Showing {thirdPartyRetreats.length} partner retreats
+                    </div>
+                  </div>
+                )}
+              </TabsContent>
+            </Tabs>
           </div>
 
           {/* Search and Filter */}
@@ -131,6 +199,16 @@ const Retreats = () => {
               <p className="text-muted-foreground mb-4">
                 Try adjusting your search or filter criteria
               </p>
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedCategory(null);
+                  setActiveTab("all");
+                }}
+              >
+                Reset filters
+              </Button>
             </div>
           )}
         </div>
