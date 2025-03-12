@@ -1,19 +1,16 @@
-
 import { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-
 interface ScrollButtonProps {
   className?: string;
   scrollTo?: string; // ID of element to scroll to
   color?: "light" | "dark"; // Light for dark backgrounds, dark for light backgrounds
 }
-
-const ScrollButton = ({ 
-  className, 
-  scrollTo, 
-  color = "light" 
+const ScrollButton = ({
+  className,
+  scrollTo,
+  color = "light"
 }: ScrollButtonProps) => {
   const [isVisible, setIsVisible] = useState(true);
 
@@ -26,44 +23,46 @@ const ScrollButton = ({
         setIsVisible(true);
       }
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
   const handleClick = () => {
     if (scrollTo) {
       const element = document.getElementById(scrollTo);
-      element?.scrollIntoView({ behavior: "smooth" });
+      element?.scrollIntoView({
+        behavior: "smooth"
+      });
     } else {
       // Default scroll action - one viewport height
       window.scrollTo({
         top: window.innerHeight,
-        behavior: "smooth",
+        behavior: "smooth"
       });
     }
   };
 
   // Animation variants
   const buttonVariants = {
-    initial: { opacity: 0, y: -20 },
-    animate: { 
-      opacity: 1, 
+    initial: {
+      opacity: 0,
+      y: -20
+    },
+    animate: {
+      opacity: 1,
       y: 0,
-      transition: { 
-        delay: 1.2, 
-        duration: 0.6 
+      transition: {
+        delay: 1.2,
+        duration: 0.6
       }
     },
-    exit: { 
-      opacity: 0, 
+    exit: {
+      opacity: 0,
       y: 20,
-      transition: { 
-        duration: 0.3 
+      transition: {
+        duration: 0.3
       }
     }
   };
-
   const iconVariants = {
     animate: {
       y: [0, 8, 0],
@@ -78,37 +77,11 @@ const ScrollButton = ({
 
   // Only show if visible state is true
   if (!isVisible) return null;
-
-  return (
-    <motion.div
-      className={cn(
-        "fixed bottom-8 left-0 right-0 mx-auto w-fit z-50 cursor-pointer flex flex-col items-center",
-        className
-      )}
-      variants={buttonVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      onClick={handleClick}
-    >
-      <p className={cn(
-        "text-sm font-medium mb-2",
-        color === "light" ? "text-white" : "text-sage-800"
-      )}>
-        Scroll Down
-      </p>
-      <motion.div
-        className={cn(
-          "p-2 rounded-full",
-          color === "light" ? "bg-white/20 text-white" : "bg-sage-800/10 text-sage-800"
-        )}
-        variants={iconVariants}
-        animate="animate"
-      >
+  return <motion.div className={cn("fixed bottom-8 left-0 right-0 mx-auto w-fit z-50 cursor-pointer flex flex-col items-center", className)} variants={buttonVariants} initial="initial" animate="animate" exit="exit" onClick={handleClick}>
+      <p className={cn("text-sm font-medium mb-2", color === "light" ? "text-white" : "text-sage-800")}>Explore</p>
+      <motion.div className={cn("p-2 rounded-full", color === "light" ? "bg-white/20 text-white" : "bg-sage-800/10 text-sage-800")} variants={iconVariants} animate="animate">
         <ChevronDown size={24} />
       </motion.div>
-    </motion.div>
-  );
+    </motion.div>;
 };
-
 export default ScrollButton;
