@@ -1,11 +1,12 @@
 
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Users, Leaf, Globe, Heart, Target, Compass } from "lucide-react";
+import { Users, Leaf, Globe, Heart, Target, Compass, Yoga, Flower, Cloud, Droplets, Plus } from "lucide-react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import OptimizedImage from "@/components/OptimizedImage";
 import {
   Card,
   CardContent,
@@ -45,33 +46,38 @@ const About = () => {
   const values = [
     {
       id: 1,
-      icon: <Heart className="h-10 w-10 text-rose-500" />,
-      title: "Compassion",
-      description: "We approach our work with empathy, kindness, and genuine care for the wellbeing of our community."
+      icon: <Yoga className="h-6 w-6 text-white" />,
+      title: "Yoga Retreats",
+      description: "Find your center with immersive yoga experiences led by skilled practitioners.",
+      image: "https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
     },
     {
       id: 2,
-      icon: <Compass className="h-10 w-10 text-emerald-500" />,
-      title: "Authenticity",
-      description: "We believe in creating spaces where people can show up as their true selves and experience genuine connection."
+      icon: <Flower className="h-6 w-6 text-white" />,
+      title: "Psychedelic Retreats",
+      description: "Explore consciousness and healing through guided psychedelic experiences.",
+      image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3264&q=80"
     },
     {
       id: 3,
-      icon: <Target className="h-10 w-10 text-amber-500" />,
-      title: "Intentionality",
-      description: "Every retreat, space, and interaction is crafted with purpose and mindfulness to create meaningful experiences."
+      icon: <Cloud className="h-6 w-6 text-white" />,
+      title: "Meditation Retreats",
+      description: "Cultivate mindfulness and inner peace through guided meditation practices.",
+      image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=4608&q=80"
     },
     {
       id: 4,
-      icon: <Globe className="h-10 w-10 text-blue-500" />,
-      title: "Community",
-      description: "We cultivate relationships that foster belonging, support, and growth for all members of our ecosystem."
+      icon: <Droplets className="h-6 w-6 text-white" />,
+      title: "Ayahuasca Retreats",
+      description: "Experience traditional plant medicine ceremonies in supportive settings.",
+      image: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=5472&q=80"
     },
     {
       id: 5,
-      icon: <Leaf className="h-10 w-10 text-green-500" />,
-      title: "Sustainability",
-      description: "We make choices that honor and protect the natural environment and promote long-term wellbeing."
+      icon: <Plus className="h-6 w-6 text-white" />,
+      title: "Health & Wellness",
+      description: "Revitalize your body and mind with holistic health and wellness programs.",
+      image: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=5909&q=80"
     }
   ];
 
@@ -241,8 +247,53 @@ const About = () => {
           </div>
         </section>
 
-        {/* Values Section */}
+        {/* Retreat Types Section (Formerly Values Section) */}
         <section className="py-20 bg-gradient-to-b from-white to-sand-50">
+          <div className="container mx-auto max-w-6xl px-4 md:px-6">
+            <motion.div
+              initial="hidden"
+              animate={isLoaded ? "visible" : "hidden"}
+              variants={fadeIn}
+              className="text-center mb-16"
+            >
+              <h2 className="text-3xl md:text-5xl font-bold mb-6">Explore by Retreat Type</h2>
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                Discover transformative experiences tailored to your wellness journey
+              </p>
+            </motion.div>
+
+            <motion.div 
+              variants={staggerChildren}
+              initial="hidden"
+              animate={isLoaded ? "visible" : "hidden"}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6"
+            >
+              {values.map((value) => (
+                <motion.div
+                  key={value.id}
+                  variants={fadeIn}
+                  className="rounded-xl overflow-hidden shadow-md relative group h-[320px] md:h-[400px]"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-70 z-10"></div>
+                  <img 
+                    src={value.image} 
+                    alt={value.title} 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 z-20">
+                    <div className="flex items-center gap-2 bg-black/70 text-white px-4 py-3 rounded-lg">
+                      <span>{value.icon}</span>
+                      <h3 className="text-lg font-medium">{value.title}</h3>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Our Values Section */}
+        <section className="py-20 bg-white">
           <div className="container mx-auto max-w-6xl px-4 md:px-6">
             <motion.div
               initial="hidden"
@@ -262,17 +313,50 @@ const About = () => {
               animate={isLoaded ? "visible" : "hidden"}
               className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6"
             >
-              {values.map((value) => (
-                <motion.div
-                  key={value.id}
-                  variants={fadeIn}
-                  className="bg-white p-6 rounded-xl shadow-sm border border-sand-100 hover:shadow-md transition-shadow"
-                >
-                  <div className="mb-4">{value.icon}</div>
-                  <h3 className="text-xl font-semibold mb-2">{value.title}</h3>
-                  <p className="text-muted-foreground text-sm">{value.description}</p>
-                </motion.div>
-              ))}
+              <motion.div
+                variants={fadeIn}
+                className="bg-white p-6 rounded-xl shadow-sm border border-sand-100 hover:shadow-md transition-shadow"
+              >
+                <div className="mb-4"><Heart className="h-10 w-10 text-rose-500" /></div>
+                <h3 className="text-xl font-semibold mb-2">Compassion</h3>
+                <p className="text-muted-foreground text-sm">We approach our work with empathy, kindness, and genuine care for the wellbeing of our community.</p>
+              </motion.div>
+
+              <motion.div
+                variants={fadeIn}
+                className="bg-white p-6 rounded-xl shadow-sm border border-sand-100 hover:shadow-md transition-shadow"
+              >
+                <div className="mb-4"><Compass className="h-10 w-10 text-emerald-500" /></div>
+                <h3 className="text-xl font-semibold mb-2">Authenticity</h3>
+                <p className="text-muted-foreground text-sm">We believe in creating spaces where people can show up as their true selves and experience genuine connection.</p>
+              </motion.div>
+
+              <motion.div
+                variants={fadeIn}
+                className="bg-white p-6 rounded-xl shadow-sm border border-sand-100 hover:shadow-md transition-shadow"
+              >
+                <div className="mb-4"><Target className="h-10 w-10 text-amber-500" /></div>
+                <h3 className="text-xl font-semibold mb-2">Intentionality</h3>
+                <p className="text-muted-foreground text-sm">Every retreat, space, and interaction is crafted with purpose and mindfulness to create meaningful experiences.</p>
+              </motion.div>
+
+              <motion.div
+                variants={fadeIn}
+                className="bg-white p-6 rounded-xl shadow-sm border border-sand-100 hover:shadow-md transition-shadow"
+              >
+                <div className="mb-4"><Globe className="h-10 w-10 text-blue-500" /></div>
+                <h3 className="text-xl font-semibold mb-2">Community</h3>
+                <p className="text-muted-foreground text-sm">We cultivate relationships that foster belonging, support, and growth for all members of our ecosystem.</p>
+              </motion.div>
+
+              <motion.div
+                variants={fadeIn}
+                className="bg-white p-6 rounded-xl shadow-sm border border-sand-100 hover:shadow-md transition-shadow"
+              >
+                <div className="mb-4"><Leaf className="h-10 w-10 text-green-500" /></div>
+                <h3 className="text-xl font-semibold mb-2">Sustainability</h3>
+                <p className="text-muted-foreground text-sm">We make choices that honor and protect the natural environment and promote long-term wellbeing.</p>
+              </motion.div>
             </motion.div>
           </div>
         </section>
