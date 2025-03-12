@@ -28,13 +28,11 @@ const CommunityTeaser = () => {
             <div className="max-w-3xl mx-auto text-center">
               <span className="inline-block bg-white/20 backdrop-blur-sm text-white px-4 py-1 rounded-full text-sm font-medium mb-4 animate-fade-in" style={{
               animationDelay: "300ms"
-            }}>
-                Join 5,000+ members on their wellness journey
-              </span>
+            }}>Join 200+ Sanghos members on their wellness journey</span>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 animate-fade-in" style={{
               animationDelay: "400ms"
             }}>
-                Find Your <span className="bg-primary/80 px-2 rounded font-extrabold text-slate-50">Community</span> on Sanghos
+                Find Your <span className="bg-primary/80 px-2 rounded font-extrabold text-sand-300">Community</span> on Sanghos
               </h1>
               <p className="text-xl text-white/90 mb-8 animate-fade-in" style={{
               animationDelay: "500ms"
@@ -186,36 +184,7 @@ const CommunityTeaser = () => {
         </section>
 
         {/* Community Gallery with enhanced styling */}
-        <section className="py-16">
-          <div className="container px-4 md:px-6">
-            <div className="max-w-3xl mx-auto text-center mb-12 animate-fade-up">
-              <h2 className="text-3xl font-bold mb-4">Community Moments</h2>
-              <p className="text-lg text-muted-foreground">
-                Experience the joy and connection of our community gatherings
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-              <div className="md:col-span-2 aspect-video rounded-2xl overflow-hidden group shadow-md animate-fade-up" style={{
-              animationDelay: "100ms"
-            }}>
-                <OptimizedImage src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="Community retreat" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" aspectRatio="custom" />
-              </div>
-              <div className="flex flex-col gap-4">
-                <div className="aspect-square rounded-2xl overflow-hidden group shadow-md animate-fade-up" style={{
-                animationDelay: "200ms"
-              }}>
-                  <OptimizedImage src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07" alt="Group meditation" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" aspectRatio="custom" />
-                </div>
-                <div className="aspect-square rounded-2xl overflow-hidden group shadow-md animate-fade-up" style={{
-                animationDelay: "300ms"
-              }}>
-                  <OptimizedImage src="https://images.unsplash.com/photo-1518495973542-4542c06a5843" alt="Wellness workshop" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" aspectRatio="custom" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        
 
         {/* Testimonials with enhanced cards */}
         <section className="py-16 container px-4 md:px-6">
