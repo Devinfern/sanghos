@@ -1,13 +1,13 @@
-
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import OptimizedImage from "@/components/OptimizedImage";
-import { Heart, Compass, Target, Globe, Leaf, Users, Clock } from "lucide-react";
+import { Heart, Compass, Target, Globe, Leaf, Users, Clock, Flower2, Cloud, Droplets, Plus } from "lucide-react";
 
 const About = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -126,7 +126,7 @@ const About = () => {
     },
     {
       id: 2,
-      icon: <Flower className="h-6 w-6 text-white" />,
+      icon: <Flower2 className="h-6 w-6 text-white" />,
       title: "Psychedelic Retreats",
       description: "Explore consciousness and healing through guided psychedelic experiences.",
       image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3264&q=80"
