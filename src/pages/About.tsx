@@ -8,7 +8,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import OptimizedImage from "@/components/OptimizedImage";
 import ScrollButton from "@/components/ScrollButton";
-import { Heart, Compass, Target, Globe, Leaf, Users, Clock, Flower2, Cloud, Droplets, Plus } from "lucide-react";
+import { Heart, Compass, Target, Globe, Leaf, Users, Clock, Wind, Cloud, Brain, HandHeart } from "lucide-react";
+
 const About = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
@@ -17,6 +18,7 @@ const About = () => {
     }, 100);
     return () => clearTimeout(timer);
   }, []);
+
   const fadeIn = {
     hidden: {
       opacity: 0,
@@ -30,6 +32,7 @@ const About = () => {
       }
     }
   };
+
   const staggerChildren = {
     hidden: {
       opacity: 0
@@ -41,155 +44,181 @@ const About = () => {
       }
     }
   };
-  const heroCards = [{
-    title: "Our Mission",
-    description: "Making mindfulness accessible to everyone",
-    image: "https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?ixlib=rb-4.0.3",
-    className: "md:col-span-2 row-span-2"
-  }, {
-    title: "Community First",
-    description: "Join our growing wellness community",
-    image: "",
-    isSolid: true,
-    className: "bg-sage-100"
-  }, {
-    title: "Expert Guidance",
-    description: "Learn from experienced practitioners",
-    image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3",
-    className: ""
-  }];
-  const missionCards = [{
-    icon: <Users className="h-12 w-12 text-sage-600 mb-4" />,
-    title: "Connect",
-    description: "We bring together mindfulness seekers, skilled instructors, and welcoming hosts to create a vibrant community.",
-    className: "bg-sage-50 md:col-span-1"
-  }, {
-    icon: <Leaf className="h-12 w-12 text-sand-600 mb-4" />,
-    title: "Transform",
-    description: "Our experiences help people disconnect from daily stresses and reconnect with themselves and others.",
-    className: "bg-sand-50 md:col-span-1"
-  }, {
-    icon: <Globe className="h-12 w-12 text-sage-600 mb-4" />,
-    title: "Cultivate",
-    description: "We nurture a growing ecosystem of mindfulness that's accessible and welcoming to everyone.",
-    className: "bg-sage-50 md:col-span-1"
-  }];
-  const valueCards = [{
-    icon: <Heart className="h-10 w-10 text-rose-500" />,
-    title: "Compassion",
-    description: "We approach our work with empathy, kindness, and genuine care for the wellbeing of our community.",
-    className: "bg-white border border-sand-100 md:col-span-1"
-  }, {
-    icon: <Compass className="h-10 w-10 text-emerald-500" />,
-    title: "Authenticity",
-    description: "We believe in creating spaces where people can show up as their true selves and experience genuine connection.",
-    className: "bg-white border border-sand-100 md:col-span-1"
-  }, {
-    icon: <Target className="h-10 w-10 text-amber-500" />,
-    title: "Intentionality",
-    description: "Every retreat, space, and interaction is crafted with purpose and mindfulness to create meaningful experiences.",
-    className: "bg-white border border-sand-100 md:col-span-1"
-  }, {
-    icon: <Globe className="h-10 w-10 text-blue-500" />,
-    title: "Community",
-    description: "We cultivate relationships that foster belonging, support, and growth for all members of our ecosystem.",
-    className: "bg-white border border-sand-100 md:col-span-1"
-  }, {
-    icon: <Leaf className="h-10 w-10 text-green-500" />,
-    title: "Sustainability",
-    description: "We make choices that honor and protect the natural environment and promote long-term wellbeing.",
-    className: "bg-white border border-sand-100 md:col-span-1"
-  }];
-  const retreatTypeCards = [{
-    id: 1,
-    icon: <Leaf className="h-6 w-6 text-white" />,
-    title: "Yoga Retreats",
-    description: "Find your center with immersive yoga experiences led by skilled practitioners.",
-    image: "https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    className: "md:col-span-2 row-span-2"
-  }, {
-    id: 2,
-    icon: <Flower2 className="h-6 w-6 text-white" />,
-    title: "Psychedelic Retreats",
-    description: "Explore consciousness and healing through guided psychedelic experiences.",
-    image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3264&q=80"
-  }, {
-    id: 3,
-    icon: <Cloud className="h-6 w-6 text-white" />,
-    title: "Meditation Retreats",
-    description: "Cultivate mindfulness and inner peace through guided meditation practices.",
-    image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=4608&q=80"
-  }, {
-    id: 4,
-    icon: <Droplets className="h-6 w-6 text-white" />,
-    title: "Ayahuasca Retreats",
-    description: "Experience traditional plant medicine ceremonies in supportive settings.",
-    image: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=5472&q=80"
-  }, {
-    id: 5,
-    icon: <Plus className="h-6 w-6 text-white" />,
-    title: "Health & Wellness",
-    description: "Revitalize your body and mind with holistic health and wellness programs.",
-    image: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=5909&q=80"
-  }];
-  const teamMembers = [{
-    name: "Maya Johnson",
-    role: "Founder & CEO",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80",
-    bio: "With over 15 years in wellness practice and a background in mindfulness education, Maya founded Sanghos to make transformative experiences more accessible.",
-    className: "md:col-span-2"
-  }, {
-    name: "Raj Patel",
-    role: "Head of Retreat Curation",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80",
-    bio: "Raj brings his expertise in retreat design and facilitation to curate experiences that balance introspection, connection, and transformation.",
-    className: "md:col-span-1"
-  }, {
-    name: "Zoe Chen",
-    role: "Community Director",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80",
-    bio: "As our Community Director, Zoe fosters meaningful connections between hosts, instructors, and participants to create a thriving ecosystem of wellness.",
-    className: "md:col-span-1"
-  }, {
-    name: "David Torres",
-    role: "Technology Lead",
-    image: "https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1160&q=80",
-    bio: "David ensures our platform connects people seamlessly, with a focus on creating intuitive and accessible digital experiences for our community.",
-    className: "md:col-span-1"
-  }, {
-    name: "Amara Wilson",
-    role: "Host Relations",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1088&q=80",
-    bio: "Amara works closely with our host community, helping them create welcoming and transformative spaces for our retreat participants.",
-    className: "md:col-span-1"
-  }, {
-    name: "Leo Kim",
-    role: "Marketing Director",
-    image: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1087&q=80",
-    bio: "Leo crafts our brand story and connects Sanghos with mindfulness seekers who are looking for authentic experiences and community.",
-    className: "md:col-span-1"
-  }];
-  const timelineMilestones = [{
-    year: "2019",
-    title: "The Beginning",
-    description: "Sanghos started as a small community of mindfulness practitioners in San Francisco hosting informal gatherings."
-  }, {
-    year: "2020",
-    title: "Digital Pivot",
-    description: "During the pandemic, we created virtual retreat experiences, connecting people across distances when they needed it most."
-  }, {
-    year: "2021",
-    title: "Official Launch",
-    description: "Sanghos platform launched officially, connecting retreat hosts with spaces and participants for in-person experiences."
-  }, {
-    year: "2022",
-    title: "Expansion",
-    description: "Expanded to 5 major cities with over 100 hosts and 50 instructors joining our growing community."
-  }, {
-    year: "2023",
-    title: "Community Growth",
-    description: "Reached 10,000 retreat participants and launched our host certification program for quality experiences."
-  }];
+
+  const heroCards = [
+    {
+      title: "Our Mission",
+      description: "Making mindfulness accessible to everyone",
+      image: "https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?ixlib=rb-4.0.3",
+      className: "md:col-span-2 row-span-2"
+    },
+    {
+      title: "Community First",
+      description: "Join our growing wellness community",
+      image: "",
+      isSolid: true,
+      className: "bg-sage-100"
+    },
+    {
+      title: "Expert Guidance",
+      description: "Learn from experienced practitioners",
+      image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3",
+      className: ""
+    }
+  ];
+
+  const missionCards = [
+    {
+      icon: <Users className="h-12 w-12 text-sage-600 mb-4" />,
+      title: "Connect",
+      description: "We bring together mindfulness seekers, skilled instructors, and welcoming hosts to create a vibrant community.",
+      className: "bg-sage-50 md:col-span-1"
+    },
+    {
+      icon: <Leaf className="h-12 w-12 text-sand-600 mb-4" />,
+      title: "Transform",
+      description: "Our experiences help people disconnect from daily stresses and reconnect with themselves and others.",
+      className: "bg-sand-50 md:col-span-1"
+    },
+    {
+      icon: <Globe className="h-12 w-12 text-sage-600 mb-4" />,
+      title: "Cultivate",
+      description: "We nurture a growing ecosystem of mindfulness that's accessible and welcoming to everyone.",
+      className: "bg-sage-50 md:col-span-1"
+    }
+  ];
+
+  const valueCards = [
+    {
+      icon: <Heart className="h-10 w-10 text-rose-500" />,
+      title: "Compassion",
+      description: "We approach our work with empathy, kindness, and genuine care for the wellbeing of our community.",
+      className: "bg-white border border-sand-100 md:col-span-1"
+    },
+    {
+      icon: <Compass className="h-10 w-10 text-emerald-500" />,
+      title: "Authenticity",
+      description: "We believe in creating spaces where people can show up as their true selves and experience genuine connection.",
+      className: "bg-white border border-sand-100 md:col-span-1"
+    },
+    {
+      icon: <Target className="h-10 w-10 text-amber-500" />,
+      title: "Intentionality",
+      description: "Every retreat, space, and interaction is crafted with purpose and mindfulness to create meaningful experiences.",
+      className: "bg-white border border-sand-100 md:col-span-1"
+    },
+    {
+      icon: <Globe className="h-10 w-10 text-blue-500" />,
+      title: "Community",
+      description: "We cultivate relationships that foster belonging, support, and growth for all members of our ecosystem.",
+      className: "bg-white border border-sand-100 md:col-span-1"
+    },
+    {
+      icon: <Leaf className="h-10 w-10 text-green-500" />,
+      title: "Sustainability",
+      description: "We make choices that honor and protect the natural environment and promote long-term wellbeing.",
+      className: "bg-white border border-sand-100 md:col-span-1"
+    }
+  ];
+
+  const retreatTypeCards = [
+    {
+      id: 1,
+      icon: <Wind className="h-6 w-6 text-white" />,
+      title: "Breathwork Day Long Retreats",
+      description: "Experience transformative breathing techniques to release tension, boost energy, and find inner calm.",
+      image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      className: "md:col-span-2 row-span-2"
+    },
+    {
+      id: 2,
+      icon: <Cloud className="h-6 w-6 text-white" />,
+      title: "Silent Day Long Retreats",
+      description: "Discover the power of silence in a supportive environment to deepen mindfulness and self-awareness.",
+      image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3264&q=80"
+    },
+    {
+      id: 3,
+      icon: <HandHeart className="h-6 w-6 text-white" />,
+      title: "Therapy + Somatic Day Long Retreats",
+      description: "Integrate body-based healing approaches with therapeutic practices for holistic emotional wellbeing.",
+      image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=4608&q=80"
+    }
+  ];
+
+  const teamMembers = [
+    {
+      name: "Maya Johnson",
+      role: "Founder & CEO",
+      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80",
+      bio: "With over 15 years in wellness practice and a background in mindfulness education, Maya founded Sanghos to make transformative experiences more accessible.",
+      className: "md:col-span-2"
+    },
+    {
+      name: "Raj Patel",
+      role: "Head of Retreat Curation",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80",
+      bio: "Raj brings his expertise in retreat design and facilitation to curate experiences that balance introspection, connection, and transformation.",
+      className: "md:col-span-1"
+    },
+    {
+      name: "Zoe Chen",
+      role: "Community Director",
+      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80",
+      bio: "As our Community Director, Zoe fosters meaningful connections between hosts, instructors, and participants to create a thriving ecosystem of wellness.",
+      className: "md:col-span-1"
+    },
+    {
+      name: "David Torres",
+      role: "Technology Lead",
+      image: "https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1160&q=80",
+      bio: "David ensures our platform connects people seamlessly, with a focus on creating intuitive and accessible digital experiences for our community.",
+      className: "md:col-span-1"
+    },
+    {
+      name: "Amara Wilson",
+      role: "Host Relations",
+      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1088&q=80",
+      bio: "Amara works closely with our host community, helping them create welcoming and transformative spaces for our retreat participants.",
+      className: "md:col-span-1"
+    },
+    {
+      name: "Leo Kim",
+      role: "Marketing Director",
+      image: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1087&q=80",
+      bio: "Leo crafts our brand story and connects Sanghos with mindfulness seekers who are looking for authentic experiences and community.",
+      className: "md:col-span-1"
+    }
+  ];
+
+  const timelineMilestones = [
+    {
+      year: "2019",
+      title: "The Beginning",
+      description: "Sanghos started as a small community of mindfulness practitioners in San Francisco hosting informal gatherings."
+    },
+    {
+      year: "2020",
+      title: "Digital Pivot",
+      description: "During the pandemic, we created virtual retreat experiences, connecting people across distances when they needed it most."
+    },
+    {
+      year: "2021",
+      title: "Official Launch",
+      description: "Sanghos platform launched officially, connecting retreat hosts with spaces and participants for in-person experiences."
+    },
+    {
+      year: "2022",
+      title: "Expansion",
+      description: "Expanded to 5 major cities with over 100 hosts and 50 instructors joining our growing community."
+    },
+    {
+      year: "2023",
+      title: "Community Growth",
+      description: "Reached 10,000 retreat participants and launched our host certification program for quality experiences."
+    }
+  ];
+
   return <>
       <Helmet>
         <title>About Us | Sanghos</title>
@@ -199,9 +228,7 @@ const About = () => {
       <Header />
 
       <main className="bg-white">
-        {/* Hero Section - With Direct Image Background */}
         <section id="hero" className="min-h-[100vh] py-16 md:py-24 px-4 relative overflow-hidden flex items-center">
-          {/* Background Image with Overlay */}
           <div className="absolute inset-0 w-full h-full">
             <div className="absolute inset-0 bg-black/70 z-10"></div>
             <OptimizedImage src="/lovable-uploads/6e9e763a-364b-4dbf-a17e-8f13d82681fa.png" alt="About Sanghos background" className={`w-full h-full transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`} aspectRatio="custom" objectFit="cover" priority={true} onLoad={() => setIsLoaded(true)} />
@@ -218,11 +245,9 @@ We'll shift your perspective.</motion.h1>
             </motion.div>
           </div>
           
-          {/* Add the Scroll button */}
           <ScrollButton scrollTo="mission-section" color="light" />
         </section>
 
-        {/* Mission Section */}
         <section id="mission-section" className="py-20 md:py-28 px-4">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
@@ -237,7 +262,6 @@ We'll shift your perspective.</motion.h1>
           </div>
         </section>
 
-        {/* Our Story Section */}
         <section className="py-20 md:py-28 px-4">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row gap-12 md:gap-16 items-center">
@@ -257,7 +281,6 @@ We'll shift your perspective.</motion.h1>
           </div>
         </section>
 
-        {/* Values Section */}
         <section className="py-20 px-4 bg-[#F7F3EE]">
           <div className="max-w-7xl mx-auto">
             <div className="text-center max-w-3xl mx-auto mb-16">
@@ -277,7 +300,6 @@ We'll shift your perspective.</motion.h1>
           </div>
         </section>
 
-        {/* Retreat Types Section */}
         <section className="py-20 px-4">
           <div className="max-w-7xl mx-auto">
             <div className="text-center max-w-3xl mx-auto mb-16">
@@ -288,7 +310,7 @@ We'll shift your perspective.</motion.h1>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {retreatTypeCards.slice(0, 3).map(type => <div key={type.id} className="rounded-xl overflow-hidden shadow-md relative h-[400px] group">
+              {retreatTypeCards.map(type => <div key={type.id} className="rounded-xl overflow-hidden shadow-md relative h-[400px] group">
                   <OptimizedImage src={type.image} alt={type.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
@@ -300,7 +322,6 @@ We'll shift your perspective.</motion.h1>
           </div>
         </section>
 
-        {/* Team Section */}
         <section className="py-20 px-4 bg-[#F7F3EE]">
           <div className="max-w-7xl mx-auto">
             <div className="text-center max-w-3xl mx-auto mb-16">
@@ -331,7 +352,6 @@ We'll shift your perspective.</motion.h1>
           </div>
         </section>
 
-        {/* Company Timeline */}
         <section className="py-20 px-4">
           <div className="max-w-7xl mx-auto">
             <div className="text-center max-w-3xl mx-auto mb-16">
@@ -342,7 +362,6 @@ We'll shift your perspective.</motion.h1>
             </div>
 
             <div className="relative">
-              {/* Timeline line */}
               <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-sage-200 z-0"></div>
               
               <div className="space-y-16 relative z-10">
@@ -366,7 +385,6 @@ We'll shift your perspective.</motion.h1>
           </div>
         </section>
 
-        {/* Join CTA Section */}
         <section className="py-24 px-4 relative overflow-hidden bg-sage-900 text-white">
           <div className="absolute inset-0 opacity-10">
             <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?ixlib=rb-4.0.3')] bg-cover bg-center"></div>
@@ -392,4 +410,5 @@ We'll shift your perspective.</motion.h1>
       <Footer />
     </>;
 };
+
 export default About;
