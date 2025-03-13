@@ -52,44 +52,43 @@ const TeamSection = ({ isLoaded }: TeamSectionProps) => {
           animate={isLoaded ? "visible" : "hidden"}
           className="flex justify-center"
         >
-          {/* More compact card with image on left (1/3 width) and content on right (2/3 width) */}
-          <Card className="max-w-sm w-full flex overflow-hidden rounded-lg shadow-sm">
-            {/* Left side - Image */}
-            <div className="w-1/3">
+          {/* Card design matching the provided image */}
+          <div className="max-w-md w-full bg-[#F7F7F7] rounded-3xl overflow-hidden shadow-sm">
+            {/* Top image section - full width */}
+            <div className="w-full rounded-2xl overflow-hidden">
               <img 
                 src={team[0].image} 
                 alt={team[0].name} 
-                className="w-full h-full object-cover"
+                className="w-full h-[350px] object-cover"
               />
             </div>
             
-            {/* Right side - Content */}
-            <div className="w-2/3 p-4 flex flex-col justify-between">
-              <div>
-                {/* Small uppercase "Founder" label */}
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-0.5">
-                  {team[0].role}
-                </p>
-                
-                {/* Name */}
-                <h3 className="text-lg font-bold text-gray-900 mb-1.5">
+            {/* Content section below image */}
+            <div className="p-6 pt-5">
+              {/* Small uppercase label */}
+              <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
+                {team[0].role}
+              </p>
+              
+              {/* Name with vertical blue accent line */}
+              <div className="flex items-center mb-5">
+                <h3 className="text-2xl font-bold text-slate-800">
                   {team[0].name}
                 </h3>
-                
-                {/* Bio text */}
-                <p className="text-gray-600 text-xs">
-                  {team[0].bio}
+                <div className="mx-2 h-7 w-1.5 bg-blue-600"></div>
+                <p className="text-2xl font-bold text-slate-800">
+                  Sanghos
                 </p>
               </div>
               
-              {/* Blue connect button at bottom */}
-              <div className="mt-3">
-                <button className="bg-blue-600 text-white px-3 py-1.5 rounded text-xs hover:bg-blue-700 transition-colors">
+              {/* Button with border only */}
+              <div className="mt-2">
+                <button className="border-2 border-slate-700 text-slate-700 px-8 py-2.5 rounded-md text-sm font-medium hover:bg-slate-50 transition-colors">
                   Connect
                 </button>
               </div>
             </div>
-          </Card>
+          </div>
         </motion.div>
       </div>
     </section>
