@@ -110,22 +110,18 @@ const About = () => {
 
   const retreatTypeCards = [{
     id: 1,
-    icon: <Wind className="h-6 w-6 text-white" />,
-    title: "Breathwork Day Long Retreats",
-    description: "Experience transformative breathing techniques to release tension, boost energy, and find inner calm.",
+    category: "BREATHWORK",
+    title: "Transformative Breathing",
     image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    className: "md:col-span-2 row-span-2"
   }, {
     id: 2,
-    icon: <Cloud className="h-6 w-6 text-white" />,
-    title: "Silent Day Long Retreats",
-    description: "Discover the power of silence in a supportive environment to deepen mindfulness and self-awareness.",
+    category: "SILENT",
+    title: "Calming Silence",
     image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=3264&q=80"
   }, {
     id: 3,
-    icon: <HandHeart className="h-6 w-6 text-white" />,
-    title: "Therapy + Somatic Day Long Retreats",
-    description: "Integrate body-based healing approaches with therapeutic practices for holistic emotional wellbeing.",
+    category: "SOMATIC",
+    title: "Body-Centered Healing",
     image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=4608&q=80"
   }];
 
@@ -247,15 +243,29 @@ const About = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {retreatTypeCards.map(type => <div key={type.id} className="rounded-xl overflow-hidden shadow-md relative h-[300px] sm:h-[350px] md:h-[400px] group">
-                  <OptimizedImage src={type.image} alt={type.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 text-white">
-                    <h3 className="text-xl sm:text-2xl font-semibold mb-2">{type.title}</h3>
-                    <p className="text-white/90 text-sm sm:text-base">{type.description}</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+              {retreatTypeCards.map(type => (
+                <div key={type.id} className="rounded-xl overflow-hidden bg-[#F5F5F5] p-6">
+                  <div className="flex flex-col h-full">
+                    <p className="text-sm font-medium text-slate-700 mb-2">{type.category}</p>
+                    <h3 className="text-2xl font-bold text-slate-900 mb-6">{type.title}</h3>
+                    
+                    <div className="mt-auto">
+                      <Button variant="outline" className="border-2 border-slate-800 text-slate-800 hover:bg-slate-50 font-medium">
+                        Learn More
+                      </Button>
+                    </div>
+                    
+                    <div className="mt-4 h-48 overflow-hidden rounded-md">
+                      <OptimizedImage 
+                        src={type.image} 
+                        alt={type.title} 
+                        className="w-full h-full object-cover" 
+                      />
+                    </div>
                   </div>
-                </div>)}
+                </div>
+              ))}
             </div>
           </div>
         </section>
