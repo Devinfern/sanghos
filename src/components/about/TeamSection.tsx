@@ -53,19 +53,19 @@ const TeamSection = ({ isLoaded }: TeamSectionProps) => {
         >
           <motion.div
             variants={fadeIn}
-            className="rounded-xl overflow-hidden bg-white shadow-sm border border-sand-100 hover:shadow-md transition-shadow max-w-2xl"
+            className="rounded-xl overflow-hidden bg-[#f7f7f7] max-w-4xl w-full flex flex-col md:flex-row"
           >
-            <div className="aspect-[3/2] overflow-hidden bg-sand-100">
+            <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+              <div className="text-sm text-slate-600 uppercase mb-2">FOUNDER</div>
+              <h3 className="text-3xl md:text-4xl font-bold text-slate-800 mb-6">{team[0].name}</h3>
+              <p className="text-slate-600 leading-relaxed">{team[0].bio}</p>
+            </div>
+            <div className="md:w-1/2">
               <img 
                 src={team[0].image} 
                 alt={team[0].name} 
-                className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
+                className="w-full h-full object-cover object-center"
               />
-            </div>
-            <div className="p-8">
-              <h3 className="text-2xl font-semibold">{team[0].name}</h3>
-              <p className="text-sage-600 mb-4">{team[0].role}</p>
-              <p className="text-muted-foreground">{team[0].bio}</p>
             </div>
           </motion.div>
         </motion.div>
