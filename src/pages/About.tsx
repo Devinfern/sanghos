@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
@@ -113,58 +112,29 @@ const About = () => {
     icon: <Wind className="h-6 w-6 text-white" />,
     title: "Breathwork Day Long Retreats",
     description: "Experience transformative breathing techniques to release tension, boost energy, and find inner calm.",
-    image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     className: "md:col-span-2 row-span-2"
   }, {
     id: 2,
     icon: <Cloud className="h-6 w-6 text-white" />,
     title: "Silent Day Long Retreats",
     description: "Discover the power of silence in a supportive environment to deepen mindfulness and self-awareness.",
-    image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3264&q=80"
+    image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=3264&q=80"
   }, {
     id: 3,
     icon: <HandHeart className="h-6 w-6 text-white" />,
     title: "Therapy + Somatic Day Long Retreats",
     description: "Integrate body-based healing approaches with therapeutic practices for holistic emotional wellbeing.",
-    image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=4608&q=80"
+    image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=4608&q=80"
   }];
 
+  // Keeping only Devin in the team members array
   const teamMembers = [{
     name: "Devin Fernandez",
     role: "Founder",
     image: "/lovable-uploads/f1e50ebf-84dd-47ec-9f51-e4ef3f49b992.png",
     bio: "Devin's 10+ years of meditation revealed the need for a more seamless retreat experience. This insight sparked the creation of Sanghos, aimed at making transformative journeys more attainable.",
-    className: "md:col-span-2"
-  }, {
-    name: "Raj Patel",
-    role: "Head of Retreat Curation",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80",
-    bio: "Raj brings his expertise in retreat design and facilitation to curate experiences that balance introspection, connection, and transformation.",
-    className: "md:col-span-1"
-  }, {
-    name: "Zoe Chen",
-    role: "Community Director",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80",
-    bio: "As our Community Director, Zoe fosters meaningful connections between hosts, instructors, and participants to create a thriving ecosystem of wellness.",
-    className: "md:col-span-1"
-  }, {
-    name: "David Torres",
-    role: "Technology Lead",
-    image: "https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1160&q=80",
-    bio: "David ensures our platform connects people seamlessly, with a focus on creating intuitive and accessible digital experiences for our community.",
-    className: "md:col-span-1"
-  }, {
-    name: "Amara Wilson",
-    role: "Host Relations",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1088&q=80",
-    bio: "Amara works closely with our host community, helping them create welcoming and transformative spaces for our retreat participants.",
-    className: "md:col-span-1"
-  }, {
-    name: "Leo Kim",
-    role: "Marketing Director",
-    image: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1087&q=80",
-    bio: "Leo crafts our brand story and connects Sanghos with mindfulness seekers who are looking for authentic experiences and community.",
-    className: "md:col-span-1"
+    className: "md:col-span-3"  // Updated to span the full width
   }];
 
   const timelineMilestones = [{
@@ -293,29 +263,23 @@ const About = () => {
         <section className="py-16 md:py-24 px-4 bg-[#F7F3EE]">
           <div className="max-w-7xl mx-auto">
             <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16 px-4">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-sage-950">Meet Our Team</h2>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-sage-950">Meet Our Founder</h2>
               <p className="text-lg sm:text-xl text-sage-700">
-                The passionate people behind Sanghos who are dedicated to creating meaningful experiences
+                The visionary behind Sanghos who is dedicated to creating meaningful experiences
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {teamMembers.slice(0, 3).map(member => <div key={member.name} className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
-                  <div className="h-[220px] sm:h-[280px] overflow-hidden">
-                    <OptimizedImage src={member.image} alt={member.name} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" objectFit="cover" />
-                  </div>
-                  <div className="p-4 sm:p-6">
-                    <h3 className="text-lg sm:text-xl font-semibold text-sage-900">{member.name}</h3>
-                    <p className="text-sage-600 mb-3">{member.role}</p>
-                    <p className="text-sage-700 text-sm">{member.bio}</p>
-                  </div>
-                </div>)}
-            </div>
-            
-            <div className="mt-10 md:mt-12 text-center">
-              <Button variant="outline" size="lg" className="text-sage-800 border-sage-200 hover:bg-sage-50">
-                View All Team Members
-              </Button>
+            <div className="flex justify-center">
+              <div className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 max-w-2xl">
+                <div className="h-[320px] sm:h-[380px] overflow-hidden">
+                  <OptimizedImage src={teamMembers[0].image} alt={teamMembers[0].name} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" objectFit="cover" />
+                </div>
+                <div className="p-6 sm:p-8">
+                  <h3 className="text-xl sm:text-2xl font-semibold text-sage-900">{teamMembers[0].name}</h3>
+                  <p className="text-sage-600 mb-4">{teamMembers[0].role}</p>
+                  <p className="text-sage-700">{teamMembers[0].bio}</p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
