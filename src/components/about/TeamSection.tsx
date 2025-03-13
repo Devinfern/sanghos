@@ -66,7 +66,7 @@ const TeamSection = ({
               </h3>
               
               {/* Large outlined button */}
-              <button className="w-full border-2 border-slate-800 text-slate-800 py-3 px-4 rounded-20px text-base font-medium hover:bg-slate-50 transition-colors">
+              <button className="w-full border-2 border-slate-800 text-slate-800 py-3 px-4 rounded-24px text-base font-medium hover:bg-slate-50 transition-colors">
                 Connect
               </button>
             </div>
