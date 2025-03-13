@@ -52,8 +52,8 @@ const TeamSection = ({ isLoaded }: TeamSectionProps) => {
           animate={isLoaded ? "visible" : "hidden"}
           className="flex justify-center"
         >
-          {/* Compact card with image on left (1/3 width) and content on right (2/3 width) */}
-          <Card className="max-w-md w-full flex overflow-hidden rounded-xl shadow-md">
+          {/* More compact card with image on left (1/3 width) and content on right (2/3 width) */}
+          <Card className="max-w-sm w-full flex overflow-hidden rounded-lg shadow-sm">
             {/* Left side - Image */}
             <div className="w-1/3">
               <img 
@@ -64,27 +64,27 @@ const TeamSection = ({ isLoaded }: TeamSectionProps) => {
             </div>
             
             {/* Right side - Content */}
-            <div className="w-2/3 p-6 flex flex-col justify-between">
+            <div className="w-2/3 p-4 flex flex-col justify-between">
               <div>
                 {/* Small uppercase "Founder" label */}
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-0.5">
                   {team[0].role}
                 </p>
                 
                 {/* Name */}
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                <h3 className="text-lg font-bold text-gray-900 mb-1.5">
                   {team[0].name}
                 </h3>
                 
                 {/* Bio text */}
-                <p className="text-gray-600 text-sm">
+                <p className="text-gray-600 text-xs">
                   {team[0].bio}
                 </p>
               </div>
               
               {/* Blue connect button at bottom */}
-              <div className="mt-4">
-                <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700 transition-colors">
+              <div className="mt-3">
+                <button className="bg-blue-600 text-white px-3 py-1.5 rounded text-xs hover:bg-blue-700 transition-colors">
                   Connect
                 </button>
               </div>
