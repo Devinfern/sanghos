@@ -53,19 +53,24 @@ const TeamSection = ({ isLoaded }: TeamSectionProps) => {
         >
           <motion.div
             variants={fadeIn}
-            className="rounded-xl overflow-hidden bg-[#f7f7f7] max-w-4xl w-full flex flex-col md:flex-row"
+            className="bg-[#f7f7f7] rounded-2xl overflow-hidden max-w-md w-full"
           >
-            <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
-              <div className="text-sm text-slate-600 uppercase mb-2">FOUNDER</div>
-              <h3 className="text-3xl md:text-4xl font-bold text-slate-800 mb-6">{team[0].name}</h3>
-              <p className="text-slate-600 leading-relaxed">{team[0].bio}</p>
-            </div>
-            <div className="md:w-1/2">
+            <div className="w-full aspect-square overflow-hidden">
               <img 
                 src={team[0].image} 
                 alt={team[0].name} 
                 className="w-full h-full object-cover object-center"
               />
+            </div>
+            <div className="p-6 md:p-8">
+              <div className="text-sm text-slate-600 uppercase tracking-wide mb-2">FOUNDER</div>
+              <h3 className="text-3xl md:text-4xl font-bold text-slate-800 mb-2 leading-tight">
+                {team[0].name}
+              </h3>
+              <div className="w-12 h-1 bg-blue-600 my-4"></div>
+              <button className="mt-4 border-2 border-slate-800 text-slate-800 py-2 px-8 rounded-none font-medium hover:bg-slate-800 hover:text-white transition-colors">
+                Connect
+              </button>
             </div>
           </motion.div>
         </motion.div>
