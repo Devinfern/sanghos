@@ -52,19 +52,19 @@ const TeamSection = ({ isLoaded }: TeamSectionProps) => {
           animate={isLoaded ? "visible" : "hidden"}
           className="flex justify-center"
         >
-          {/* Card design matching the provided image */}
-          <div className="max-w-md w-full bg-[#F7F7F7] rounded-3xl overflow-hidden shadow-sm">
-            {/* Top image section - full width */}
-            <div className="w-full rounded-2xl overflow-hidden">
+          {/* Horizontal card with image on left (1/3) and content on right (2/3) */}
+          <div className="max-w-3xl w-full bg-[#F7F7F7] rounded-xl overflow-hidden shadow-sm flex">
+            {/* Left side - Image (1/3 width) */}
+            <div className="w-1/3 overflow-hidden">
               <img 
                 src={team[0].image} 
                 alt={team[0].name} 
-                className="w-full h-[350px] object-cover"
+                className="w-full h-full object-cover"
               />
             </div>
             
-            {/* Content section below image */}
-            <div className="p-6 pt-5">
+            {/* Right side - Content (2/3 width) */}
+            <div className="w-2/3 p-6">
               {/* Small uppercase label */}
               <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
                 {team[0].role}
@@ -72,18 +72,18 @@ const TeamSection = ({ isLoaded }: TeamSectionProps) => {
               
               {/* Name with vertical blue accent line */}
               <div className="flex items-center mb-5">
-                <h3 className="text-2xl font-bold text-slate-800">
+                <h3 className="text-xl font-bold text-slate-800">
                   {team[0].name}
                 </h3>
-                <div className="mx-2 h-7 w-1.5 bg-blue-600"></div>
-                <p className="text-2xl font-bold text-slate-800">
+                <div className="mx-2 h-6 w-1 bg-blue-600"></div>
+                <p className="text-xl font-bold text-slate-800">
                   Sanghos
                 </p>
               </div>
               
               {/* Button with border only */}
-              <div className="mt-2">
-                <button className="border-2 border-slate-700 text-slate-700 px-8 py-2.5 rounded-md text-sm font-medium hover:bg-slate-50 transition-colors">
+              <div className="mt-3">
+                <button className="border border-slate-700 text-slate-700 px-6 py-2 rounded-md text-sm font-medium hover:bg-slate-50 transition-colors">
                   Connect
                 </button>
               </div>
