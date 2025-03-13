@@ -51,28 +51,27 @@ const TeamSection = ({ isLoaded }: TeamSectionProps) => {
           animate={isLoaded ? "visible" : "hidden"}
           className="flex justify-center"
         >
-          <motion.div
-            variants={fadeIn}
-            className="bg-[#f7f7f7] rounded-2xl overflow-hidden max-w-md w-full"
-          >
-            <div className="w-full aspect-square overflow-hidden">
+          <div className="max-w-md w-full flex flex-col md:flex-row bg-white shadow-md rounded-xl overflow-hidden">
+            <div className="md:w-1/3">
               <img 
                 src={team[0].image} 
                 alt={team[0].name} 
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-cover"
               />
             </div>
-            <div className="p-6 md:p-8">
-              <div className="text-sm text-slate-600 uppercase tracking-wide mb-2">FOUNDER</div>
-              <h3 className="text-3xl md:text-4xl font-bold text-slate-800 mb-2 leading-tight">
-                {team[0].name}
-              </h3>
-              <div className="w-12 h-1 bg-blue-600 my-4"></div>
-              <button className="mt-4 border-2 border-slate-800 text-slate-800 py-2 px-8 rounded-none font-medium hover:bg-slate-800 hover:text-white transition-colors">
-                Connect
-              </button>
+            <div className="md:w-2/3 p-6 flex flex-col justify-between">
+              <div>
+                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Founder</div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">{team[0].name}</h3>
+                <p className="text-gray-600 text-sm mb-4">{team[0].bio}</p>
+              </div>
+              <div>
+                <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700 transition-colors">
+                  Connect
+                </button>
+              </div>
             </div>
-          </motion.div>
+          </div>
         </motion.div>
       </div>
     </section>
