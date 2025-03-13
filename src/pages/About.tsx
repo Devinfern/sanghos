@@ -112,16 +112,19 @@ const About = () => {
     id: 1,
     category: "BREATHWORK",
     title: "Transformative Breathing",
+    description: "Experience transformative breathing techniques to release tension, boost energy, and find inner calm.",
     image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
   }, {
     id: 2,
     category: "SILENT",
     title: "Calming Silence",
+    description: "Discover the power of silence in a supportive environment to deepen mindfulness and self-awareness.",
     image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=3264&q=80"
   }, {
     id: 3,
     category: "SOMATIC",
     title: "Body-Centered Healing",
+    description: "Integrate body-based healing approaches with therapeutic practices for holistic emotional wellbeing.",
     image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=4608&q=80"
   }];
 
@@ -248,7 +251,8 @@ const About = () => {
                 <div key={type.id} className="rounded-xl overflow-hidden bg-[#F5F5F5] p-6">
                   <div className="flex flex-col h-full">
                     <p className="text-sm font-medium text-slate-700 mb-2">{type.category}</p>
-                    <h3 className="text-2xl font-bold text-slate-900 mb-6">{type.title}</h3>
+                    <h3 className="text-2xl font-bold text-slate-900 mb-3">{type.title}</h3>
+                    <p className="text-slate-700 mb-6">{type.description}</p>
                     
                     <div className="mt-auto">
                       <Button variant="outline" className="border-2 border-slate-800 text-slate-800 hover:bg-slate-50 font-medium">
