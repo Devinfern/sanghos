@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import OptimizedImage from "@/components/OptimizedImage";
 import ScrollButton from "@/components/ScrollButton";
+import TeamSection from "@/components/about/TeamSection";
 import { Heart, Compass, Target, Globe, Leaf, Users, Clock, Wind, Cloud, Brain, HandHeart } from "lucide-react";
 
 const About = () => {
@@ -128,13 +129,12 @@ const About = () => {
     image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=4608&q=80"
   }];
 
-  // Keeping only Devin in the team members array
   const teamMembers = [{
     name: "Devin Fernandez",
     role: "Founder",
     image: "/lovable-uploads/f1e50ebf-84dd-47ec-9f51-e4ef3f49b992.png",
     bio: "Devin's 10+ years of meditation revealed the need for a more seamless retreat experience. This insight sparked the creation of Sanghos, aimed at making transformative journeys more attainable.",
-    className: "md:col-span-3"  // Updated to span the full width
+    className: "md:col-span-3"
   }];
 
   const timelineMilestones = [{
@@ -260,29 +260,7 @@ const About = () => {
           </div>
         </section>
 
-        <section className="py-16 md:py-24 px-4 bg-[#F7F3EE]">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16 px-4">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-sage-950">Meet Our Founder</h2>
-              <p className="text-lg sm:text-xl text-sage-700">
-                The visionary behind Sanghos who is dedicated to creating meaningful experiences
-              </p>
-            </div>
-
-            <div className="flex justify-center">
-              <div className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 max-w-2xl">
-                <div className="h-[320px] sm:h-[380px] overflow-hidden">
-                  <OptimizedImage src={teamMembers[0].image} alt={teamMembers[0].name} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" objectFit="cover" />
-                </div>
-                <div className="p-6 sm:p-8">
-                  <h3 className="text-xl sm:text-2xl font-semibold text-sage-900">{teamMembers[0].name}</h3>
-                  <p className="text-sage-600 mb-4">{teamMembers[0].role}</p>
-                  <p className="text-sage-700">{teamMembers[0].bio}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <TeamSection isLoaded={isLoaded} />
 
         <section className="py-16 sm:py-20 md:py-24 px-4 relative overflow-hidden bg-sage-900 text-white">
           <div className="absolute inset-0 opacity-10">
