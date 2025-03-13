@@ -10,7 +10,6 @@ import OptimizedImage from "@/components/OptimizedImage";
 import ScrollButton from "@/components/ScrollButton";
 import TeamSection from "@/components/about/TeamSection";
 import { Heart, Compass, Target, Globe, Leaf, Users, Clock, Wind, Cloud, Brain, HandHeart } from "lucide-react";
-
 const About = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
@@ -19,7 +18,6 @@ const About = () => {
     }, 100);
     return () => clearTimeout(timer);
   }, []);
-
   const fadeIn = {
     hidden: {
       opacity: 0,
@@ -33,7 +31,6 @@ const About = () => {
       }
     }
   };
-
   const staggerChildren = {
     hidden: {
       opacity: 0
@@ -45,7 +42,6 @@ const About = () => {
       }
     }
   };
-
   const heroCards = [{
     title: "Our Mission",
     description: "Making mindfulness accessible to everyone",
@@ -63,7 +59,6 @@ const About = () => {
     image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3",
     className: ""
   }];
-
   const missionCards = [{
     icon: <Users className="h-12 w-12 text-sage-600 mb-4" />,
     title: "Connect",
@@ -80,7 +75,6 @@ const About = () => {
     description: "We nurture a growing ecosystem of mindfulness that's accessible and welcoming to everyone.",
     className: "bg-sage-50 md:col-span-1"
   }];
-
   const valueCards = [{
     icon: <Heart className="h-10 w-10 text-rose-500" />,
     title: "Compassion",
@@ -107,13 +101,12 @@ const About = () => {
     description: "We make choices that honor and protect the natural environment and promote long-term wellbeing.",
     className: "bg-white border border-sand-100 md:col-span-1"
   }];
-
   const retreatTypeCards = [{
     id: 1,
     category: "BREATHWORK",
     title: "Transformative Breathing",
     description: "Experience transformative breathing techniques to release tension, boost energy, and find inner calm.",
-    image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
   }, {
     id: 2,
     category: "SILENT",
@@ -127,7 +120,6 @@ const About = () => {
     description: "Integrate body-based healing approaches with therapeutic practices for holistic emotional wellbeing.",
     image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=4608&q=80"
   }];
-
   const teamMembers = [{
     name: "Devin Fernandez",
     role: "Founder",
@@ -135,7 +127,6 @@ const About = () => {
     bio: "Devin's 10+ years of meditation revealed the need for a more seamless retreat experience. This insight sparked the creation of Sanghos, aimed at making transformative journeys more attainable.",
     className: "md:col-span-3"
   }];
-
   const timelineMilestones = [{
     year: "2019",
     title: "The Beginning",
@@ -157,7 +148,6 @@ const About = () => {
     title: "Community Growth",
     description: "Reached 10,000 retreat participants and launched our host certification program for quality experiences."
   }];
-
   return <>
       <Helmet>
         <title>About Us | Sanghos</title>
@@ -247,29 +237,21 @@ const About = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-              {retreatTypeCards.map(type => (
-                <div key={type.id} className="rounded-xl overflow-hidden bg-[#F5F5F5] p-6">
+              {retreatTypeCards.map(type => <div key={type.id} className="rounded-xl overflow-hidden bg-[#F5F5F5] p-6">
                   <div className="flex flex-col h-full">
                     <p className="text-sm font-medium text-slate-700 mb-2">{type.category}</p>
                     <h3 className="text-2xl font-bold text-slate-900 mb-3">{type.title}</h3>
                     <p className="text-slate-700 mb-6">{type.description}</p>
                     
                     <div className="mt-auto">
-                      <Button variant="outline" className="border-2 border-slate-800 text-slate-800 hover:bg-slate-50 font-medium">
-                        Learn More
-                      </Button>
+                      
                     </div>
                     
                     <div className="mt-4 h-48 overflow-hidden rounded-md">
-                      <OptimizedImage 
-                        src={type.image} 
-                        alt={type.title} 
-                        className="w-full h-full object-cover" 
-                      />
+                      <OptimizedImage src={type.image} alt={type.title} className="w-full h-full object-cover" />
                     </div>
                   </div>
-                </div>
-              ))}
+                </div>)}
             </div>
           </div>
         </section>
@@ -301,5 +283,4 @@ const About = () => {
       <Footer />
     </>;
 };
-
 export default About;
