@@ -1,6 +1,7 @@
 
 import { motion } from "framer-motion";
-import { Leaf, Flower, Cloud, Droplets, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import OptimizedImage from "@/components/OptimizedImage";
 
 interface RetreatTypesProps {
   isLoaded: boolean;
@@ -25,38 +26,24 @@ const RetreatTypes = ({ isLoaded }: RetreatTypesProps) => {
   const retreatTypes = [
     {
       id: 1,
-      icon: <Leaf className="h-6 w-6 text-white" />,
-      title: "Yoga Retreats",
-      description: "Find your center with immersive yoga experiences led by skilled practitioners.",
-      image: "https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+      category: "BREATHWORK",
+      title: "Transformative Breathing",
+      description: "Experience transformative breathing techniques to release tension, boost energy, and find inner calm.",
+      image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
     },
     {
       id: 2,
-      icon: <Flower className="h-6 w-6 text-white" />,
-      title: "Psychedelic Retreats",
-      description: "Explore consciousness and healing through guided psychedelic experiences.",
-      image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3264&q=80"
+      category: "SILENT",
+      title: "Calming Silence",
+      description: "Discover the power of silence in a supportive environment to deepen mindfulness and self-awareness.",
+      image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=3264&q=80"
     },
     {
       id: 3,
-      icon: <Cloud className="h-6 w-6 text-white" />,
-      title: "Meditation Retreats",
-      description: "Cultivate mindfulness and inner peace through guided meditation practices.",
-      image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=4608&q=80"
-    },
-    {
-      id: 4,
-      icon: <Droplets className="h-6 w-6 text-white" />,
-      title: "Ayahuasca Retreats",
-      description: "Experience traditional plant medicine ceremonies in supportive settings.",
-      image: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=5472&q=80"
-    },
-    {
-      id: 5,
-      icon: <Plus className="h-6 w-6 text-white" />,
-      title: "Health & Wellness",
-      description: "Revitalize your body and mind with holistic health and wellness programs.",
-      image: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=5909&q=80"
+      category: "SOMATIC",
+      title: "Body-Centered Healing",
+      description: "Integrate body-based healing approaches with therapeutic practices for holistic emotional wellbeing.",
+      image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=4608&q=80"
     }
   ];
 
@@ -79,24 +66,34 @@ const RetreatTypes = ({ isLoaded }: RetreatTypesProps) => {
           variants={staggerChildren}
           initial="hidden"
           animate={isLoaded ? "visible" : "hidden"}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
         >
           {retreatTypes.map((type) => (
             <motion.div
               key={type.id}
               variants={fadeIn}
-              className="rounded-xl overflow-hidden shadow-md relative group h-[320px] md:h-[400px]"
+              className="rounded-xl overflow-hidden bg-[#F5F5F5] p-6 hover:shadow-md transition-shadow"
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-70 z-10"></div>
-              <img 
-                src={type.image} 
-                alt={type.title} 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-4 z-20">
-                <div className="flex items-center gap-2 bg-black/70 text-white px-4 py-3 rounded-lg">
-                  <span>{type.icon}</span>
-                  <h3 className="text-lg font-medium">{type.title}</h3>
+              <div className="flex flex-col h-full">
+                <p className="text-sm font-medium text-slate-700 mb-2">{type.category}</p>
+                <h3 className="text-2xl font-bold text-slate-900 mb-3">{type.title}</h3>
+                <p className="text-slate-700 mb-6">{type.description}</p>
+                
+                <div className="mt-auto mb-4">
+                  <Button 
+                    variant="outline" 
+                    className="border-2 border-slate-800 text-slate-800 hover:bg-slate-50 font-medium"
+                  >
+                    Learn More
+                  </Button>
+                </div>
+                
+                <div className="h-48 overflow-hidden rounded-md">
+                  <OptimizedImage 
+                    src={type.image} 
+                    alt={type.title} 
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" 
+                  />
                 </div>
               </div>
             </motion.div>
