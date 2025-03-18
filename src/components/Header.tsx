@@ -2,9 +2,17 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import NavHeader from "@/components/ui/NavHeader";
+import { 
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle
+} from "@/components/ui/navigation-menu";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -68,15 +76,6 @@ const Header = () => {
     }
   };
 
-  // Navigation links configuration
-  const navLinks = [
-    { title: "Home", href: "/" },
-    { title: "Retreats", href: "/retreats" },
-    { title: "About", href: "/about" },
-    { title: "Instructors", href: "/instructors" },
-    { title: "Community", href: isLoggedIn ? "/community" : "/community-teaser" },
-  ];
-
   return (
     <header
       className={cn(
@@ -97,49 +96,128 @@ const Header = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center justify-center flex-1">
-          <NavHeader links={navLinks} />
-        </div>
+        <div className="hidden md:flex items-center space-x-1">
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <Link 
+                  to="/"
+                  className={cn(
+                    "group inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors",
+                    location.pathname === "/" 
+                      ? "text-primary" 
+                      : (hasDarkHero && !isScrolled) 
+                        ? "text-white hover:text-white/80" 
+                        : "text-slate-700 hover:text-primary"
+                  )}
+                >
+                  Home
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link 
+                  to="/retreats"
+                  className={cn(
+                    "group inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors",
+                    location.pathname === "/retreats" 
+                      ? "text-primary" 
+                      : (hasDarkHero && !isScrolled) 
+                        ? "text-white hover:text-white/80" 
+                        : "text-slate-700 hover:text-primary"
+                  )}
+                >
+                  Retreats
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link 
+                  to="/instructors"
+                  className={cn(
+                    "group inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors",
+                    location.pathname === "/instructors" 
+                      ? "text-primary" 
+                      : (hasDarkHero && !isScrolled) 
+                        ? "text-white hover:text-white/80" 
+                        : "text-slate-700 hover:text-primary"
+                  )}
+                >
+                  Instructors
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link 
+                  to="/about"
+                  className={cn(
+                    "group inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors",
+                    location.pathname === "/about" 
+                      ? "text-primary" 
+                      : (hasDarkHero && !isScrolled) 
+                        ? "text-white hover:text-white/80" 
+                        : "text-slate-700 hover:text-primary"
+                  )}
+                >
+                  About Us
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link 
+                  to={isLoggedIn ? "/community" : "/community-teaser"}
+                  className={cn(
+                    "group inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors",
+                    (location.pathname === "/community" || location.pathname === "/community-teaser") 
+                      ? "text-primary" 
+                      : (hasDarkHero && !isScrolled) 
+                        ? "text-white hover:text-white/80" 
+                        : "text-slate-700 hover:text-primary"
+                  )}
+                  onClick={handleCommunityClick}
+                >
+                  Community
+                </Link>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
 
-        {/* Auth Buttons */}
-        <div className="hidden md:flex items-center space-x-3">
-          {isLoggedIn ? (
-            <Button 
-              size="sm" 
-              variant={hasDarkHero && !isScrolled ? "outline" : "outline"}
-              className={hasDarkHero && !isScrolled 
-                ? "border-white text-white hover:bg-white/10" 
-                : "border-slate-300 text-slate-800 hover:bg-slate-100"
-              }
-              onClick={handleSignOut}
-            >
-              Sign Out
-            </Button>
-          ) : (
-            <>
+          {/* Auth Buttons */}
+          <div className="flex items-center space-x-3 ml-6">
+            {isLoggedIn ? (
               <Button 
                 size="sm" 
-                variant="outline" 
-                asChild
+                variant={hasDarkHero && !isScrolled ? "outline" : "outline"}
                 className={hasDarkHero && !isScrolled 
                   ? "border-white text-white hover:bg-white/10" 
                   : "border-slate-300 text-slate-800 hover:bg-slate-100"
                 }
+                onClick={handleSignOut}
               >
-                <Link to="/login">Sign In</Link>
+                Sign Out
               </Button>
-              <Button 
-                size="sm" 
-                asChild
-                className={hasDarkHero && !isScrolled 
-                  ? "bg-white text-sage-900 hover:bg-white/90" 
-                  : ""
-                }
-              >
-                <Link to="/join">Join Sanghos</Link>
-              </Button>
-            </>
-          )}
+            ) : (
+              <>
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  asChild
+                  className={hasDarkHero && !isScrolled 
+                    ? "border-white text-white hover:bg-white/10" 
+                    : "border-slate-300 text-slate-800 hover:bg-slate-100"
+                  }
+                >
+                  <Link to="/login">Sign In</Link>
+                </Button>
+                <Button 
+                  size="sm" 
+                  asChild
+                  className={hasDarkHero && !isScrolled 
+                    ? "bg-white text-sage-900 hover:bg-white/90" 
+                    : ""
+                  }
+                >
+                  <Link to="/join">Join Sanghos</Link>
+                </Button>
+              </>
+            )}
+          </div>
         </div>
 
         {/* Mobile Menu Toggle */}
