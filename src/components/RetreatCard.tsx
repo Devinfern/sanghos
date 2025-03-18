@@ -18,7 +18,7 @@ interface RetreatCardProps {
   comingSoon?: boolean;
 }
 
-const RetreatCard = ({ retreat, index = 0, comingSoon = true }: RetreatCardProps) => {
+const RetreatCard = ({ retreat, index = 0, comingSoon = false }: RetreatCardProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [liked, setLiked] = useState(false);
@@ -59,7 +59,7 @@ const RetreatCard = ({ retreat, index = 0, comingSoon = true }: RetreatCardProps
     <CardWrapper>
       <Card
         className={cn(
-          "h-full overflow-hidden group border-0 shadow-sm hover:shadow-md transition-all duration-300 relative",
+          "h-full overflow-hidden group border shadow-sm hover:shadow-md transition-all duration-300 relative",
           "opacity-0 animate-fade-up"
         )}
         style={{ animationDelay: getAnimationDelay() }}

@@ -66,7 +66,7 @@ const RetreatHero = ({
   };
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-r from-sage-50 to-sage-100 pt-16 pb-12 md:pt-24 md:pb-16">
+    <div className="relative overflow-hidden bg-gradient-to-r from-sage-50 to-sage-100 pt-16 pb-12 md:pt-20 md:pb-14">
       {/* Decorative circles */}
       <div className="absolute top-0 left-0 w-32 h-32 rounded-full bg-sage-200/20 -translate-x-1/2 -translate-y-1/2"></div>
       <div className="absolute bottom-0 right-0 w-64 h-64 rounded-full bg-sage-200/30 translate-x-1/4 translate-y-1/4"></div>
@@ -80,13 +80,13 @@ const RetreatHero = ({
       </div>
       
       <div className="container px-4 md:px-6 relative z-10">
-        <div className="max-w-3xl mx-auto text-center mb-8">
+        <div className="max-w-3xl mx-auto text-center mb-6">
           <div className={`transition-all duration-700 delay-300 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-sage-900 mb-5">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-sage-900 mb-4">
               Find Your Perfect <span className="text-primary">Daylong Retreat</span>
             </h1>
             
-            <p className="text-lg text-sage-700 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg text-sage-700 mb-6 max-w-2xl mx-auto">
               Discover curated retreats designed to help you reconnect with yourself, 
               find balance, and cultivate mindfulness in stunning locations.
             </p>
@@ -94,9 +94,9 @@ const RetreatHero = ({
           
           {/* Integrated Tab Navigation */}
           {onTabChange && (
-            <div className={`mb-8 transition-all duration-700 delay-400 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <div className={`mb-6 transition-all duration-700 delay-400 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               <Tabs defaultValue={activeTab} onValueChange={onTabChange} className="w-full">
-                <div className="flex justify-center mb-5">
+                <div className="flex justify-center mb-4">
                   <TabsList className="grid grid-cols-3 w-full max-w-md bg-white/90 shadow-sm">
                     <TabsTrigger value="all" className="relative overflow-hidden group">
                       All Retreats
@@ -146,7 +146,7 @@ const RetreatHero = ({
           
           <form 
             onSubmit={handleSubmit} 
-            className={`relative max-w-xl mx-auto mb-8 transition-all duration-700 delay-500 ${
+            className={`relative max-w-xl mx-auto mb-6 transition-all duration-700 delay-500 ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
             }`}
           >

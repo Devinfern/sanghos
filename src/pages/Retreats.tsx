@@ -95,9 +95,7 @@ const Retreats = () => {
         />
       </Helmet>
 
-      <Header />
-
-      <main className="pt-20 bg-sage-50/30">
+      <main className="pt-20 bg-sage-50/30 min-h-screen flex flex-col">
         <RetreatHero 
           onSearch={handleSearch} 
           onCategorySelect={handleCategorySelect}
@@ -106,10 +104,10 @@ const Retreats = () => {
           activeTab={activeTab}
         />
         
-        <div className="container px-4 md:px-6 py-10 relative z-10">
-          <Card className="mb-8 overflow-hidden border-0 shadow-md">
-            <CardContent className="p-0">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-5">
+        <div className="container px-4 md:px-6 py-10 flex-grow">
+          <Card className="mb-6 overflow-hidden shadow-md">
+            <CardContent className="p-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="relative md:col-span-2">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                   <Input
@@ -144,7 +142,7 @@ const Retreats = () => {
               </div>
               
               {hasFilters && (
-                <div className="px-5 pb-5 pt-0 flex items-center">
+                <div className="mt-4 flex items-center">
                   <div className="flex items-center flex-wrap gap-2">
                     <span className="text-sm text-muted-foreground mr-2">Active filters:</span>
                     
@@ -191,7 +189,7 @@ const Retreats = () => {
             </CardContent>
           </Card>
 
-          <div className="mb-6 flex items-center justify-between">
+          <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <p className="font-medium">
                 Results
@@ -217,7 +215,7 @@ const Retreats = () => {
           {filteredRetreats.length > 0 ? (
             <div 
               className={cn(
-                "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-opacity duration-700",
+                "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 transition-opacity duration-700",
                 isLoaded ? "opacity-100" : "opacity-0"
               )}
             >
@@ -226,12 +224,12 @@ const Retreats = () => {
                   key={retreat.id} 
                   retreat={retreat} 
                   index={index}
-                  comingSoon={true}
+                  comingSoon={false}
                 />
               ))}
             </div>
           ) : (
-            <Card className="text-center py-16 my-8 bg-white border-0 shadow-sm">
+            <Card className="text-center py-12 my-8 bg-white shadow-sm">
               <CardContent className="pt-0">
                 <div className="flex flex-col items-center">
                   <div className="rounded-full bg-sage-100 p-4 mb-4">
