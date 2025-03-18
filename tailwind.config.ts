@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -19,6 +18,10 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				'playfair': ['"Playfair Display"', 'serif'],
+				'sans': ['Inter', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -96,7 +99,6 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			spacing: {
-				// Standardized spacing scale
 				'section': '5rem',
 				'section-sm': '3rem',
 				'section-lg': '8rem',
