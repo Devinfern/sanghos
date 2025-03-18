@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Users } from "lucide-react";
 import OptimizedImage from "./OptimizedImage";
@@ -6,7 +7,7 @@ const HowItWorks = () => {
     title: "Find your perfect retreat.",
     icon: <Calendar className="h-10 w-10 text-sage-600" />,
     description: "Browse our curated selection of wellness retreats by date, practice type, or instructor. Each retreat is thoughtfully designed to provide an immersive experience in a unique private space.",
-    image: "/lovable-uploads/a4221dcd-00b3-46f3-abc5-1020058579a4.png"
+    image: "/lovable-uploads/7d087453-b662-43ef-bd58-62953d225341.png"
   }, {
     title: "Experience a transformative day.",
     icon: <MapPin className="h-10 w-10 text-sage-600" />,
