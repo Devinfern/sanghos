@@ -70,7 +70,7 @@ const JoinCommunity = () => {
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
             <Button 
               size="lg" 
-              className="bg-brand-primary text-white hover:bg-brand-primary/90 text-lg font-medium px-8 py-6 h-auto"
+              className="bg-brand-primary hover:bg-brand-primary/90"
               onClick={() => navigate('/retreats')}
             >
               Browse Retreats
@@ -78,7 +78,7 @@ const JoinCommunity = () => {
             <Button 
               size="lg" 
               variant="outline" 
-              className="text-white border-white hover:bg-white/10 text-lg font-medium px-8 py-6 h-auto"
+              className="text-white border-white hover:bg-white/10"
               onClick={handleCommunityClick}
             >
               Join Our Community
