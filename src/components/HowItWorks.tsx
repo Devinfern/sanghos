@@ -1,6 +1,8 @@
+
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Users } from "lucide-react";
 import OptimizedImage from "./OptimizedImage";
+
 const HowItWorks = () => {
   const steps = [{
     title: "Find your perfect retreat.",
@@ -18,6 +20,7 @@ const HowItWorks = () => {
     description: "Share experiences with others on a similar journey. Our retreats foster connection through shared practice, communal meals, and meaningful conversation. Many participants form lasting friendships that extend beyond the retreat day.",
     image: "/lovable-uploads/80481871-1be9-4470-b1e2-4a2f47bdad30.png"
   }];
+  
   return <section className="py-24 md:py-32 bg-sand-50 overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
         <div className="max-w-6xl mx-auto">
@@ -29,7 +32,13 @@ const HowItWorks = () => {
             {steps.map((step, index) => <div key={index} className="flex flex-col lg:flex-row gap-12 items-center">
                 {index % 2 === 0 ? <>
                     <div className="lg:w-1/2">
-                      <img src={step.image} alt={step.title} className="rounded-xl shadow-lg w-full h-[600px] object-scale-down" />
+                      <OptimizedImage 
+                        src={step.image} 
+                        alt={step.title} 
+                        className="rounded-xl shadow-lg w-full max-h-[600px]" 
+                        objectFit="contain" 
+                        aspectRatio="custom"
+                      />
                     </div>
                     <div className="lg:w-1/2 space-y-6">
                       <div className="flex items-center gap-4 mb-4">
@@ -47,7 +56,13 @@ const HowItWorks = () => {
                       <p className="text-lg text-muted-foreground leading-relaxed">{step.description}</p>
                     </div>
                     <div className="lg:w-1/2 order-1 lg:order-2">
-                      <img src={step.image} alt={step.title} className="rounded-xl shadow-lg w-full h-[600px] object-cover" />
+                      <OptimizedImage 
+                        src={step.image} 
+                        alt={step.title} 
+                        className="rounded-xl shadow-lg w-full max-h-[600px]" 
+                        objectFit="contain" 
+                        aspectRatio="custom"
+                      />
                     </div>
                   </>}
               </div>)}
@@ -56,4 +71,5 @@ const HowItWorks = () => {
       </div>
     </section>;
 };
+
 export default HowItWorks;
