@@ -38,10 +38,10 @@ const RetreatHero = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedSearch, setExpandedSearch] = useState(false);
   
-  // If the user scrolls down more than 600px, we'll consider the search "expanded"
+  // If the user scrolls down more than 300px, we'll consider the search "expanded"
   useEffect(() => {
     const handleScroll = () => {
-      setExpandedSearch(window.scrollY > 600);
+      setExpandedSearch(window.scrollY > 300);
     };
     
     window.addEventListener("scroll", handleScroll);
@@ -52,74 +52,37 @@ const RetreatHero = ({
     e.preventDefault();
     onSearch(searchQuery);
     
-    // Automatically scroll to results if we're at the top of the page
+    // Automatically scroll to results
     if (!expandedSearch) {
       setTimeout(() => {
-        window.scrollTo({ top: 650, behavior: 'smooth' });
+        window.scrollTo({ top: 450, behavior: 'smooth' });
       }, 100);
     }
   };
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-r from-sage-50 to-sage-100 py-16 md:py-24">
+    <div className="relative overflow-hidden bg-gradient-to-r from-sage-50 to-sage-100 pt-14 pb-8 md:pt-20 md:pb-10">
       {/* Decorative circles */}
       <div className="absolute top-0 left-0 w-32 h-32 rounded-full bg-sage-200/20 -translate-x-1/2 -translate-y-1/2"></div>
       <div className="absolute bottom-0 right-0 w-64 h-64 rounded-full bg-sage-200/30 translate-x-1/4 translate-y-1/4"></div>
       
       <div className="container px-4 md:px-6 relative z-10">
-        <div className="max-w-3xl mx-auto text-center mb-10">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-sage-900 mb-6">
+        <div className="max-w-3xl mx-auto text-center mb-6">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-sage-900 mb-4">
             Find Your Perfect <span className="text-primary">Mindfulness Retreat</span>
           </h1>
           
-          <p className="text-lg text-sage-700 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-sage-700 mb-6 max-w-2xl mx-auto">
             Discover curated retreats designed to help you reconnect with yourself, 
             find balance, and cultivate mindfulness in stunning locations.
           </p>
-          
-          <div className="flex flex-col md:flex-row gap-4 justify-center mb-8">
-            <div className="flex items-center bg-white text-sage-600 rounded-md px-4 py-2 shadow-sm">
-              <span className="font-medium">200+</span>
-              <span className="ml-2 text-sage-500">Active Retreats</span>
-            </div>
-            <div className="flex items-center bg-white text-sage-600 rounded-md px-4 py-2 shadow-sm">
-              <span className="font-medium">50+</span>
-              <span className="ml-2 text-sage-500">Expert Guides</span>
-            </div>
-            <div className="flex items-center bg-white text-sage-600 rounded-md px-4 py-2 shadow-sm">
-              <span className="font-medium">1000+</span>
-              <span className="ml-2 text-sage-500">Happy Participants</span>
-            </div>
-          </div>
-          
-          <form 
-            onSubmit={handleSubmit}
-            className="relative max-w-xl mx-auto mb-8"
-          >
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-              <Input
-                type="search"
-                placeholder="Search retreats by name, location, or type..."
-                className="pl-10 py-6 bg-white border-0 shadow-md"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <Button 
-                type="submit" 
-                className="absolute right-1.5 top-1/2 transform -translate-y-1/2"
-              >
-                Search
-              </Button>
-            </div>
-          </form>
           
           {/* Integrated Tab Navigation */}
           {onTabChange && (
             <div className="mb-6">
               <Tabs defaultValue={activeTab} onValueChange={onTabChange} className="w-full">
                 <div className="flex justify-center mb-4">
-                  <TabsList className="grid grid-cols-3 w-full max-w-md bg-white/80 shadow-sm">
+                  <TabsList className="grid grid-cols-3 w-full max-w-md bg-white/90 shadow-sm">
                     <TabsTrigger value="all" className="relative overflow-hidden group">
                       All Retreats
                       <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-data-[state=active]:scale-x-100 transition-transform origin-left duration-300"></span>
@@ -166,6 +129,28 @@ const RetreatHero = ({
             </div>
           )}
           
+          <form 
+            onSubmit={handleSubmit}
+            className="relative max-w-xl mx-auto mb-6"
+          >
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
+              <Input
+                type="search"
+                placeholder="Search retreats by name, location, or type..."
+                className="pl-10 py-6 bg-white border-0 shadow-md"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <Button 
+                type="submit" 
+                className="absolute right-1.5 top-1/2 transform -translate-y-1/2"
+              >
+                Search
+              </Button>
+            </div>
+          </form>
+          
           <div className="flex flex-wrap justify-center gap-2">
             {categories.map((category) => (
               <Badge
@@ -178,16 +163,6 @@ const RetreatHero = ({
               </Badge>
             ))}
           </div>
-        </div>
-        
-        <div className="mt-6 text-center">
-          <Button 
-            variant="link" 
-            className="text-sage-700 hover:text-sage-900 font-normal"
-            onClick={() => window.scrollTo({ top: 600, behavior: 'smooth' })}
-          >
-            Browse all retreats <ChevronRight className="h-4 w-4" />
-          </Button>
         </div>
       </div>
     </div>

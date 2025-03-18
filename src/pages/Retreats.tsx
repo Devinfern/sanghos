@@ -88,7 +88,7 @@ const Retreats = () => {
 
       <Header />
 
-      <main className="pt-20">
+      <main className="pt-20 bg-sage-50/50">
         <RetreatHero 
           onSearch={handleSearch} 
           onCategorySelect={handleCategorySelect}
@@ -97,8 +97,8 @@ const Retreats = () => {
           activeTab={activeTab}
         />
         
-        <div className="container px-4 md:px-6 py-12">
-          <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="container px-4 md:px-6 py-8 -mt-4 relative z-10">
+          <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4 bg-white p-4 rounded-lg shadow-sm">
             <div className="relative md:col-span-2">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
@@ -152,7 +152,7 @@ const Retreats = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-16 bg-muted/20 rounded-lg">
+            <div className="text-center py-16 bg-white rounded-lg shadow-sm">
               <h3 className="text-xl font-medium mb-2">No retreats found</h3>
               <p className="text-muted-foreground mb-4">
                 Try adjusting your search or filter criteria
