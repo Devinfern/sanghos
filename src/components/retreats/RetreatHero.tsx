@@ -66,7 +66,7 @@ const RetreatHero = ({
   };
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-r from-sage-50 to-sage-100 pt-14 pb-8 md:pt-20 md:pb-10">
+    <div className="relative overflow-hidden bg-gradient-to-r from-sage-50 to-sage-100 pt-16 pb-12 md:pt-24 md:pb-16">
       {/* Decorative circles */}
       <div className="absolute top-0 left-0 w-32 h-32 rounded-full bg-sage-200/20 -translate-x-1/2 -translate-y-1/2"></div>
       <div className="absolute bottom-0 right-0 w-64 h-64 rounded-full bg-sage-200/30 translate-x-1/4 translate-y-1/4"></div>
@@ -80,13 +80,13 @@ const RetreatHero = ({
       </div>
       
       <div className="container px-4 md:px-6 relative z-10">
-        <div className="max-w-3xl mx-auto text-center mb-6">
+        <div className="max-w-3xl mx-auto text-center mb-8">
           <div className={`transition-all duration-700 delay-300 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-sage-900 mb-4">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-sage-900 mb-5">
               Find Your Perfect <span className="text-primary">Daylong Retreat</span>
             </h1>
             
-            <p className="text-lg text-sage-700 mb-6 max-w-2xl mx-auto">
+            <p className="text-lg text-sage-700 mb-8 max-w-2xl mx-auto">
               Discover curated retreats designed to help you reconnect with yourself, 
               find balance, and cultivate mindfulness in stunning locations.
             </p>
@@ -94,9 +94,9 @@ const RetreatHero = ({
           
           {/* Integrated Tab Navigation */}
           {onTabChange && (
-            <div className={`mb-6 transition-all duration-700 delay-400 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <div className={`mb-8 transition-all duration-700 delay-400 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               <Tabs defaultValue={activeTab} onValueChange={onTabChange} className="w-full">
-                <div className="flex justify-center mb-4">
+                <div className="flex justify-center mb-5">
                   <TabsList className="grid grid-cols-3 w-full max-w-md bg-white/90 shadow-sm">
                     <TabsTrigger value="all" className="relative overflow-hidden group">
                       All Retreats
@@ -118,24 +118,24 @@ const RetreatHero = ({
 
                 <TabsContent value="all" className="animate-fade-up">
                   <div className="flex justify-center">
-                    <div className="inline-flex items-center bg-white/80 rounded-full px-3 py-1 text-sm text-sage-600">
-                      <Info className="w-3.5 h-3.5 mr-1" />
+                    <div className="inline-flex items-center bg-white/90 rounded-full px-3 py-1 text-sm text-sage-600">
+                      <Info className="w-3.5 h-3.5 mr-1.5" />
                       Showing all {retreatCounts.all} retreats
                     </div>
                   </div>
                 </TabsContent>
                 <TabsContent value="sanghos" className="animate-fade-up">
                   <div className="flex justify-center">
-                    <div className="inline-flex items-center bg-white/80 rounded-full px-3 py-1 text-sm text-sage-600">
-                      <Info className="w-3.5 h-3.5 mr-1" />
+                    <div className="inline-flex items-center bg-white/90 rounded-full px-3 py-1 text-sm text-sage-600">
+                      <Info className="w-3.5 h-3.5 mr-1.5" />
                       Showing {retreatCounts.sanghos} retreats organized by Sanghos
                     </div>
                   </div>
                 </TabsContent>
                 <TabsContent value="thirdparty" className="animate-fade-up">
                   <div className="flex justify-center">
-                    <div className="inline-flex items-center bg-white/80 rounded-full px-3 py-1 text-sm text-sage-600">
-                      <Info className="w-3.5 h-3.5 mr-1" />
+                    <div className="inline-flex items-center bg-white/90 rounded-full px-3 py-1 text-sm text-sage-600">
+                      <Info className="w-3.5 h-3.5 mr-1.5" />
                       Showing {retreatCounts.thirdparty} partner retreats
                     </div>
                   </div>
@@ -146,7 +146,7 @@ const RetreatHero = ({
           
           <form 
             onSubmit={handleSubmit} 
-            className={`relative max-w-xl mx-auto mb-6 transition-all duration-700 delay-500 ${
+            className={`relative max-w-xl mx-auto mb-8 transition-all duration-700 delay-500 ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
             }`}
           >
@@ -170,7 +170,7 @@ const RetreatHero = ({
           </form>
           
           <div 
-            className={`flex flex-wrap justify-center gap-2 transition-all duration-700 delay-600 ${
+            className={`flex flex-wrap justify-center gap-2.5 transition-all duration-700 delay-600 ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
             }`}
           >
@@ -178,7 +178,7 @@ const RetreatHero = ({
               <Badge 
                 key={category} 
                 variant="outline" 
-                className="bg-white hover:bg-sage-100 cursor-pointer text-sage-700 hover:text-sage-900 border-sage-200 transition-all duration-300 hover:scale-105" 
+                className="bg-white hover:bg-sage-100 cursor-pointer text-sage-700 hover:text-sage-900 border-sage-200 transition-all duration-300 hover:scale-105 py-1.5 px-3 text-sm" 
                 onClick={() => onCategorySelect(category)}
               >
                 {category}

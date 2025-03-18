@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Search, Info } from "lucide-react";
+import { Search, Info, Filter, X } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import RetreatCard from "@/components/RetreatCard";
@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 const allCategories = Array.from(
   new Set(retreats.flatMap((retreat) => retreat.category))
@@ -50,6 +52,11 @@ const Retreats = () => {
     setActiveTab(tab);
   };
 
+  const resetFilters = () => {
+    setSearchQuery("");
+    setSelectedCategory(null);
+  };
+
   const filteredRetreats = retreats.filter(retreat => {
     const matchesSearch = searchQuery === "" || 
       retreat.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -76,6 +83,8 @@ const Retreats = () => {
     thirdparty: thirdPartyRetreats.length
   };
 
+  const hasFilters = searchQuery !== "" || selectedCategory !== null;
+
   return (
     <>
       <Helmet>
@@ -88,7 +97,7 @@ const Retreats = () => {
 
       <Header />
 
-      <main className="pt-20 bg-sage-50/50">
+      <main className="pt-20 bg-sage-50/30">
         <RetreatHero 
           onSearch={handleSearch} 
           onCategorySelect={handleCategorySelect}
@@ -97,42 +106,112 @@ const Retreats = () => {
           activeTab={activeTab}
         />
         
-        <div className="container px-4 md:px-6 py-8 -mt-4 relative z-10">
-          <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4 bg-white p-4 rounded-lg shadow-sm">
-            <div className="relative md:col-span-2">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <Input
-                type="search"
-                placeholder="Refine your search..."
-                className="pl-10"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            <div>
-              <Select 
-                value={selectedCategory || ""} 
-                onValueChange={(value) => setSelectedCategory(value === "all" ? null : value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Filter by category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
-                  {allCategories.map(category => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+        <div className="container px-4 md:px-6 py-10 relative z-10">
+          <Card className="mb-8 overflow-hidden border-0 shadow-md">
+            <CardContent className="p-0">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-5">
+                <div className="relative md:col-span-2">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                  <Input
+                    type="search"
+                    placeholder="Refine your search..."
+                    className="pl-10"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Select 
+                    value={selectedCategory || ""} 
+                    onValueChange={(value) => setSelectedCategory(value === "all" ? null : value)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <div className="flex items-center">
+                        <Filter className="h-4 w-4 mr-2 text-muted-foreground" />
+                        <SelectValue placeholder="Filter by category" />
+                      </div>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Categories</SelectItem>
+                      {allCategories.map(category => (
+                        <SelectItem key={category} value={category}>
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              
+              {hasFilters && (
+                <div className="px-5 pb-5 pt-0 flex items-center">
+                  <div className="flex items-center flex-wrap gap-2">
+                    <span className="text-sm text-muted-foreground mr-2">Active filters:</span>
+                    
+                    {searchQuery && (
+                      <Badge variant="secondary" className="gap-1 pl-2 pr-1 py-1">
+                        Search: {searchQuery.length > 15 ? `${searchQuery.substring(0, 15)}...` : searchQuery}
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-5 w-5 p-0 ml-1 text-muted-foreground hover:text-foreground"
+                          onClick={() => setSearchQuery("")}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </Badge>
+                    )}
+                    
+                    {selectedCategory && (
+                      <Badge variant="secondary" className="gap-1 pl-2 pr-1 py-1">
+                        Category: {selectedCategory}
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-5 w-5 p-0 ml-1 text-muted-foreground hover:text-foreground"
+                          onClick={() => setSelectedCategory(null)}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </Badge>
+                    )}
+                    
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-sm text-muted-foreground hover:text-primary ml-auto"
+                      onClick={resetFilters}
+                    >
+                      <X className="h-3.5 w-3.5 mr-1" />
+                      Clear all filters
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
-          <div className="mb-6">
-            <p className="text-muted-foreground">
-              {filteredRetreats.length} {filteredRetreats.length === 1 ? 'retreat' : 'retreats'} found
-            </p>
+          <div className="mb-6 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <p className="font-medium">
+                Results
+              </p>
+              <Badge variant="outline" className="bg-white text-muted-foreground">
+                {filteredRetreats.length} {filteredRetreats.length === 1 ? 'retreat' : 'retreats'}
+              </Badge>
+            </div>
+            
+            {activeTab === "sanghos" && (
+              <div className="flex items-center text-sm text-muted-foreground">
+                <SanghosIcon className="h-4 w-4 mr-1 text-sage-600" />
+                <span>Sanghos organized retreats</span>
+              </div>
+            )}
+            {activeTab === "thirdparty" && (
+              <div className="flex items-center text-sm text-muted-foreground">
+                <span>Partner retreats</span>
+              </div>
+            )}
           </div>
 
           {filteredRetreats.length > 0 ? (
@@ -152,22 +231,25 @@ const Retreats = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-16 bg-white rounded-lg shadow-sm">
-              <h3 className="text-xl font-medium mb-2">No retreats found</h3>
-              <p className="text-muted-foreground mb-4">
-                Try adjusting your search or filter criteria
-              </p>
-              <Button 
-                variant="outline" 
-                onClick={() => {
-                  setSearchQuery("");
-                  setSelectedCategory(null);
-                  setActiveTab("all");
-                }}
-              >
-                Reset filters
-              </Button>
-            </div>
+            <Card className="text-center py-16 my-8 bg-white border-0 shadow-sm">
+              <CardContent className="pt-0">
+                <div className="flex flex-col items-center">
+                  <div className="rounded-full bg-sage-100 p-4 mb-4">
+                    <Info className="h-6 w-6 text-sage-600" />
+                  </div>
+                  <h3 className="text-xl font-medium mb-2">No retreats found</h3>
+                  <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                    We couldn't find any retreats matching your search criteria. Try adjusting your filters or search query.
+                  </p>
+                  <Button 
+                    variant="default" 
+                    onClick={resetFilters}
+                  >
+                    Reset filters
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           )}
         </div>
       </main>

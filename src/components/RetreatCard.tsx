@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Calendar, Users, Clock } from "lucide-react";
+import { MapPin, Calendar, Users, Clock, Heart } from "lucide-react";
 import { Retreat, formatCurrency, getRemainingText } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "@/components/ui/button";
 import EmailSignupForm from "./EmailSignupForm";
 import SanghosIcon from "./SanghosIcon";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 interface RetreatCardProps {
   retreat: Retreat;
@@ -20,9 +21,15 @@ interface RetreatCardProps {
 const RetreatCard = ({ retreat, index = 0, comingSoon = true }: RetreatCardProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [liked, setLiked] = useState(false);
 
   const getAnimationDelay = () => {
     return `${100 + index * 100}ms`;
+  };
+
+  const handleLike = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setLiked(!liked);
   };
 
   const CardWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -30,7 +37,7 @@ const RetreatCard = ({ retreat, index = 0, comingSoon = true }: RetreatCardProps
       return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <div className="cursor-pointer">{children}</div>
+            <div className="cursor-pointer h-full">{children}</div>
           </DialogTrigger>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
@@ -45,14 +52,14 @@ const RetreatCard = ({ retreat, index = 0, comingSoon = true }: RetreatCardProps
       );
     }
     
-    return <Link to={`/retreat/${retreat.id}`}>{children}</Link>;
+    return <Link to={`/retreat/${retreat.id}`} className="h-full">{children}</Link>;
   };
 
   return (
     <CardWrapper>
-      <div
+      <Card
         className={cn(
-          "retreat-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 relative",
+          "h-full overflow-hidden group border-0 shadow-sm hover:shadow-md transition-all duration-300 relative",
           "opacity-0 animate-fade-up"
         )}
         style={{ animationDelay: getAnimationDelay() }}
@@ -69,42 +76,55 @@ const RetreatCard = ({ retreat, index = 0, comingSoon = true }: RetreatCardProps
           </div>
         )}
 
-        <OptimizedImage
-          src={retreat.image}
-          alt={retreat.title}
-          aspectRatio="video"
-          className={cn("rounded-t-xl", comingSoon && "filter blur-[2px]")}
-          onLoad={() => setImageLoaded(true)}
-        />
-        
-        <div className="absolute top-3 right-3 flex flex-col gap-2 z-20">
-          {retreat.featured && (
-            <Badge
-              className="bg-primary/90 hover:bg-primary/90"
-              variant="default"
-            >
-              Featured
-            </Badge>
-          )}
-          {retreat.isSanghos && (
-            <Badge 
-              className="bg-sage-500/90 hover:bg-sage-500/90 flex items-center"
-              variant="default"
-            >
-              <SanghosIcon className="mr-1 h-4 w-4" opacity={0.85} /> Sanghos
-            </Badge>
-          )}
+        <div className="relative aspect-video overflow-hidden">
+          <OptimizedImage
+            src={retreat.image}
+            alt={retreat.title}
+            className={cn(
+              "object-cover w-full h-full transition-all duration-500 group-hover:scale-105", 
+              comingSoon && "filter blur-[2px]"
+            )}
+            onLoad={() => setImageLoaded(true)}
+          />
+          
+          <div className="absolute top-3 right-3 flex flex-col gap-2 z-20">
+            {retreat.featured && (
+              <Badge
+                className="bg-primary/90 hover:bg-primary/90"
+                variant="default"
+              >
+                Featured
+              </Badge>
+            )}
+            {retreat.isSanghos && (
+              <Badge 
+                className="bg-sage-500/90 hover:bg-sage-500/90 flex items-center"
+                variant="default"
+              >
+                <SanghosIcon className="mr-1 h-4 w-4" opacity={0.85} /> Sanghos
+              </Badge>
+            )}
+          </div>
+          
+          <Button
+            size="icon"
+            variant="ghost"
+            className="absolute top-3 left-3 z-20 h-8 w-8 rounded-full bg-white/80 hover:bg-white text-muted-foreground hover:text-rose-500"
+            onClick={handleLike}
+          >
+            <Heart className={cn("h-4 w-4", liked && "fill-rose-500 text-rose-500")} />
+          </Button>
         </div>
 
-        <div className="p-5">
+        <CardContent className="p-5">
           <div className="flex items-center mb-2">
-            <MapPin className="h-4 w-4 text-sage-500 mr-1" />
-            <span className="text-sm text-muted-foreground">
+            <MapPin className="h-4 w-4 text-sage-500 mr-1 flex-shrink-0" />
+            <span className="text-sm text-muted-foreground truncate">
               {retreat.location.city}, {retreat.location.state}
             </span>
           </div>
 
-          <h3 className="text-xl font-semibold mb-2 line-clamp-2">
+          <h3 className="text-xl font-semibold mb-2 line-clamp-2 group-hover:text-primary transition-colors">
             {retreat.title}
           </h3>
 
@@ -135,15 +155,15 @@ const RetreatCard = ({ retreat, index = 0, comingSoon = true }: RetreatCardProps
               <OptimizedImage
                 src={retreat.instructor.image}
                 alt={retreat.instructor.name}
-                className="w-8 h-8 rounded-full"
+                className="w-8 h-8 rounded-full border border-sage-100"
                 priority={true}
               />
-              <span className="text-sm">{retreat.instructor.name}</span>
+              <span className="text-sm font-medium">{retreat.instructor.name}</span>
             </div>
-            <p className="font-semibold">{formatCurrency(retreat.price)}</p>
+            <p className="font-semibold text-primary">{formatCurrency(retreat.price)}</p>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </CardWrapper>
   );
 };
