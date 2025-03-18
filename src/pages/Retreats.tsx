@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { Search, Info } from "lucide-react";
@@ -15,7 +16,6 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -39,19 +39,15 @@ const Retreats = () => {
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    if (query) {
-      setTimeout(() => {
-        window.scrollTo({ top: 650, behavior: 'smooth' });
-      }, 100);
-    }
   };
 
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category);
     setActiveTab("all");
-    setTimeout(() => {
-      window.scrollTo({ top: 650, behavior: 'smooth' });
-    }, 100);
+  };
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
   };
 
   const filteredRetreats = retreats.filter(retreat => {
@@ -74,6 +70,12 @@ const Retreats = () => {
   const sanghoRetreats = retreats.filter(retreat => retreat.isSanghos);
   const thirdPartyRetreats = retreats.filter(retreat => !retreat.isSanghos);
 
+  const retreatCounts = {
+    all: retreats.length,
+    sanghos: sanghoRetreats.length,
+    thirdparty: thirdPartyRetreats.length
+  };
+
   return (
     <>
       <Helmet>
@@ -89,65 +91,13 @@ const Retreats = () => {
       <main className="pt-20">
         <RetreatHero 
           onSearch={handleSearch} 
-          onCategorySelect={handleCategorySelect} 
+          onCategorySelect={handleCategorySelect}
+          onTabChange={handleTabChange}
+          retreatCounts={retreatCounts}
+          activeTab={activeTab}
         />
         
         <div className="container px-4 md:px-6 py-12">
-          <div className="mb-8">
-            <Tabs defaultValue="all" onValueChange={setActiveTab} className="w-full">
-              <div className="flex justify-center mb-6">
-                <TabsList className="grid grid-cols-3 w-full max-w-md">
-                  <TabsTrigger value="all" className="relative overflow-hidden group">
-                    All Retreats
-                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-data-[state=active]:scale-x-100 transition-transform origin-left duration-300"></span>
-                  </TabsTrigger>
-                  <TabsTrigger value="sanghos" className="relative overflow-hidden group">
-                    <span className="flex items-center gap-1">
-                      Sanghos 
-                      <SanghosIcon className="ml-0.5 w-4 h-4" />
-                    </span>
-                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-data-[state=active]:scale-x-100 transition-transform origin-left duration-300"></span>
-                  </TabsTrigger>
-                  <TabsTrigger value="thirdparty" className="relative overflow-hidden group">
-                    Partners
-                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-data-[state=active]:scale-x-100 transition-transform origin-left duration-300"></span>
-                  </TabsTrigger>
-                </TabsList>
-              </div>
-
-              <TabsContent value="all" className="animate-fade-up">
-                {activeTab === "all" && (
-                  <div className="mb-2 flex justify-center">
-                    <div className="inline-flex items-center bg-muted/60 rounded-full px-3 py-1 text-sm text-muted-foreground">
-                      <Info className="w-3.5 h-3.5 mr-1" />
-                      Showing all {retreats.length} retreats
-                    </div>
-                  </div>
-                )}
-              </TabsContent>
-              <TabsContent value="sanghos" className="animate-fade-up">
-                {activeTab === "sanghos" && (
-                  <div className="mb-2 flex justify-center">
-                    <div className="inline-flex items-center bg-muted/60 rounded-full px-3 py-1 text-sm text-muted-foreground">
-                      <Info className="w-3.5 h-3.5 mr-1" />
-                      Showing {sanghoRetreats.length} retreats organized by Sanghos
-                    </div>
-                  </div>
-                )}
-              </TabsContent>
-              <TabsContent value="thirdparty" className="animate-fade-up">
-                {activeTab === "thirdparty" && (
-                  <div className="mb-2 flex justify-center">
-                    <div className="inline-flex items-center bg-muted/60 rounded-full px-3 py-1 text-sm text-muted-foreground">
-                      <Info className="w-3.5 h-3.5 mr-1" />
-                      Showing {thirdPartyRetreats.length} partner retreats
-                    </div>
-                  </div>
-                )}
-              </TabsContent>
-            </Tabs>
-          </div>
-
           <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="relative md:col-span-2">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
