@@ -20,10 +20,6 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // Check if current page has dark background hero - home page and retreat detail pages
-  const hasDarkHero = location.pathname === "/" || 
-                      location.pathname.startsWith('/retreat/');
-
   // Handle scrolling effects
   useEffect(() => {
     const handleScroll = () => {
@@ -80,9 +76,9 @@ const Header = () => {
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300",
-        isScrolled || !hasDarkHero
+        isScrolled 
           ? "bg-white/95 backdrop-blur-md shadow-sm py-3"
-          : "bg-transparent py-4"
+          : "bg-white/95 backdrop-blur-md shadow-sm py-4"
       )}
     >
       <div className="container mx-auto px-4 lg:px-8 flex items-center justify-between">
@@ -106,9 +102,7 @@ const Header = () => {
                     "group inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors",
                     location.pathname === "/" 
                       ? "text-primary" 
-                      : (hasDarkHero && !isScrolled) 
-                        ? "text-white hover:text-white/80" 
-                        : "text-slate-700 hover:text-primary"
+                      : "text-slate-700 hover:text-primary"
                   )}
                 >
                   Home
@@ -121,9 +115,7 @@ const Header = () => {
                     "group inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors",
                     location.pathname === "/retreats" 
                       ? "text-primary" 
-                      : (hasDarkHero && !isScrolled) 
-                        ? "text-white hover:text-white/80" 
-                        : "text-slate-700 hover:text-primary"
+                      : "text-slate-700 hover:text-primary"
                   )}
                 >
                   Retreats
@@ -136,9 +128,7 @@ const Header = () => {
                     "group inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors",
                     location.pathname === "/instructors" 
                       ? "text-primary" 
-                      : (hasDarkHero && !isScrolled) 
-                        ? "text-white hover:text-white/80" 
-                        : "text-slate-700 hover:text-primary"
+                      : "text-slate-700 hover:text-primary"
                   )}
                 >
                   Instructors
@@ -151,9 +141,7 @@ const Header = () => {
                     "group inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors",
                     location.pathname === "/about" 
                       ? "text-primary" 
-                      : (hasDarkHero && !isScrolled) 
-                        ? "text-white hover:text-white/80" 
-                        : "text-slate-700 hover:text-primary"
+                      : "text-slate-700 hover:text-primary"
                   )}
                 >
                   About Us
@@ -166,9 +154,7 @@ const Header = () => {
                     "group inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors",
                     (location.pathname === "/community" || location.pathname === "/community-teaser") 
                       ? "text-primary" 
-                      : (hasDarkHero && !isScrolled) 
-                        ? "text-white hover:text-white/80" 
-                        : "text-slate-700 hover:text-primary"
+                      : "text-slate-700 hover:text-primary"
                   )}
                   onClick={handleCommunityClick}
                 >
@@ -183,11 +169,8 @@ const Header = () => {
             {isLoggedIn ? (
               <Button 
                 size="sm" 
-                variant={hasDarkHero && !isScrolled ? "outline" : "outline"}
-                className={hasDarkHero && !isScrolled 
-                  ? "border-white text-white hover:bg-white/10" 
-                  : "border-slate-300 text-slate-800 hover:bg-slate-100"
-                }
+                variant="outline"
+                className="border-slate-300 text-slate-800 hover:bg-slate-100"
                 onClick={handleSignOut}
               >
                 Sign Out
@@ -198,20 +181,13 @@ const Header = () => {
                   size="sm" 
                   variant="outline" 
                   asChild
-                  className={hasDarkHero && !isScrolled 
-                    ? "border-white text-white hover:bg-white/10" 
-                    : "border-slate-300 text-slate-800 hover:bg-slate-100"
-                  }
+                  className="border-slate-300 text-slate-800 hover:bg-slate-100"
                 >
                   <Link to="/login">Sign In</Link>
                 </Button>
                 <Button 
                   size="sm" 
                   asChild
-                  className={hasDarkHero && !isScrolled 
-                    ? "bg-white text-sage-900 hover:bg-white/90" 
-                    : ""
-                  }
                 >
                   <Link to="/join">Join Sanghos</Link>
                 </Button>
@@ -227,9 +203,9 @@ const Header = () => {
           aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
         >
           {mobileMenuOpen ? (
-            <X size={24} className={hasDarkHero && !isScrolled ? "text-white" : "text-slate-800"} />
+            <X size={24} className="text-slate-800" />
           ) : (
-            <Menu size={24} className={hasDarkHero && !isScrolled ? "text-white" : "text-slate-800"} />
+            <Menu size={24} className="text-slate-800" />
           )}
         </button>
       </div>
