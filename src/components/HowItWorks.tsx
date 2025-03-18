@@ -25,7 +25,7 @@ const HowItWorks = () => {
   return <section className="py-24 md:py-32 bg-sand-50 overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-normal leading-tight mb-8 text-center">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-playfair font-light leading-tight mb-8 text-center">
             How Sanghos Works
           </h2>
           
@@ -48,17 +48,17 @@ const HowItWorks = () => {
                     <div className="lg:w-1/2 space-y-6">
                       <div className="flex items-center gap-4 mb-4">
                         <div className="bg-sage-100 p-3 rounded-full">{step.icon}</div>
-                        <h3 className="text-2xl md:text-3xl font-heading font-normal">{step.title}</h3>
+                        <h3 className="text-2xl md:text-3xl font-playfair font-medium">{step.title}</h3>
                       </div>
-                      <p className="text-lg text-muted-foreground leading-relaxed font-light">{step.description}</p>
+                      <p className="text-lg text-muted-foreground leading-relaxed">{step.description}</p>
                     </div>
                   </> : <>
                     <div className="lg:w-1/2 space-y-6 order-2 lg:order-1">
                       <div className="flex items-center gap-4 mb-4">
                         <div className="bg-sage-100 p-3 rounded-full">{step.icon}</div>
-                        <h3 className="text-2xl md:text-3xl font-heading font-normal">{step.title}</h3>
+                        <h3 className="text-2xl md:text-3xl font-playfair font-medium">{step.title}</h3>
                       </div>
-                      <p className="text-lg text-muted-foreground leading-relaxed font-light">{step.description}</p>
+                      <p className="text-lg text-muted-foreground leading-relaxed">{step.description}</p>
                     </div>
                     <div className="lg:w-1/2 order-1 lg:order-2">
                       <div className="rounded-xl overflow-hidden bg-transparent">
