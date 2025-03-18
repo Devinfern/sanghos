@@ -1,20 +1,13 @@
 
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Info, Filter, X } from "lucide-react";
+import { Info, X } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import RetreatCard from "@/components/RetreatCard";
 import SanghosIcon from "@/components/SanghosIcon";
 import RetreatHero from "@/components/retreats/RetreatHero";
 import { retreats } from "@/lib/data";
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -104,37 +97,10 @@ const Retreats = () => {
         />
         
         <div className="container px-4 md:px-6 py-10 flex-grow">
-          <Card className="mb-6 overflow-hidden shadow-md">
-            <CardContent className="p-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="md:col-span-2">
-                  {/* Removed the additional search input */}
-                </div>
-                <div>
-                  <Select 
-                    value={selectedCategory || ""} 
-                    onValueChange={(value) => setSelectedCategory(value === "all" ? null : value)}
-                  >
-                    <SelectTrigger className="w-full">
-                      <div className="flex items-center">
-                        <Filter className="h-4 w-4 mr-2 text-muted-foreground" />
-                        <SelectValue placeholder="Filter by category" />
-                      </div>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Categories</SelectItem>
-                      {allCategories.map(category => (
-                        <SelectItem key={category} value={category}>
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              
-              {hasFilters && (
-                <div className="mt-4 flex items-center">
+          {hasFilters && (
+            <Card className="mb-6 overflow-hidden shadow-md">
+              <CardContent className="p-4">
+                <div className="flex items-center">
                   <div className="flex items-center flex-wrap gap-2">
                     <span className="text-sm text-muted-foreground mr-2">Active filters:</span>
                     
@@ -177,9 +143,9 @@ const Retreats = () => {
                     </Button>
                   </div>
                 </div>
-              )}
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          )}
 
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -211,20 +177,14 @@ const Retreats = () => {
                 isLoaded ? "opacity-100" : "opacity-0"
               )}
             >
-              {filteredRetreats.map((retreat, index) => {
-                // Mark certain retreats as "coming soon" based on a criterion
-                // For example, retreats with remaining spots of 0
-                const isComingSoon = retreat.remaining === 0;
-                
-                return (
-                  <RetreatCard 
-                    key={retreat.id} 
-                    retreat={retreat} 
-                    index={index}
-                    comingSoon={isComingSoon}
-                  />
-                );
-              })}
+              {filteredRetreats.map((retreat, index) => (
+                <RetreatCard 
+                  key={retreat.id} 
+                  retreat={retreat} 
+                  index={index}
+                  comingSoon={true} // Set all cards to coming soon
+                />
+              ))}
             </div>
           ) : (
             <Card className="text-center py-12 my-8 bg-white shadow-sm">
