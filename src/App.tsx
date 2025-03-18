@@ -20,6 +20,7 @@ import CommunitySpaceDetails from "./pages/CommunitySpaceDetails";
 import { HostProvider } from "./contexts/HostContext";
 import ScrollToTop from "./components/ScrollToTop";
 import Header from "./components/Header";
+import { NavHeaderDemo } from "./components/NavHeaderDemo";
 
 // Host Portal Pages
 import HostLogin from "./pages/host/HostLogin";
@@ -48,6 +49,7 @@ const App = () => (
         <ScrollToTop />
         <HostProvider>
           <Header />
+          <NavHeaderDemo />
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
