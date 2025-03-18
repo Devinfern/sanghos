@@ -51,7 +51,7 @@ const TeamSection = ({ isLoaded }: TeamSectionProps) => {
           variants={fadeIn} 
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">Meet Our Founder</h2>
+          <h2 className="text-3xl md:text-5xl font-bold mb-6 text-brand-dark">Meet Our Founder</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             The visionary behind Sanghos who is dedicated to creating meaningful experiences
           </p>
@@ -63,7 +63,7 @@ const TeamSection = ({ isLoaded }: TeamSectionProps) => {
           animate={isLoaded ? "visible" : "hidden"} 
           className="flex justify-center"
         >
-          <div className="max-w-sm w-full bg-[#F5F5F5] rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
+          <div className="max-w-sm w-full bg-brand-subtle/10 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
             {/* Image container taking full width */}
             <div className="w-full overflow-hidden">
               <img 
@@ -76,17 +76,17 @@ const TeamSection = ({ isLoaded }: TeamSectionProps) => {
             {/* Content section with improved spacing and typography */}
             <div className="p-8">
               {/* Role label */}
-              <p className="text-base text-slate-700 mb-2">
+              <p className="text-base text-brand-slate mb-2">
                 {team[0].role}
               </p>
               
               {/* Name in larger bold text */}
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">
+              <h3 className="text-2xl font-bold text-brand-dark mb-4">
                 {team[0].name}
               </h3>
               
               {/* Bio text */}
-              <p className="text-slate-700 mb-6">
+              <p className="text-brand-slate mb-6">
                 {team[0].bio}
               </p>
               
@@ -95,16 +95,16 @@ const TeamSection = ({ isLoaded }: TeamSectionProps) => {
                 <Button 
                   variant="outline" 
                   size="icon" 
-                  className="rounded-full border-slate-300 hover:bg-slate-100 hover:border-slate-400"
+                  className="rounded-full border-brand-subtle hover:bg-brand-subtle/10 hover:border-brand-primary"
                 >
-                  <Linkedin className="h-5 w-5 text-slate-700" />
+                  <Linkedin className="h-5 w-5 text-brand-primary" />
                 </Button>
                 <Button 
                   variant="outline" 
                   size="icon" 
-                  className="rounded-full border-slate-300 hover:bg-slate-100 hover:border-slate-400"
+                  className="rounded-full border-brand-subtle hover:bg-brand-subtle/10 hover:border-brand-primary"
                 >
-                  <Mail className="h-5 w-5 text-slate-700" />
+                  <Mail className="h-5 w-5 text-brand-primary" />
                 </Button>
               </div>
             </div>

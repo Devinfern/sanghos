@@ -48,7 +48,7 @@ const RetreatTypes = ({ isLoaded }: RetreatTypesProps) => {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-sand-50">
+    <section className="py-20 bg-gradient-to-b from-white to-brand-subtle/10">
       <div className="container mx-auto max-w-6xl px-4 md:px-6">
         <motion.div
           initial="hidden"
@@ -56,7 +56,7 @@ const RetreatTypes = ({ isLoaded }: RetreatTypesProps) => {
           variants={fadeIn}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">Explore by Retreat Type</h2>
+          <h2 className="text-3xl md:text-5xl font-bold mb-6 text-brand-dark">Explore by Retreat Type</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Discover transformative experiences tailored to your wellness journey
           </p>
@@ -72,17 +72,17 @@ const RetreatTypes = ({ isLoaded }: RetreatTypesProps) => {
             <motion.div
               key={type.id}
               variants={fadeIn}
-              className="rounded-xl overflow-hidden bg-[#F5F5F5] p-6 hover:shadow-md transition-shadow"
+              className="rounded-xl overflow-hidden bg-white p-6 hover:shadow-md transition-shadow border border-brand-subtle/20"
             >
               <div className="flex flex-col h-full">
-                <p className="text-sm font-medium text-slate-700 mb-2">{type.category}</p>
-                <h3 className="text-2xl font-bold text-slate-900 mb-3">{type.title}</h3>
-                <p className="text-slate-700 mb-6">{type.description}</p>
+                <p className="text-sm font-medium text-brand-primary mb-2">{type.category}</p>
+                <h3 className="text-2xl font-bold text-brand-dark mb-3">{type.title}</h3>
+                <p className="text-brand-slate mb-6">{type.description}</p>
                 
                 <div className="mt-auto mb-4">
                   <Button 
                     variant="outline" 
-                    className="border-2 border-slate-800 text-slate-800 hover:bg-slate-50 font-medium"
+                    className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium"
                   >
                     Learn More
                   </Button>

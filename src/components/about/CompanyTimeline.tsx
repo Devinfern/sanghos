@@ -40,7 +40,7 @@ const CompanyTimeline = ({ isLoaded }: CompanyTimelineProps) => {
   ];
 
   return (
-    <section className="py-20 bg-sand-50">
+    <section className="py-20 bg-brand-subtle/10">
       <div className="container mx-auto max-w-6xl px-4 md:px-6">
         <motion.div
           initial="hidden"
@@ -48,7 +48,7 @@ const CompanyTimeline = ({ isLoaded }: CompanyTimelineProps) => {
           variants={fadeIn}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">Our Journey</h2>
+          <h2 className="text-3xl md:text-5xl font-bold mb-6 text-brand-dark">Our Journey</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             From a small community gathering to a thriving platform
           </p>
@@ -56,7 +56,7 @@ const CompanyTimeline = ({ isLoaded }: CompanyTimelineProps) => {
 
         <div className="relative">
           {/* Timeline Line */}
-          <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 h-full w-1 bg-sand-200"></div>
+          <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 h-full w-1 bg-brand-subtle"></div>
           
           {/* Timeline Items */}
           <div className="space-y-12">
@@ -71,12 +71,12 @@ const CompanyTimeline = ({ isLoaded }: CompanyTimelineProps) => {
                 }`}
               >
                 <div className="md:w-1/2"></div>
-                <div className="z-10 absolute left-0 md:left-1/2 transform -translate-y-1/3 md:-translate-x-1/2 w-10 h-10 rounded-full bg-sage-500 border-4 border-white flex items-center justify-center">
+                <div className="z-10 absolute left-0 md:left-1/2 transform -translate-y-1/3 md:-translate-x-1/2 w-10 h-10 rounded-full bg-brand-primary border-4 border-white flex items-center justify-center">
                   <span className="text-white font-bold text-xs">{milestone.year}</span>
                 </div>
-                <div className="md:w-1/2 bg-white p-6 rounded-xl shadow-sm border border-sand-100">
-                  <h3 className="text-xl font-semibold mb-2">{milestone.title}</h3>
-                  <p className="text-muted-foreground">{milestone.description}</p>
+                <div className="md:w-1/2 bg-white p-6 rounded-xl shadow-sm border border-brand-subtle/20">
+                  <h3 className="text-xl font-semibold mb-2 text-brand-dark">{milestone.title}</h3>
+                  <p className="text-brand-slate">{milestone.description}</p>
                 </div>
               </motion.div>
             ))}
