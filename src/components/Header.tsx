@@ -15,9 +15,7 @@ const Header = () => {
   
   // Check if current page has dark background hero
   const hasDarkHero = location.pathname === "/" || 
-                      (location.pathname !== "/about" && 
-                       location.pathname !== "/retreats" && 
-                       !isScrolled);
+                      (location.pathname.startsWith('/retreat/'));
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,6 +67,10 @@ const Header = () => {
     document.body.style.removeProperty('overflow');
   };
 
+  console.log("Current path:", location.pathname);
+  console.log("Has dark hero:", hasDarkHero);
+  console.log("Is scrolled:", isScrolled);
+
   return (
     <header
       className={cn(
@@ -84,7 +86,7 @@ const Header = () => {
           isLoggedIn={isLoggedIn} 
           onSignOut={handleSignOut} 
           onCommunityClick={handleCommunityClick}
-          isOnDarkBackground={hasDarkHero}
+          isOnDarkBackground={hasDarkHero && !isScrolled}
         />
         {!mobileMenuOpen && (
           <MobileMenuToggle isOpen={mobileMenuOpen} onToggle={toggleMobileMenu} />

@@ -47,6 +47,7 @@ const App = () => (
       <BrowserRouter>
         <ScrollToTop />
         <HostProvider>
+          <Header />
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
