@@ -56,6 +56,15 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				brand: {
+					dark: '#264653',     // Dark blue/teal
+					primary: '#2A9D8F',  // Teal
+					sky: '#C0E8F9',      // Light blue
+					subtle: '#B8D3D1',   // Muted teal
+					peach: '#F0B67F',    // Peach/orange
+					rose: '#CE7B91',     // Rose/pink
+					slate: '#516072',    // Slate blue/gray
+				},
 				sand: {
 					50: '#f9f7f4',
 					100: '#f2efe9',

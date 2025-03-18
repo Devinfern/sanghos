@@ -15,12 +15,12 @@ const JoinCTA = ({ isLoaded }: JoinCTAProps) => {
 
   return (
     <section className="py-24 relative overflow-hidden">
-      <div className="absolute inset-0 bg-sage-900 z-0"></div>
+      <div className="absolute inset-0 bg-brand-dark z-0"></div>
       
       {/* Decorative elements */}
       <div className="absolute w-full h-full overflow-hidden z-0">
-        <div className="absolute -right-20 top-20 w-72 h-72 bg-sage-700/30 rounded-full blur-xl"></div>
-        <div className="absolute -left-20 bottom-20 w-80 h-80 bg-sand-200/10 rounded-full blur-xl"></div>
+        <div className="absolute -right-20 top-20 w-72 h-72 bg-brand-primary/30 rounded-full blur-xl"></div>
+        <div className="absolute -left-20 bottom-20 w-80 h-80 bg-brand-peach/20 rounded-full blur-xl"></div>
       </div>
       
       <div className="container relative z-10 mx-auto max-w-6xl px-4 md:px-6">
@@ -37,7 +37,7 @@ const JoinCTA = ({ isLoaded }: JoinCTAProps) => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg" 
-              className="bg-white text-sage-900 hover:bg-white/90 group"
+              className="bg-white text-brand-dark hover:bg-white/90 group"
               asChild
             >
               <a href="/signup">

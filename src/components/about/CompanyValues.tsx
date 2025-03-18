@@ -24,27 +24,27 @@ const CompanyValues = ({ isLoaded }: CompanyValuesProps) => {
 
   const values = [
     {
-      icon: <Heart className="h-10 w-10 text-rose-500" />,
+      icon: <Heart className="h-10 w-10 text-brand-rose" />,
       title: "Compassion",
       description: "We approach our work with empathy, kindness, and genuine care for the wellbeing of our community."
     },
     {
-      icon: <Compass className="h-10 w-10 text-emerald-500" />,
+      icon: <Compass className="h-10 w-10 text-brand-primary" />,
       title: "Authenticity",
       description: "We believe in creating spaces where people can show up as their true selves and experience genuine connection."
     },
     {
-      icon: <Target className="h-10 w-10 text-amber-500" />,
+      icon: <Target className="h-10 w-10 text-brand-peach" />,
       title: "Intentionality",
       description: "Every retreat, space, and interaction is crafted with purpose and mindfulness to create meaningful experiences."
     },
     {
-      icon: <Globe className="h-10 w-10 text-blue-500" />,
+      icon: <Globe className="h-10 w-10 text-brand-sky" />,
       title: "Community",
       description: "We cultivate relationships that foster belonging, support, and growth for all members of our ecosystem."
     },
     {
-      icon: <Leaf className="h-10 w-10 text-green-500" />,
+      icon: <Leaf className="h-10 w-10 text-brand-primary" />,
       title: "Sustainability",
       description: "We make choices that honor and protect the natural environment and promote long-term wellbeing."
     }
@@ -75,7 +75,7 @@ const CompanyValues = ({ isLoaded }: CompanyValuesProps) => {
             <motion.div
               key={index}
               variants={fadeIn}
-              className="bg-white p-6 rounded-xl shadow-sm border border-sand-100 hover:shadow-md transition-shadow"
+              className="bg-white p-6 rounded-xl shadow-sm border border-brand-subtle/30 hover:shadow-md transition-shadow"
             >
               <div className="mb-4">{value.icon}</div>
               <h3 className="text-xl font-semibold mb-2">{value.title}</h3>
