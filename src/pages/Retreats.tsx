@@ -1,14 +1,13 @@
 
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Search, Info, Filter, X } from "lucide-react";
+import { Info, Filter, X } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import RetreatCard from "@/components/RetreatCard";
 import SanghosIcon from "@/components/SanghosIcon";
 import RetreatHero from "@/components/retreats/RetreatHero";
 import { retreats } from "@/lib/data";
-import { Input } from "@/components/ui/input";
 import { 
   Select, 
   SelectContent, 
@@ -108,15 +107,8 @@ const Retreats = () => {
           <Card className="mb-6 overflow-hidden shadow-md">
             <CardContent className="p-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="relative md:col-span-2">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                  <Input
-                    type="search"
-                    placeholder="Refine your search..."
-                    className="pl-10"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
+                <div className="md:col-span-2">
+                  {/* Removed the additional search input */}
                 </div>
                 <div>
                   <Select 
@@ -219,14 +211,20 @@ const Retreats = () => {
                 isLoaded ? "opacity-100" : "opacity-0"
               )}
             >
-              {filteredRetreats.map((retreat, index) => (
-                <RetreatCard 
-                  key={retreat.id} 
-                  retreat={retreat} 
-                  index={index}
-                  comingSoon={false}
-                />
-              ))}
+              {filteredRetreats.map((retreat, index) => {
+                // Mark certain retreats as "coming soon" based on a criterion
+                // For example, retreats with remaining spots of 0
+                const isComingSoon = retreat.remaining === 0;
+                
+                return (
+                  <RetreatCard 
+                    key={retreat.id} 
+                    retreat={retreat} 
+                    index={index}
+                    comingSoon={isComingSoon}
+                  />
+                );
+              })}
             </div>
           ) : (
             <Card className="text-center py-12 my-8 bg-white shadow-sm">
