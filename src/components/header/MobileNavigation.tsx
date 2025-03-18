@@ -40,7 +40,7 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick, onC
           className={({ isActive }) =>
             cn(
               "text-lg font-medium py-2 transition-colors",
-              isActive ? "text-primary" : "text-muted-foreground"
+              isActive ? "text-primary" : "text-slate-800"
             )
           }
           onClick={onClose}
@@ -52,7 +52,7 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick, onC
           className={({ isActive }) =>
             cn(
               "text-lg font-medium py-2 transition-colors",
-              isActive ? "text-primary" : "text-muted-foreground"
+              isActive ? "text-primary" : "text-slate-800"
             )
           }
           onClick={onClose}
@@ -64,7 +64,7 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick, onC
           className={({ isActive }) =>
             cn(
               "text-lg font-medium py-2 transition-colors",
-              isActive ? "text-primary" : "text-muted-foreground"
+              isActive ? "text-primary" : "text-slate-800"
             )
           }
           onClick={onClose}
@@ -76,7 +76,7 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick, onC
           className={({ isActive }) =>
             cn(
               "text-lg font-medium py-2 transition-colors",
-              isActive ? "text-primary" : "text-muted-foreground"
+              isActive ? "text-primary" : "text-slate-800"
             )
           }
           onClick={onClose}
@@ -89,7 +89,7 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick, onC
             className={({ isActive }) =>
               cn(
                 "text-lg font-medium py-2 transition-colors",
-                isActive ? "text-primary" : "text-muted-foreground"
+                isActive ? "text-primary" : "text-slate-800"
               )
             }
             onClick={onClose}
@@ -99,7 +99,7 @@ const MobileNavigation = ({ isOpen, isLoggedIn, onSignOut, onCommunityClick, onC
         ) : (
           <Link
             to="/community-teaser"
-            className="text-lg font-medium py-2 transition-colors text-muted-foreground"
+            className="text-lg font-medium py-2 transition-colors text-slate-800"
             onClick={onClose}
           >
             Community

@@ -27,7 +27,7 @@ const DesktopNavigation = ({
               ? "text-primary" 
               : isOnDarkBackground 
                 ? "text-white" 
-                : "text-slate-700"
+                : "text-slate-800"
           )
         }
       >
@@ -42,7 +42,7 @@ const DesktopNavigation = ({
               ? "text-primary" 
               : isOnDarkBackground 
                 ? "text-white" 
-                : "text-slate-700"
+                : "text-slate-800"
           )
         }
       >
@@ -57,7 +57,7 @@ const DesktopNavigation = ({
               ? "text-primary" 
               : isOnDarkBackground 
                 ? "text-white" 
-                : "text-slate-700"
+                : "text-slate-800"
           )
         }
       >
@@ -72,7 +72,7 @@ const DesktopNavigation = ({
               ? "text-primary" 
               : isOnDarkBackground 
                 ? "text-white" 
-                : "text-slate-700"
+                : "text-slate-800"
           )
         }
       >
@@ -88,7 +88,7 @@ const DesktopNavigation = ({
                 ? "text-primary" 
                 : isOnDarkBackground 
                   ? "text-white" 
-                  : "text-slate-700"
+                  : "text-slate-800"
             )
           }
           onClick={onCommunityClick}
@@ -102,7 +102,7 @@ const DesktopNavigation = ({
             "text-sm font-medium transition-colors hover:text-primary",
             isOnDarkBackground 
               ? "text-white" 
-              : "text-slate-700"
+              : "text-slate-800"
           )}
         >
           Community
@@ -112,7 +112,7 @@ const DesktopNavigation = ({
         <Button 
           size="sm" 
           variant={isOnDarkBackground ? "outline" : "outline"}
-          className={isOnDarkBackground ? "border-white text-white hover:bg-white/10" : ""}
+          className={isOnDarkBackground ? "border-white text-white hover:bg-white/10" : "border-slate-300 text-slate-800 hover:bg-slate-100"}
           onClick={onSignOut}
         >
           Sign Out
@@ -126,8 +126,8 @@ const DesktopNavigation = ({
             className={cn(
               "ml-4", 
               isOnDarkBackground 
-                ? "border-white text-slate-900 bg-white hover:bg-white/90 hover:text-slate-900" 
-                : "text-slate-900"
+                ? "border-white text-white hover:bg-white/10" 
+                : "border-slate-300 text-slate-800 hover:bg-slate-100"
             )}
           >
             <Link to="/login">Sign In</Link>
