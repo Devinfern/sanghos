@@ -38,7 +38,7 @@ const FeaturedRetreats = () => {
   return (
     <section 
       id="featured-retreats"
-      className="py-16 md:py-24 bg-sand-50"
+      className="py-16 md:py-24 bg-brand-subtle/10"
     >
       <div className="container px-4 md:px-6">
         <div 
@@ -46,7 +46,7 @@ const FeaturedRetreats = () => {
             isVisible ? "opacity-100" : "opacity-0"
           }`}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-brand-dark">
             Featured Retreats
           </h2>
           <p className="text-muted-foreground">
@@ -71,7 +71,7 @@ const FeaturedRetreats = () => {
             isVisible ? "opacity-100" : "opacity-0"
           }`}
         >
-          <Button asChild size="lg">
+          <Button asChild size="lg" className="bg-brand-primary hover:bg-brand-primary/90">
             <Link to="/retreats" className="group">
               View All Retreats
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />

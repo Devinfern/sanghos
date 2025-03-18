@@ -43,7 +43,7 @@ const JoinCommunity = () => {
       className="py-24 md:py-36 relative overflow-hidden"
     >
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-black/60 z-10"></div>
+        <div className="absolute inset-0 bg-brand-dark/70 z-10"></div>
         <img
           src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07"
           alt="Peaceful retreat setting"
@@ -54,8 +54,8 @@ const JoinCommunity = () => {
       <div className="container relative z-20 px-4 md:px-6">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-playfair font-light leading-tight text-white mb-12">
-            Take a day <span className="text-sand-200">for yourself</span>. To disconnect. 
-            To breathe. <span className="text-sand-200">To practice</span>. To reconnect.
+            Take a day <span className="text-brand-peach">for yourself</span>. To disconnect. 
+            To breathe. <span className="text-brand-peach">To practice</span>. To reconnect.
           </h2>
           
           <div className="text-lg md:text-xl font-light text-white/90 mb-12 leading-relaxed">
@@ -70,7 +70,7 @@ const JoinCommunity = () => {
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
             <Button 
               size="lg" 
-              className="bg-white text-sage-900 hover:bg-white/90 text-lg font-medium px-8 py-6 h-auto"
+              className="bg-brand-primary text-white hover:bg-brand-primary/90 text-lg font-medium px-8 py-6 h-auto"
               onClick={() => navigate('/retreats')}
             >
               Browse Retreats

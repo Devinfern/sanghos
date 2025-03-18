@@ -26,7 +26,7 @@ const Hero = () => {
     <section className="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
       {/* Background image with overlay */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-transparent z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-brand-dark/40 via-brand-dark/20 to-transparent z-10"></div>
         <OptimizedImage
           src="https://cdn.prod.website-files.com/5ff4fbd49286ac4facd6bbce/67cfba7e2604665f5076bdb7_HEROIMG.jpg"
           alt="Peaceful retreat setting"
@@ -80,7 +80,7 @@ const Hero = () => {
                 <Button
                   type="submit"
                   size="sm"
-                  className="absolute right-1 h-10 px-5 rounded-full"
+                  className="absolute right-1 h-10 px-5 rounded-full bg-brand-primary hover:bg-brand-primary/90"
                 >
                   Search
                 </Button>
@@ -90,7 +90,7 @@ const Hero = () => {
             <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
               <Button
                 size="lg"
-                className="group"
+                className="group bg-brand-primary hover:bg-brand-primary/90"
                 onClick={() => navigate("/retreats")}
               >
                 Browse Retreats
@@ -99,7 +99,7 @@ const Hero = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="bg-white hover:bg-white/90"
+                className="bg-white/80 hover:bg-white/90 text-brand-dark border-transparent"
                 onClick={() => navigate("/instructors")}
               >
                 Meet Our Instructors
