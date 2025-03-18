@@ -1,11 +1,14 @@
+
 import { useState, useEffect } from "react";
-import { Search, ChevronRight, Info } from "lucide-react";
+import { Search, ChevronRight, Info, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SanghosIcon from "@/components/SanghosIcon";
+
 const categories = ["Meditation", "Yoga", "Breathwork", "Sound Healing", "Forest Therapy", "Mindfulness"];
+
 interface RetreatHeroProps {
   onSearch: (query: string) => void;
   onCategorySelect: (category: string) => void;
@@ -17,6 +20,7 @@ interface RetreatHeroProps {
   };
   activeTab?: string;
 }
+
 const RetreatHero = ({
   onSearch,
   onCategorySelect,
@@ -30,6 +34,7 @@ const RetreatHero = ({
 }: RetreatHeroProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedSearch, setExpandedSearch] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // If the user scrolls down more than 300px, we'll consider the search "expanded"
   useEffect(() => {
@@ -39,6 +44,12 @@ const RetreatHero = ({
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Animation effect when component mounts
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSearch(searchQuery);
@@ -53,24 +64,37 @@ const RetreatHero = ({
       }, 100);
     }
   };
-  return <div className="relative overflow-hidden bg-gradient-to-r from-sage-50 to-sage-100 pt-14 pb-8 md:pt-20 md:pb-10">
+
+  return (
+    <div className="relative overflow-hidden bg-gradient-to-r from-sage-50 to-sage-100 pt-14 pb-8 md:pt-20 md:pb-10">
       {/* Decorative circles */}
       <div className="absolute top-0 left-0 w-32 h-32 rounded-full bg-sage-200/20 -translate-x-1/2 -translate-y-1/2"></div>
       <div className="absolute bottom-0 right-0 w-64 h-64 rounded-full bg-sage-200/30 translate-x-1/4 translate-y-1/4"></div>
       
+      {/* Animated sparkles */}
+      <div className={`absolute top-20 right-20 transition-all duration-700 delay-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+        <Sparkles className="h-6 w-6 text-primary/40 animate-pulse" />
+      </div>
+      <div className={`absolute bottom-20 left-20 transition-all duration-700 delay-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+        <Sparkles className="h-5 w-5 text-primary/40 animate-pulse" style={{ animationDelay: "1s" }} />
+      </div>
+      
       <div className="container px-4 md:px-6 relative z-10">
         <div className="max-w-3xl mx-auto text-center mb-6">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-sage-900 mb-4">
-            Find Your Perfect <span className="text-primary">Daylong Retreat</span>
-          </h1>
-          
-          <p className="text-lg text-sage-700 mb-6 max-w-2xl mx-auto">
-            Discover curated retreats designed to help you reconnect with yourself, 
-            find balance, and cultivate mindfulness in stunning locations.
-          </p>
+          <div className={`transition-all duration-700 delay-300 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-sage-900 mb-4">
+              Find Your Perfect <span className="text-primary">Daylong Retreat</span>
+            </h1>
+            
+            <p className="text-lg text-sage-700 mb-6 max-w-2xl mx-auto">
+              Discover curated retreats designed to help you reconnect with yourself, 
+              find balance, and cultivate mindfulness in stunning locations.
+            </p>
+          </div>
           
           {/* Integrated Tab Navigation */}
-          {onTabChange && <div className="mb-6">
+          {onTabChange && (
+            <div className={`mb-6 transition-all duration-700 delay-400 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               <Tabs defaultValue={activeTab} onValueChange={onTabChange} className="w-full">
                 <div className="flex justify-center mb-4">
                   <TabsList className="grid grid-cols-3 w-full max-w-md bg-white/90 shadow-sm">
@@ -117,25 +141,54 @@ const RetreatHero = ({
                   </div>
                 </TabsContent>
               </Tabs>
-            </div>}
+            </div>
+          )}
           
-          <form onSubmit={handleSubmit} className="relative max-w-xl mx-auto mb-6">
+          <form 
+            onSubmit={handleSubmit} 
+            className={`relative max-w-xl mx-auto mb-6 transition-all duration-700 delay-500 ${
+              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+            }`}
+          >
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-              <Input type="search" placeholder="Search retreats by name, location, or type..." className="pl-10 py-6 bg-white border-0 shadow-md" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
-              <Button type="submit" className="absolute right-1.5 top-1/2 transform -translate-y-1/2">
+              <Input 
+                type="search" 
+                placeholder="Search retreats by name, location, or type..." 
+                className="pl-10 py-6 bg-white border-0 shadow-md hover:shadow-lg transition-shadow duration-300" 
+                value={searchQuery} 
+                onChange={e => setSearchQuery(e.target.value)} 
+              />
+              <Button 
+                type="submit" 
+                className="absolute right-1.5 top-1/2 transform -translate-y-1/2 group"
+              >
                 Search
+                <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </Button>
             </div>
           </form>
           
-          <div className="flex flex-wrap justify-center gap-2">
-            {categories.map(category => <Badge key={category} variant="outline" className="bg-white hover:bg-sage-100 cursor-pointer text-sage-700 hover:text-sage-900 border-sage-200" onClick={() => onCategorySelect(category)}>
+          <div 
+            className={`flex flex-wrap justify-center gap-2 transition-all duration-700 delay-600 ${
+              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+            }`}
+          >
+            {categories.map(category => (
+              <Badge 
+                key={category} 
+                variant="outline" 
+                className="bg-white hover:bg-sage-100 cursor-pointer text-sage-700 hover:text-sage-900 border-sage-200 transition-all duration-300 hover:scale-105" 
+                onClick={() => onCategorySelect(category)}
+              >
                 {category}
-              </Badge>)}
+              </Badge>
+            ))}
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default RetreatHero;
