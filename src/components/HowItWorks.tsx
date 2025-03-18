@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Users } from "lucide-react";
 import OptimizedImage from "./OptimizedImage";
@@ -7,17 +8,17 @@ const HowItWorks = () => {
     title: "Find your perfect retreat.",
     icon: <Calendar className="h-10 w-10 text-sage-600" />,
     description: "Browse our curated selection of wellness retreats by date, practice type, or instructor. Each retreat is thoughtfully designed to provide an immersive experience in a unique private space.",
-    image: "/lovable-uploads/7d087453-b662-43ef-bd58-62953d225341.png"
+    image: "/lovable-uploads/ed75a7a7-188f-4332-a284-ae244d5ea459.png"
   }, {
     title: "Experience a transformative day.",
     icon: <MapPin className="h-10 w-10 text-sage-600" />,
     description: "Step into a beautiful private home transformed into your sanctuary for the day. Our expert instructors guide you through practices designed to nourish your mind and body in an intimate setting with a small group of like-minded individuals.",
-    image: "/lovable-uploads/6d18343c-7100-4964-a39e-2a3215536423.png"
+    image: "/lovable-uploads/bd896dc7-9768-4dac-b8e9-425c9558c653.png"
   }, {
     title: "Connect with community.",
     icon: <Users className="h-10 w-10 text-sage-600" />,
     description: "Share experiences with others on a similar journey. Our retreats foster connection through shared practice, communal meals, and meaningful conversation. Many participants form lasting friendships that extend beyond the retreat day.",
-    image: "/lovable-uploads/6bab8880-8765-4e83-9a38-d482633fdc95.png"
+    image: "/lovable-uploads/80481871-1be9-4470-b1e2-4a2f47bdad30.png"
   }];
 
   return <section className="py-24 md:py-32 bg-sand-50 overflow-hidden">
