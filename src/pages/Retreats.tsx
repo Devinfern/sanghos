@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import RetreatCard from "@/components/RetreatCard";
 import SanghosIcon from "@/components/SanghosIcon";
+import RetreatHero from "@/components/retreats/RetreatHero";
 import { retreats } from "@/lib/data";
 import { Input } from "@/components/ui/input";
 import { 
@@ -35,6 +36,23 @@ const Retreats = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    if (query) {
+      setTimeout(() => {
+        window.scrollTo({ top: 650, behavior: 'smooth' });
+      }, 100);
+    }
+  };
+
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category);
+    setActiveTab("all");
+    setTimeout(() => {
+      window.scrollTo({ top: 650, behavior: 'smooth' });
+    }, 100);
+  };
 
   const filteredRetreats = retreats.filter(retreat => {
     const matchesSearch = searchQuery === "" || 
@@ -68,16 +86,13 @@ const Retreats = () => {
 
       <Header />
 
-      <main className="pt-24 pb-16">
-        <div className="container px-4 md:px-6">
-          <div className="mb-12 text-center">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">Discover Our Retreats</h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Explore our curated selection of mindfulness and wellness retreats designed to help you 
-              reconnect with yourself and find balance in your life.
-            </p>
-          </div>
-
+      <main className="pt-20">
+        <RetreatHero 
+          onSearch={handleSearch} 
+          onCategorySelect={handleCategorySelect} 
+        />
+        
+        <div className="container px-4 md:px-6 py-12">
           <div className="mb-8">
             <Tabs defaultValue="all" onValueChange={setActiveTab} className="w-full">
               <div className="flex justify-center mb-6">
@@ -138,7 +153,7 @@ const Retreats = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
                 type="search"
-                placeholder="Search retreats..."
+                placeholder="Refine your search..."
                 className="pl-10"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

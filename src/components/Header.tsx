@@ -14,7 +14,9 @@ const Header = () => {
   
   // Check if current page has dark background hero
   const hasDarkHero = location.pathname === "/" || 
-                      (location.pathname !== "/about" && !isScrolled);
+                      (location.pathname !== "/about" && 
+                       location.pathname !== "/retreats" && 
+                       !isScrolled);
 
   useEffect(() => {
     const handleScroll = () => {
