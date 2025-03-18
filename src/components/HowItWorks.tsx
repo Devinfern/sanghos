@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Users } from "lucide-react";
 import OptimizedImage from "./OptimizedImage";
+import { AspectRatio } from "./ui/aspect-ratio";
 
 const HowItWorks = () => {
   const steps = [{
@@ -32,13 +33,17 @@ const HowItWorks = () => {
             {steps.map((step, index) => <div key={index} className="flex flex-col lg:flex-row gap-12 items-center">
                 {index % 2 === 0 ? <>
                     <div className="lg:w-1/2">
-                      <OptimizedImage 
-                        src={step.image} 
-                        alt={step.title} 
-                        className="rounded-xl shadow-lg w-full max-h-[600px]" 
-                        objectFit="contain" 
-                        aspectRatio="custom"
-                      />
+                      <div className="rounded-xl overflow-hidden bg-transparent">
+                        <AspectRatio ratio={16/10} className="bg-transparent">
+                          <OptimizedImage 
+                            src={step.image} 
+                            alt={step.title} 
+                            className="w-full h-full" 
+                            objectFit="contain" 
+                            loadingClassName="bg-transparent"
+                          />
+                        </AspectRatio>
+                      </div>
                     </div>
                     <div className="lg:w-1/2 space-y-6">
                       <div className="flex items-center gap-4 mb-4">
@@ -56,13 +61,17 @@ const HowItWorks = () => {
                       <p className="text-lg text-muted-foreground leading-relaxed">{step.description}</p>
                     </div>
                     <div className="lg:w-1/2 order-1 lg:order-2">
-                      <OptimizedImage 
-                        src={step.image} 
-                        alt={step.title} 
-                        className="rounded-xl shadow-lg w-full max-h-[600px]" 
-                        objectFit="contain" 
-                        aspectRatio="custom"
-                      />
+                      <div className="rounded-xl overflow-hidden bg-transparent">
+                        <AspectRatio ratio={16/10} className="bg-transparent">
+                          <OptimizedImage 
+                            src={step.image} 
+                            alt={step.title} 
+                            className="w-full h-full" 
+                            objectFit="contain" 
+                            loadingClassName="bg-transparent"
+                          />
+                        </AspectRatio>
+                      </div>
                     </div>
                   </>}
               </div>)}
