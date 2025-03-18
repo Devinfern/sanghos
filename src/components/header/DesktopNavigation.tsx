@@ -27,7 +27,7 @@ const DesktopNavigation = ({
               ? "text-primary" 
               : isOnDarkBackground 
                 ? "text-white" 
-                : "text-muted-foreground"
+                : "text-slate-700"
           )
         }
       >
@@ -42,7 +42,7 @@ const DesktopNavigation = ({
               ? "text-primary" 
               : isOnDarkBackground 
                 ? "text-white" 
-                : "text-muted-foreground"
+                : "text-slate-700"
           )
         }
       >
@@ -57,7 +57,7 @@ const DesktopNavigation = ({
               ? "text-primary" 
               : isOnDarkBackground 
                 ? "text-white" 
-                : "text-muted-foreground"
+                : "text-slate-700"
           )
         }
       >
@@ -72,7 +72,7 @@ const DesktopNavigation = ({
               ? "text-primary" 
               : isOnDarkBackground 
                 ? "text-white" 
-                : "text-muted-foreground"
+                : "text-slate-700"
           )
         }
       >
@@ -88,7 +88,7 @@ const DesktopNavigation = ({
                 ? "text-primary" 
                 : isOnDarkBackground 
                   ? "text-white" 
-                  : "text-muted-foreground"
+                  : "text-slate-700"
             )
           }
           onClick={onCommunityClick}
@@ -102,7 +102,7 @@ const DesktopNavigation = ({
             "text-sm font-medium transition-colors hover:text-primary",
             isOnDarkBackground 
               ? "text-white" 
-              : "text-muted-foreground"
+              : "text-slate-700"
           )}
         >
           Community

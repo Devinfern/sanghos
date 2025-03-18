@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -14,7 +13,8 @@ const Header = () => {
   const navigate = useNavigate();
   
   // Check if current page has dark background hero
-  const hasDarkHero = location.pathname === "/about" || location.pathname === "/";
+  const hasDarkHero = location.pathname === "/" || 
+                      (location.pathname !== "/about" && !isScrolled);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -81,7 +81,7 @@ const Header = () => {
           isLoggedIn={isLoggedIn} 
           onSignOut={handleSignOut} 
           onCommunityClick={handleCommunityClick}
-          isOnDarkBackground={!isScrolled && hasDarkHero}
+          isOnDarkBackground={hasDarkHero}
         />
         {!mobileMenuOpen && (
           <MobileMenuToggle isOpen={mobileMenuOpen} onToggle={toggleMobileMenu} />
