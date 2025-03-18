@@ -1,7 +1,7 @@
-
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Users } from "lucide-react";
 import OptimizedImage from "./OptimizedImage";
+
 const HowItWorks = () => {
   const steps = [{
     title: "Find your perfect retreat.",
@@ -17,8 +17,9 @@ const HowItWorks = () => {
     title: "Connect with community.",
     icon: <Users className="h-10 w-10 text-sage-600" />,
     description: "Share experiences with others on a similar journey. Our retreats foster connection through shared practice, communal meals, and meaningful conversation. Many participants form lasting friendships that extend beyond the retreat day.",
-    image: "https://images.unsplash.com/photo-1542359649-31e03cd4d909?q=80&w=2674&auto=format&fit=crop"
+    image: "/lovable-uploads/6bab8880-8765-4e83-9a38-d482633fdc95.png"
   }];
+
   return <section className="py-24 md:py-32 bg-sand-50 overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
         <div className="max-w-6xl mx-auto">
@@ -57,4 +58,5 @@ const HowItWorks = () => {
       </div>
     </section>;
 };
+
 export default HowItWorks;
