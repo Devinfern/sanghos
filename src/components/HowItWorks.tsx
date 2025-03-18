@@ -1,6 +1,7 @@
 
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Users } from "lucide-react";
+import OptimizedImage from "./OptimizedImage";
 
 const HowItWorks = () => {
   const steps = [
@@ -14,7 +15,7 @@ const HowItWorks = () => {
       title: "Experience a transformative day.",
       icon: <MapPin className="h-10 w-10 text-sage-600" />,
       description: "Step into a beautiful private home transformed into your sanctuary for the day. Our expert instructors guide you through practices designed to nourish your mind and body in an intimate setting with a small group of like-minded individuals.",
-      image: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=2670&auto=format&fit=crop"
+      image: "/lovable-uploads/6d18343c-7100-4964-a39e-2a3215536423.png"
     },
     {
       title: "Connect with community.",
