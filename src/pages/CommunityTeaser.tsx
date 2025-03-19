@@ -1,4 +1,3 @@
-
 import { Helmet } from "react-helmet";
 import { useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -8,15 +7,12 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Users, MessageCircle, Calendar, Check, Heart, Star } from "lucide-react";
 import OptimizedImage from "@/components/OptimizedImage";
 import { Card, CardContent } from "@/components/ui/card";
-
 const CommunityTeaser = () => {
   const navigate = useNavigate();
   const [isLoaded, setIsLoaded] = useState(false);
-
   useEffect(() => {
     setIsLoaded(true);
   }, []);
-
   return <>
       <Helmet>
         <title>Join Our Community | Sanghos</title>
@@ -30,43 +26,43 @@ const CommunityTeaser = () => {
         <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden mb-16">
           <div className="absolute inset-0 z-0">
             <div className="absolute inset-0 bg-gradient-to-b from-brand-dark/60 to-brand-dark/40 z-10"></div>
-            <OptimizedImage 
-              src="/lovable-uploads/d119458d-9251-4956-9c76-ec663432c449.png" 
-              alt="Modern retreat space with pool" 
-              className={`w-full h-full transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-              aspectRatio="custom" 
-              objectFit="cover" 
-              priority={true} 
-              onLoad={() => setIsLoaded(true)}
-            />
+            <OptimizedImage src="/lovable-uploads/d119458d-9251-4956-9c76-ec663432c449.png" alt="Modern retreat space with pool" className={`w-full h-full transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`} aspectRatio="custom" objectFit="cover" priority={true} onLoad={() => setIsLoaded(true)} />
           </div>
 
           <div className="container relative z-20 px-4 md:px-6 py-16 sm:py-24 max-w-5xl">
             <div className="mx-auto text-center">
-              <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{transitionDelay: "300ms"}}>
+              <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{
+              transitionDelay: "300ms"
+            }}>
                 <span className="inline-block bg-brand-primary/20 backdrop-blur-sm text-white px-4 py-1 rounded-full text-sm font-medium mb-6">
                   Join 200+ Sanghos members
                 </span>
               </div>
               
-              <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{transitionDelay: "400ms"}}>
+              <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{
+              transitionDelay: "400ms"
+            }}>
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight">
                   Find Your Community on Sanghos
                 </h1>
               </div>
               
-              <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{transitionDelay: "500ms"}}>
+              <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{
+              transitionDelay: "500ms"
+            }}>
                 <p className="text-xl md:text-2xl text-white/90 mb-10 max-w-2xl mx-auto">
                   Connect with like-minded individuals and access exclusive content
                 </p>
               </div>
               
-              <div className={`flex flex-col sm:flex-row justify-center gap-6 transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{transitionDelay: "600ms"}}>
+              <div className={`flex flex-col sm:flex-row justify-center gap-6 transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{
+              transitionDelay: "600ms"
+            }}>
                 <Button size="lg" onClick={() => navigate("/join")} className="bg-brand-primary hover:bg-brand-primary/90 group text-white">
                   Join Sanghos
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
-                <Button size="lg" variant="outline" onClick={() => navigate("/login")} className="border-white text-white hover:bg-white/10">
+                <Button size="lg" variant="outline" onClick={() => navigate("/login")} className="border-white text-white bg-orange-500 hover:bg-orange-400">
                   Sign In
                 </Button>
               </div>
@@ -74,7 +70,9 @@ const CommunityTeaser = () => {
           </div>
 
           {/* Decorative element moved to bottom with animation */}
-          <div className={`absolute bottom-12 left-0 right-0 flex justify-center transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`} style={{transitionDelay: "800ms"}}>
+          <div className={`absolute bottom-12 left-0 right-0 flex justify-center transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`} style={{
+          transitionDelay: "800ms"
+        }}>
             <div className="w-10 h-10 rounded-full bg-brand-primary/20 backdrop-blur-sm flex items-center justify-center animate-bounce">
               <ArrowRight className="h-5 w-5 text-white rotate-90" />
             </div>
@@ -92,8 +90,8 @@ const CommunityTeaser = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-muted/30 hover:shadow-xl transition-all hover:-translate-y-1 duration-300 overflow-hidden rounded-xl animate-fade-up" style={{
-              animationDelay: "100ms"
-            }}>
+            animationDelay: "100ms"
+          }}>
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-primary to-brand-sky"></div>
               <CardContent className="p-8">
                 <div className="w-12 h-12 bg-brand-primary/10 rounded-full flex items-center justify-center mb-6">
@@ -118,8 +116,8 @@ const CommunityTeaser = () => {
             </Card>
             
             <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-muted/30 hover:shadow-xl transition-all hover:-translate-y-1 duration-300 overflow-hidden rounded-xl animate-fade-up" style={{
-              animationDelay: "200ms"
-            }}>
+            animationDelay: "200ms"
+          }}>
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-sky to-brand-peach"></div>
               <CardContent className="p-8">
                 <div className="w-12 h-12 bg-brand-primary/10 rounded-full flex items-center justify-center mb-6">
@@ -144,8 +142,8 @@ const CommunityTeaser = () => {
             </Card>
             
             <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-muted/30 hover:shadow-xl transition-all hover:-translate-y-1 duration-300 overflow-hidden rounded-xl animate-fade-up" style={{
-              animationDelay: "300ms"
-            }}>
+            animationDelay: "300ms"
+          }}>
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-peach to-brand-rose"></div>
               <CardContent className="p-8">
                 <div className="w-12 h-12 bg-brand-primary/10 rounded-full flex items-center justify-center mb-6">
@@ -176,26 +174,26 @@ const CommunityTeaser = () => {
           <div className="container px-4 md:px-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               <div className="p-4 animate-fade-up" style={{
-                animationDelay: "100ms"
-              }}>
+              animationDelay: "100ms"
+            }}>
                 <div className="text-4xl font-bold text-brand-primary mb-2">5,000+</div>
                 <div className="text-sm text-muted-foreground">Active Members</div>
               </div>
               <div className="p-4 animate-fade-up" style={{
-                animationDelay: "200ms"
-              }}>
+              animationDelay: "200ms"
+            }}>
                 <div className="text-4xl font-bold text-brand-primary mb-2">120+</div>
                 <div className="text-sm text-muted-foreground">Monthly Events</div>
               </div>
               <div className="p-4 animate-fade-up" style={{
-                animationDelay: "300ms"
-              }}>
+              animationDelay: "300ms"
+            }}>
                 <div className="text-4xl font-bold text-brand-primary mb-2">4.9</div>
                 <div className="text-sm text-muted-foreground">Satisfaction Rating</div>
               </div>
               <div className="p-4 animate-fade-up" style={{
-                animationDelay: "400ms"
-              }}>
+              animationDelay: "400ms"
+            }}>
                 <div className="text-4xl font-bold text-brand-primary mb-2">25K+</div>
                 <div className="text-sm text-muted-foreground">Discussion Posts</div>
               </div>
@@ -210,8 +208,8 @@ const CommunityTeaser = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <Card className="bg-gradient-to-br from-white to-brand-subtle/20 border-0 shadow-md rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 animate-fade-up" style={{
-                animationDelay: "100ms"
-              }}>
+              animationDelay: "100ms"
+            }}>
                 <CardContent className="p-6">
                   <div className="flex flex-col h-full">
                     <div className="mb-4 text-brand-peach flex">
@@ -234,8 +232,8 @@ const CommunityTeaser = () => {
               </Card>
               
               <Card className="bg-gradient-to-br from-white to-brand-subtle/20 border-0 shadow-md rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 animate-fade-up" style={{
-                animationDelay: "200ms"
-              }}>
+              animationDelay: "200ms"
+            }}>
                 <CardContent className="p-6">
                   <div className="flex flex-col h-full">
                     <div className="mb-4 text-brand-peach flex">
@@ -270,23 +268,23 @@ const CommunityTeaser = () => {
                 <span className="text-sm font-medium pr-2 text-brand-dark">Join our growing community today</span>
               </div>
               <h2 className="text-3xl font-bold mb-4 animate-fade-up text-brand-dark" style={{
-                animationDelay: "100ms"
-              }}>Ready to Begin Your Journey?</h2>
+              animationDelay: "100ms"
+            }}>Ready to Begin Your Journey?</h2>
               <p className="text-lg text-brand-slate mb-8 animate-fade-up" style={{
-                animationDelay: "200ms"
-              }}>
+              animationDelay: "200ms"
+            }}>
                 Take the first step toward a more connected wellness journey. Join Sanghos today and become part of our growing community.
               </p>
               <Button size="lg" onClick={() => navigate("/join")} className="group bg-brand-primary hover:bg-brand-primary/90 text-white animate-fade-up" style={{
-                animationDelay: "300ms"
-              }}>
+              animationDelay: "300ms"
+            }}>
                 Join Sanghos Now
                 <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
               
               <div className="mt-8 pt-8 border-t border-brand-primary/10 text-sm text-muted-foreground animate-fade-up" style={{
-                animationDelay: "400ms"
-              }}>
+              animationDelay: "400ms"
+            }}>
                 <p>Already a member? <Link to="/login" className="text-brand-primary hover:underline">Sign in here</Link></p>
               </div>
             </div>
