@@ -29,7 +29,7 @@ const CommunityTeaser = () => {
         {/* Hero Section with improved spacing and animations */}
         <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden mb-16">
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/10 z-10"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-brand-dark/60 to-brand-dark/40 z-10"></div>
             <OptimizedImage 
               src="/lovable-uploads/d119458d-9251-4956-9c76-ec663432c449.png" 
               alt="Modern retreat space with pool" 
@@ -44,7 +44,7 @@ const CommunityTeaser = () => {
           <div className="container relative z-20 px-4 md:px-6 py-16 sm:py-24 max-w-5xl">
             <div className="mx-auto text-center">
               <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{transitionDelay: "300ms"}}>
-                <span className="inline-block bg-white/20 backdrop-blur-sm text-white px-4 py-1 rounded-full text-sm font-medium mb-6">
+                <span className="inline-block bg-brand-primary/20 backdrop-blur-sm text-white px-4 py-1 rounded-full text-sm font-medium mb-6">
                   Join 200+ Sanghos members
                 </span>
               </div>
@@ -62,11 +62,11 @@ const CommunityTeaser = () => {
               </div>
               
               <div className={`flex flex-col sm:flex-row justify-center gap-6 transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{transitionDelay: "600ms"}}>
-                <Button size="lg" onClick={() => navigate("/join")} className="bg-primary hover:bg-primary/90 group shadow-lg hover:shadow-xl transition-all text-lg py-6">
+                <Button size="lg" onClick={() => navigate("/join")} className="bg-brand-primary hover:bg-brand-primary/90 group text-white">
                   Join Sanghos
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
-                <Button size="lg" variant="outline" onClick={() => navigate("/login")} className="bg-white/10 text-white hover:bg-white/20 border-white/30 backdrop-blur-sm text-lg py-6">
+                <Button size="lg" variant="outline" onClick={() => navigate("/login")} className="border-white text-white hover:bg-white/10">
                   Sign In
                 </Button>
               </div>
@@ -75,7 +75,7 @@ const CommunityTeaser = () => {
 
           {/* Decorative element moved to bottom with animation */}
           <div className={`absolute bottom-12 left-0 right-0 flex justify-center transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`} style={{transitionDelay: "800ms"}}>
-            <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center animate-bounce">
+            <div className="w-10 h-10 rounded-full bg-brand-primary/20 backdrop-blur-sm flex items-center justify-center animate-bounce">
               <ArrowRight className="h-5 w-5 text-white rotate-90" />
             </div>
           </div>
@@ -84,7 +84,7 @@ const CommunityTeaser = () => {
         {/* Benefits Section with enhanced cards */}
         <section className="py-16 container px-4 md:px-6 overflow-hidden">
           <div className="max-w-3xl mx-auto text-center mb-12 animate-fade-up">
-            <h2 className="text-3xl font-bold mb-4">Why Join Our Community?</h2>
+            <h2 className="text-3xl font-bold mb-4 text-brand-dark">Why Join Our Community?</h2>
             <p className="text-lg text-muted-foreground">
               Becoming a member opens doors to exclusive resources and connections with fellow wellness enthusiasts.
             </p>
@@ -92,25 +92,25 @@ const CommunityTeaser = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-muted/30 hover:shadow-xl transition-all hover:-translate-y-1 duration-300 overflow-hidden rounded-xl animate-fade-up" style={{
-            animationDelay: "100ms"
-          }}>
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-purple-500"></div>
+              animationDelay: "100ms"
+            }}>
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-primary to-brand-sky"></div>
               <CardContent className="p-8">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-6">
-                  <Users className="h-6 w-6 text-primary" />
+                <div className="w-12 h-12 bg-brand-primary/10 rounded-full flex items-center justify-center mb-6">
+                  <Users className="h-6 w-6 text-brand-primary" />
                 </div>
-                <h3 className="text-xl font-semibold mb-4">Connect</h3>
+                <h3 className="text-xl font-semibold mb-4 text-brand-dark">Connect</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start">
-                    <Check className="h-5 w-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
+                    <Check className="h-5 w-5 text-brand-primary mr-2 mt-0.5 flex-shrink-0" />
                     <span>Find like-minded practitioners</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="h-5 w-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
+                    <Check className="h-5 w-5 text-brand-primary mr-2 mt-0.5 flex-shrink-0" />
                     <span>Build meaningful relationships</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="h-5 w-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
+                    <Check className="h-5 w-5 text-brand-primary mr-2 mt-0.5 flex-shrink-0" />
                     <span>Grow together on your journey</span>
                   </li>
                 </ul>
@@ -118,25 +118,25 @@ const CommunityTeaser = () => {
             </Card>
             
             <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-muted/30 hover:shadow-xl transition-all hover:-translate-y-1 duration-300 overflow-hidden rounded-xl animate-fade-up" style={{
-            animationDelay: "200ms"
-          }}>
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-blue-400"></div>
+              animationDelay: "200ms"
+            }}>
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-sky to-brand-peach"></div>
               <CardContent className="p-8">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-6">
-                  <MessageCircle className="h-6 w-6 text-primary" />
+                <div className="w-12 h-12 bg-brand-primary/10 rounded-full flex items-center justify-center mb-6">
+                  <MessageCircle className="h-6 w-6 text-brand-primary" />
                 </div>
-                <h3 className="text-xl font-semibold mb-4">Share</h3>
+                <h3 className="text-xl font-semibold mb-4 text-brand-dark">Share</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start">
-                    <Check className="h-5 w-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
+                    <Check className="h-5 w-5 text-brand-primary mr-2 mt-0.5 flex-shrink-0" />
                     <span>Exchange practices and tips</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="h-5 w-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
+                    <Check className="h-5 w-5 text-brand-primary mr-2 mt-0.5 flex-shrink-0" />
                     <span>Discuss wellness philosophies</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="h-5 w-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
+                    <Check className="h-5 w-5 text-brand-primary mr-2 mt-0.5 flex-shrink-0" />
                     <span>Get answers to your questions</span>
                   </li>
                 </ul>
@@ -144,25 +144,25 @@ const CommunityTeaser = () => {
             </Card>
             
             <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-muted/30 hover:shadow-xl transition-all hover:-translate-y-1 duration-300 overflow-hidden rounded-xl animate-fade-up" style={{
-            animationDelay: "300ms"
-          }}>
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-pink-400"></div>
+              animationDelay: "300ms"
+            }}>
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-peach to-brand-rose"></div>
               <CardContent className="p-8">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-6">
-                  <Calendar className="h-6 w-6 text-primary" />
+                <div className="w-12 h-12 bg-brand-primary/10 rounded-full flex items-center justify-center mb-6">
+                  <Calendar className="h-6 w-6 text-brand-primary" />
                 </div>
-                <h3 className="text-xl font-semibold mb-4">Events</h3>
+                <h3 className="text-xl font-semibold mb-4 text-brand-dark">Events</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start">
-                    <Check className="h-5 w-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
+                    <Check className="h-5 w-5 text-brand-primary mr-2 mt-0.5 flex-shrink-0" />
                     <span>Join exclusive virtual gatherings</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="h-5 w-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
+                    <Check className="h-5 w-5 text-brand-primary mr-2 mt-0.5 flex-shrink-0" />
                     <span>Participate in member challenges</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="h-5 w-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
+                    <Check className="h-5 w-5 text-brand-primary mr-2 mt-0.5 flex-shrink-0" />
                     <span>Meet instructors in Q&A sessions</span>
                   </li>
                 </ul>
@@ -172,63 +172,60 @@ const CommunityTeaser = () => {
         </section>
 
         {/* Community Stats Section - New */}
-        <section className="py-12 bg-primary/5">
+        <section className="py-12 bg-brand-subtle/20">
           <div className="container px-4 md:px-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               <div className="p-4 animate-fade-up" style={{
-              animationDelay: "100ms"
-            }}>
-                <div className="text-4xl font-bold text-primary mb-2">5,000+</div>
+                animationDelay: "100ms"
+              }}>
+                <div className="text-4xl font-bold text-brand-primary mb-2">5,000+</div>
                 <div className="text-sm text-muted-foreground">Active Members</div>
               </div>
               <div className="p-4 animate-fade-up" style={{
-              animationDelay: "200ms"
-            }}>
-                <div className="text-4xl font-bold text-primary mb-2">120+</div>
+                animationDelay: "200ms"
+              }}>
+                <div className="text-4xl font-bold text-brand-primary mb-2">120+</div>
                 <div className="text-sm text-muted-foreground">Monthly Events</div>
               </div>
               <div className="p-4 animate-fade-up" style={{
-              animationDelay: "300ms"
-            }}>
-                <div className="text-4xl font-bold text-primary mb-2">4.9</div>
+                animationDelay: "300ms"
+              }}>
+                <div className="text-4xl font-bold text-brand-primary mb-2">4.9</div>
                 <div className="text-sm text-muted-foreground">Satisfaction Rating</div>
               </div>
               <div className="p-4 animate-fade-up" style={{
-              animationDelay: "400ms"
-            }}>
-                <div className="text-4xl font-bold text-primary mb-2">25K+</div>
+                animationDelay: "400ms"
+              }}>
+                <div className="text-4xl font-bold text-brand-primary mb-2">25K+</div>
                 <div className="text-sm text-muted-foreground">Discussion Posts</div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Community Gallery with enhanced styling */}
-        
-
         {/* Testimonials with enhanced cards */}
         <section className="py-16 container px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-12 animate-fade-up">What Our Community Members Say</h2>
+            <h2 className="text-3xl font-bold text-center mb-12 animate-fade-up text-brand-dark">What Our Community Members Say</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <Card className="bg-gradient-to-br from-white to-primary/5 border-0 shadow-md rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 animate-fade-up" style={{
-              animationDelay: "100ms"
-            }}>
+              <Card className="bg-gradient-to-br from-white to-brand-subtle/20 border-0 shadow-md rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 animate-fade-up" style={{
+                animationDelay: "100ms"
+              }}>
                 <CardContent className="p-6">
                   <div className="flex flex-col h-full">
-                    <div className="mb-4 text-primary flex">
-                      {[...Array(5)].map((_, i) => <Star key={i} className="h-5 w-5 fill-primary text-primary" />)}
+                    <div className="mb-4 text-brand-peach flex">
+                      {[...Array(5)].map((_, i) => <Star key={i} className="h-5 w-5 fill-brand-peach text-brand-peach" />)}
                     </div>
-                    <p className="italic mb-6 flex-grow">
+                    <p className="italic mb-6 flex-grow text-brand-slate">
                       "Joining the Sanghos community has been transformative for my wellness journey. I've found so many like-minded individuals who support and inspire me."
                     </p>
                     <div className="flex items-center">
-                      <div className="w-12 h-12 bg-primary/10 rounded-full mr-3 overflow-hidden border-2 border-white shadow-md">
+                      <div className="w-12 h-12 bg-brand-primary/10 rounded-full mr-3 overflow-hidden border-2 border-white shadow-md">
                         <OptimizedImage src="https://i.pravatar.cc/100?u=sarah" alt="Sarah J." className="w-full h-full object-cover" aspectRatio="square" />
                       </div>
                       <div>
-                        <p className="font-medium">Sarah J.</p>
+                        <p className="font-medium text-brand-dark">Sarah J.</p>
                         <p className="text-sm text-muted-foreground">Member since 2023</p>
                       </div>
                     </div>
@@ -236,23 +233,23 @@ const CommunityTeaser = () => {
                 </CardContent>
               </Card>
               
-              <Card className="bg-gradient-to-br from-white to-primary/5 border-0 shadow-md rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 animate-fade-up" style={{
-              animationDelay: "200ms"
-            }}>
+              <Card className="bg-gradient-to-br from-white to-brand-subtle/20 border-0 shadow-md rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 animate-fade-up" style={{
+                animationDelay: "200ms"
+              }}>
                 <CardContent className="p-6">
                   <div className="flex flex-col h-full">
-                    <div className="mb-4 text-primary flex">
-                      {[...Array(5)].map((_, i) => <Star key={i} className="h-5 w-5 fill-primary text-primary" />)}
+                    <div className="mb-4 text-brand-peach flex">
+                      {[...Array(5)].map((_, i) => <Star key={i} className="h-5 w-5 fill-brand-peach text-brand-peach" />)}
                     </div>
-                    <p className="italic mb-6 flex-grow">
+                    <p className="italic mb-6 flex-grow text-brand-slate">
                       "The community forums have been an incredible resource. I've learned so much from other members and found practices that work for me."
                     </p>
                     <div className="flex items-center">
-                      <div className="w-12 h-12 bg-primary/10 rounded-full mr-3 overflow-hidden border-2 border-white shadow-md">
+                      <div className="w-12 h-12 bg-brand-primary/10 rounded-full mr-3 overflow-hidden border-2 border-white shadow-md">
                         <OptimizedImage src="https://i.pravatar.cc/100?u=michael" alt="Michael T." className="w-full h-full object-cover" aspectRatio="square" />
                       </div>
                       <div>
-                        <p className="font-medium">Michael T.</p>
+                        <p className="font-medium text-brand-dark">Michael T.</p>
                         <p className="text-sm text-muted-foreground">Member since 2022</p>
                       </div>
                     </div>
@@ -264,33 +261,33 @@ const CommunityTeaser = () => {
         </section>
 
         {/* CTA Section with enhanced styling */}
-        <section className="py-16 bg-gradient-to-tr from-primary/10 to-muted/20 border-t border-b border-primary/10 relative overflow-hidden">
+        <section className="py-16 bg-gradient-to-tr from-brand-primary/10 to-brand-subtle/20 border-t border-b border-brand-primary/10 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07')] opacity-5 bg-cover bg-center"></div>
           <div className="container px-4 md:px-6 relative z-10">
             <div className="max-w-3xl mx-auto text-center">
               <div className="inline-flex items-center justify-center p-1 mb-8 rounded-full bg-white/80 backdrop-blur-sm shadow-md animate-fade-up">
-                <Heart className="h-5 w-5 text-pink-500 mr-2" />
-                <span className="text-sm font-medium pr-2">Join our growing community today</span>
+                <Heart className="h-5 w-5 text-brand-rose mr-2" />
+                <span className="text-sm font-medium pr-2 text-brand-dark">Join our growing community today</span>
               </div>
-              <h2 className="text-3xl font-bold mb-4 animate-fade-up" style={{
-              animationDelay: "100ms"
-            }}>Ready to Begin Your Journey?</h2>
-              <p className="text-lg text-muted-foreground mb-8 animate-fade-up" style={{
-              animationDelay: "200ms"
-            }}>
+              <h2 className="text-3xl font-bold mb-4 animate-fade-up text-brand-dark" style={{
+                animationDelay: "100ms"
+              }}>Ready to Begin Your Journey?</h2>
+              <p className="text-lg text-brand-slate mb-8 animate-fade-up" style={{
+                animationDelay: "200ms"
+              }}>
                 Take the first step toward a more connected wellness journey. Join Sanghos today and become part of our growing community.
               </p>
-              <Button size="lg" onClick={() => navigate("/join")} className="group bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl transition-all animate-fade-up" style={{
-              animationDelay: "300ms"
-            }}>
+              <Button size="lg" onClick={() => navigate("/join")} className="group bg-brand-primary hover:bg-brand-primary/90 text-white animate-fade-up" style={{
+                animationDelay: "300ms"
+              }}>
                 Join Sanghos Now
                 <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
               
-              <div className="mt-8 pt-8 border-t border-primary/10 text-sm text-muted-foreground animate-fade-up" style={{
-              animationDelay: "400ms"
-            }}>
-                <p>Already a member? <Link to="/login" className="text-primary hover:underline">Sign in here</Link></p>
+              <div className="mt-8 pt-8 border-t border-brand-primary/10 text-sm text-muted-foreground animate-fade-up" style={{
+                animationDelay: "400ms"
+              }}>
+                <p>Already a member? <Link to="/login" className="text-brand-primary hover:underline">Sign in here</Link></p>
               </div>
             </div>
           </div>
