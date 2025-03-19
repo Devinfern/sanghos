@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate, Link } from "react-router-dom";
@@ -174,8 +175,10 @@ const CommunityPage = () => {
         <main className="pt-24 pb-16 min-h-screen bg-slate-50">
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center mb-6">
-              <h1 className="text-2xl font-bold">Community Management</h1>
-              <Button onClick={toggleCMS}>Back to Community</Button>
+              <h1 className="text-2xl font-bold text-brand-dark">Community Management</h1>
+              <Button onClick={toggleCMS} className="bg-brand-primary hover:bg-brand-primary/90 text-white">
+                Back to Community
+              </Button>
             </div>
             <ForumCMS />
           </div>
@@ -206,12 +209,12 @@ const CommunityPage = () => {
     return (
       <>
         <Header />
-        <main className="pt-24 pb-16 min-h-screen bg-slate-50">
+        <main className="pt-24 pb-16 min-h-screen bg-gradient-to-b from-brand-subtle/20 to-white">
           <div className="container mx-auto px-4 text-center py-12">
             <div className="animate-pulse">
-              <div className="h-8 bg-slate-200 rounded w-1/3 mx-auto mb-4"></div>
-              <div className="h-4 bg-slate-200 rounded w-1/2 mx-auto mb-8"></div>
-              <div className="h-32 bg-slate-200 rounded w-full max-w-md mx-auto"></div>
+              <div className="h-8 bg-brand-subtle rounded w-1/3 mx-auto mb-4"></div>
+              <div className="h-4 bg-brand-subtle rounded w-1/2 mx-auto mb-8"></div>
+              <div className="h-32 bg-brand-subtle rounded w-full max-w-md mx-auto"></div>
             </div>
           </div>
         </main>
@@ -229,15 +232,19 @@ const CommunityPage = () => {
 
       <Header />
 
-      <main className="pt-24 pb-16 min-h-screen bg-slate-50">
+      <main className="pt-24 pb-16 min-h-screen bg-gradient-to-b from-brand-subtle/20 to-white">
         <div className="container px-4 md:px-6 mx-auto">
           {!isLoggedIn && (
-            <div className="mb-8 bg-white p-6 rounded-lg shadow-sm">
-              <h2 className="text-xl font-semibold mb-2">Join Our Community</h2>
-              <p className="mb-4">To participate in discussions, create posts, and interact with our community, please sign in or create an account.</p>
+            <div className="mb-8 bg-white p-6 rounded-lg shadow-sm border border-brand-subtle/30">
+              <h2 className="text-xl font-semibold mb-2 text-brand-dark">Join Our Community</h2>
+              <p className="mb-4 text-brand-slate">To participate in discussions, create posts, and interact with our community, please sign in or create an account.</p>
               <div className="flex gap-3">
-                <Button onClick={handleLogin}>Sign In</Button>
-                <Button variant="outline" onClick={() => navigate("/join")}>Join Sanghos</Button>
+                <Button onClick={handleLogin} className="bg-brand-primary hover:bg-brand-primary/90 text-white">
+                  Sign In
+                </Button>
+                <Button variant="outline" onClick={() => navigate("/join")} className="border-brand-primary text-brand-primary hover:bg-brand-primary/5">
+                  Join Sanghos
+                </Button>
               </div>
             </div>
           )}
@@ -245,26 +252,26 @@ const CommunityPage = () => {
           <div className="flex flex-col lg:flex-row gap-6">
             <div className="lg:w-64 w-full shrink-0">
               <div className="sticky top-24 space-y-8">
-                <div className="bg-white rounded-lg shadow-sm p-4">
-                  <h3 className="font-semibold text-lg mb-4">Spaces</h3>
+                <div className="bg-white rounded-lg shadow-sm p-4 border border-brand-subtle/30">
+                  <h3 className="font-semibold text-lg mb-4 text-brand-dark">Spaces</h3>
                   
                   <div className="space-y-4">
                     {forumSpaces.map((category, index) => (
                       <div key={index} className="space-y-2">
-                        <h4 className="text-sm font-medium text-muted-foreground">{category.name}</h4>
+                        <h4 className="text-sm font-medium text-brand-slate">{category.name}</h4>
                         <div className="space-y-1">
                           {category.spaces.map((space, spaceIndex) => (
                             <Link 
                               key={spaceIndex}
                               to={`/community/space/${createSlug(space.name)}`}
-                              className="flex items-center justify-between rounded-md p-2 hover:bg-slate-100"
+                              className="flex items-center justify-between rounded-md p-2 hover:bg-brand-subtle/10"
                             >
                               <div className="flex items-center">
                                 {renderSpaceIcon(space.icon)}
-                                <span className="text-sm">{space.name}</span>
+                                <span className="text-sm text-brand-slate">{space.name}</span>
                               </div>
                               {space.count !== null && (
-                                <span className="text-xs text-muted-foreground">{space.count}</span>
+                                <span className="text-xs text-brand-slate">{space.count}</span>
                               )}
                             </Link>
                           ))}
@@ -278,12 +285,12 @@ const CommunityPage = () => {
 
             <div className="flex-1">
               <div className="mb-6 flex justify-between items-center">
-                <h1 className="text-2xl font-bold">Feed</h1>
+                <h1 className="text-2xl font-bold text-brand-dark">Feed</h1>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium mr-2">Latest</span>
-                  <ChevronDown className="h-4 w-4" />
+                  <span className="text-sm font-medium mr-2 text-brand-slate">Latest</span>
+                  <ChevronDown className="h-4 w-4 text-brand-slate" />
                   {isAdmin && (
-                    <Button variant="outline" onClick={toggleCMS}>
+                    <Button variant="outline" onClick={toggleCMS} className="border-brand-primary text-brand-primary hover:bg-brand-primary/5">
                       <Settings className="h-4 w-4 mr-2" />
                       Manage Content
                     </Button>
@@ -296,7 +303,7 @@ const CommunityPage = () => {
               </div>
 
               {isLoggedIn && (
-                <Card className="p-4 mb-6 border border-slate-200">
+                <Card className="p-4 mb-6 border border-brand-subtle/30 shadow-sm">
                   <div className="flex gap-3">
                     <Avatar className="h-10 w-10">
                       <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="User" />
@@ -304,7 +311,7 @@ const CommunityPage = () => {
                     <div className="flex-1">
                       <Textarea 
                         placeholder="Start a post" 
-                        className="resize-none mb-3"
+                        className="resize-none mb-3 border-brand-subtle/50 focus:border-brand-primary"
                         value={newPostContent}
                         onChange={(e) => setNewPostContent(e.target.value)}
                       />
@@ -313,6 +320,7 @@ const CommunityPage = () => {
                           size="sm" 
                           onClick={handlePostSubmit}
                           disabled={!newPostContent.trim()}
+                          className="bg-brand-primary hover:bg-brand-primary/90 text-white"
                         >
                           <Plus className="h-4 w-4 mr-1" />
                           Post
@@ -325,7 +333,7 @@ const CommunityPage = () => {
 
               <div className="space-y-6">
                 {posts.map((post) => (
-                  <Card key={post.id} className="overflow-hidden border border-slate-200">
+                  <Card key={post.id} className="overflow-hidden border border-brand-subtle/30 shadow-sm">
                     <div className="p-4">
                       <div className="flex justify-between items-start mb-3">
                         <div className="flex items-center gap-3">
@@ -334,40 +342,40 @@ const CommunityPage = () => {
                           </Avatar>
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="font-medium">{post.author.name}</span>
-                              <span className="text-xs px-2 py-1 bg-slate-100 rounded-full">{post.author.role}</span>
+                              <span className="font-medium text-brand-dark">{post.author.name}</span>
+                              <span className="text-xs px-2 py-1 bg-brand-subtle/20 rounded-full text-brand-slate">{post.author.role}</span>
                               {post.author.tag && (
-                                <span className="text-xs px-2 py-1 bg-slate-100 rounded-full">{post.author.tag}</span>
+                                <span className="text-xs px-2 py-1 bg-brand-peach/20 rounded-full text-brand-slate">{post.author.tag}</span>
                               )}
                             </div>
-                            <div className="text-xs text-muted-foreground">
+                            <div className="text-xs text-brand-slate">
                               Posted in {post.postedIn} · {post.timeAgo}
                             </div>
                           </div>
                         </div>
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" className="text-brand-slate hover:text-brand-dark hover:bg-brand-subtle/10">
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </div>
                       
-                      <h2 className="text-xl font-semibold mb-2">{post.title}</h2>
-                      <div className="text-sm mb-3 whitespace-pre-line">
+                      <h2 className="text-xl font-semibold mb-2 text-brand-dark">{post.title}</h2>
+                      <div className="text-sm mb-3 whitespace-pre-line text-brand-slate">
                         {post.content}
-                        <button className="text-primary hover:underline block mt-1">See more</button>
+                        <button className="text-brand-primary hover:underline block mt-1">See more</button>
                       </div>
 
-                      <div className="pt-4 flex justify-between items-center border-t">
+                      <div className="pt-4 flex justify-between items-center border-t border-brand-subtle/30">
                         <div className="flex items-center gap-4">
-                          <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground" 
+                          <button className="flex items-center gap-1 text-sm text-brand-slate hover:text-brand-primary" 
                                   onClick={() => !isLoggedIn ? toast.error("Please log in to like posts") : null}>
                             <Heart className="h-4 w-4" /> {post.likes}
                           </button>
-                          <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+                          <button className="flex items-center gap-1 text-sm text-brand-slate hover:text-brand-primary"
                                   onClick={() => !isLoggedIn ? toast.error("Please log in to comment") : null}>
                             <MessageCircle className="h-4 w-4" /> {post.comments}
                           </button>
                         </div>
-                        <button className={`${post.bookmarked ? 'text-primary' : 'text-muted-foreground'} hover:text-primary`}
+                        <button className={`${post.bookmarked ? 'text-brand-primary' : 'text-brand-slate'} hover:text-brand-primary`}
                                 onClick={() => !isLoggedIn ? toast.error("Please log in to bookmark posts") : null}>
                           <Bookmark className="h-4 w-4" />
                         </button>
@@ -380,39 +388,39 @@ const CommunityPage = () => {
 
             <div className="lg:w-80 w-full shrink-0">
               <div className="sticky top-24 space-y-6">
-                <Card className="overflow-hidden border border-slate-200">
-                  <div className="p-4 border-b">
-                    <h3 className="font-semibold">Upcoming events</h3>
+                <Card className="overflow-hidden border border-brand-subtle/30 shadow-sm">
+                  <div className="p-4 border-b border-brand-subtle/30 bg-brand-subtle/10">
+                    <h3 className="font-semibold text-brand-dark">Upcoming events</h3>
                   </div>
-                  <div className="divide-y">
+                  <div className="divide-y divide-brand-subtle/30">
                     {currentEvents.map((event) => (
-                      <div key={event.id} className="p-4 flex gap-3">
-                        <div className="text-center w-12">
-                          <div className="text-lg font-bold">{event.date.day}</div>
-                          <div className="text-xs text-muted-foreground">{event.date.month}</div>
+                      <div key={event.id} className="p-4 flex gap-3 hover:bg-brand-subtle/5 transition-colors">
+                        <div className="text-center w-12 bg-brand-peach/10 rounded-md p-1">
+                          <div className="text-lg font-bold text-brand-primary">{event.date.day}</div>
+                          <div className="text-xs text-brand-slate">{event.date.month}</div>
                         </div>
                         <div>
-                          <h4 className="text-sm font-medium">{event.title}</h4>
-                          <p className="text-xs text-muted-foreground mt-1">{event.time}</p>
+                          <h4 className="text-sm font-medium text-brand-dark">{event.title}</h4>
+                          <p className="text-xs text-brand-slate mt-1">{event.time}</p>
                         </div>
                       </div>
                     ))}
                   </div>
                 </Card>
 
-                <Card className="overflow-hidden border border-slate-200">
-                  <div className="p-4 border-b">
-                    <h3 className="font-semibold">Trending Posts</h3>
+                <Card className="overflow-hidden border border-brand-subtle/30 shadow-sm">
+                  <div className="p-4 border-b border-brand-subtle/30 bg-brand-subtle/10">
+                    <h3 className="font-semibold text-brand-dark">Trending Posts</h3>
                   </div>
-                  <div className="divide-y">
+                  <div className="divide-y divide-brand-subtle/30">
                     {trendingPosts.map((post) => (
-                      <div key={post.id} className="p-4 flex items-center gap-3">
-                        <Avatar className="h-10 w-10">
+                      <div key={post.id} className="p-4 flex items-center gap-3 hover:bg-brand-subtle/5 transition-colors">
+                        <Avatar className="h-10 w-10 border-2 border-brand-subtle/30">
                           <img src={post.avatar} alt={post.author} />
                         </Avatar>
                         <div>
-                          <h4 className="text-sm font-medium">{post.title}</h4>
-                          <p className="text-xs text-muted-foreground">{post.author}</p>
+                          <h4 className="text-sm font-medium text-brand-dark">{post.title}</h4>
+                          <p className="text-xs text-brand-slate">{post.author}</p>
                         </div>
                       </div>
                     ))}
