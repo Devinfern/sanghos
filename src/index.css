@@ -1,4 +1,49 @@
 @font-face {
+  font-family: 'Banana Grotesk';
+  src: url('/fonts/BananaGrotesk-Light.woff2') format('woff2'),
+       url('/fonts/BananaGrotesk-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Banana Grotesk';
+  src: url('/fonts/BananaGrotesk-Regular.woff2') format('woff2'),
+       url('/fonts/BananaGrotesk-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Banana Grotesk';
+  src: url('/fonts/BananaGrotesk-Medium.woff2') format('woff2'),
+       url('/fonts/BananaGrotesk-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Banana Grotesk';
+  src: url('/fonts/BananaGrotesk-SemiBold.woff2') format('woff2'),
+       url('/fonts/BananaGrotesk-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Banana Grotesk';
+  src: url('/fonts/BananaGrotesk-Bold.woff2') format('woff2'),
+       url('/fonts/BananaGrotesk-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'Gilroy';
   src: url('/fonts/Gilroy-Light.woff2') format('woff2'),
        url('/fonts/Gilroy-Light.woff') format('woff');
@@ -97,11 +142,11 @@
 
   body {
     @apply bg-background text-foreground selection:bg-sage-200 selection:text-sage-900;
-    font-family: 'Gilroy', sans-serif;
+    font-family: 'Banana Grotesk', sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Gilroy', sans-serif;
+    font-family: 'Banana Grotesk', sans-serif;
     @apply tracking-tight font-bold;
   }
 

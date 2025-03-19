@@ -19,8 +19,9 @@ export default {
 		},
 		extend: {
 			fontFamily: {
+				'banana': ['Banana Grotesk', 'sans-serif'],
+				'sans': ['Banana Grotesk', 'Inter', 'sans-serif'],
 				'gilroy': ['Gilroy', 'sans-serif'],
-				'sans': ['Gilroy', 'Inter', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
