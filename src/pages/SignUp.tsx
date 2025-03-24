@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -9,6 +8,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -35,9 +35,31 @@ const SignUp = () => {
       // Simulate API call with timeout
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // This is a mock registration
-      // In a real app, you would send the credentials to your backend
-      toast.success("Account created successfully!");
+      // In a real app, you would register the user with Supabase Auth
+      // For demo, we're simulating this
+      
+      // Send welcome email with credentials
+      try {
+        const emailResponse = await supabase.functions.invoke('send-welcome-email', {
+          body: {
+            name,
+            email,
+            password // Note: In a production app, you might not want to send the password in plain text
+          }
+        });
+        
+        if (emailResponse.error) {
+          console.error("Error sending welcome email:", emailResponse.error);
+          // Continue with signup even if email fails
+        } else {
+          console.log("Welcome email sent successfully");
+        }
+      } catch (emailError) {
+        console.error("Error invoking send-welcome-email function:", emailError);
+        // Continue with signup even if email fails
+      }
+      
+      toast.success("Account created successfully! Check your email for login details.");
       navigate("/login");
     } catch (err) {
       setError("An error occurred while creating your account");
