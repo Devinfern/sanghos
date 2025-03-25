@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { 
   NavigationMenu,
@@ -13,6 +13,14 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle
 } from "@/components/ui/navigation-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -167,14 +175,29 @@ const Header = () => {
           {/* Auth Buttons */}
           <div className="flex items-center space-x-3 ml-6">
             {isLoggedIn ? (
-              <Button 
-                size="sm" 
-                variant="outline"
-                className="border-slate-300 text-slate-800 hover:bg-slate-100"
-                onClick={handleSignOut}
-              >
-                Sign Out
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    className="border-slate-300 text-slate-800 hover:bg-slate-100 flex items-center gap-2"
+                  >
+                    <User size={16} />
+                    My Account
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/dashboard">Dashboard</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <>
                 <Button 
@@ -281,15 +304,28 @@ const Header = () => {
           {/* Auth Buttons for Mobile */}
           <div className="flex flex-col space-y-3 mt-4">
             {isLoggedIn ? (
-              <Button 
-                variant="outline" 
-                onClick={() => {
-                  handleSignOut();
-                  setMobileMenuOpen(false);
-                }}
-              >
-                Sign Out
-              </Button>
+              <>
+                <Button 
+                  asChild 
+                  variant="outline"
+                  className="w-full justify-start"
+                >
+                  <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                    <User size={16} className="mr-2" />
+                    My Dashboard
+                  </Link>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start"
+                  onClick={() => {
+                    handleSignOut();
+                    setMobileMenuOpen(false);
+                  }}
+                >
+                  Sign Out
+                </Button>
+              </>
             ) : (
               <>
                 <Button asChild variant="default">
