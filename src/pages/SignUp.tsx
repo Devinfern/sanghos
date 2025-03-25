@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { ArrowLeft, Mail, Lock, User, AlertCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Eye, EyeOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
@@ -15,7 +16,7 @@ const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -23,15 +24,19 @@ const SignUp = () => {
     e.preventDefault();
     setError("");
     
-    // Basic validation
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
+    if (!name || !email || !password) {
+      setError("All fields are required");
       return;
     }
-
-    setIsLoading(true);
-
+    
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+    
     try {
+      setIsLoading(true);
+      
       // Simulate API call with timeout
       await new Promise(resolve => setTimeout(resolve, 1000));
       
@@ -59,134 +64,104 @@ const SignUp = () => {
         // Continue with signup even if email fails
       }
       
+      // Store user in localStorage for demo
+      localStorage.setItem("sanghos_user", JSON.stringify({
+        email,
+        name,
+        onboarded: false
+      }));
+      
       toast.success("Account created successfully! Check your email for login details.");
-      navigate("/login");
+      
+      // Redirect to onboarding page instead of login
+      navigate("/onboarding");
     } catch (err) {
       setError("An error occurred while creating your account");
-      console.error(err);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
     <>
       <Helmet>
         <title>Sign Up | Sanghos</title>
-        <meta name="description" content="Create a new Sanghos account" />
+        <meta name="description" content="Create an account to start your wellness journey with Sanghos." />
       </Helmet>
 
       <Header />
 
-      <main className="pt-24 pb-16 min-h-[calc(100vh-64px)]">
-        <div className="container max-w-md px-4 md:px-6">
-          {/* Back Button */}
-          <div className="mb-6">
-            <Button asChild variant="ghost" size="sm" className="group">
-              <Link to="/">
-                <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
-                Back to Home
-              </Link>
-            </Button>
+      <main className="pt-24 pb-16 flex-1 flex flex-col items-center justify-center">
+        <div className="container px-4 md:px-6 max-w-lg">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold mb-2">Create an Account</h1>
+            <p className="text-muted-foreground">Start your wellness journey with Sanghos</p>
           </div>
 
-          <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold mb-2">Create Account</h1>
-            <p className="text-muted-foreground">Join the Sanghos community</p>
-          </div>
-
-          {error && (
-            <div className="bg-destructive/10 text-destructive rounded-lg p-3 mb-6 flex items-center gap-2">
-              <AlertCircle className="h-5 w-5" />
-              <p className="text-sm">{error}</p>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <label htmlFor="name" className="text-sm font-medium">
-                Full Name
-              </label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="John Doe"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="pl-10"
-                  required
-                />
-              </div>
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter your name"
+                required
+              />
             </div>
-
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
-                Email
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10"
-                  required
-                />
-              </div>
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+              />
             </div>
-
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium">
-                Password
-              </label>
+              <Label htmlFor="password">Password</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input
                   id="password"
-                  type="password"
-                  placeholder="••••••••"
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10"
+                  placeholder="Enter your password"
                   required
-                  minLength={8}
                 />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-2.5 top-2.5 h-auto px-1"
+                  onClick={toggleShowPassword}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </Button>
               </div>
             </div>
-
-            <div className="space-y-2">
-              <label htmlFor="confirmPassword" className="text-sm font-medium">
-                Confirm Password
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  placeholder="••••••••"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="pl-10"
-                  required
-                  minLength={8}
-                />
-              </div>
-            </div>
-
+            {error && <p className="text-red-500 text-sm">{error}</p>}
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Creating Account..." : "Create Account"}
+              {isLoading ? "Creating Account..." : "Sign Up"}
             </Button>
           </form>
 
-          <div className="mt-8 text-center text-sm">
-            <p className="text-muted-foreground">
+          <div className="text-center mt-4">
+            <p className="text-sm text-muted-foreground">
               Already have an account?{" "}
               <Link to="/login" className="text-primary hover:underline">
-                Sign in
+                Log in
               </Link>
             </p>
           </div>

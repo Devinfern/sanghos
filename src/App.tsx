@@ -20,6 +20,9 @@ import CommunitySpaceDetails from "./pages/CommunitySpaceDetails";
 import { HostProvider } from "./contexts/HostContext";
 import ScrollToTop from "./components/ScrollToTop";
 import Header from "./components/Header";
+import UserDashboard from "./pages/UserDashboard";
+import Booking from "./pages/Booking";
+import OnboardingPage from "./pages/OnboardingPage";
 
 // Host Portal Pages
 import HostLogin from "./pages/host/HostLogin";
@@ -34,7 +37,7 @@ const queryClient = new QueryClient();
 const ProtectedRoute = ({ children }) => {
   const isLoggedIn = localStorage.getItem("sanghos_user") !== null;
   if (!isLoggedIn) {
-    return <Navigate to="/community-teaser" />;
+    return <Navigate to="/login" />;
   }
   return children;
 };
@@ -60,8 +63,25 @@ const App = () => (
             <Route path="/signup" element={<SignUp />} />
             <Route path="/join" element={<JoinNow />} />
             <Route path="/community-teaser" element={<CommunityTeaser />} />
+            <Route path="/booking/:id" element={<Booking />} />
             
             {/* Protected Routes */}
+            <Route 
+              path="/onboarding" 
+              element={
+                <ProtectedRoute>
+                  <OnboardingPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <UserDashboard />
+                </ProtectedRoute>
+              } 
+            />
             <Route 
               path="/community" 
               element={
