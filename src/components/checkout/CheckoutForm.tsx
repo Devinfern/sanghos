@@ -36,8 +36,8 @@ const formSchema = z.object({
   expiryDate: z.string().min(5, { message: "Valid expiry date is required" }),
   cvc: z.string().min(3, { message: "Valid CVC is required" }),
   nameOnCard: z.string().min(2, { message: "Name on card is required" }),
-  agreeToTerms: z.literal(true, {
-    errorMap: () => ({ message: "You must agree to the terms and conditions" }),
+  agreeToTerms: z.boolean().refine(value => value === true, {
+    message: "You must agree to the terms and conditions",
   }),
 });
 
