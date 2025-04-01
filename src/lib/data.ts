@@ -1,4 +1,3 @@
-
 export type Instructor = {
   id: string;
   name: string;
@@ -74,8 +73,8 @@ export const retreats: Retreat[] = [
     description: "Disconnect from the digital world and reconnect with yourself in this rejuvenating weekend retreat. Through guided meditation, mindful movement, and nature connection practices, you'll learn practical tools to bring greater presence and peace into your everyday life.",
     image: "https://images.unsplash.com/photo-1518002171953-a080ee817e1f",
     additionalImages: [
-      "https://images.unsplash.com/photo-1510137600163-2729bc6959e4",
-      "https://images.unsplash.com/photo-1604881991720-f91add269bed"
+      "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9",
+      "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86"
     ],
     location: {
       name: "Cedar Ridge Retreat Center",
@@ -100,10 +99,10 @@ export const retreats: Retreat[] = [
     id: "ret-2",
     title: "Sound Healing Journey",
     description: "Experience the profound healing effects of sound vibration in this immersive day retreat. Using Tibetan singing bowls, gongs, and other instruments, Marcus will guide you through a sound journey combined with breathwork to release tension, reduce stress, and promote deep relaxation.",
-    image: "https://images.unsplash.com/photo-1578091879915-33e3a8338cde",
+    image: "https://images.unsplash.com/photo-1518495973542-4542c06a5843",
     additionalImages: [
-      "https://images.unsplash.com/photo-1504417930654-1aa74d1cb4d8",
-      "https://images.unsplash.com/photo-1616897350333-fd12b303e234"
+      "https://images.unsplash.com/photo-1469474968028-56623f02e42e",
+      "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86"
     ],
     location: {
       name: "Urban Sanctuary",
@@ -130,8 +129,8 @@ export const retreats: Retreat[] = [
     description: "Connect with the healing energy of the forest through gentle qigong practices, guided forest bathing, and mindful awareness exercises. This retreat is perfect for anyone seeking to recharge their energy and deepen their relationship with the natural world.",
     image: "https://images.unsplash.com/photo-1513806562344-c75007ad303d",
     additionalImages: [
-      "https://images.unsplash.com/photo-1599901860904-17e6ed7083a0",
-      "https://images.unsplash.com/photo-1636407689567-393eb213c0c4"
+      "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9",
+      "https://images.unsplash.com/photo-1469474968028-56623f02e42e"
     ],
     location: {
       name: "Redwood Sanctuary",
@@ -156,10 +155,10 @@ export const retreats: Retreat[] = [
     id: "ret-4",
     title: "Mountain Yoga Escape",
     description: "Rejuvenate your body and mind with daily yoga sessions overlooking breathtaking mountain vistas. This retreat combines energizing vinyasa flows, gentle restorative practices, and guided meditation to help you find balance and inner peace.",
-    image: "https://images.unsplash.com/photo-1540208677736-7ea5368a5263",
+    image: "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86",
     additionalImages: [
-      "https://images.unsplash.com/photo-1506126613408-eca07ce68773",
-      "https://images.unsplash.com/photo-1531685250784-7569952593d2"
+      "https://images.unsplash.com/photo-1518495973542-4542c06a5843",
+      "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9"
     ],
     location: {
       name: "Mountain View Lodge",
