@@ -17,6 +17,16 @@ const allCategories = Array.from(
   new Set(retreats.flatMap((retreat) => retreat.category))
 ).sort();
 
+// Find the most recent retreat by date
+const getMostRecentRetreatId = () => {
+  const sortedRetreats = [...retreats].sort((a, b) => 
+    new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+  return sortedRetreats[0]?.id;
+};
+
+const mostRecentRetreatId = getMostRecentRetreatId();
+
 const Retreats = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -182,7 +192,7 @@ const Retreats = () => {
                   key={retreat.id} 
                   retreat={retreat} 
                   index={index}
-                  comingSoon={retreat.id !== "ret-1"} // Only the first featured retreat is available
+                  comingSoon={retreat.id === mostRecentRetreatId} // Only the most recent retreat is marked as coming soon
                 />
               ))}
             </div>
