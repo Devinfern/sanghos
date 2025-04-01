@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -78,14 +79,16 @@ const Booking = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      navigate(`/booking-confirmation/${id}`);
-      toast({ title: "Success", description: "Your booking has been confirmed!" });
-    }, 1500);
+    if (!validateStep1()) return;
+    
+    // Navigate to checkout page instead of confirming the booking directly
+    navigate(`/checkout/${id}`);
+  };
+
+  const continueToCheckout = () => {
+    if (!validateStep1()) return;
+    navigate(`/checkout/${id}`);
   };
 
   return (
@@ -207,8 +210,8 @@ const Booking = () => {
                         />
                       </div>
                       
-                      <Button type="button" onClick={nextStep} className="w-full">
-                        Continue to Review
+                      <Button type="button" onClick={continueToCheckout} className="w-full">
+                        Continue to Checkout
                       </Button>
                     </div>
                   )}
@@ -256,8 +259,8 @@ const Booking = () => {
                         <Button type="button" variant="outline" onClick={prevStep} className="flex-1">
                           Back
                         </Button>
-                        <Button type="submit" className="flex-1" disabled={isSubmitting}>
-                          {isSubmitting ? "Processing..." : "Confirm Booking"}
+                        <Button type="button" onClick={continueToCheckout} className="flex-1">
+                          Continue to Checkout
                         </Button>
                       </div>
                     </div>

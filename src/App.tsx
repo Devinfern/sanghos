@@ -22,6 +22,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import Header from "./components/Header";
 import UserDashboard from "./pages/UserDashboard";
 import Booking from "./pages/Booking";
+import CheckoutPage from "./pages/CheckoutPage";
 import OnboardingPage from "./pages/OnboardingPage";
 
 // Host Portal Pages
@@ -64,6 +65,7 @@ const App = () => (
             <Route path="/join" element={<JoinNow />} />
             <Route path="/community-teaser" element={<CommunityTeaser />} />
             <Route path="/booking/:id" element={<Booking />} />
+            <Route path="/checkout/:id" element={<CheckoutPage />} />
             
             {/* Protected Routes */}
             <Route 
