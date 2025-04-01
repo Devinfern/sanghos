@@ -182,7 +182,7 @@ const Retreats = () => {
                   key={retreat.id} 
                   retreat={retreat} 
                   index={index}
-                  comingSoon={true} // Set all cards to coming soon
+                  comingSoon={retreat.id !== "ret-1"} // Only the first featured retreat is available
                 />
               ))}
             </div>
