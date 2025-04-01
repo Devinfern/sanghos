@@ -41,7 +41,7 @@ const RetreatCard = ({ retreat, index = 0, comingSoon = false }: RetreatCardProp
           </DialogTrigger>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <DialogTitle>Get notified when available</DialogTitle>
+              <DialogTitle>Get notified when we launch</DialogTitle>
             </DialogHeader>
             <EmailSignupForm 
               retreatTitle={retreat.title} 
@@ -71,7 +71,7 @@ const RetreatCard = ({ retreat, index = 0, comingSoon = false }: RetreatCardProp
               <span className="font-medium">Coming Soon</span>
             </div>
             <p className="text-sm text-center px-4">
-              Sign up to be notified when this retreat becomes available
+              We're launching soon! Sign up to be notified when bookings open
             </p>
           </div>
         )}

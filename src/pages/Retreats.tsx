@@ -17,7 +17,8 @@ const allCategories = Array.from(
   new Set(retreats.flatMap((retreat) => retreat.category))
 ).sort();
 
-// Find the most recent retreat by date
+// Previously we were using this to identify the most recent retreat
+// Now all retreats will have the coming soon overlay
 const getMostRecentRetreatId = () => {
   const sortedRetreats = [...retreats].sort((a, b) => 
     new Date(b.date).getTime() - new Date(a.date).getTime()
@@ -192,7 +193,7 @@ const Retreats = () => {
                   key={retreat.id} 
                   retreat={retreat} 
                   index={index}
-                  comingSoon={retreat.id === mostRecentRetreatId} // Only the most recent retreat is marked as coming soon
+                  comingSoon={true} // Set all retreats to coming soon
                 />
               ))}
             </div>
