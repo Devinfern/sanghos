@@ -72,7 +72,7 @@ const CommunityTeaser = () => {
                   Begin Your Journey
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
-                <Button size="lg" variant="outline" onClick={() => navigate("/login")} className="border-white bg-[#000a0e]/0 text-slate-950">
+                <Button size="lg" variant="outline" onClick={() => navigate("/login")} className="border-white bg-[#000a0e]/0 text-slate-50">
                   Already a Member? Sign In
                 </Button>
               </div>
