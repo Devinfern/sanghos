@@ -13,7 +13,9 @@ import {
   Bookmark,
   ChevronDown,
   Search,
-  Settings
+  Settings,
+  ArrowRight,
+  Star
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -36,6 +38,7 @@ import {
 import CommunityPostEditor from "@/components/CommunityPostEditor";
 import ForumCMS from "@/components/ForumCMS";
 import { ForumPost } from "@/lib/communityData";
+import OptimizedImage from "@/components/OptimizedImage";
 
 const CommunityPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -45,6 +48,7 @@ const CommunityPage = () => {
   const [showCMS, setShowCMS] = useState<boolean>(false);
   const [currentEvents, setCurrentEvents] = useState(forumEvents);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isHeroVisible, setIsHeroVisible] = useState(true);
   const navigate = useNavigate();
 
   // Load data from Supabase on component mount
@@ -165,6 +169,10 @@ const CommunityPage = () => {
     navigate("/login");
   };
 
+  const dismissHero = () => {
+    setIsHeroVisible(false);
+  };
+
   if (showCMS && isAdmin) {
     return (
       <>
@@ -205,6 +213,21 @@ const CommunityPage = () => {
     return text.toLowerCase().replace(/\s+/g, '-');
   };
 
+  const testimonials = [
+    {
+      quote: "Joining the Sanghos community transformed my wellness journey. I've found lifelong friends who understand and support my path to mindfulness.",
+      author: "Maya L.",
+      role: "Member since 2022",
+      avatar: "https://images.unsplash.com/photo-1500673922987-e212871fec22"
+    },
+    {
+      quote: "What I love most about Sanghos is how we continue to connect long after the retreats end. This community has become my wellness family.",
+      author: "David T.",
+      role: "Member since 2023",
+      avatar: "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+    }
+  ];
+
   if (isLoading) {
     return (
       <>
@@ -227,23 +250,232 @@ const CommunityPage = () => {
     <>
       <Helmet>
         <title>Community | Sanghos</title>
-        <meta name="description" content="Join our community for discussions, events, and more" />
+        <meta name="description" content="Join our mindful community of wellness enthusiasts. Connect, share, and grow together on your wellness journey with Sanghos." />
       </Helmet>
 
       <Header />
 
-      <main className="pt-24 pb-16 min-h-screen bg-gradient-to-b from-brand-subtle/20 to-white">
+      <main className="pt-16 pb-16 min-h-screen bg-gradient-to-b from-brand-subtle/20 to-white">
+        {/* New Hero Section */}
+        {isHeroVisible && (
+          <section className="relative mb-16 overflow-hidden bg-brand-dark text-white">
+            <div className="absolute inset-0 z-0">
+              <div className="absolute inset-0 bg-gradient-to-b from-brand-dark/80 to-brand-dark/80 z-10"></div>
+              <OptimizedImage 
+                src="https://images.unsplash.com/photo-1500673922987-e212871fec22" 
+                alt="Community gathering in nature" 
+                className="w-full h-full" 
+                aspectRatio="custom" 
+                objectFit="cover" 
+                priority={true} 
+              />
+            </div>
+            <div className="container mx-auto px-4 md:px-6 py-16 md:py-24 relative z-10">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="absolute top-4 right-4 text-white hover:bg-white/10" 
+                onClick={dismissHero}
+              >
+                ×
+              </Button>
+              <div className="max-w-3xl mx-auto text-center">
+                <h1 className="text-3xl md:text-5xl font-bold mb-6">
+                  Connect. Grow. Renew.<br />
+                  <span className="text-brand-peach">Welcome to the Sanghos Community.</span>
+                </h1>
+                <p className="text-lg md:text-xl mb-8">
+                  Join a circle of like-minded individuals on a collective journey toward wellness and mindful living. 
+                  In our community, you'll find support, inspiration, and authentic connections that nurture your growth.
+                </p>
+                <div className="flex flex-col sm:flex-row justify-center gap-4">
+                  <Button 
+                    size="lg" 
+                    onClick={() => navigate("/join")} 
+                    className="bg-brand-peach hover:bg-brand-peach/90 text-white"
+                  >
+                    Join Our Community
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="lg" 
+                    onClick={() => navigate("/retreats")} 
+                    className="border-white text-white hover:bg-white/10"
+                  >
+                    Explore Retreats
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
         <div className="container px-4 md:px-6 mx-auto">
+          {/* Benefits Section (New) */}
+          <section className="mb-16">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold text-brand-dark mb-4">Why Join Our Community?</h2>
+              <p className="text-lg text-brand-slate max-w-3xl mx-auto">
+                Sanghos is more than just retreats—it's a supportive ecosystem where wellness enthusiasts connect, 
+                share experiences, and find inspiration on their journey toward mindful living.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <Card className="p-6 border border-brand-subtle/30 shadow-sm hover:shadow-md transition-all">
+                <div className="w-12 h-12 bg-brand-primary/10 rounded-full flex items-center justify-center mb-4">
+                  <Users className="h-6 w-6 text-brand-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3 text-brand-dark">Authentic Connections</h3>
+                <p className="text-brand-slate">
+                  Find kindred spirits who share your passion for wellness and mindful living. Form meaningful 
+                  relationships that extend beyond retreat experiences.
+                </p>
+              </Card>
+              
+              <Card className="p-6 border border-brand-subtle/30 shadow-sm hover:shadow-md transition-all">
+                <div className="w-12 h-12 bg-brand-primary/10 rounded-full flex items-center justify-center mb-4">
+                  <Heart className="h-6 w-6 text-brand-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3 text-brand-dark">Collective Growth</h3>
+                <p className="text-brand-slate">
+                  Share insights, discover new perspectives, and grow together through 
+                  shared experiences and collaborative learning.
+                </p>
+              </Card>
+              
+              <Card className="p-6 border border-brand-subtle/30 shadow-sm hover:shadow-md transition-all">
+                <div className="w-12 h-12 bg-brand-primary/10 rounded-full flex items-center justify-center mb-4">
+                  <Calendar className="h-6 w-6 text-brand-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3 text-brand-dark">Ongoing Support</h3>
+                <p className="text-brand-slate">
+                  Continue your wellness journey with community support long after your retreat ends. 
+                  Stay connected, motivated, and inspired.
+                </p>
+              </Card>
+            </div>
+          </section>
+
+          {/* Community Vision Section (New) */}
+          <section className="mb-16 bg-brand-subtle/10 py-12 px-4 md:px-8 rounded-2xl">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-bold text-brand-dark mb-6 text-center">Our Community Vision</h2>
+              <p className="text-lg text-brand-slate mb-8 text-center">
+                We're building a vibrant ecosystem where wellness enthusiasts can connect, share, and grow together.
+                Here's what you can look forward to as part of the Sanghos community:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="flex gap-4">
+                  <div className="bg-brand-primary/10 p-3 rounded-full h-min">
+                    <MessageSquare className="h-6 w-6 text-brand-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2 text-brand-dark">Thoughtful Discussions</h3>
+                    <p className="text-brand-slate">
+                      Engage in meaningful conversations about wellness practices, mindfulness techniques, 
+                      and personal growth in our online forums.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex gap-4">
+                  <div className="bg-brand-primary/10 p-3 rounded-full h-min">
+                    <Calendar className="h-6 w-6 text-brand-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2 text-brand-dark">Exclusive Events</h3>
+                    <p className="text-brand-slate">
+                      Participate in community-only virtual gatherings, workshops, and special retreats 
+                      designed to deepen your wellness practice.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex gap-4">
+                  <div className="bg-brand-primary/10 p-3 rounded-full h-min">
+                    <MessageCircle className="h-6 w-6 text-brand-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2 text-brand-dark">Instructor Access</h3>
+                    <p className="text-brand-slate">
+                      Connect with our wellness experts outside of retreats for Q&A sessions, 
+                      guidance, and continued learning.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex gap-4">
+                  <div className="bg-brand-primary/10 p-3 rounded-full h-min">
+                    <Users className="h-6 w-6 text-brand-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2 text-brand-dark">Community Circles</h3>
+                    <p className="text-brand-slate">
+                      Join interest-based groups focused on specific wellness practices like meditation, 
+                      yoga, or mindful nutrition.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Testimonials Section (New) */}
+          <section className="mb-16">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold text-brand-dark mb-4">Community Voices</h2>
+              <p className="text-lg text-brand-slate max-w-3xl mx-auto">
+                Hear from members who have found connection and growth within our community.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {testimonials.map((testimonial, index) => (
+                <Card key={index} className="p-6 border border-brand-subtle/30 shadow-sm">
+                  <div className="mb-4 text-brand-peach flex">
+                    {[...Array(5)].map((_, i) => <Star key={i} className="h-5 w-5 fill-brand-peach text-brand-peach" />)}
+                  </div>
+                  <p className="text-brand-slate italic mb-6">"{testimonial.quote}"</p>
+                  <div className="flex items-center">
+                    <Avatar className="h-10 w-10 mr-3">
+                      <img src={testimonial.avatar} alt={testimonial.author} />
+                    </Avatar>
+                    <div>
+                      <p className="font-medium text-brand-dark">{testimonial.author}</p>
+                      <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </section>
+
           {!isLoggedIn && (
-            <div className="mb-8 bg-white p-6 rounded-lg shadow-sm border border-brand-subtle/30">
-              <h2 className="text-xl font-semibold mb-2 text-brand-dark">Join Our Community</h2>
-              <p className="mb-4 text-brand-slate">To participate in discussions, create posts, and interact with our community, please sign in or create an account.</p>
-              <div className="flex gap-3">
-                <Button onClick={handleLogin} className="bg-brand-primary hover:bg-brand-primary/90 text-white">
-                  Sign In
-                </Button>
-                <Button variant="outline" onClick={() => navigate("/join")} className="border-brand-primary text-brand-primary hover:bg-brand-primary/5">
+            <div className="mb-12 py-10 px-8 bg-gradient-to-r from-brand-primary/10 to-brand-peach/10 rounded-2xl text-center">
+              <h2 className="text-2xl font-bold mb-4 text-brand-dark">Ready to Begin Your Journey?</h2>
+              <p className="text-lg mb-6 text-brand-slate max-w-2xl mx-auto">
+                Join our growing community today and connect with like-minded individuals on a path to wellness and mindful living.
+                Create an account to unlock all community features and begin sharing your journey.
+              </p>
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <Button 
+                  size="lg" 
+                  onClick={() => navigate("/join")} 
+                  className="bg-brand-primary hover:bg-brand-primary/90 text-white"
+                >
                   Join Sanghos
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  onClick={handleLogin} 
+                  className="border-brand-primary text-brand-primary hover:bg-brand-primary/5"
+                >
+                  Sign In
                 </Button>
               </div>
             </div>
@@ -285,7 +517,7 @@ const CommunityPage = () => {
 
             <div className="flex-1">
               <div className="mb-6 flex justify-between items-center">
-                <h1 className="text-2xl font-bold text-brand-dark">Feed</h1>
+                <h2 className="text-2xl font-bold text-brand-dark">Community Feed</h2>
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium mr-2 text-brand-slate">Latest</span>
                   <ChevronDown className="h-4 w-4 text-brand-slate" />
@@ -358,7 +590,7 @@ const CommunityPage = () => {
                         </Button>
                       </div>
                       
-                      <h2 className="text-xl font-semibold mb-2 text-brand-dark">{post.title}</h2>
+                      <h3 className="text-xl font-semibold mb-2 text-brand-dark">{post.title}</h3>
                       <div className="text-sm mb-3 whitespace-pre-line text-brand-slate">
                         {post.content}
                         <button className="text-brand-primary hover:underline block mt-1">See more</button>
@@ -425,6 +657,20 @@ const CommunityPage = () => {
                       </div>
                     ))}
                   </div>
+                </Card>
+
+                {/* Join CTA for Sidebar */}
+                <Card className="border border-brand-subtle/30 shadow-sm bg-gradient-to-br from-brand-primary/5 to-brand-peach/5 p-5">
+                  <h3 className="font-semibold text-brand-dark mb-3">Join Our Community</h3>
+                  <p className="text-sm text-brand-slate mb-4">
+                    Connect with like-minded individuals on your wellness journey and unlock exclusive content.
+                  </p>
+                  <Button 
+                    className="w-full bg-brand-primary hover:bg-brand-primary/90 text-white"
+                    onClick={() => navigate("/join")}
+                  >
+                    Become a Member
+                  </Button>
                 </Card>
               </div>
             </div>
