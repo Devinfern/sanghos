@@ -1,36 +1,20 @@
-
 import { Helmet } from "react-helmet";
 import { useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { 
-  ArrowRight, 
-  Users, 
-  MessageCircle, 
-  Calendar, 
-  Check, 
-  Heart, 
-  Star, 
-  Sparkles,
-  Share2,
-  HandHeart,
-  BookOpen
-} from "lucide-react";
+import { ArrowRight, Users, MessageCircle, Calendar, Check, Heart, Star, Sparkles, Share2, HandHeart, BookOpen } from "lucide-react";
 import OptimizedImage from "@/components/OptimizedImage";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-
 const CommunityTeaser = () => {
   const navigate = useNavigate();
   const [isLoaded, setIsLoaded] = useState(false);
   const [email, setEmail] = useState("");
-  
   useEffect(() => {
     setIsLoaded(true);
   }, []);
-
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
     if (email.trim()) {
@@ -39,9 +23,7 @@ const CommunityTeaser = () => {
       setEmail("");
     }
   };
-  
-  return (
-    <>
+  return <>
       <Helmet>
         <title>Join Our Community | Sanghos</title>
         <meta name="description" content="Join the Sanghos community to connect with like-minded individuals, share experiences, and deepen your wellness journey together." />
@@ -60,37 +42,37 @@ const CommunityTeaser = () => {
           <div className="container relative z-20 px-4 md:px-6 py-16 sm:py-24 max-w-5xl">
             <div className="mx-auto text-center">
               <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{
-                transitionDelay: "300ms"
-              }}>
+              transitionDelay: "300ms"
+            }}>
                 <span className="inline-block bg-brand-primary/20 backdrop-blur-sm text-white px-4 py-1 rounded-full text-sm font-medium mb-6">
                   A community of over 200+ wellness seekers
                 </span>
               </div>
               
               <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{
-                transitionDelay: "400ms"
-              }}>
+              transitionDelay: "400ms"
+            }}>
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight">
                   Find Your Tribe. <span className="text-brand-peach">Flourish Together.</span>
                 </h1>
               </div>
               
               <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{
-                transitionDelay: "500ms"
-              }}>
+              transitionDelay: "500ms"
+            }}>
                 <p className="text-xl md:text-2xl text-white/90 mb-10 max-w-2xl mx-auto">
                   Join a sanctuary where minds meet, hearts connect, and wellness journeys intertwine. More than retreats—it's belonging, growth, and support that lasts well beyond a single day.
                 </p>
               </div>
               
               <div className={`flex flex-col sm:flex-row justify-center gap-6 transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{
-                transitionDelay: "600ms"
-              }}>
+              transitionDelay: "600ms"
+            }}>
                 <Button size="lg" onClick={() => navigate("/join")} className="bg-brand-primary hover:bg-brand-primary/90 group text-white">
                   Begin Your Journey
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
-                <Button size="lg" variant="outline" onClick={() => navigate("/login")} className="border-white text-white hover:bg-white/10">
+                <Button size="lg" variant="outline" onClick={() => navigate("/login")} className="border-white bg-[#000a0e]/0 text-slate-950">
                   Already a Member? Sign In
                 </Button>
               </div>
@@ -99,8 +81,8 @@ const CommunityTeaser = () => {
 
           {/* Decorative element moved to bottom with animation */}
           <div className={`absolute bottom-12 left-0 right-0 flex justify-center transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`} style={{
-            transitionDelay: "800ms"
-          }}>
+          transitionDelay: "800ms"
+        }}>
             <div className="w-10 h-10 rounded-full bg-brand-primary/20 backdrop-blur-sm flex items-center justify-center animate-bounce">
               <ArrowRight className="h-5 w-5 text-white rotate-90" />
             </div>
@@ -121,8 +103,8 @@ const CommunityTeaser = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-muted/30 hover:shadow-xl transition-all hover:-translate-y-1 duration-300 overflow-hidden rounded-xl animate-fade-up" style={{
-              animationDelay: "100ms"
-            }}>
+            animationDelay: "100ms"
+          }}>
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-primary to-brand-sky"></div>
               <CardContent className="p-8">
                 <div className="w-12 h-12 bg-brand-primary/10 rounded-full flex items-center justify-center mb-6">
@@ -147,8 +129,8 @@ const CommunityTeaser = () => {
             </Card>
             
             <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-muted/30 hover:shadow-xl transition-all hover:-translate-y-1 duration-300 overflow-hidden rounded-xl animate-fade-up" style={{
-              animationDelay: "200ms"
-            }}>
+            animationDelay: "200ms"
+          }}>
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-sky to-brand-peach"></div>
               <CardContent className="p-8">
                 <div className="w-12 h-12 bg-brand-primary/10 rounded-full flex items-center justify-center mb-6">
@@ -173,8 +155,8 @@ const CommunityTeaser = () => {
             </Card>
             
             <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-muted/30 hover:shadow-xl transition-all hover:-translate-y-1 duration-300 overflow-hidden rounded-xl animate-fade-up" style={{
-              animationDelay: "300ms"
-            }}>
+            animationDelay: "300ms"
+          }}>
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-peach to-brand-rose"></div>
               <CardContent className="p-8">
                 <div className="w-12 h-12 bg-brand-primary/10 rounded-full flex items-center justify-center mb-6">
@@ -261,40 +243,22 @@ const CommunityTeaser = () => {
                 </div>
               </div>
               
-              <div className="relative animate-fade-up" style={{ animationDelay: "200ms" }}>
+              <div className="relative animate-fade-up" style={{
+              animationDelay: "200ms"
+            }}>
                 <div className="absolute -top-4 -bottom-4 -right-4 -left-4 bg-brand-primary/5 rounded-3xl -z-10"></div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="aspect-square rounded-lg overflow-hidden">
-                    <OptimizedImage 
-                      src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" 
-                      alt="Community members in meditation circle" 
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" 
-                      aspectRatio="square"
-                    />
+                    <OptimizedImage src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="Community members in meditation circle" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" aspectRatio="square" />
                   </div>
                   <div className="aspect-square rounded-lg overflow-hidden">
-                    <OptimizedImage 
-                      src="https://images.unsplash.com/photo-1501854140801-50d01698950b" 
-                      alt="Serene mountain view" 
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" 
-                      aspectRatio="square"
-                    />
+                    <OptimizedImage src="https://images.unsplash.com/photo-1501854140801-50d01698950b" alt="Serene mountain view" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" aspectRatio="square" />
                   </div>
                   <div className="aspect-square rounded-lg overflow-hidden">
-                    <OptimizedImage 
-                      src="https://images.unsplash.com/photo-1518495973542-4542c06a5843" 
-                      alt="Sunlight through forest canopy" 
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" 
-                      aspectRatio="square"
-                    />
+                    <OptimizedImage src="https://images.unsplash.com/photo-1518495973542-4542c06a5843" alt="Sunlight through forest canopy" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" aspectRatio="square" />
                   </div>
                   <div className="aspect-square rounded-lg overflow-hidden">
-                    <OptimizedImage 
-                      src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158" 
-                      alt="Group discussion in comfortable setting" 
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" 
-                      aspectRatio="square"
-                    />
+                    <OptimizedImage src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158" alt="Group discussion in comfortable setting" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" aspectRatio="square" />
                   </div>
                 </div>
               </div>
@@ -311,26 +275,26 @@ const CommunityTeaser = () => {
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               <div className="p-4 animate-fade-up" style={{
-                animationDelay: "100ms"
-              }}>
+              animationDelay: "100ms"
+            }}>
                 <div className="text-4xl font-bold text-brand-primary mb-2">5,000+</div>
                 <div className="text-sm text-muted-foreground">Active Members</div>
               </div>
               <div className="p-4 animate-fade-up" style={{
-                animationDelay: "200ms"
-              }}>
+              animationDelay: "200ms"
+            }}>
                 <div className="text-4xl font-bold text-brand-primary mb-2">120+</div>
                 <div className="text-sm text-muted-foreground">Monthly Events</div>
               </div>
               <div className="p-4 animate-fade-up" style={{
-                animationDelay: "300ms"
-              }}>
+              animationDelay: "300ms"
+            }}>
                 <div className="text-4xl font-bold text-brand-primary mb-2">4.9</div>
                 <div className="text-sm text-muted-foreground">Satisfaction Rating</div>
               </div>
               <div className="p-4 animate-fade-up" style={{
-                animationDelay: "400ms"
-              }}>
+              animationDelay: "400ms"
+            }}>
                 <div className="text-4xl font-bold text-brand-primary mb-2">25K+</div>
                 <div className="text-sm text-muted-foreground">Discussion Posts</div>
               </div>
@@ -345,8 +309,8 @@ const CommunityTeaser = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <Card className="bg-gradient-to-br from-white to-brand-subtle/20 border-0 shadow-md rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 animate-fade-up" style={{
-                animationDelay: "100ms"
-              }}>
+              animationDelay: "100ms"
+            }}>
                 <CardContent className="p-6">
                   <div className="flex flex-col h-full">
                     <div className="mb-4 text-brand-peach flex">
@@ -369,8 +333,8 @@ const CommunityTeaser = () => {
               </Card>
               
               <Card className="bg-gradient-to-br from-white to-brand-subtle/20 border-0 shadow-md rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 animate-fade-up" style={{
-                animationDelay: "200ms"
-              }}>
+              animationDelay: "200ms"
+            }}>
                 <CardContent className="p-6">
                   <div className="flex flex-col h-full">
                     <div className="mb-4 text-brand-peach flex">
@@ -393,8 +357,8 @@ const CommunityTeaser = () => {
               </Card>
               
               <Card className="bg-gradient-to-br from-white to-brand-subtle/20 border-0 shadow-md rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 animate-fade-up md:col-span-2" style={{
-                animationDelay: "300ms"
-              }}>
+              animationDelay: "300ms"
+            }}>
                 <CardContent className="p-6">
                   <div className="flex flex-col h-full">
                     <div className="mb-4 text-brand-peach flex">
@@ -428,24 +392,19 @@ const CommunityTeaser = () => {
                 <span className="text-sm font-medium pr-2 text-brand-dark">Stay connected with our community</span>
               </div>
               <h2 className="text-3xl font-bold mb-4 animate-fade-up text-brand-dark" style={{
-                animationDelay: "100ms"
-              }}>Join Our Newsletter</h2>
+              animationDelay: "100ms"
+            }}>Join Our Newsletter</h2>
               <p className="text-lg text-brand-slate mb-8 animate-fade-up" style={{
-                animationDelay: "200ms"
-              }}>
+              animationDelay: "200ms"
+            }}>
                 Be the first to know about new community features, upcoming events, and wellness insights from our instructors and members.
               </p>
               
               <form onSubmit={handleSubscribe} className="max-w-md mx-auto animate-fade-up" style={{
-                animationDelay: "300ms"
-              }}>
+              animationDelay: "300ms"
+            }}>
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <Textarea
-                    placeholder="Your email address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="resize-none h-12 focus-visible:ring-brand-primary"
-                  />
+                  <Textarea placeholder="Your email address" value={email} onChange={e => setEmail(e.target.value)} className="resize-none h-12 focus-visible:ring-brand-primary" />
                   <Button type="submit" className="bg-brand-primary hover:bg-brand-primary/90 text-white whitespace-nowrap">
                     Subscribe
                   </Button>
@@ -468,16 +427,16 @@ const CommunityTeaser = () => {
                 <span className="text-sm font-medium pr-2 text-brand-dark">Your journey awaits</span>
               </div>
               <h2 className="text-3xl font-bold mb-4 animate-fade-up text-brand-dark" style={{
-                animationDelay: "100ms"
-              }}>Ready to Begin Your Journey?</h2>
+              animationDelay: "100ms"
+            }}>Ready to Begin Your Journey?</h2>
               <p className="text-lg text-brand-slate mb-8 animate-fade-up" style={{
-                animationDelay: "200ms"
-              }}>
+              animationDelay: "200ms"
+            }}>
                 Take the first step toward a more connected wellness experience. Join Sanghos today and become part of a community that supports, inspires, and grows together.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fade-up" style={{
-                animationDelay: "300ms"
-              }}>
+              animationDelay: "300ms"
+            }}>
                 <Button size="lg" onClick={() => navigate("/join")} className="group bg-brand-primary hover:bg-brand-primary/90 text-white">
                   Join Sanghos Now
                   <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -488,8 +447,8 @@ const CommunityTeaser = () => {
               </div>
               
               <div className="mt-8 pt-8 border-t border-brand-primary/10 text-sm text-muted-foreground animate-fade-up" style={{
-                animationDelay: "400ms"
-              }}>
+              animationDelay: "400ms"
+            }}>
                 <p>Already a member? <Link to="/login" className="text-brand-primary hover:underline">Sign in here</Link></p>
               </div>
             </div>
@@ -498,8 +457,6 @@ const CommunityTeaser = () => {
       </main>
 
       <Footer />
-    </>
-  );
+    </>;
 };
-
 export default CommunityTeaser;
