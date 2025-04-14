@@ -53,7 +53,6 @@ const CommunityPage = () => {
   const [activeSection, setActiveSection] = useState("discussions");
   const navigate = useNavigate();
 
-  // Load data from Supabase on component mount
   useEffect(() => {
     const loadData = async () => {
       setIsLoading(true);
@@ -63,7 +62,7 @@ const CommunityPage = () => {
         loadForumEvents(),
         loadTrendingPosts()
       ]);
-      setPosts(initialPosts); // Update with the loaded data
+      setPosts(initialPosts);
       setCurrentEvents(forumEvents);
       setIsLoading(false);
     };
@@ -71,7 +70,6 @@ const CommunityPage = () => {
     loadData();
   }, []);
 
-  // Check login status
   useEffect(() => {
     const checkLoginStatus = () => {
       const userString = localStorage.getItem("sanghos_user");
@@ -91,7 +89,6 @@ const CommunityPage = () => {
     checkLoginStatus();
   }, []);
 
-  // Update events when forumEvents changes
   useEffect(() => {
     setCurrentEvents(forumEvents);
   }, [forumEvents]);
@@ -109,6 +106,27 @@ const CommunityPage = () => {
       return;
     }
     setShowCMS(!showCMS);
+  };
+
+  const renderActiveSection = () => {
+    switch (activeSection) {
+      case "discussions":
+        return (
+          <CommunityDiscussions 
+            posts={posts}
+            isLoggedIn={isLoggedIn}
+            onPostCreated={handlePostCreated}
+          />
+        );
+      case "events":
+        return <CommunityEventsPage events={currentEvents} />;
+      case "resources":
+        return <CommunityResourcesPage />;
+      case "members":
+        return <CommunityMembersPage />;
+      default:
+        return null;
+    }
   };
 
   if (showCMS && isAdmin) {
@@ -180,7 +198,9 @@ const CommunityPage = () => {
 
             <div className="flex-1">
               <div className="mb-6 flex justify-between items-center">
-                <h1 className="text-2xl font-bold text-brand-dark">Feed</h1>
+                <h1 className="text-2xl font-bold text-brand-dark">
+                  {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
+                </h1>
                 {isAdmin && (
                   <Button variant="outline" onClick={toggleCMS} className="border-brand-primary text-brand-primary hover:bg-brand-primary/5">
                     <Settings className="h-4 w-4 mr-2" />
@@ -189,11 +209,7 @@ const CommunityPage = () => {
                 )}
               </div>
 
-              <CommunityDiscussions 
-                posts={posts}
-                isLoggedIn={isLoggedIn}
-                onPostCreated={handlePostCreated}
-              />
+              {renderActiveSection()}
             </div>
 
             <div className="lg:w-80 w-full shrink-0">
