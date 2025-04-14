@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate, Link } from "react-router-dom";
@@ -117,9 +116,7 @@ const CommunityPage = () => {
       case "discussions":
         return (
           <CommunityDiscussions 
-            posts={posts}
             isLoggedIn={isLoggedIn}
-            onPostCreated={handlePostCreated}
           />
         );
       case "events":

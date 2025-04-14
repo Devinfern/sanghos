@@ -17,7 +17,7 @@ const CommunityDiscussions = ({ isLoggedIn }: CommunityDiscussionsProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all"); // Changed default to "all"
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -39,7 +39,8 @@ const CommunityDiscussions = ({ isLoggedIn }: CommunityDiscussionsProps) => {
           query = query.or(`title.ilike.%${searchQuery}%,content.ilike.%${searchQuery}%`);
         }
 
-        if (categoryFilter) {
+        // Only filter by category if it's not "all"
+        if (categoryFilter && categoryFilter !== "all") {
           query = query.eq('category', categoryFilter);
         }
 
@@ -114,7 +115,7 @@ const CommunityDiscussions = ({ isLoggedIn }: CommunityDiscussionsProps) => {
               <SelectValue placeholder="Filter by category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Categories</SelectItem>
+              <SelectItem value="all">All Categories</SelectItem>
               <SelectItem value="question">Questions</SelectItem>
               <SelectItem value="discussion">Discussions</SelectItem>
               <SelectItem value="resource">Resources</SelectItem>
@@ -142,7 +143,7 @@ const CommunityDiscussions = ({ isLoggedIn }: CommunityDiscussionsProps) => {
           <Card className="p-8 text-center">
             <h3 className="text-lg font-medium mb-2">No posts found</h3>
             <p className="text-muted-foreground mb-4">
-              {searchQuery || categoryFilter
+              {searchQuery || categoryFilter !== "all"
                 ? "Try adjusting your search or filters"
                 : "Be the first to start a discussion!"}
             </p>
