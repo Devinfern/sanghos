@@ -22,35 +22,51 @@ const UserDashboard = () => {
   
   useEffect(() => {
     const checkAuth = async () => {
-      const { data } = await supabase.auth.getSession();
+      const { data: { session } } = await supabase.auth.getSession();
       
-      if (!data.session) {
+      if (!session) {
         navigate("/login");
         return;
       }
 
-      // In a real implementation, we would fetch the user's data from Supabase
-      // For now, using mock data
-      setUserData({
-        name: "Sarah Johnson",
-        email: "sarah@example.com",
-        joinDate: "2023-06-15",
-        membershipStatus: "active",
-        completedRetreats: 2,
-        points: 150
-      });
+      try {
+        // Fetch user profile from the user_profiles table
+        const { data: profile, error } = await supabase
+          .from('user_profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
 
-      // Filter retreats to show as "upcoming"
-      // In a real app, this would be fetched from the database
-      const today = new Date();
-      const upcoming = retreats
-        .filter(retreat => new Date(retreat.date) > today)
-        .slice(0, 3);
-      
-      setUpcomingRetreats(upcoming);
-      setIsLoading(false);
+        if (error) {
+          console.error("Error fetching user profile:", error);
+          toast.error("Failed to load user profile");
+          return;
+        }
+
+        setUserData({
+          name: profile.full_name || session.user.email?.split('@')[0] || 'User',
+          email: session.user.email,
+          joinDate: profile.created_at,
+          membershipStatus: "active",
+          completedRetreats: 0,
+          points: 0
+        });
+
+        // Filter retreats to show as "upcoming"
+        const today = new Date();
+        const upcoming = retreats
+          .filter(retreat => new Date(retreat.date) > today)
+          .slice(0, 3);
+        
+        setUpcomingRetreats(upcoming);
+      } catch (err) {
+        console.error("Error in dashboard:", err);
+        toast.error("Something went wrong loading your dashboard");
+      } finally {
+        setIsLoading(false);
+      }
     };
-
+    
     checkAuth();
   }, [navigate]);
 
@@ -77,15 +93,15 @@ const UserDashboard = () => {
         <div className="container px-4 md:px-6">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Welcome back, {userData.name}</h1>
+              <h1 className="text-3xl font-bold mb-2">Welcome back, {userData?.name}</h1>
               <p className="text-muted-foreground">Track your wellness journey and upcoming experiences</p>
             </div>
             <div className="mt-4 md:mt-0 flex items-center space-x-2">
               <Badge variant="outline" className="text-sm">
-                Member since {formatDate(userData.joinDate)}
+                Member since {formatDate(userData?.joinDate)}
               </Badge>
               <Badge variant="secondary" className="bg-sage-100 text-sage-800">
-                {userData.points} Points
+                {userData?.points} Points
               </Badge>
             </div>
           </div>
