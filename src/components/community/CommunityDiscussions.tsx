@@ -17,43 +17,43 @@ const CommunityDiscussions = ({ isLoggedIn }: CommunityDiscussionsProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all"); // Changed default to "all"
+  const [categoryFilter, setCategoryFilter] = useState("all");
+
+  const fetchPosts = async () => {
+    setIsLoading(true);
+    try {
+      let query = supabase
+        .from('community_posts')
+        .select(`
+          *,
+          user_profiles(
+            username,
+            avatar_url,
+            is_wellness_practitioner
+          )
+        `)
+        .order('created_at', { ascending: false });
+
+      if (searchQuery) {
+        query = query.or(`title.ilike.%${searchQuery}%,content.ilike.%${searchQuery}%`);
+      }
+
+      // Only filter by category if it's not "all"
+      if (categoryFilter && categoryFilter !== "all") {
+        query = query.eq('category', categoryFilter);
+      }
+
+      const { data, error } = await query;
+      if (error) throw error;
+      setPosts(data || []);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      setIsLoading(true);
-      try {
-        let query = supabase
-          .from('community_posts')
-          .select(`
-            *,
-            user_profiles(
-              username,
-              avatar_url,
-              is_wellness_practitioner
-            )
-          `)
-          .order('created_at', { ascending: false });
-
-        if (searchQuery) {
-          query = query.or(`title.ilike.%${searchQuery}%,content.ilike.%${searchQuery}%`);
-        }
-
-        // Only filter by category if it's not "all"
-        if (categoryFilter && categoryFilter !== "all") {
-          query = query.eq('category', categoryFilter);
-        }
-
-        const { data, error } = await query;
-        if (error) throw error;
-        setPosts(data || []);
-      } catch (error) {
-        console.error('Error fetching posts:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       setCurrentUserId(session?.user.id || null);
@@ -125,7 +125,7 @@ const CommunityDiscussions = ({ isLoggedIn }: CommunityDiscussionsProps) => {
         </div>
         {isLoggedIn && (
           <div className="w-full md:w-48">
-            <CreatePost onPostCreated={() => {}} />
+            <CreatePost onPostCreated={fetchPosts} />
           </div>
         )}
       </div>
@@ -136,7 +136,7 @@ const CommunityDiscussions = ({ isLoggedIn }: CommunityDiscussionsProps) => {
             key={post.id}
             post={post}
             currentUserId={currentUserId}
-            onPostUpdate={() => {}}
+            onPostUpdate={fetchPosts}
           />
         ))}
         {posts.length === 0 && (
@@ -147,7 +147,7 @@ const CommunityDiscussions = ({ isLoggedIn }: CommunityDiscussionsProps) => {
                 ? "Try adjusting your search or filters"
                 : "Be the first to start a discussion!"}
             </p>
-            {isLoggedIn && <CreatePost onPostCreated={() => {}} />}
+            {isLoggedIn && <CreatePost onPostCreated={fetchPosts} />}
           </Card>
         )}
       </div>

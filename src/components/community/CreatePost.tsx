@@ -49,7 +49,10 @@ const CreatePost = ({ onPostCreated }: CreatePostProps) => {
           }
         ]);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error details:', error);
+        throw error;
+      }
 
       toast.success("Post created successfully!");
       setIsOpen(false);
