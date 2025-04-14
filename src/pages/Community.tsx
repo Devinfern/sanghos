@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate, Link } from "react-router-dom";
@@ -32,10 +31,10 @@ import {
   loadForumEvents,
   loadTrendingPosts,
   updateForumPosts
-} from "@/lib/communityData";
-import CommunityPostEditor from "@/components/CommunityPostEditor";
+} from "@/lib/forumData";
+import ForumPostEditor from "@/components/ForumPostEditor";
 import ForumCMS from "@/components/ForumCMS";
-import { ForumPost } from "@/lib/communityData";
+import { ForumPost } from "@/lib/forumData";
 
 const CommunityPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -295,7 +294,7 @@ const CommunityPage = () => {
                       Manage Content
                     </Button>
                   )}
-                  <CommunityPostEditor 
+                  <ForumPostEditor 
                     onPostCreated={handleNewPostCreated}
                     buttonLabel="New post"
                   />
