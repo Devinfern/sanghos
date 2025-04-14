@@ -1,14 +1,14 @@
-
 import { useState, useEffect } from "react";
 import { forumEvents, trendingPosts, loadForumEvents, loadTrendingPosts } from "@/lib/forumData";
 import CommunityLayout from "@/components/layouts/CommunityLayout";
 import CommunityContent from "@/components/community/CommunityContent";
 import CommunityManagement from "@/components/community/CommunityManagement";
+import { useAdminStatus } from "@/hooks/useAdminStatus";
 import { toast } from "sonner";
 
 const CommunityPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const { isAdmin, isLoading: isAdminLoading } = useAdminStatus();
   const [showCMS, setShowCMS] = useState<boolean>(false);
   const [currentEvents, setCurrentEvents] = useState(forumEvents);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -31,17 +31,7 @@ const CommunityPage = () => {
   useEffect(() => {
     const checkLoginStatus = () => {
       const userString = localStorage.getItem("sanghos_user");
-      const mockLoggedIn = userString !== null;
-      setIsLoggedIn(mockLoggedIn);
-      
-      if (mockLoggedIn && userString) {
-        try {
-          const userData = JSON.parse(userString);
-          setIsAdmin(userData.isAdmin || userData.email === "admin@sanghos.com");
-        } catch (error) {
-          console.error("Error parsing user data:", error);
-        }
-      }
+      setIsLoggedIn(userString !== null);
     };
     
     checkLoginStatus();
@@ -59,7 +49,7 @@ const CommunityPage = () => {
     setShowCMS(!showCMS);
   };
 
-  if (isLoading) {
+  if (isLoading || isAdminLoading) {
     return (
       <CommunityLayout>
         <div className="container mx-auto px-4 text-center py-12">
