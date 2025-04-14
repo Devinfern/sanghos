@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Tabs,
   TabsContent,
@@ -10,15 +10,59 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { updateForumSpaces, updateForumPosts, updateForumEvents, updateTrendingPosts } from "@/lib/forumData";
+import { 
+  forumSpaces as initialForumSpaces, 
+  forumPosts as initialForumPosts, 
+  forumEvents as initialForumEvents, 
+  trendingPosts as initialTrendingPosts,
+  updateForumSpaces, 
+  updateForumPosts, 
+  updateForumEvents, 
+  updateTrendingPosts,
+  loadForumSpaces,
+  loadForumPosts,
+  loadForumEvents,
+  loadTrendingPosts
+} from "@/lib/forumData";
 import { SpacesTab } from "@/components/forum-cms/SpacesTab";
 import { PostsTab } from "@/components/forum-cms/PostsTab";
 import { EventsTab } from "@/components/forum-cms/EventsTab";
 import { TrendingTab } from "@/components/forum-cms/TrendingTab";
 
 const ForumCMS = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  
+  const [forumSpaces, setForumSpaces] = useState(initialForumSpaces);
+  const [forumPosts, setForumPosts] = useState(initialForumPosts);
+  const [forumEvents, setForumEvents] = useState(initialForumEvents);
+  const [trendingPosts, setTrendingPosts] = useState(initialTrendingPosts);
+
+  useEffect(() => {
+    const loadAllData = async () => {
+      try {
+        setIsLoading(true);
+        await Promise.all([
+          loadForumSpaces(),
+          loadForumPosts(),
+          loadForumEvents(),
+          loadTrendingPosts()
+        ]);
+        
+        setForumSpaces([...initialForumSpaces]);
+        setForumPosts([...initialForumPosts]);
+        setForumEvents([...initialForumEvents]);
+        setTrendingPosts([...initialTrendingPosts]);
+      } catch (error) {
+        console.error("Error loading forum data:", error);
+        toast.error("Failed to load forum data");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    loadAllData();
+  }, []);
 
   if (isLoading) {
     return (
