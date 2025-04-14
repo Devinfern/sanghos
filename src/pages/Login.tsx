@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -9,6 +10,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -30,16 +32,25 @@ const Login = () => {
     try {
       setIsLoading(true);
       
-      // Simulate API call with timeout
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // This is a mock login
-      // In a real app, you would verify credentials with your backend
-      
-      // For demo purposes, store a simple user object in localStorage
-      localStorage.setItem("sanghos_user", JSON.stringify({
+      // Sign in with Supabase auth
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email,
-        name: email.split('@')[0]
+        password,
+      });
+
+      if (signInError) {
+        console.error("Login error:", signInError);
+        throw new Error(signInError.message);
+      }
+
+      if (!data.user) {
+        throw new Error("No user returned from login");
+      }
+
+      // Store basic user info in localStorage for demo/compatibility
+      localStorage.setItem("sanghos_user", JSON.stringify({
+        email: data.user.email,
+        name: data.user.email?.split('@')[0] || 'User'
       }));
       
       toast.success("Login successful!");
@@ -47,6 +58,7 @@ const Login = () => {
       // Redirect to dashboard instead of home page
       navigate("/dashboard");
     } catch (err) {
+      console.error(err);
       setError("Invalid email or password");
     } finally {
       setIsLoading(false);
@@ -73,7 +85,7 @@ const Login = () => {
             {error && (
               <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
                 <strong className="font-bold">Error!</strong>
-                <span className="block sm:inline">{error}</span>
+                <span className="block sm:inline"> {error}</span>
               </div>
             )}
             <form onSubmit={handleSubmit} className="space-y-4">

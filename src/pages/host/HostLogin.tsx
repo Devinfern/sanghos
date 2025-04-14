@@ -6,15 +6,33 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight } from "lucide-react";
 import HostHeader from "@/components/HostHeader";
+import { supabase } from "@/integrations/supabase/client";
 
 const HostLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const { host, login, isLoading } = useHost();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await login(email, password);
+    setError("");
+    
+    try {
+      // First, authenticate with Supabase
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+      
+      if (authError) throw new Error(authError.message);
+      
+      // If authentication succeeded, proceed with the host login
+      await login(email, password);
+    } catch (err) {
+      console.error("Login error:", err);
+      setError(err instanceof Error ? err.message : "Invalid email or password");
+    }
   };
 
   // Redirect if already logged in
@@ -35,6 +53,12 @@ const HostLogin = () => {
           </div>
 
           <div className="bg-white shadow-lg rounded-lg p-8">
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                <span className="block">{error}</span>
+              </div>
+            )}
+            
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <label htmlFor="email" className="text-sm font-medium">

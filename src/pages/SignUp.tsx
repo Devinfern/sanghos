@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -37,34 +38,24 @@ const SignUp = () => {
     try {
       setIsLoading(true);
       
-      // Simulate API call with timeout
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // In a real app, you would register the user with Supabase Auth
-      // For demo, we're simulating this
-      
-      // Send welcome email with credentials
-      try {
-        const emailResponse = await supabase.functions.invoke('send-welcome-email', {
-          body: {
-            name,
-            email,
-            password // Note: In a production app, you might not want to send the password in plain text
+      // Sign up with Supabase auth
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: name,
+            username: email.split('@')[0]
           }
-        });
-        
-        if (emailResponse.error) {
-          console.error("Error sending welcome email:", emailResponse.error);
-          // Continue with signup even if email fails
-        } else {
-          console.log("Welcome email sent successfully");
         }
-      } catch (emailError) {
-        console.error("Error invoking send-welcome-email function:", emailError);
-        // Continue with signup even if email fails
+      });
+
+      if (signUpError) {
+        console.error("Sign up error:", signUpError);
+        throw new Error(signUpError.message);
       }
       
-      // Store user in localStorage for demo
+      // Store user in localStorage for demo/compatibility
       localStorage.setItem("sanghos_user", JSON.stringify({
         email,
         name,
@@ -73,10 +64,15 @@ const SignUp = () => {
       
       toast.success("Account created successfully! Check your email for login details.");
       
-      // Redirect to onboarding page instead of login
+      // Redirect to onboarding page 
       navigate("/onboarding");
     } catch (err) {
-      setError("An error occurred while creating your account");
+      console.error(err);
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An error occurred while creating your account");
+      }
     } finally {
       setIsLoading(false);
     }
