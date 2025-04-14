@@ -22,3 +22,4 @@ const CommunityManagement = ({ onBack }: CommunityManagementProps) => {
 };
 
 export default CommunityManagement;
+

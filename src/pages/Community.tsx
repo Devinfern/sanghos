@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { forumEvents, trendingPosts, loadForumEvents, loadTrendingPosts } from "@/lib/forumData";
 import CommunityLayout from "@/components/layouts/CommunityLayout";
@@ -87,3 +88,4 @@ const CommunityPage = () => {
 };
 
 export default CommunityPage;
+
