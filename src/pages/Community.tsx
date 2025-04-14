@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate, Link } from "react-router-dom";
@@ -40,8 +41,11 @@ import CommunityNavigation from "@/components/community/CommunityNavigation";
 import CommunityStats from "@/components/community/CommunityStats";
 import CommunityDiscussions from "@/components/community/CommunityDiscussions";
 import CommunityEvents from "@/components/community/CommunityEvents";
+import CommunityEventsPage from "@/components/community/CommunityEventsPage";
 import CommunityResources from "@/components/community/CommunityResources";
+import CommunityResourcesPage from "@/components/community/CommunityResourcesPage";
 import CommunityMembers from "@/components/community/CommunityMembers";
+import CommunityMembersPage from "@/components/community/CommunityMembersPage";
 
 const CommunityPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
