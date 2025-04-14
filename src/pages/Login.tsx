@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -20,25 +19,36 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [connectionStatus, setConnectionStatus] = useState<"checking" | "connected" | "error">("checking");
+  const [connectionStatus, setConnectionStatus] = useState<"checking" | "connected" | "error" | "project_not_found">("checking");
+  const [projectDetails, setProjectDetails] = useState({
+    url: supabase.supabaseUrl,
+    key: supabase.supabaseKey.substring(0, 10) + '...'
+  });
 
-  // Check Supabase connection status on component mount
   useEffect(() => {
     const checkConnection = async () => {
       try {
-        // Simple health check query to verify connection
         const { error } = await supabase.from('forum_posts').select('count', { count: 'exact', head: true });
         
-        if (error && (error.message.includes("connection") || error.message.includes("network") || error.message.includes("fetch"))) {
-          setConnectionStatus("error");
-          setError("Unable to connect to Supabase. Please check your internet connection or the project may not exist.");
+        if (error) {
+          console.error("Supabase connection error:", error);
+          if (error.message.includes("The resource was not found") || error.message.includes("does not exist")) {
+            setConnectionStatus("project_not_found");
+            setError("The Supabase project does not exist or is no longer accessible. Please check your project configuration.");
+          } else if (error.message.includes("connection") || error.message.includes("network") || error.message.includes("fetch")) {
+            setConnectionStatus("error");
+            setError("Unable to connect to Supabase. Please check your internet connection.");
+          } else {
+            setConnectionStatus("error");
+            setError(error.message);
+          }
         } else {
           setConnectionStatus("connected");
         }
       } catch (err) {
         console.error("Supabase connection error:", err);
         setConnectionStatus("error");
-        setError("Unable to establish a connection to the database. The project may not exist or be accessible.");
+        setError("Unable to establish a connection to the database.");
       }
     };
 
@@ -62,7 +72,6 @@ const Login = () => {
     try {
       setIsLoading(true);
       
-      // Sign in with Supabase auth
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -77,7 +86,6 @@ const Login = () => {
         throw new Error("No user returned from login");
       }
 
-      // Store basic user info in localStorage for demo/compatibility
       localStorage.setItem("sanghos_user", JSON.stringify({
         email: data.user.email,
         name: data.user.email?.split('@')[0] || 'User'
@@ -85,12 +93,10 @@ const Login = () => {
       
       toast.success("Login successful!");
       
-      // Redirect to dashboard instead of home page
       navigate("/dashboard");
     } catch (err) {
       console.error(err);
       if (err instanceof Error) {
-        // Provide more specific error messages
         if (err.message.includes("Email not confirmed")) {
           setError("Your email has not been confirmed. Please check your inbox for a confirmation email.");
         } else if (err.message.includes("Invalid login credentials")) {
@@ -107,7 +113,7 @@ const Login = () => {
       setIsLoading(false);
     }
   };
-  
+
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -139,12 +145,21 @@ const Login = () => {
               <Alert variant="destructive" className="mb-4">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                  Database connection error. The Supabase project may no longer exist or be accessible. Please check your project configuration.
+                  Database connection error. {error}
                 </AlertDescription>
               </Alert>
             )}
             
-            {error && (
+            {connectionStatus === "project_not_found" && (
+              <Alert variant="destructive" className="mb-4">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>
+                  The Supabase project does not exist. Please check your project configuration.
+                </AlertDescription>
+              </Alert>
+            )}
+            
+            {error && connectionStatus !== "error" && connectionStatus !== "project_not_found" && (
               <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
                 <strong className="font-bold">Error!</strong>
                 <span className="block sm:inline"> {error}</span>
@@ -192,7 +207,7 @@ const Login = () => {
               <Button 
                 type="submit" 
                 className="w-full" 
-                disabled={isLoading || connectionStatus === "error" || connectionStatus === "checking"}
+                disabled={isLoading || connectionStatus === "error" || connectionStatus === "checking" || connectionStatus === "project_not_found"}
               >
                 {isLoading ? "Logging in..." : connectionStatus === "checking" ? "Checking connection..." : "Login"}
               </Button>
@@ -203,16 +218,17 @@ const Login = () => {
               </Link>
             </div>
             
-            {connectionStatus === "error" && (
-              <div className="mt-4 text-center">
-                <p className="text-sm text-muted-foreground">
-                  If you're a developer, please check if:
-                </p>
-                <ul className="text-sm text-muted-foreground list-disc list-inside text-left mt-2">
-                  <li>The Supabase project still exists</li>
-                  <li>The project reference in your code is correct</li>
-                  <li>Your API keys haven't expired</li>
+            {(connectionStatus === "error" || connectionStatus === "project_not_found") && (
+              <div className="mt-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <h3 className="text-sm font-medium mb-2">Supabase Project Information</h3>
+                <ul className="text-xs text-muted-foreground space-y-1">
+                  <li><span className="font-medium">Project URL:</span> {projectDetails.url}</li>
+                  <li><span className="font-medium">API Key:</span> {projectDetails.key}</li>
                 </ul>
+                <div className="mt-3 text-xs text-muted-foreground">
+                  <p>If you've created a new Supabase project, you need to update these values in:</p>
+                  <code className="bg-gray-100 p-1 text-xs rounded">src/integrations/supabase/client.ts</code>
+                </div>
               </div>
             )}
           </div>
