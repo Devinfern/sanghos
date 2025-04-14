@@ -35,15 +35,22 @@ import {
 import ForumPostEditor from "@/components/ForumPostEditor";
 import ForumCMS from "@/components/ForumCMS";
 import { ForumPost } from "@/lib/forumData";
+import CommunityHero from "@/components/community/CommunityHero";
+import CommunityNavigation from "@/components/community/CommunityNavigation";
+import CommunityStats from "@/components/community/CommunityStats";
+import CommunityDiscussions from "@/components/community/CommunityDiscussions";
+import CommunityEvents from "@/components/community/CommunityEvents";
+import CommunityResources from "@/components/community/CommunityResources";
+import CommunityMembers from "@/components/community/CommunityMembers";
 
 const CommunityPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const [newPostContent, setNewPostContent] = useState<string>("");
   const [posts, setPosts] = useState<ForumPost[]>(initialPosts);
   const [showCMS, setShowCMS] = useState<boolean>(false);
   const [currentEvents, setCurrentEvents] = useState(forumEvents);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [activeSection, setActiveSection] = useState("discussions");
   const navigate = useNavigate();
 
   // Load data from Supabase on component mount
@@ -89,67 +96,11 @@ const CommunityPage = () => {
     setCurrentEvents(forumEvents);
   }, [forumEvents]);
 
-  const handlePostSubmit = async () => {
-    if (!isLoggedIn) {
-      toast.error("You need to be logged in to post");
-      navigate("/login");
-      return;
-    }
-    
-    if (!newPostContent.trim()) {
-      toast.error("Please enter some content for your post");
-      return;
-    }
-    
-    const newPost: ForumPost = {
-      id: Date.now(),
-      author: {
-        name: "You",
-        role: "Member",
-        avatar: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-      },
-      postedIn: "Open Conversation",
-      timeAgo: "just now",
-      title: "Quick post",
-      content: newPostContent,
-      likes: 0,
-      comments: 0,
-      bookmarked: false
-    };
-    
+  const handlePostCreated = async (newPost: ForumPost) => {
     const updatedPosts = [newPost, ...posts];
     setPosts(updatedPosts);
     await updateForumPosts(updatedPosts);
     toast.success("Post created successfully!");
-    setNewPostContent("");
-  };
-
-  const handleNewPostCreated = async (newPost: Partial<ForumPost>) => {
-    if (!isLoggedIn) {
-      toast.error("You need to be logged in to post");
-      navigate("/login");
-      return;
-    }
-    
-    const fullPost: ForumPost = {
-      id: Date.now(),
-      author: {
-        name: "You",
-        role: "Member",
-        avatar: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-      },
-      postedIn: newPost.postedIn || "Open Conversation",
-      timeAgo: "just now",
-      title: newPost.title || "Untitled",
-      content: newPost.content || "",
-      likes: 0,
-      comments: 0,
-      bookmarked: false
-    };
-    
-    const updatedPosts = [fullPost, ...posts];
-    setPosts(updatedPosts);
-    await updateForumPosts(updatedPosts);
   };
 
   const toggleCMS = () => {
@@ -158,10 +109,6 @@ const CommunityPage = () => {
       return;
     }
     setShowCMS(!showCMS);
-  };
-
-  const handleLogin = () => {
-    navigate("/login");
   };
 
   if (showCMS && isAdmin) {
@@ -186,23 +133,6 @@ const CommunityPage = () => {
       </>
     );
   }
-
-  const renderSpaceIcon = (iconName: string) => {
-    switch (iconName) {
-      case "MessageSquare":
-        return <MessageSquare className="h-4 w-4 mr-2 text-muted-foreground" />;
-      case "Calendar":
-        return <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />;
-      case "Users":
-        return <Users className="h-4 w-4 mr-2 text-muted-foreground" />;
-      default:
-        return <MessageSquare className="h-4 w-4 mr-2 text-muted-foreground" />;
-    }
-  };
-
-  const createSlug = (text: string) => {
-    return text.toLowerCase().replace(/\s+/g, '-');
-  };
 
   if (isLoading) {
     return (
@@ -229,202 +159,47 @@ const CommunityPage = () => {
         <meta name="description" content="Join our community for discussions, events, and more" />
       </Helmet>
 
-      <Header />
-
       <main className="pt-24 pb-16 min-h-screen bg-gradient-to-b from-brand-subtle/20 to-white">
+        <CommunityHero />
+        <CommunityStats />
+        
         <div className="container px-4 md:px-6 mx-auto">
-          {!isLoggedIn && (
-            <div className="mb-8 bg-white p-6 rounded-lg shadow-sm border border-brand-subtle/30">
-              <h2 className="text-xl font-semibold mb-2 text-brand-dark">Join Our Community</h2>
-              <p className="mb-4 text-brand-slate">To participate in discussions, create posts, and interact with our community, please sign in or create an account.</p>
-              <div className="flex gap-3">
-                <Button onClick={handleLogin} className="bg-brand-primary hover:bg-brand-primary/90 text-white">
-                  Sign In
-                </Button>
-                <Button variant="outline" onClick={() => navigate("/join")} className="border-brand-primary text-brand-primary hover:bg-brand-primary/5">
-                  Join Sanghos
-                </Button>
-              </div>
-            </div>
-          )}
-          
+          <div className="mb-8">
+            <CommunityNavigation 
+              activeSection={activeSection} 
+              onSectionChange={setActiveSection} 
+            />
+          </div>
+
           <div className="flex flex-col lg:flex-row gap-6">
             <div className="lg:w-64 w-full shrink-0">
               <div className="sticky top-24 space-y-8">
-                <div className="bg-white rounded-lg shadow-sm p-4 border border-brand-subtle/30">
-                  <h3 className="font-semibold text-lg mb-4 text-brand-dark">Spaces</h3>
-                  
-                  <div className="space-y-4">
-                    {forumSpaces.map((category, index) => (
-                      <div key={index} className="space-y-2">
-                        <h4 className="text-sm font-medium text-brand-slate">{category.name}</h4>
-                        <div className="space-y-1">
-                          {category.spaces.map((space, spaceIndex) => (
-                            <Link 
-                              key={spaceIndex}
-                              to={`/community/space/${createSlug(space.name)}`}
-                              className="flex items-center justify-between rounded-md p-2 hover:bg-brand-subtle/10"
-                            >
-                              <div className="flex items-center">
-                                {renderSpaceIcon(space.icon)}
-                                <span className="text-sm text-brand-slate">{space.name}</span>
-                              </div>
-                              {space.count !== null && (
-                                <span className="text-xs text-brand-slate">{space.count}</span>
-                              )}
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <CommunityResources />
               </div>
             </div>
 
             <div className="flex-1">
               <div className="mb-6 flex justify-between items-center">
                 <h1 className="text-2xl font-bold text-brand-dark">Feed</h1>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium mr-2 text-brand-slate">Latest</span>
-                  <ChevronDown className="h-4 w-4 text-brand-slate" />
-                  {isAdmin && (
-                    <Button variant="outline" onClick={toggleCMS} className="border-brand-primary text-brand-primary hover:bg-brand-primary/5">
-                      <Settings className="h-4 w-4 mr-2" />
-                      Manage Content
-                    </Button>
-                  )}
-                  <ForumPostEditor 
-                    onPostCreated={handleNewPostCreated}
-                    buttonLabel="New post"
-                  />
-                </div>
+                {isAdmin && (
+                  <Button variant="outline" onClick={toggleCMS} className="border-brand-primary text-brand-primary hover:bg-brand-primary/5">
+                    <Settings className="h-4 w-4 mr-2" />
+                    Manage Content
+                  </Button>
+                )}
               </div>
 
-              {isLoggedIn && (
-                <Card className="p-4 mb-6 border border-brand-subtle/30 shadow-sm">
-                  <div className="flex gap-3">
-                    <Avatar className="h-10 w-10">
-                      <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="User" />
-                    </Avatar>
-                    <div className="flex-1">
-                      <Textarea 
-                        placeholder="Start a post" 
-                        className="resize-none mb-3 border-brand-subtle/50 focus:border-brand-primary"
-                        value={newPostContent}
-                        onChange={(e) => setNewPostContent(e.target.value)}
-                      />
-                      <div className="flex justify-end">
-                        <Button 
-                          size="sm" 
-                          onClick={handlePostSubmit}
-                          disabled={!newPostContent.trim()}
-                          className="bg-brand-primary hover:bg-brand-primary/90 text-white"
-                        >
-                          <Plus className="h-4 w-4 mr-1" />
-                          Post
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              )}
-
-              <div className="space-y-6">
-                {posts.map((post) => (
-                  <Card key={post.id} className="overflow-hidden border border-brand-subtle/30 shadow-sm">
-                    <div className="p-4">
-                      <div className="flex justify-between items-start mb-3">
-                        <div className="flex items-center gap-3">
-                          <Avatar className="h-10 w-10">
-                            <img src={post.author.avatar} alt={post.author.name} />
-                          </Avatar>
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <span className="font-medium text-brand-dark">{post.author.name}</span>
-                              <span className="text-xs px-2 py-1 bg-brand-subtle/20 rounded-full text-brand-slate">{post.author.role}</span>
-                              {post.author.tag && (
-                                <span className="text-xs px-2 py-1 bg-brand-peach/20 rounded-full text-brand-slate">{post.author.tag}</span>
-                              )}
-                            </div>
-                            <div className="text-xs text-brand-slate">
-                              Posted in {post.postedIn} · {post.timeAgo}
-                            </div>
-                          </div>
-                        </div>
-                        <Button variant="ghost" size="icon" className="text-brand-slate hover:text-brand-dark hover:bg-brand-subtle/10">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      
-                      <h2 className="text-xl font-semibold mb-2 text-brand-dark">{post.title}</h2>
-                      <div className="text-sm mb-3 whitespace-pre-line text-brand-slate">
-                        {post.content}
-                        <button className="text-brand-primary hover:underline block mt-1">See more</button>
-                      </div>
-
-                      <div className="pt-4 flex justify-between items-center border-t border-brand-subtle/30">
-                        <div className="flex items-center gap-4">
-                          <button className="flex items-center gap-1 text-sm text-brand-slate hover:text-brand-primary" 
-                                  onClick={() => !isLoggedIn ? toast.error("Please log in to like posts") : null}>
-                            <Heart className="h-4 w-4" /> {post.likes}
-                          </button>
-                          <button className="flex items-center gap-1 text-sm text-brand-slate hover:text-brand-primary"
-                                  onClick={() => !isLoggedIn ? toast.error("Please log in to comment") : null}>
-                            <MessageCircle className="h-4 w-4" /> {post.comments}
-                          </button>
-                        </div>
-                        <button className={`${post.bookmarked ? 'text-brand-primary' : 'text-brand-slate'} hover:text-brand-primary`}
-                                onClick={() => !isLoggedIn ? toast.error("Please log in to bookmark posts") : null}>
-                          <Bookmark className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </div>
-                  </Card>
-                ))}
-              </div>
+              <CommunityDiscussions 
+                posts={posts}
+                isLoggedIn={isLoggedIn}
+                onPostCreated={handlePostCreated}
+              />
             </div>
 
             <div className="lg:w-80 w-full shrink-0">
               <div className="sticky top-24 space-y-6">
-                <Card className="overflow-hidden border border-brand-subtle/30 shadow-sm">
-                  <div className="p-4 border-b border-brand-subtle/30 bg-brand-subtle/10">
-                    <h3 className="font-semibold text-brand-dark">Upcoming events</h3>
-                  </div>
-                  <div className="divide-y divide-brand-subtle/30">
-                    {currentEvents.map((event) => (
-                      <div key={event.id} className="p-4 flex gap-3 hover:bg-brand-subtle/5 transition-colors">
-                        <div className="text-center w-12 bg-brand-peach/10 rounded-md p-1">
-                          <div className="text-lg font-bold text-brand-primary">{event.date.day}</div>
-                          <div className="text-xs text-brand-slate">{event.date.month}</div>
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-medium text-brand-dark">{event.title}</h4>
-                          <p className="text-xs text-brand-slate mt-1">{event.time}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </Card>
-
-                <Card className="overflow-hidden border border-brand-subtle/30 shadow-sm">
-                  <div className="p-4 border-b border-brand-subtle/30 bg-brand-subtle/10">
-                    <h3 className="font-semibold text-brand-dark">Trending Posts</h3>
-                  </div>
-                  <div className="divide-y divide-brand-subtle/30">
-                    {trendingPosts.map((post) => (
-                      <div key={post.id} className="p-4 flex items-center gap-3 hover:bg-brand-subtle/5 transition-colors">
-                        <Avatar className="h-10 w-10 border-2 border-brand-subtle/30">
-                          <img src={post.avatar} alt={post.author} />
-                        </Avatar>
-                        <div>
-                          <h4 className="text-sm font-medium text-brand-dark">{post.title}</h4>
-                          <p className="text-xs text-brand-slate">{post.author}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </Card>
+                <CommunityEvents events={currentEvents} />
+                <CommunityMembers trendingPosts={trendingPosts} />
               </div>
             </div>
           </div>
