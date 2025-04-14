@@ -27,7 +27,7 @@ const CommunityDiscussions = ({ isLoggedIn }: CommunityDiscussionsProps) => {
           .from('community_posts')
           .select(`
             *,
-            user_profiles:user_id (
+            user_profiles(
               username,
               avatar_url,
               is_wellness_practitioner

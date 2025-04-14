@@ -9,21 +9,24 @@ import { toast } from "sonner";
 import { formatDistanceToNow } from 'date-fns';
 import { supabase } from "@/integrations/supabase/client";
 
+interface User {
+  username: string;
+  avatar_url: string;
+  is_wellness_practitioner: boolean;
+}
+
 interface CommunityPostProps {
   post: {
     id: string;
     title: string;
     content: string;
-    author: {
-      username: string;
-      avatar_url: string;
-      is_wellness_practitioner: boolean;
-    };
+    user_id: string;
     created_at: string;
     likes: number;
     category: string;
+    user_profiles?: User;
   };
-  currentUserId?: string;
+  currentUserId?: string | null;
   onPostUpdate?: () => void;
 }
 
@@ -31,6 +34,13 @@ const CommunityPost = ({ post, currentUserId, onPostUpdate }: CommunityPostProps
   const [isLiked, setIsLiked] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [comment, setComment] = useState("");
+  
+  // Extract user info from the user_profiles relation or use defaults
+  const author = post.user_profiles || {
+    username: "Anonymous User",
+    avatar_url: null,
+    is_wellness_practitioner: false
+  };
 
   const handleLike = async () => {
     if (!currentUserId) {
@@ -91,12 +101,12 @@ const CommunityPost = ({ post, currentUserId, onPostUpdate }: CommunityPostProps
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <Avatar className="h-10 w-10">
-            <img src={post.author.avatar_url || '/placeholder.svg'} alt={post.author.username} />
+            <img src={author.avatar_url || '/placeholder.svg'} alt={author.username} />
           </Avatar>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-medium">{post.author.username}</span>
-              {post.author.is_wellness_practitioner && (
+              <span className="font-medium">{author.username}</span>
+              {author.is_wellness_practitioner && (
                 <span className="text-xs px-2 py-1 bg-brand-peach/20 rounded-full">
                   Wellness Practitioner
                 </span>

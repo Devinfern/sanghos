@@ -29,13 +29,23 @@ const CreatePost = ({ onPostCreated }: CreatePostProps) => {
     setIsSubmitting(true);
 
     try {
+      // First get the current user session
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session?.user.id) {
+        toast.error("You must be logged in to create posts");
+        setIsSubmitting(false);
+        return;
+      }
+      
       const { error } = await supabase
         .from('community_posts')
         .insert([
           {
             title,
             content,
-            category
+            category,
+            user_id: session.user.id
           }
         ]);
 
