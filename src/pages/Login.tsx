@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -21,8 +22,8 @@ const Login = () => {
   const [error, setError] = useState("");
   const [connectionStatus, setConnectionStatus] = useState<"checking" | "connected" | "error" | "project_not_found">("checking");
   const [projectDetails, setProjectDetails] = useState({
-    url: supabase.supabaseUrl,
-    key: supabase.supabaseKey.substring(0, 10) + '...'
+    url: "https://raijubzrdhwizxtupguy.supabase.co",
+    key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....[truncated]"
   });
 
   useEffect(() => {
