@@ -12,6 +12,7 @@ export const useAdminStatus = () => {
         const { data: session } = await supabase.auth.getSession();
         if (!session.session?.user?.email) {
           setIsAdmin(false);
+          setIsLoading(false);
           return;
         }
 
@@ -19,15 +20,14 @@ export const useAdminStatus = () => {
           .from('admin_users')
           .select('email')
           .eq('email', session.session.user.email)
-          .single();
+          .maybeSingle();
 
         if (error) {
           console.error('Error checking admin status:', error);
           setIsAdmin(false);
-          return;
+        } else {
+          setIsAdmin(!!data);
         }
-
-        setIsAdmin(!!data);
       } catch (error) {
         console.error('Error checking admin status:', error);
         setIsAdmin(false);
@@ -38,7 +38,6 @@ export const useAdminStatus = () => {
 
     checkAdminStatus();
 
-    // Subscribe to auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
       checkAdminStatus();
     });
@@ -50,4 +49,3 @@ export const useAdminStatus = () => {
 
   return { isAdmin, isLoading };
 };
-
