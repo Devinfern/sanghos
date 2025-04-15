@@ -38,9 +38,9 @@ const SignUp = () => {
     try {
       setIsLoading(true);
       
-      // Sign up with Supabase auth
+      // Sign up with Supabase auth - ensure email is used exactly as entered
       const { data, error: signUpError } = await supabase.auth.signUp({
-        email,
+        email: email.trim(),
         password,
         options: {
           data: {
@@ -55,9 +55,9 @@ const SignUp = () => {
         throw new Error(signUpError.message);
       }
       
-      // Store user in localStorage for demo/compatibility
+      // Store user in localStorage with the exact email entered
       localStorage.setItem("sanghos_user", JSON.stringify({
-        email,
+        email: email.trim(),
         name,
         onboarded: false
       }));
