@@ -33,15 +33,13 @@ const UserDashboard = () => {
         // Try to fetch user profile from the user_profiles table
         const { data: profile, error } = await supabase
           .from('user_profiles')
-          .select('*')
+          .select('*, full_name, username')
           .eq('id', session.user.id)
           .single();
 
         // If there's an error with the user_profiles table, create a default user object
-        // This handles cases where the table doesn't exist yet
         if (error) {
           console.error("Error fetching user profile:", error);
-          // Instead of showing error toast, create default profile
           setUserData({
             name: session.user.email?.split('@')[0] || 'User',
             email: session.user.email,
@@ -52,12 +50,13 @@ const UserDashboard = () => {
           });
         } else {
           setUserData({
-            name: profile?.full_name || session.user.email?.split('@')[0] || 'User',
+            name: profile.full_name || profile.username || session.user.email?.split('@')[0] || 'User',
             email: session.user.email,
-            joinDate: profile?.created_at || new Date().toISOString(),
+            joinDate: profile.created_at || new Date().toISOString(),
             membershipStatus: "active",
             completedRetreats: 0,
-            points: 0
+            points: 0,
+            avatar: profile.avatar_url // Added avatar support
           });
         }
 
@@ -123,9 +122,19 @@ const UserDashboard = () => {
       <main className="pt-24 pb-16">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">Welcome back, {userData.name}</h1>
-              <p className="text-muted-foreground">Track your wellness journey and upcoming experiences</p>
+            <div className="flex items-center space-x-4">
+              {/* Optional avatar display */}
+              {userData.avatar && (
+                <img 
+                  src={userData.avatar} 
+                  alt={`${userData.name}'s avatar`} 
+                  className="w-16 h-16 rounded-full object-cover"
+                />
+              )}
+              <div>
+                <h1 className="text-3xl font-bold mb-2">Welcome back, {userData.name}</h1>
+                <p className="text-muted-foreground">Track your wellness journey and upcoming experiences</p>
+              </div>
             </div>
             <div className="mt-4 md:mt-0 flex items-center space-x-2">
               <Badge variant="outline" className="text-sm">
