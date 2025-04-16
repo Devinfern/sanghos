@@ -85,7 +85,7 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
         if (spacesError) throw new Error(`Error fetching spaces: ${spacesError.message}`);
 
         // Transform spaces data to match ForumSpace type
-        const transformedSpaces: ForumSpace[] = spacesData ? (spacesData as SupabaseForumSpace[]).map(space => ({
+        const transformedSpaces: ForumSpace[] = spacesData ? spacesData.map(space => ({
           id: space.id,
           name: space.name,
           description: space.description || '',
@@ -128,7 +128,7 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
         if (postsError) throw new Error(`Error fetching posts: ${postsError.message}`);
 
         // Transform posts data
-        const transformedPosts: ForumPost[] = postsData ? (postsData as SupabaseForumPost[]).map(post => {
+        const transformedPosts: ForumPost[] = postsData ? postsData.map(post => {
           const userProfile = post.user_profiles || {
             username: undefined,
             avatar_url: undefined,

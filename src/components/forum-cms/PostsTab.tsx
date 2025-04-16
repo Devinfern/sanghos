@@ -17,17 +17,13 @@ export const PostsTab = () => {
   const [postDialogOpen, setPostDialogOpen] = useState(false);
 
   const handleEditPost = (post: ForumPost) => {
-    const typedPost = {
-      ...post,
-      id: typeof post.id === 'string' ? parseInt(post.id) : post.id
-    };
-    setEditingPost(typedPost);
+    setEditingPost({...post});
     setPostDialogOpen(true);
   };
 
   const handleAddPost = () => {
     setEditingPost({
-      id: Date.now(),
+      id: String(Date.now()), // Convert to string for compatibility
       author: {
         name: "Admin",
         role: "Admin",
@@ -67,12 +63,8 @@ export const PostsTab = () => {
     toast.success(postIndex === -1 ? "Post added successfully" : "Post updated successfully");
   };
 
-  const handleDeletePost = (postId: string | number) => {
-    const idToDelete = typeof postId === 'string' ? postId : postId;
-    const newPosts = posts.filter(p => {
-      const currentId = p.id;
-      return currentId !== idToDelete;
-    });
+  const handleDeletePost = (postId: string) => {
+    const newPosts = posts.filter(p => p.id !== postId);
     
     setPosts(newPosts);
     updateForumPosts(newPosts);
