@@ -1,12 +1,12 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "./ui/spinner";
 import { toast } from "sonner";
 import { retreats } from "@/lib/data";
+import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 
 // Type for retreat recommendation
 interface RetreatRecommendation {
@@ -22,6 +22,15 @@ export default function WellnessJournal() {
   const [recommendations, setRecommendations] = useState<RetreatRecommendation[]>([]);
   const [isJournalSubmitted, setIsJournalSubmitted] = useState(false);
   const navigate = useNavigate();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setJournalEntry(e.target.value);
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await analyzeJournal();
+  };
 
   const analyzeJournal = async () => {
     if (journalEntry.trim().length < 20) {
@@ -127,6 +136,15 @@ export default function WellnessJournal() {
     navigate(`/retreat/${retreatId}`);
   };
 
+  // Wellness journal placeholders
+  const journalPlaceholders = [
+    "How are you feeling today?",
+    "What's been on your mind lately?",
+    "What kind of wellness experience are you seeking?",
+    "Describe your ideal retreat experience...",
+    "What aspects of wellness do you want to focus on?"
+  ];
+
   return (
     <Card className="w-full max-w-3xl mx-auto bg-white border-brand-subtle/30 shadow-md">
       <CardHeader>
@@ -140,25 +158,28 @@ export default function WellnessJournal() {
       <CardContent>
         {!isJournalSubmitted ? (
           <div className="space-y-4">
-            <Textarea
-              placeholder="How are you feeling today? What's on your mind? What kind of wellness experience are you seeking?"
-              value={journalEntry}
-              onChange={(e) => setJournalEntry(e.target.value)}
-              className="min-h-[200px] p-4 text-brand-dark"
-            />
-            <Button 
-              onClick={analyzeJournal}
-              disabled={isAnalyzing || journalEntry.length < 20}
-              className="w-full bg-brand-primary hover:bg-brand-primary/90"
-            >
-              {isAnalyzing ? (
-                <>
-                  <Spinner className="mr-2" /> Analyzing...
-                </>
-              ) : (
-                "Get Personalized Retreat Recommendations"
-              )}
-            </Button>
+            {isAnalyzing ? (
+              <div className="min-h-[200px] flex items-center justify-center">
+                <div className="text-center">
+                  <Spinner className="mx-auto mb-4 h-8 w-8" />
+                  <p className="text-muted-foreground">Analyzing your journal entry...</p>
+                </div>
+              </div>
+            ) : (
+              <PlaceholdersAndVanishInput 
+                placeholders={journalPlaceholders}
+                onChange={handleInputChange}
+                onSubmit={handleFormSubmit}
+              />
+            )}
+            {journalEntry.length > 0 && !isAnalyzing && (
+              <Button 
+                onClick={() => analyzeJournal()}
+                className="w-full bg-brand-primary hover:bg-brand-primary/90"
+              >
+                Get Personalized Retreat Recommendations
+              </Button>
+            )}
           </div>
         ) : (
           <div className="space-y-6">

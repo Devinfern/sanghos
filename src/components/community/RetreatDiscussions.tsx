@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -56,6 +55,24 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
     if (!a.isPinned && b.isPinned) return 1;
     return 0;
   });
+
+  const handleVoteLike = async (postId: string | number) => {
+    // Find the post and update its likes count
+    const updatedPosts = posts.map(post => {
+      if (String(post.id) === String(postId)) {
+        return {
+          ...post,
+          likes: post.likes + 1
+        };
+      }
+      return post;
+    });
+    setPosts(updatedPosts);
+    
+    // Mock API call to update vote count
+    await new Promise(resolve => setTimeout(resolve, 300));
+    toast.success("Vote recorded");
+  };
 
   if (isLoading) {
     return (
