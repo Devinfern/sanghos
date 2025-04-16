@@ -162,7 +162,9 @@ const router = createBrowserRouter([
     path: "*",
     element: <NotFound />
   }
-]);
+], {
+  basename: "/"
+});
 
 function App() {
   return (
