@@ -1,4 +1,3 @@
-
 import { Helmet } from "react-helmet";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
@@ -31,8 +30,8 @@ const Index = () => {
       <AIWellnessSection />
       <HowItWorks />
 
-      {/* Featured Instructors */}
-      <section className="py-16 md:py-24 bg-white">
+      {/* Commented out Featured Instructors section */}
+      {/* <section className="py-16 md:py-24 bg-white">
         <div className="container px-4 md:px-6">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-5xl font-playfair font-light mb-6 text-brand-dark">
@@ -76,7 +75,7 @@ const Index = () => {
             </Button>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <JoinCommunity />
       <Footer />
