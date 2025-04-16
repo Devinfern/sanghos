@@ -10,6 +10,7 @@ import { useRetreatCommunity } from "@/hooks/useRetreatCommunity";
 import CommunityPost from "./CommunityPost";
 import CreatePost from "./CreatePost";
 import CommunitySearchFilter from "./CommunitySearchFilter";
+import { ForumPost } from "@/lib/forumData";
 
 interface RetreatDiscussionsProps {
   retreatId?: string;
@@ -137,7 +138,7 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
 
       {sortedPosts.length > 0 ? (
         <div className="space-y-4">
-          {sortedPosts.map((post) => (
+          {sortedPosts.map((post: ForumPost) => (
             <div key={post.id} className="relative">
               {post.isPinned && (
                 <Badge className="absolute -top-2 -right-2 bg-brand-primary z-10">

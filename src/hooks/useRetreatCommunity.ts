@@ -3,6 +3,46 @@ import { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import { ForumSpace, ForumPost } from "@/lib/forumData";
 
+// Define types for Supabase forum space data
+type SupabaseForumSpace = {
+  id: string;
+  name: string;
+  description?: string;
+  category: string;
+  icon: string;
+  count?: number;
+  retreat_id?: string;
+  is_pre_retreat?: boolean;
+  is_post_retreat?: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+// Define types for Supabase forum post data
+type SupabaseForumPost = {
+  id: string;
+  title: string;
+  content: string;
+  posted_in: string;
+  likes: number;
+  comments: number;
+  bookmarked: boolean;
+  author_name: string;
+  author_role: string;
+  author_avatar: string;
+  author_tag?: string;
+  retreat_id?: string;
+  retreat_phase?: "pre" | "post";
+  is_pinned?: boolean;
+  created_at: string;
+  updated_at: string;
+  user_profiles?: {
+    username?: string;
+    avatar_url?: string;
+    is_wellness_practitioner?: boolean;
+  } | null;
+};
+
 export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") => {
   const [spaces, setSpaces] = useState<ForumSpace[]>([]);
   const [posts, setPosts] = useState<ForumPost[]>([]);
@@ -37,7 +77,7 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
         if (spacesError) throw new Error(`Error fetching spaces: ${spacesError.message}`);
 
         // Transform spaces data to match ForumSpace type
-        const transformedSpaces: ForumSpace[] = spacesData.map(space => ({
+        const transformedSpaces: ForumSpace[] = (spacesData as SupabaseForumSpace[]).map(space => ({
           id: space.id,
           name: space.name,
           description: space.description || '',
@@ -61,8 +101,7 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
               avatar_url,
               is_wellness_practitioner
             )
-          `)
-          .order('created_at', { ascending: false });
+          `);
         
         // If retreat ID is provided, filter for that retreat
         if (retreatId) {
@@ -81,19 +120,20 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
         if (postsError) throw new Error(`Error fetching posts: ${postsError.message}`);
 
         // Transform posts data
-        const transformedPosts: ForumPost[] = postsData.map(post => {
+        const transformedPosts: ForumPost[] = (postsData as SupabaseForumPost[]).map(post => {
           const userProfile = post.user_profiles || {
-            username: "Anonymous",
-            avatar_url: "/placeholder.svg" 
+            username: undefined,
+            avatar_url: undefined,
+            is_wellness_practitioner: undefined
           };
 
           return {
             id: post.id,
             author: {
-              name: userProfile.username,
-              role: userProfile.is_wellness_practitioner ? "Host" : "Member",
-              avatar: userProfile.avatar_url || "/placeholder.svg",
-              tag: userProfile.is_wellness_practitioner ? "Wellness Guide" : undefined
+              name: userProfile.username || post.author_name || "Anonymous",
+              role: (userProfile.is_wellness_practitioner || post.author_role === "Host") ? "Host" : "Member",
+              avatar: userProfile.avatar_url || post.author_avatar || "/placeholder.svg",
+              tag: post.author_tag
             },
             postedIn: post.posted_in,
             timeAgo: new Date(post.created_at).toLocaleString(),
@@ -101,7 +141,7 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
             content: post.content,
             likes: post.likes || 0,
             comments: post.comments || 0,
-            bookmarked: false,
+            bookmarked: post.bookmarked || false,
             retreatId: post.retreat_id,
             retreatPhase: post.retreat_phase,
             isPinned: post.is_pinned
