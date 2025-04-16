@@ -122,20 +122,21 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
         
         if (postsError) throw new Error(`Error fetching posts: ${postsError.message}`);
 
-        // Transform posts data
+        // Transform posts data safely with typed data
         const transformedPosts: ForumPost[] = (postsData as any[] || []).map(post => {
-          const userProfile = post.user_profiles || {
-            username: undefined,
-            avatar_url: undefined,
-            is_wellness_practitioner: undefined
-          };
+          // Extract user profile data with proper typing
+          const userProfile: User | null = post.user_profiles ? {
+            username: post.user_profiles.username,
+            avatar_url: post.user_profiles.avatar_url,
+            is_wellness_practitioner: post.user_profiles.is_wellness_practitioner
+          } : null;
 
           return {
             id: post.id,
             author: {
-              name: userProfile.username || post.author_name || "Anonymous",
-              role: (userProfile.is_wellness_practitioner || post.author_role === "Host") ? "Host" : "Member",
-              avatar: userProfile.avatar_url || post.author_avatar || "/placeholder.svg",
+              name: userProfile?.username || post.author_name || "Anonymous",
+              role: (userProfile?.is_wellness_practitioner || post.author_role === "Host") ? "Host" : "Member",
+              avatar: userProfile?.avatar_url || post.author_avatar || "/placeholder.svg",
               tag: post.author_tag
             },
             postedIn: post.posted_in,

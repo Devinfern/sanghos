@@ -10,7 +10,7 @@ export type ForumAuthor = {
 };
 
 export type ForumPost = {
-  id: number | string;
+  id: string; // Changed from number | string to just string
   author: ForumAuthor;
   postedIn: string;
   timeAgo: string;
@@ -22,7 +22,7 @@ export type ForumPost = {
 };
 
 export type ForumEvent = {
-  id: number | string;
+  id: string; // Changed from number | string to just string
   date: {
     day: number;
     month: string;
@@ -32,7 +32,7 @@ export type ForumEvent = {
 };
 
 export type TrendingPost = {
-  id: number | string;
+  id: string; // Changed from number | string to just string
   title: string;
   author: string;
   avatar: string;
@@ -74,7 +74,7 @@ export let forumSpaces = [
 // Posts data
 export let forumPosts: ForumPost[] = [
   {
-    id: 1,
+    id: "1", // Changed from number to string
     author: {
       name: "Sarita Walsh",
       role: "Admin",
@@ -92,7 +92,7 @@ This is part of our ongoing series on practical wisdom for everyday challenges.`
     bookmarked: false
   },
   {
-    id: 2,
+    id: "2", // Changed from number to string
     author: {
       name: "Maya Johnson",
       role: "Host",
@@ -110,7 +110,7 @@ Would you like me to host a free online session to walk through these techniques
     bookmarked: true
   },
   {
-    id: 3,
+    id: "3", // Changed from number to string
     author: {
       name: "David Chen",
       role: "Member",
@@ -127,7 +127,7 @@ Before LYF, I was constantly in a state of self-judgment. Now I'm finding moment
     bookmarked: false
   },
   {
-    id: 4,
+    id: "4", // Changed from number to string
     author: {
       name: "Aisha Williams",
       role: "Host",
@@ -154,31 +154,31 @@ What helps you stay consistent with your practice?`,
 // Events data
 export let forumEvents: ForumEvent[] = [
   {
-    id: 1,
+    id: "1", // Changed from number to string
     date: { day: 11, month: "MAR" },
     title: "Support Our Event Test + Discover a Powerful Distinction",
     time: "9:00 - 10:00 AM PDT"
   },
   {
-    id: 2,
+    id: "2", // Changed from number to string
     date: { day: 14, month: "MAR" },
     title: "Masterclass: How to Break the Cycle of Doubt & Overthinking",
     time: "9:00 - 10:30 AM PDT"
   },
   {
-    id: 3,
+    id: "3", // Changed from number to string
     date: { day: 16, month: "MAR" },
     title: "Workshop: Update Your Operating System → Break Patterns of Doubt",
     time: "9:00 - 10:30 AM PDT"
   },
   {
-    id: 4,
+    id: "4", // Changed from number to string
     date: { day: 22, month: "APR" },
     title: "Quarterly Being° Gathering (Q2)",
     time: "9:00 - 10:30 AM PDT"
   },
   {
-    id: 5,
+    id: "5", // Changed from number to string
     date: { day: 22, month: "JUL" },
     title: "Quarterly Being° Gathering (Q3)",
     time: "9:00 - 10:30 AM PDT"
@@ -188,19 +188,19 @@ export let forumEvents: ForumEvent[] = [
 // Trending posts data
 export let trendingPosts: TrendingPost[] = [
   {
-    id: 1,
+    id: "1", // Changed from number to string
     title: "An Invitation to Slow Down and Return to Yourself",
     author: "Sarita Walsh",
     avatar: "/lovable-uploads/91da0c1f-b9f1-4310-aea3-1afbfe1358f7.png"
   },
   {
-    id: 2,
+    id: "2", // Changed from number to string
     title: "How to Practice Self-Compassion in Difficult Moments",
     author: "Maya Johnson",
     avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   },
   {
-    id: 3,
+    id: "3", // Changed from number to string
     title: "Finding Peace in Uncertainty",
     author: "David Chen",
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"

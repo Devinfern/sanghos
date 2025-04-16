@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { ForumPost, forumPosts, updateForumPosts } from "@/lib/forumData";
+import { ForumPost, ForumAuthor, forumPosts, updateForumPosts } from "@/lib/forumData";
 
 export const PostsTab = () => {
   const [posts, setPosts] = useState([...forumPosts]);
@@ -126,7 +126,6 @@ export const PostsTab = () => {
         </div>
       </CardContent>
 
-      {/* Post Dialog */}
       <Dialog open={postDialogOpen} onOpenChange={setPostDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
