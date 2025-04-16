@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -6,6 +7,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Calendar, MessageCircle, Users, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRetreatCommunity } from "@/hooks/useRetreatCommunity";
+import { toast } from "sonner";
 import CommunityPost from "./CommunityPost";
 import CreatePost from "./CreatePost";
 import CommunitySearchFilter from "./CommunitySearchFilter";
@@ -31,10 +33,18 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
   
   const { 
     spaces, 
-    posts, 
+    posts: initialPosts, 
     isLoading, 
     error 
   } = useRetreatCommunity(retreatId, activePhase);
+  
+  // Use local state to manage posts for voting functionality
+  const [posts, setPosts] = useState<ForumPost[]>(initialPosts);
+
+  // Update local posts state when initialPosts changes
+  useState(() => {
+    setPosts(initialPosts);
+  }, [initialPosts]);
 
   // Filter posts based on search and category
   const filteredPosts = posts.filter(post => {
@@ -153,7 +163,7 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
           <div className="w-full md:w-48">
             <CreatePost 
               onPostCreated={() => {}} 
-              retreatId={retreatId} 
+              retreatId={retreatId || ""} 
               retreatPhase={activePhase} 
             />
           </div>
@@ -201,7 +211,7 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
           {isLoggedIn && (
             <CreatePost 
               onPostCreated={() => {}} 
-              retreatId={retreatId} 
+              retreatId={retreatId || ""} 
               retreatPhase={activePhase} 
             />
           )}

@@ -6,7 +6,12 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant" // Use "instant" instead of "smooth" to avoid visual inconsistencies
+    });
+    document.body.style.scrollBehavior = "auto";
   }, [pathname]);
 
   return null;

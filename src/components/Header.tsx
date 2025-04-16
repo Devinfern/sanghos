@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -80,6 +79,21 @@ const Header = () => {
     }
   };
 
+  // Use custom link component to handle navigation without page refresh
+  const NavLink = ({ to, children, className, onClick }) => {
+    return (
+      <Link 
+        to={to}
+        className={className}
+        onClick={(e) => {
+          if (onClick) onClick(e);
+        }}
+      >
+        {children}
+      </Link>
+    );
+  };
+
   return (
     <header
       className={cn(
@@ -90,7 +104,6 @@ const Header = () => {
       )}
     >
       <div className="container mx-auto px-4 lg:px-8 flex items-center justify-between">
-        {/* Logo */}
         <Link to="/" className="relative z-10">
           <img 
             src="/lovable-uploads/e38deb47-fbee-4a9f-9466-0ad53f2d7a19.png" 
@@ -99,12 +112,11 @@ const Header = () => {
           />
         </Link>
 
-        {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-1">
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <Link 
+                <NavLink 
                   to="/"
                   className={cn(
                     "group inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors",
@@ -112,12 +124,13 @@ const Header = () => {
                       ? "text-primary" 
                       : "text-slate-700 hover:text-primary"
                   )}
+                  onClick={null}
                 >
                   Home
-                </Link>
+                </NavLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link 
+                <NavLink 
                   to="/retreats"
                   className={cn(
                     "group inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors",
@@ -125,12 +138,13 @@ const Header = () => {
                       ? "text-primary" 
                       : "text-slate-700 hover:text-primary"
                   )}
+                  onClick={null}
                 >
                   Retreats
-                </Link>
+                </NavLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link 
+                <NavLink 
                   to="/instructors"
                   className={cn(
                     "group inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors",
@@ -138,12 +152,13 @@ const Header = () => {
                       ? "text-primary" 
                       : "text-slate-700 hover:text-primary"
                   )}
+                  onClick={null}
                 >
                   Instructors
-                </Link>
+                </NavLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link 
+                <NavLink 
                   to="/about"
                   className={cn(
                     "group inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors",
@@ -151,12 +166,13 @@ const Header = () => {
                       ? "text-primary" 
                       : "text-slate-700 hover:text-primary"
                   )}
+                  onClick={null}
                 >
                   About Us
-                </Link>
+                </NavLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link 
+                <NavLink 
                   to={isLoggedIn ? "/community" : "/community-teaser"}
                   className={cn(
                     "group inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors",
@@ -167,12 +183,11 @@ const Header = () => {
                   onClick={handleCommunityClick}
                 >
                   Community
-                </Link>
+                </NavLink>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
 
-          {/* Auth Buttons */}
           <div className="flex items-center space-x-3 ml-6">
             {isLoggedIn ? (
               <DropdownMenu>
@@ -219,7 +234,6 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Menu Toggle */}
         <button 
           onClick={toggleMobileMenu} 
           className="md:hidden flex items-center z-50"
@@ -233,7 +247,6 @@ const Header = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       <div 
         className={cn(
           "fixed inset-0 bg-white z-40 flex flex-col pt-20 pb-6 px-6 transition-transform duration-300 ease-in-out md:hidden",
@@ -301,7 +314,6 @@ const Header = () => {
             Community
           </Link>
           
-          {/* Auth Buttons for Mobile */}
           <div className="flex flex-col space-y-3 mt-4">
             {isLoggedIn ? (
               <>

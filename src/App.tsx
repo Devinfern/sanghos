@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   createBrowserRouter,
@@ -16,56 +17,127 @@ import Onboarding from "@/pages/Onboarding";
 import Community from "@/pages/Community";
 import CommunitySpaceDetails from "@/pages/CommunitySpaceDetails";
 import RetreatCommunity from "@/pages/RetreatCommunity";
+import CommunityTeaser from "@/pages/CommunityTeaser";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Index />,
+    element: (
+      <>
+        <ScrollToTop />
+        <Index />
+      </>
+    ),
     errorElement: <NotFound />
   },
   {
     path: "/about",
-    element: <About />
+    element: (
+      <>
+        <ScrollToTop />
+        <About />
+      </>
+    )
   },
   {
     path: "/contact",
-    element: <Contact />
+    element: (
+      <>
+        <ScrollToTop />
+        <Contact />
+      </>
+    )
   },
   {
     path: "/retreats",
-    element: <Retreats />
+    element: (
+      <>
+        <ScrollToTop />
+        <Retreats />
+      </>
+    )
   },
   {
     path: "/retreat/:slug",
-    element: <Retreat />
+    element: (
+      <>
+        <ScrollToTop />
+        <Retreat />
+      </>
+    )
   },
   {
     path: "/signup",
-    element: <SignUp />
+    element: (
+      <>
+        <ScrollToTop />
+        <SignUp />
+      </>
+    )
   },
   {
     path: "/login",
-    element: <Login />
+    element: (
+      <>
+        <ScrollToTop />
+        <Login />
+      </>
+    )
   },
   {
     path: "/dashboard",
-    element: <UserDashboard />
+    element: (
+      <>
+        <ScrollToTop />
+        <UserDashboard />
+      </>
+    )
   },
   {
     path: "/onboarding",
-    element: <Onboarding />
+    element: (
+      <>
+        <ScrollToTop />
+        <Onboarding />
+      </>
+    )
   },
   {
     path: "/community",
-    element: <Community />
+    element: (
+      <>
+        <ScrollToTop />
+        <Community />
+      </>
+    )
+  },
+  {
+    path: "/community-teaser",
+    element: (
+      <>
+        <ScrollToTop />
+        <CommunityTeaser />
+      </>
+    )
   },
   {
     path: "/community/:slug",
-    element: <CommunitySpaceDetails />
+    element: (
+      <>
+        <ScrollToTop />
+        <CommunitySpaceDetails />
+      </>
+    )
   },
   {
     path: "/community/retreat/:retreatId",
-    element: <RetreatCommunity />
+    element: (
+      <>
+        <ScrollToTop />
+        <RetreatCommunity />
+      </>
+    )
   },
   {
     path: "*",
