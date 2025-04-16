@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import WellnessJournal from "@/components/WellnessJournal";
 import { cn } from "@/lib/utils";
 import { Sparkles, Feather, Heart, Leaf, MapPin } from "lucide-react";
+import OptimizedImage from "@/components/OptimizedImage";
 
 const WellnessJournalPage = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -32,16 +33,16 @@ const WellnessJournalPage = () => {
       <Header />
 
       <main className="pt-24 pb-16 min-h-screen relative">
-        {/* Background Image with Overlay */}
+        {/* Forest/Nature Background with Dark Overlay */}
         <div className="absolute inset-0 z-0">
           <div 
             className="absolute inset-0 bg-cover bg-center"
             style={{ 
-              backgroundImage: "url('/lovable-uploads/e36dbc23-7334-48c8-afe8-4027497207fe.png')",
+              backgroundImage: "url('https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')",
               backgroundAttachment: "fixed"
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-sage-900/80 to-sage-900/95" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#1A1F2C]/85 to-[#1A1F2C]/95" />
         </div>
 
         <div className="container px-4 md:px-6 max-w-5xl mx-auto relative z-10">
