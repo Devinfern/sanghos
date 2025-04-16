@@ -18,6 +18,7 @@ import Community from "@/pages/Community";
 import CommunitySpaceDetails from "@/pages/CommunitySpaceDetails";
 import RetreatCommunity from "@/pages/RetreatCommunity";
 import CommunityTeaser from "@/pages/CommunityTeaser";
+import JoinNow from "@/pages/JoinNow";
 import ScrollToTop from "@/components/ScrollToTop";
 
 const router = createBrowserRouter([
@@ -136,6 +137,15 @@ const router = createBrowserRouter([
       <>
         <ScrollToTop />
         <RetreatCommunity />
+      </>
+    )
+  },
+  {
+    path: "/join",
+    element: (
+      <>
+        <ScrollToTop />
+        <JoinNow />
       </>
     )
   },

@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -42,7 +42,7 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
   const [posts, setPosts] = useState<ForumPost[]>(initialPosts);
 
   // Update local posts state when initialPosts changes
-  useState(() => {
+  useEffect(() => {
     setPosts(initialPosts);
   }, [initialPosts]);
 
@@ -181,7 +181,7 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
               )}
               <CommunityPost
                 post={{
-                  id: post.id,
+                  id: String(post.id),
                   title: post.title,
                   content: post.content,
                   user_id: post.user_id || '',
