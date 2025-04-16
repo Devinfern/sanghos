@@ -39,7 +39,7 @@ export const TrendingTab = () => {
     }
 
     const newTrending = [...trending];
-    const postIndex = newTrending.findIndex(p => p.id === editingTrending.id);
+    const postIndex = newTrending.findIndex(p => String(p.id) === String(editingTrending.id));
     
     if (postIndex === -1) {
       newTrending.push(editingTrending as TrendingPost);
@@ -53,8 +53,8 @@ export const TrendingTab = () => {
     toast.success(postIndex === -1 ? "Trending post added successfully" : "Trending post updated successfully");
   };
 
-  const handleDeleteTrending = (postId: string) => {
-    const newTrending = trending.filter(p => p.id !== postId);
+  const handleDeleteTrending = (postId: string | number) => {
+    const newTrending = trending.filter(p => String(p.id) !== String(postId));
     
     setTrending(newTrending);
     updateTrendingPosts(newTrending);

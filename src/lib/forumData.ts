@@ -8,7 +8,7 @@ export type ForumAuthor = {
 };
 
 export type ForumPost = {
-  id: string; // Using string type consistently
+  id: string | number; // Update to match communityData.ts
   author: ForumAuthor;
   postedIn: string;
   timeAgo: string;
@@ -31,7 +31,7 @@ export type ForumPost = {
 };
 
 export type ForumEvent = {
-  id: string; // Using string type consistently
+  id: string | number; // Update to match communityData.ts
   date: {
     day: number;
     month: string;
@@ -42,7 +42,7 @@ export type ForumEvent = {
 };
 
 export type TrendingPost = {
-  id: string; // Using string type consistently
+  id: string | number; // Update to match communityData.ts
   title: string;
   author: string;
   avatar: string;

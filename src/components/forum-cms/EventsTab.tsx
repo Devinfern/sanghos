@@ -42,7 +42,7 @@ export const EventsTab = () => {
     }
 
     const newEvents = [...events];
-    const eventIndex = newEvents.findIndex(e => e.id === editingEvent.id);
+    const eventIndex = newEvents.findIndex(e => String(e.id) === String(editingEvent.id));
     
     if (eventIndex === -1) {
       newEvents.push(editingEvent as ForumEvent);
@@ -56,8 +56,8 @@ export const EventsTab = () => {
     toast.success(eventIndex === -1 ? "Event added successfully" : "Event updated successfully");
   };
 
-  const handleDeleteEvent = (eventId: string) => {
-    const newEvents = events.filter(e => e.id !== eventId);
+  const handleDeleteEvent = (eventId: string | number) => {
+    const newEvents = events.filter(e => String(e.id) !== String(eventId));
     
     setEvents(newEvents);
     updateForumEvents(newEvents);

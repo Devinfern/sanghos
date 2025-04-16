@@ -49,7 +49,7 @@ export const PostsTab = () => {
     }
 
     const newPosts = [...posts];
-    const postIndex = newPosts.findIndex(p => p.id === editingPost.id);
+    const postIndex = newPosts.findIndex(p => String(p.id) === String(editingPost.id));
     
     if (postIndex === -1) {
       newPosts.unshift(editingPost as ForumPost);
@@ -63,8 +63,8 @@ export const PostsTab = () => {
     toast.success(postIndex === -1 ? "Post added successfully" : "Post updated successfully");
   };
 
-  const handleDeletePost = (postId: string) => {
-    const newPosts = posts.filter(p => p.id !== postId);
+  const handleDeletePost = (postId: string | number) => {
+    const newPosts = posts.filter(p => String(p.id) !== String(postId));
     
     setPosts(newPosts);
     updateForumPosts(newPosts);
