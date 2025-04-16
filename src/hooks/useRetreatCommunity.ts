@@ -44,13 +44,6 @@ type SupabaseForumPost = {
   } | null;
 };
 
-// User profile type - simplified to avoid recursive types
-type UserProfile = {
-  username?: string;
-  avatar_url?: string;
-  is_wellness_practitioner?: boolean;
-};
-
 export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") => {
   const [spaces, setSpaces] = useState<ForumSpace[]>([]);
   const [posts, setPosts] = useState<ForumPost[]>([]);
@@ -85,7 +78,7 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
         if (spacesError) throw new Error(`Error fetching spaces: ${spacesError.message}`);
 
         // Transform spaces data to match ForumSpace type
-        const transformedSpaces: ForumSpace[] = spacesData ? spacesData.map(space => ({
+        const transformedSpaces: ForumSpace[] = spacesData ? spacesData.map((space: any) => ({
           id: space.id,
           name: space.name,
           description: space.description || '',
@@ -128,7 +121,7 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
         if (postsError) throw new Error(`Error fetching posts: ${postsError.message}`);
 
         // Transform posts data
-        const transformedPosts: ForumPost[] = postsData ? postsData.map(post => {
+        const transformedPosts: ForumPost[] = postsData ? postsData.map((post: any) => {
           const userProfile = post.user_profiles || {
             username: undefined,
             avatar_url: undefined,
@@ -155,8 +148,7 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
             isPinned: post.is_pinned,
             user_id: post.user_id || '',
             created_at: post.created_at,
-            category: post.posted_in,  // Using posted_in as category
-            user_profiles: post.user_profiles
+            category: post.posted_in  // Using posted_in as category
           };
         }) : [];
 

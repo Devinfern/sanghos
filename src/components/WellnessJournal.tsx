@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "./ui/spinner";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
 import { retreats } from "@/lib/data";
 
 // Type for retreat recommendation
@@ -31,37 +30,91 @@ export default function WellnessJournal() {
     }
 
     setIsAnalyzing(true);
+    
     try {
-      const { data, error } = await supabase.functions.invoke("analyze-journal", {
-        body: { journalEntry },
-      });
-
-      if (error) throw error;
-
-      // Process and display recommendations
-      if (data && data.recommendations) {
-        // Map API recommendations to actual retreat data
-        const retreatRecommendations = data.recommendations.map((rec: any) => {
-          const retreat = retreats.find(r => r.id === rec.retreatId);
-          if (!retreat) return null;
-          
-          return {
-            retreatId: rec.retreatId,
-            title: retreat.title,
-            matchScore: rec.matchScore,
-            reason: rec.reason
-          };
-        }).filter(Boolean);
-        
-        setRecommendations(retreatRecommendations);
-        setIsJournalSubmitted(true);
-      }
+      // Instead of calling the API, we'll generate mock recommendations
+      // Short timeout to simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Generate retreat recommendations based on journal content
+      const mockRecommendations: RetreatRecommendation[] = generateMockRecommendations(journalEntry);
+      
+      setRecommendations(mockRecommendations);
+      setIsJournalSubmitted(true);
     } catch (error) {
       console.error("Error analyzing journal entry:", error);
-      toast.error("Unable to analyze your entry. Please try again later.");
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setIsAnalyzing(false);
     }
+  };
+
+  // Function to generate mock recommendations based on journal content
+  const generateMockRecommendations = (journal: string): RetreatRecommendation[] => {
+    const text = journal.toLowerCase();
+    const availableRetreats = retreats.slice(0, 3); // Use the first 3 retreats from data
+    
+    // Check for keywords in the journal entry to personalize recommendations
+    const stressKeywords = ["stress", "anxiety", "overwhelmed", "busy", "pressure", "tense"];
+    const meditationKeywords = ["meditation", "mindful", "peace", "calm", "quiet", "reflect"];
+    const natureKeywords = ["nature", "outdoor", "forest", "hike", "mountain", "fresh air"];
+    const healingKeywords = ["healing", "sound", "therapy", "recover", "restore", "rejuvenate"];
+    
+    // Calculate match scores based on keyword matches
+    const getMatchScore = (keywords: string[]): number => {
+      const matches = keywords.filter(word => text.includes(word)).length;
+      return Math.min(0.5 + (matches * 0.1), 0.95); // Base 0.5 + 0.1 per match, max 0.95
+    };
+    
+    // Generate personalized reasons based on content
+    const generateReason = (retreatId: string, score: number): string => {
+      switch (retreatId) {
+        case "ret-1":
+          return text.includes("stress") || text.includes("anxiety") 
+            ? "This retreat focuses on mindfulness practices that can help reduce the anxiety and stress you mentioned."
+            : "The mindfulness practices in this retreat align with your wellness goals and could bring the calm you're seeking.";
+        case "ret-2":
+          return text.includes("relax") || text.includes("tension")
+            ? "Sound healing can deeply address the tension and help you relax as you mentioned in your journal."
+            : "The sound healing techniques offered would provide the restorative experience you're looking for.";
+        case "ret-3":
+          return text.includes("nature") || text.includes("connect")
+            ? "This retreat offers the nature connection experience you're seeking, combined with gentle movement practices."
+            : "The forest setting and qigong practice would help you reconnect with both nature and yourself.";
+        case "ret-4":
+          return text.includes("balance") || text.includes("peace")
+            ? "This mountain yoga experience directly addresses your desire for balance and inner peace."
+            : "The mountain setting provides a perfect backdrop for finding the peace and perspective you're seeking.";
+        default:
+          return "This retreat aligns well with your current wellness needs.";
+      }
+    };
+    
+    // Create recommendations with different scores based on journal content
+    return availableRetreats.map(retreat => {
+      let score = 0.7; // Default score
+      
+      if (retreat.id === "ret-1") {
+        // Mindfulness retreat
+        score = getMatchScore(meditationKeywords);
+      } else if (retreat.id === "ret-2") {
+        // Sound healing retreat
+        score = getMatchScore(healingKeywords);
+      } else if (retreat.id === "ret-3") {
+        // Nature retreat
+        score = getMatchScore(natureKeywords);
+      } else if (retreat.id === "ret-4") {
+        // Mountain yoga retreat
+        score = getMatchScore(stressKeywords);
+      }
+      
+      return {
+        retreatId: retreat.id,
+        title: retreat.title,
+        matchScore: score,
+        reason: generateReason(retreat.id, score)
+      };
+    }).sort((a, b) => b.matchScore - a.matchScore);
   };
 
   const handleReset = () => {
