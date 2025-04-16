@@ -6,9 +6,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WellnessJournal from "@/components/WellnessJournal";
 import { cn } from "@/lib/utils";
-import { Sparkles, Feather, Heart, Leaf } from "lucide-react";
+import { Sparkles, Feather, Heart, Leaf, MapPin } from "lucide-react";
 
-const WellnessJournalPage = () => {
+const AIRetreatFinderPage = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -22,10 +22,10 @@ const WellnessJournalPage = () => {
   return (
     <>
       <Helmet>
-        <title>Wellness Journal | Sanghos</title>
+        <title>AI Retreat Finder | Sanghos</title>
         <meta 
           name="description" 
-          content="Express your feelings and discover personalized retreat recommendations with our AI-powered wellness journal."
+          content="Discover personalized wellness retreats tailored to your unique needs using our AI-powered retreat matching technology."
         />
       </Helmet>
 
@@ -44,9 +44,9 @@ const WellnessJournalPage = () => {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <h1 className="text-3xl md:text-5xl font-bold mb-4 text-brand-primary">Your Wellness Journal</h1>
+              <h1 className="text-3xl md:text-5xl font-bold mb-4 text-brand-primary">AI Retreat Finder</h1>
               <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-                Express your thoughts and feelings to receive personalized retreat recommendations tailored to your wellness journey.
+                Unlock your perfect wellness journey with our AI-powered retreat matching technology. Share your thoughts and let our intelligent system guide you to transformative experiences.
               </p>
             </motion.div>
 
@@ -65,7 +65,7 @@ const WellnessJournalPage = () => {
                 <span className="text-sm">Analyze</span>
               </div>
               <div className="flex items-center text-brand-primary/80">
-                <Heart className="h-5 w-5 mr-2" />
+                <MapPin className="h-5 w-5 mr-2" />
                 <span className="text-sm">Discover</span>
               </div>
             </motion.div>
@@ -132,4 +132,5 @@ const WellnessJournalPage = () => {
   );
 };
 
-export default WellnessJournalPage;
+export default AIRetreatFinderPage;
+

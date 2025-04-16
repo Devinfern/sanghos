@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -28,7 +27,6 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // Handle scrolling effects
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -38,20 +36,17 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
     document.body.style.removeProperty('overflow');
   }, [location.pathname]);
 
-  // Cleanup body overflow style when component unmounts
   useEffect(() => {
     return () => {
       document.body.style.removeProperty('overflow');
     };
   }, []);
 
-  // Toggle mobile menu and handle body scroll
   const toggleMobileMenu = () => {
     const newMenuState = !mobileMenuOpen;
     setMobileMenuOpen(newMenuState);
@@ -63,16 +58,13 @@ const Header = () => {
     }
   };
 
-  // Check if user is logged in
   const isLoggedIn = localStorage.getItem("sanghos_user") !== null;
   
-  // Handle sign out
   const handleSignOut = () => {
     localStorage.removeItem("sanghos_user");
     window.location.href = "/";
   };
 
-  // Handle community link click for non-logged in users
   const handleCommunityClick = (e) => {
     if (!isLoggedIn) {
       e.preventDefault();
@@ -80,7 +72,6 @@ const Header = () => {
     }
   };
 
-  // Use custom link component to handle navigation without page refresh
   const NavLink = ({ to, children, className, onClick }) => {
     return (
       <Link 
@@ -155,7 +146,7 @@ const Header = () => {
                   )}
                   onClick={null}
                 >
-                  Wellness Journal
+                  AI Retreat Finder
                 </NavLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
@@ -283,7 +274,7 @@ const Header = () => {
             )}
             onClick={() => setMobileMenuOpen(false)}
           >
-            Wellness Journal
+            AI Retreat Finder
           </Link>
           <Link
             to="/about"

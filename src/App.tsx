@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   createBrowserRouter,
@@ -20,6 +19,7 @@ import RetreatCommunity from "@/pages/RetreatCommunity";
 import CommunityTeaser from "@/pages/CommunityTeaser";
 import JoinNow from "@/pages/JoinNow";
 import WellnessJournalPage from "@/pages/WellnessJournalPage";
+import AIRetreatFinderPage from "@/pages/AIRetreatFinderPage";
 import ScrollToTop from "@/components/ScrollToTop";
 
 const router = createBrowserRouter([
@@ -146,7 +146,7 @@ const router = createBrowserRouter([
     element: (
       <>
         <ScrollToTop />
-        <WellnessJournalPage />
+        <AIRetreatFinderPage />
       </>
     )
   },
