@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
@@ -8,7 +7,7 @@ import WellnessJournal from "@/components/WellnessJournal";
 import { cn } from "@/lib/utils";
 import { Sparkles, Feather, Heart, Leaf, MapPin } from "lucide-react";
 
-const AIRetreatFinderPage = () => {
+const WellnessJournalPage = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -132,5 +131,4 @@ const AIRetreatFinderPage = () => {
   );
 };
 
-export default AIRetreatFinderPage;
-
+export default WellnessJournalPage;
