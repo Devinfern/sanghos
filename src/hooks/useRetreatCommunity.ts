@@ -44,6 +44,13 @@ type SupabaseForumPost = {
   } | null;
 };
 
+// User profile type for mapping
+type UserProfile = {
+  username?: string;
+  avatar_url?: string;
+  is_wellness_practitioner?: boolean;
+} | null;
+
 export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") => {
   const [spaces, setSpaces] = useState<ForumSpace[]>([]);
   const [posts, setPosts] = useState<ForumPost[]>([]);
@@ -56,103 +63,115 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
       setError(null);
 
       try {
-        // Fetch spaces related to this retreat
-        let spacesQuery = supabase
-          .from('forum_spaces')
-          .select('*');
-        
-        // If retreat ID is provided, filter for that retreat
-        if (retreatId) {
-          spacesQuery = spacesQuery.eq('retreat_id', retreatId);
-        }
+        // Mock data for spaces and posts since the database tables don't exist yet
+        const mockSpaces: ForumSpace[] = [
+          {
+            id: "space-1",
+            name: "General Discussion",
+            description: "Talk about anything related to the retreat",
+            category: "discussion",
+            icon: "MessageCircle",
+            count: 5,
+            retreatId: retreatId,
+            isPreRetreat: phase === "pre",
+            isPostRetreat: phase === "post"
+          },
+          {
+            id: "space-2",
+            name: "Travel Coordination",
+            description: "Plan your journey to the retreat",
+            category: "logistics",
+            icon: "Calendar",
+            count: 3,
+            retreatId: retreatId,
+            isPreRetreat: phase === "pre",
+            isPostRetreat: false
+          },
+          {
+            id: "space-3",
+            name: "Practice Support",
+            description: "Get support for your ongoing practice",
+            category: "support",
+            icon: "Users",
+            count: 8,
+            retreatId: retreatId,
+            isPreRetreat: false,
+            isPostRetreat: phase === "post"
+          }
+        ];
 
-        // If phase is specified, filter for pre or post retreat spaces
-        if (phase === "pre") {
-          spacesQuery = spacesQuery.eq('is_pre_retreat', true);
-        } else if (phase === "post") {
-          spacesQuery = spacesQuery.eq('is_post_retreat', true);
-        }
-
-        const { data: spacesData, error: spacesError } = await spacesQuery;
-        
-        if (spacesError) throw new Error(`Error fetching spaces: ${spacesError.message}`);
-
-        // Transform spaces data to match ForumSpace type
-        const transformedSpaces: ForumSpace[] = spacesData ? spacesData.map((space: any) => ({
-          id: space.id,
-          name: space.name,
-          description: space.description || '',
-          category: space.category,
-          icon: space.icon,
-          count: space.count,
-          retreatId: space.retreat_id,
-          isPreRetreat: space.is_pre_retreat,
-          isPostRetreat: space.is_post_retreat
-        })) : [];
-
-        setSpaces(transformedSpaces);
-
-        // Fetch posts related to this retreat
-        let postsQuery = supabase
-          .from('forum_posts')
-          .select(`
-            *,
-            user_profiles (
-              username,
-              avatar_url,
-              is_wellness_practitioner
-            )
-          `);
-        
-        // If retreat ID is provided, filter for that retreat
-        if (retreatId) {
-          postsQuery = postsQuery.eq('retreat_id', retreatId);
-        }
-
-        // If phase is specified, filter for pre or post retreat posts
-        if (phase === "pre") {
-          postsQuery = postsQuery.eq('retreat_phase', 'pre');
-        } else if (phase === "post") {
-          postsQuery = postsQuery.eq('retreat_phase', 'post');
-        }
-
-        const { data: postsData, error: postsError } = await postsQuery;
-        
-        if (postsError) throw new Error(`Error fetching posts: ${postsError.message}`);
-
-        // Transform posts data
-        const transformedPosts: ForumPost[] = postsData ? postsData.map((post: any) => {
-          const userProfile = post.user_profiles || {
-            username: undefined,
-            avatar_url: undefined,
-            is_wellness_practitioner: undefined
-          };
-
-          return {
-            id: post.id,
+        const mockPosts: ForumPost[] = [
+          {
+            id: "post-1",
+            title: "Welcome to our retreat community!",
+            content: "We're excited to have you join us for this transformative experience.",
             author: {
-              name: userProfile.username || post.author_name || "Anonymous",
-              role: (userProfile.is_wellness_practitioner || post.author_role === "Host") ? "Host" : "Member",
-              avatar: userProfile.avatar_url || post.author_avatar || "/placeholder.svg",
-              tag: post.author_tag
+              name: "Sarah Johnson",
+              role: "Host",
+              avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+              tag: "Retreat Leader"
             },
-            postedIn: post.posted_in,
-            timeAgo: new Date(post.created_at).toLocaleString(),
-            title: post.title,
-            content: post.content,
-            likes: post.likes || 0,
-            comments: post.comments || 0,
-            bookmarked: post.bookmarked || false,
-            retreatId: post.retreat_id,
-            retreatPhase: post.retreat_phase,
-            isPinned: post.is_pinned,
-            user_id: post.user_id || '',
-            created_at: post.created_at,
-            category: post.posted_in  // Using posted_in as category
-          };
-        }) : [];
+            postedIn: "General Discussion",
+            timeAgo: "2 days ago",
+            likes: 12,
+            comments: 5,
+            bookmarked: false,
+            isPinned: true,
+            retreatId: retreatId,
+            retreatPhase: phase,
+            user_id: "user-1",
+            created_at: "2025-04-14T10:00:00Z"
+          },
+          {
+            id: "post-2",
+            title: "What to pack for the retreat",
+            content: "Here's a list of essential items to bring with you...",
+            author: {
+              name: "Michael Chen",
+              role: "Member",
+              avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+            },
+            postedIn: "Travel Coordination",
+            timeAgo: "1 day ago",
+            likes: 8,
+            comments: 10,
+            bookmarked: true,
+            retreatId: retreatId,
+            retreatPhase: phase,
+            user_id: "user-2",
+            created_at: "2025-04-15T14:30:00Z"
+          },
+          {
+            id: "post-3",
+            title: "My meditation experience so far",
+            content: "I've been practicing the techniques we learned and wanted to share my progress...",
+            author: {
+              name: "Emma Wilson",
+              role: "Member",
+              avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+            },
+            postedIn: "Practice Support",
+            timeAgo: "5 hours ago",
+            likes: 15,
+            comments: 7,
+            bookmarked: false,
+            retreatId: retreatId,
+            retreatPhase: phase,
+            user_id: "user-3",
+            created_at: "2025-04-16T08:15:00Z"
+          }
+        ];
 
-        setPosts(transformedPosts);
+        // Filter spaces based on retreat phase if specified
+        let filteredSpaces = [...mockSpaces];
+        if (phase === "pre") {
+          filteredSpaces = filteredSpaces.filter(space => space.isPreRetreat);
+        } else if (phase === "post") {
+          filteredSpaces = filteredSpaces.filter(space => space.isPostRetreat);
+        }
+
+        setSpaces(filteredSpaces);
+        setPosts(mockPosts);
 
       } catch (err) {
         console.error("Error in useRetreatCommunity:", err);

@@ -98,6 +98,8 @@ const Retreats = () => {
         />
       </Helmet>
 
+      <Header />
+      
       <main className="pt-20 bg-sage-50/30 min-h-screen flex flex-col">
         <RetreatHero 
           onSearch={handleSearch} 
