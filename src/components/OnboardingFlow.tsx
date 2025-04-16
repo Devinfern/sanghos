@@ -10,14 +10,25 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 
 interface OnboardingFlowProps {
+  currentStep?: number;
+  onStepChange?: (step: number) => void;
+  userData?: any;
+  onUserDataChange?: (userData: any) => void;
   onComplete: (userData: any) => void;
-  onCancel: () => void;
+  onCancel?: () => void;
 }
 
-const OnboardingFlow = ({ onComplete, onCancel }: OnboardingFlowProps) => {
-  const [step, setStep] = useState(1);
+const OnboardingFlow = ({ 
+  currentStep: externalStep, 
+  onStepChange: externalSetStep,
+  userData: externalUserData,
+  onUserDataChange: externalSetUserData,
+  onComplete, 
+  onCancel 
+}: OnboardingFlowProps) => {
+  const [internalStep, setInternalStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [userData, setUserData] = useState({
+  const [internalUserData, setInternalUserData] = useState({
     fullName: "",
     birthdate: "",
     experience: "beginner",
@@ -32,17 +43,23 @@ const OnboardingFlow = ({ onComplete, onCancel }: OnboardingFlowProps) => {
     notifications: true
   });
 
+  // Use either external or internal state depending on what's provided
+  const step = externalStep !== undefined ? externalStep : internalStep;
+  const setStep = externalSetStep || setInternalStep;
+  const userData = externalUserData || internalUserData;
+  const setUserData = externalSetUserData || setInternalUserData;
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserData(prev => ({ ...prev, [name]: value }));
+    setUserData((prev: any) => ({ ...prev, [name]: value }));
   };
 
   const handleExperienceChange = (value: string) => {
-    setUserData(prev => ({ ...prev, experience: value }));
+    setUserData((prev: any) => ({ ...prev, experience: value }));
   };
 
   const handlePreferenceChange = (preference: string, checked: boolean) => {
-    setUserData(prev => ({
+    setUserData((prev: any) => ({
       ...prev,
       preferences: {
         ...prev.preferences,
@@ -52,7 +69,7 @@ const OnboardingFlow = ({ onComplete, onCancel }: OnboardingFlowProps) => {
   };
 
   const handleNotificationChange = (checked: boolean) => {
-    setUserData(prev => ({ ...prev, notifications: checked }));
+    setUserData((prev: any) => ({ ...prev, notifications: checked }));
   };
 
   const nextStep = () => {

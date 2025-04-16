@@ -43,6 +43,13 @@ type SupabaseForumPost = {
   } | null;
 };
 
+// User profile type
+type User = {
+  username?: string;
+  avatar_url?: string;
+  is_wellness_practitioner?: boolean;
+};
+
 export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") => {
   const [spaces, setSpaces] = useState<ForumSpace[]>([]);
   const [posts, setPosts] = useState<ForumPost[]>([]);
@@ -56,20 +63,20 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
 
       try {
         // Fetch spaces related to this retreat
-        const spacesQuery = supabase
+        let spacesQuery = supabase
           .from('forum_spaces')
           .select('*');
         
         // If retreat ID is provided, filter for that retreat
         if (retreatId) {
-          spacesQuery.eq('retreat_id', retreatId);
+          spacesQuery = spacesQuery.eq('retreat_id', retreatId);
         }
 
         // If phase is specified, filter for pre or post retreat spaces
         if (phase === "pre") {
-          spacesQuery.eq('is_pre_retreat', true);
+          spacesQuery = spacesQuery.eq('is_pre_retreat', true);
         } else if (phase === "post") {
-          spacesQuery.eq('is_post_retreat', true);
+          spacesQuery = spacesQuery.eq('is_post_retreat', true);
         }
 
         const { data: spacesData, error: spacesError } = await spacesQuery;
@@ -92,7 +99,7 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
         setSpaces(transformedSpaces);
 
         // Fetch posts related to this retreat
-        const postsQuery = supabase
+        let postsQuery = supabase
           .from('forum_posts')
           .select(`
             *,
@@ -105,14 +112,14 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
         
         // If retreat ID is provided, filter for that retreat
         if (retreatId) {
-          postsQuery.eq('retreat_id', retreatId);
+          postsQuery = postsQuery.eq('retreat_id', retreatId);
         }
 
         // If phase is specified, filter for pre or post retreat posts
         if (phase === "pre") {
-          postsQuery.eq('retreat_phase', 'pre');
+          postsQuery = postsQuery.eq('retreat_phase', 'pre');
         } else if (phase === "post") {
-          postsQuery.eq('retreat_phase', 'post');
+          postsQuery = postsQuery.eq('retreat_phase', 'post');
         }
 
         const { data: postsData, error: postsError } = await postsQuery;
@@ -144,7 +151,11 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
             bookmarked: post.bookmarked || false,
             retreatId: post.retreat_id,
             retreatPhase: post.retreat_phase,
-            isPinned: post.is_pinned
+            isPinned: post.is_pinned,
+            // Added missing fields required by the ForumPost type
+            user_id: '',  // This would need to be populated if you're using it
+            created_at: post.created_at,
+            category: post.posted_in  // Using posted_in as category
           };
         });
 

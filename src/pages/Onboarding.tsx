@@ -33,6 +33,10 @@ const Onboarding = () => {
     navigate('/dashboard');
   };
 
+  const handleCancel = () => {
+    navigate('/');
+  };
+
   return (
     <div className="container max-w-4xl mx-auto py-12 px-4">
       <div className="mb-8 text-center">
@@ -49,6 +53,7 @@ const Onboarding = () => {
           userData={userData}
           onUserDataChange={setUserData}
           onComplete={handleComplete}
+          onCancel={handleCancel}
         />
       </Card>
       

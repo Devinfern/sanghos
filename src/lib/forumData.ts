@@ -19,6 +19,14 @@ export type ForumPost = {
   retreatId?: string; // Link to specific retreat
   retreatPhase?: "pre" | "post"; // Pre-retreat or post-retreat discussion
   isPinned?: boolean; // For important announcements
+  user_id?: string;
+  created_at?: string;
+  category?: string;
+  user_profiles?: {
+    username?: string;
+    avatar_url?: string;
+    is_wellness_practitioner?: boolean;
+  } | null;
 };
 
 export type ForumEvent = {
