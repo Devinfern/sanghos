@@ -24,7 +24,7 @@ interface CommunityPostProps {
     created_at: string;
     likes: number;
     category: string;
-    user_profiles?: User;
+    user_profiles?: User | null;
   };
   currentUserId?: string | null;
   onPostUpdate?: () => void;
@@ -38,7 +38,7 @@ const CommunityPost = ({ post, currentUserId, onPostUpdate }: CommunityPostProps
   // Extract user info from the user_profiles relation or use defaults
   const author = post.user_profiles || {
     username: "Anonymous User",
-    avatar_url: null,
+    avatar_url: "",
     is_wellness_practitioner: false
   };
 

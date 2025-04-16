@@ -44,8 +44,8 @@ type SupabaseForumPost = {
   } | null;
 };
 
-// User profile type
-type User = {
+// User profile type - simplified to avoid recursive types
+type UserProfile = {
   username?: string;
   avatar_url?: string;
   is_wellness_practitioner?: boolean;
@@ -153,10 +153,10 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
             retreatId: post.retreat_id,
             retreatPhase: post.retreat_phase,
             isPinned: post.is_pinned,
-            // Added required fields for type compatibility
             user_id: post.user_id || '',
             created_at: post.created_at,
-            category: post.posted_in  // Using posted_in as category
+            category: post.posted_in,  // Using posted_in as category
+            user_profiles: post.user_profiles
           };
         }) : [];
 

@@ -14,9 +14,9 @@ import { ForumPost } from "@/lib/forumData";
 
 // Define the User type to match CommunityPost props
 type User = {
-  username?: string;
-  avatar_url?: string;
-  is_wellness_practitioner?: boolean;
+  username: string;
+  avatar_url: string;
+  is_wellness_practitioner: boolean;
 };
 
 interface RetreatDiscussionsProps {
@@ -161,7 +161,11 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
                   created_at: post.created_at || new Date().toISOString(),
                   likes: post.likes,
                   category: post.category || post.postedIn,
-                  user_profiles: post.user_profiles
+                  user_profiles: post.user_profiles ? {
+                    username: post.user_profiles.username || "",
+                    avatar_url: post.user_profiles.avatar_url || "",
+                    is_wellness_practitioner: post.user_profiles.is_wellness_practitioner || false
+                  } : null
                 }}
                 currentUserId={null}
                 onPostUpdate={() => {}}

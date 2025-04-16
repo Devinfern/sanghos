@@ -8,7 +8,7 @@ export type ForumAuthor = {
 };
 
 export type ForumPost = {
-  id: string; // Changed from number | string to just string
+  id: string; // Using string type consistently
   author: ForumAuthor;
   postedIn: string;
   timeAgo: string;
@@ -31,7 +31,7 @@ export type ForumPost = {
 };
 
 export type ForumEvent = {
-  id: string; // Changed from number | string to just string
+  id: string; // Using string type consistently
   date: {
     day: number;
     month: string;
@@ -42,7 +42,7 @@ export type ForumEvent = {
 };
 
 export type TrendingPost = {
-  id: string; // Changed from number | string to just string
+  id: string; // Using string type consistently
   title: string;
   author: string;
   avatar: string;
