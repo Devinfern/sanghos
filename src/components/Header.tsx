@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -145,16 +146,16 @@ const Header = () => {
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavLink 
-                  to="/instructors"
+                  to="/wellness-journal"
                   className={cn(
                     "group inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors",
-                    location.pathname === "/instructors" 
+                    location.pathname === "/wellness-journal" 
                       ? "text-primary" 
                       : "text-slate-700 hover:text-primary"
                   )}
                   onClick={null}
                 >
-                  Instructors
+                  Wellness Journal
                 </NavLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
@@ -275,14 +276,14 @@ const Header = () => {
             Retreats
           </Link>
           <Link
-            to="/instructors"
+            to="/wellness-journal"
             className={cn(
               "text-lg font-medium py-2 border-b border-slate-100",
-              location.pathname === "/instructors" ? "text-primary" : "text-slate-800"
+              location.pathname === "/wellness-journal" ? "text-primary" : "text-slate-800"
             )}
             onClick={() => setMobileMenuOpen(false)}
           >
-            Instructors
+            Wellness Journal
           </Link>
           <Link
             to="/about"
