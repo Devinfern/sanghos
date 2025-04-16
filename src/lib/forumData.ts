@@ -1,3 +1,4 @@
+
 // Forum data types
 export type ForumAuthor = {
   name: string;
@@ -7,7 +8,7 @@ export type ForumAuthor = {
 };
 
 export type ForumPost = {
-  id: number | string;
+  id: string; // Changed from number | string to just string
   author: ForumAuthor;
   postedIn: string;
   timeAgo: string;
@@ -30,7 +31,7 @@ export type ForumPost = {
 };
 
 export type ForumEvent = {
-  id: number | string;
+  id: string; // Changed from number | string to just string
   date: {
     day: number;
     month: string;
@@ -41,7 +42,7 @@ export type ForumEvent = {
 };
 
 export type TrendingPost = {
-  id: number | string;
+  id: string; // Changed from number | string to just string
   title: string;
   author: string;
   avatar: string;

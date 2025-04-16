@@ -138,7 +138,7 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
 
       {sortedPosts.length > 0 ? (
         <div className="space-y-4">
-          {sortedPosts.map((post: ForumPost) => (
+          {sortedPosts.map((post) => (
             <div key={post.id} className="relative">
               {post.isPinned && (
                 <Badge className="absolute -top-2 -right-2 bg-brand-primary z-10">
@@ -146,7 +146,21 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
                 </Badge>
               )}
               <CommunityPost
-                post={post}
+                key={post.id}
+                post={{
+                  id: post.id.toString(),
+                  title: post.title,
+                  content: post.content,
+                  user_id: post.user_id || '',
+                  created_at: post.created_at || '',
+                  likes: post.likes,
+                  category: post.category || post.postedIn,
+                  user_profiles: {
+                    username: post.author.name,
+                    avatar_url: post.author.avatar,
+                    is_wellness_practitioner: post.author.role === "Host"
+                  }
+                }}
                 currentUserId={null}
                 onPostUpdate={() => {}}
               />
