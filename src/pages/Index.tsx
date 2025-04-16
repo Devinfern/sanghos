@@ -11,6 +11,7 @@ import { ArrowRight } from "lucide-react";
 import SanghosStory from "@/components/SanghosStory";
 import HowItWorks from "@/components/HowItWorks";
 import JoinCommunity from "@/components/JoinCommunity";
+import AIWellnessSection from "@/components/AIWellnessSection";
 
 const Index = () => {
   return (
@@ -27,6 +28,7 @@ const Index = () => {
       <Hero />
       <SanghosStory />
       <FeaturedRetreats />
+      <AIWellnessSection />
       <HowItWorks />
 
       {/* Featured Instructors */}
