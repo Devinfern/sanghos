@@ -141,8 +141,8 @@ export default function WellnessJournal() {
               </Button>}
           </div> : <div className="space-y-6">
             <div className="bg-brand-subtle/10 p-4 rounded-lg">
-              <h3 className="font-medium text-lg text-brand-primary mb-2">Your Wellness Analysis</h3>
-              <p className="text-muted-foreground">Based on your journal entry, we've found retreats that align with your current needs and interests.</p>
+              <h3 className="font-medium text-lg mb-2 text-amber-500">Your Wellness Analysis</h3>
+              <p className="text-slate-50">Based on your journal entry, we've found retreats that align with your current needs and interests.</p>
             </div>
             
             {recommendations.length > 0 ? <div className="space-y-4">
