@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -17,21 +18,6 @@ interface RetreatDiscussionsProps {
   isLoggedIn: boolean;
 }
 
-interface CommunityPostData {
-  id: string;
-  title: string;
-  content: string;
-  user_id: string;
-  created_at: string;
-  likes: number;
-  category: string;
-  user_profiles?: {
-    username?: string;
-    avatar_url?: string;
-    is_wellness_practitioner?: boolean;
-  } | null;
-}
-
 const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscussionsProps) => {
   const [activePhase, setActivePhase] = useState<"pre" | "post">("pre");
   const [searchQuery, setSearchQuery] = useState("");
@@ -44,6 +30,7 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
     error 
   } = useRetreatCommunity(retreatId, activePhase);
 
+  // Filter posts based on search and category
   const filteredPosts = posts.filter(post => {
     const matchesSearch = searchQuery.trim() === '' || 
       post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -55,28 +42,13 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
     return matchesSearch && matchesCategory;
   });
 
+  // Sort posts - pinned first
   const sortedPosts = [...filteredPosts].sort((a, b) => {
+    // Pinned posts first
     if (a.isPinned && !b.isPinned) return -1;
     if (!a.isPinned && b.isPinned) return 1;
     return 0;
   });
-
-  const mapPostToCommunityPostData = (post: ForumPost): CommunityPostData => {
-    return {
-      id: post.id.toString(),
-      title: post.title,
-      content: post.content,
-      user_id: post.user_id || '',
-      created_at: post.created_at || '',
-      likes: post.likes,
-      category: post.category || post.postedIn,
-      user_profiles: {
-        username: post.author.name,
-        avatar_url: post.author.avatar,
-        is_wellness_practitioner: post.author.role === "Host"
-      }
-    };
-  };
 
   if (isLoading) {
     return (
@@ -166,7 +138,7 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
 
       {sortedPosts.length > 0 ? (
         <div className="space-y-4">
-          {sortedPosts.map((post) => (
+          {sortedPosts.map((post: ForumPost) => (
             <div key={post.id} className="relative">
               {post.isPinned && (
                 <Badge className="absolute -top-2 -right-2 bg-brand-primary z-10">
@@ -174,8 +146,7 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
                 </Badge>
               )}
               <CommunityPost
-                key={post.id}
-                post={mapPostToCommunityPostData(post)}
+                post={post}
                 currentUserId={null}
                 onPostUpdate={() => {}}
               />

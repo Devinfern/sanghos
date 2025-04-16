@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
@@ -15,13 +16,17 @@ export const TrendingTab = () => {
   const [trendingDialogOpen, setTrendingDialogOpen] = useState(false);
 
   const handleEditTrending = (post: TrendingPost) => {
-    setEditingTrending({...post});
+    const typedPost = {
+      ...post,
+      id: typeof post.id === 'string' ? parseInt(post.id) : post.id
+    };
+    setEditingTrending(typedPost);
     setTrendingDialogOpen(true);
   };
 
   const handleAddTrending = () => {
     setEditingTrending({
-      id: Date.now().toString(),
+      id: Date.now(),
       title: "",
       author: "Admin",
       avatar: "/lovable-uploads/91da0c1f-b9f1-4310-aea3-1afbfe1358f7.png",
@@ -52,8 +57,13 @@ export const TrendingTab = () => {
     toast.success(postIndex === -1 ? "Trending post added successfully" : "Trending post updated successfully");
   };
 
-  const handleDeleteTrending = (postId: string) => {
-    const newTrending = trending.filter(p => p.id !== postId);
+  const handleDeleteTrending = (postId: string | number) => {
+    const idToDelete = typeof postId === 'string' ? postId : postId;
+    const newTrending = trending.filter(p => {
+      const currentId = p.id;
+      return currentId !== idToDelete;
+    });
+    
     setTrending(newTrending);
     updateTrendingPosts(newTrending);
     toast.success("Trending post deleted successfully");

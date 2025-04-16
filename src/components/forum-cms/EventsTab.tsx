@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
@@ -14,14 +15,18 @@ export const EventsTab = () => {
   const [eventDialogOpen, setEventDialogOpen] = useState(false);
 
   const handleEditEvent = (event: ForumEvent) => {
-    setEditingEvent({...event});
+    const typedEvent = {
+      ...event,
+      id: typeof event.id === 'string' ? parseInt(event.id) : event.id
+    };
+    setEditingEvent(typedEvent);
     setEventDialogOpen(true);
   };
 
   const handleAddEvent = () => {
     const today = new Date();
     setEditingEvent({
-      id: Date.now().toString(),
+      id: Date.now(),
       date: {
         day: today.getDate(),
         month: today.toLocaleString('en-US', { month: 'short' }).toUpperCase(),
@@ -55,8 +60,13 @@ export const EventsTab = () => {
     toast.success(eventIndex === -1 ? "Event added successfully" : "Event updated successfully");
   };
 
-  const handleDeleteEvent = (eventId: string) => {
-    const newEvents = events.filter(e => e.id !== eventId);
+  const handleDeleteEvent = (eventId: string | number) => {
+    const idToDelete = typeof eventId === 'string' ? eventId : eventId;
+    const newEvents = events.filter(e => {
+      const currentId = e.id;
+      return currentId !== idToDelete;
+    });
+    
     setEvents(newEvents);
     updateForumEvents(newEvents);
     toast.success("Event deleted successfully");

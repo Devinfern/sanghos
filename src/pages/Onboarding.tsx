@@ -8,18 +8,19 @@ import OnboardingFlow from '@/components/OnboardingFlow';
 const Onboarding = () => {
   const [step, setStep] = useState(1);
   const [userData, setUserData] = useState({
-    fullName: "",
-    birthdate: "",
-    experience: "beginner",
-    preferences: {
-      yoga: false,
-      meditation: false,
-      nature: false,
-      wellness: false,
-      workshops: false
+    wellness: [],
+    interests: [],
+    goals: [],
+    retreatPreferences: {
+      location: [],
+      duration: [],
+      priceRange: null,
     },
-    goals: "",
-    notifications: true
+    notificationPreferences: {
+      retreatUpdates: true,
+      communityMessages: true,
+      practiceReminders: false,
+    }
   });
   
   const navigate = useNavigate();
@@ -47,6 +48,8 @@ const Onboarding = () => {
       
       <Card className="p-6 md:p-8">
         <OnboardingFlow 
+          currentStep={step}
+          onStepChange={setStep}
           userData={userData}
           onUserDataChange={setUserData}
           onComplete={handleComplete}

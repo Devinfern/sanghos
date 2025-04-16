@@ -36,7 +36,11 @@ type SupabaseForumPost = {
   is_pinned?: boolean;
   created_at: string;
   updated_at: string;
-  user_id?: string;
+  user_profiles?: {
+    username?: string;
+    avatar_url?: string;
+    is_wellness_practitioner?: boolean;
+  } | null;
 };
 
 // User profile type
@@ -80,7 +84,7 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
         if (spacesError) throw new Error(`Error fetching spaces: ${spacesError.message}`);
 
         // Transform spaces data to match ForumSpace type
-        const transformedSpaces: ForumSpace[] = (spacesData as SupabaseForumSpace[] || []).map(space => ({
+        const transformedSpaces: ForumSpace[] = (spacesData as SupabaseForumSpace[]).map(space => ({
           id: space.id,
           name: space.name,
           description: space.description || '',
@@ -122,21 +126,20 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
         
         if (postsError) throw new Error(`Error fetching posts: ${postsError.message}`);
 
-        // Transform posts data safely with typed data
-        const transformedPosts: ForumPost[] = (postsData as any[] || []).map(post => {
-          // Extract user profile data with proper typing
-          const userProfile: User | null = post.user_profiles ? {
-            username: post.user_profiles.username,
-            avatar_url: post.user_profiles.avatar_url,
-            is_wellness_practitioner: post.user_profiles.is_wellness_practitioner
-          } : null;
+        // Transform posts data
+        const transformedPosts: ForumPost[] = (postsData as SupabaseForumPost[]).map(post => {
+          const userProfile = post.user_profiles || {
+            username: undefined,
+            avatar_url: undefined,
+            is_wellness_practitioner: undefined
+          };
 
           return {
             id: post.id,
             author: {
-              name: userProfile?.username || post.author_name || "Anonymous",
-              role: (userProfile?.is_wellness_practitioner || post.author_role === "Host") ? "Host" : "Member",
-              avatar: userProfile?.avatar_url || post.author_avatar || "/placeholder.svg",
+              name: userProfile.username || post.author_name || "Anonymous",
+              role: (userProfile.is_wellness_practitioner || post.author_role === "Host") ? "Host" : "Member",
+              avatar: userProfile.avatar_url || post.author_avatar || "/placeholder.svg",
               tag: post.author_tag
             },
             postedIn: post.posted_in,
@@ -149,7 +152,8 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
             retreatId: post.retreat_id,
             retreatPhase: post.retreat_phase,
             isPinned: post.is_pinned,
-            user_id: post.user_id || '',
+            // Added missing fields required by the ForumPost type
+            user_id: '',  // This would need to be populated if you're using it
             created_at: post.created_at,
             category: post.posted_in  // Using posted_in as category
           };

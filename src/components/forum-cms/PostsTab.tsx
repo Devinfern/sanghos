@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
@@ -11,33 +12,34 @@ import { toast } from "sonner";
 import { ForumPost, ForumAuthor, forumPosts, updateForumPosts } from "@/lib/forumData";
 
 export const PostsTab = () => {
-  const [posts, setPosts] = useState([...forumPosts]);
+  const [posts, setPosts] = useState<ForumPost[]>([...forumPosts]);
   const [editingPost, setEditingPost] = useState<Partial<ForumPost> | null>(null);
   const [postDialogOpen, setPostDialogOpen] = useState(false);
 
   const handleEditPost = (post: ForumPost) => {
-    setEditingPost({...post});
+    const typedPost = {
+      ...post,
+      id: typeof post.id === 'string' ? parseInt(post.id) : post.id
+    };
+    setEditingPost(typedPost);
     setPostDialogOpen(true);
   };
 
   const handleAddPost = () => {
     setEditingPost({
-      id: Date.now().toString(),
+      id: Date.now(),
       author: {
         name: "Admin",
         role: "Admin",
-        avatar: "/lovable-uploads/91da0c1f-b9f1-4310-aea3-1afbfe1358f7.png"
+        avatar: "/lovable-uploads/91da0c1f-b9f1-4310-aea3-1afbfe1358f7.png",
       },
       postedIn: "Open Conversation",
-      timeAgo: "Just now",
+      timeAgo: "just now",
       title: "",
       content: "",
       likes: 0,
       comments: 0,
       bookmarked: false,
-      user_id: "",
-      created_at: new Date().toISOString(),
-      category: "Open Conversation"
     });
     setPostDialogOpen(true);
   };
@@ -54,7 +56,7 @@ export const PostsTab = () => {
     const postIndex = newPosts.findIndex(p => p.id === editingPost.id);
     
     if (postIndex === -1) {
-      newPosts.push(editingPost as ForumPost);
+      newPosts.unshift(editingPost as ForumPost);
     } else {
       newPosts[postIndex] = editingPost as ForumPost;
     }
@@ -65,8 +67,13 @@ export const PostsTab = () => {
     toast.success(postIndex === -1 ? "Post added successfully" : "Post updated successfully");
   };
 
-  const handleDeletePost = (postId: string) => {
-    const newPosts = posts.filter(p => p.id !== postId);
+  const handleDeletePost = (postId: string | number) => {
+    const idToDelete = typeof postId === 'string' ? postId : postId;
+    const newPosts = posts.filter(p => {
+      const currentId = p.id;
+      return currentId !== idToDelete;
+    });
+    
     setPosts(newPosts);
     updateForumPosts(newPosts);
     toast.success("Post deleted successfully");
@@ -126,6 +133,7 @@ export const PostsTab = () => {
         </div>
       </CardContent>
 
+      {/* Post Dialog */}
       <Dialog open={postDialogOpen} onOpenChange={setPostDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
