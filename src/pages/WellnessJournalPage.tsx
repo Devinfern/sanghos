@@ -46,9 +46,7 @@ const WellnessJournalPage = () => {
             delay: 0.1
           }} className="my-[100px]">
               <h1 className="text-3xl md:text-5xl font-bold mb-4 text-white">AI Retreat Finder</h1>
-              <p className="text-white/80 max-w-2xl mx-auto text-lg">
-                Unlock your perfect wellness journey with our AI-powered retreat matching technology. Share your thoughts and let our intelligent system guide you to transformative experiences.
-              </p>
+              <p className="text-white/80 max-w-2xl mx-auto text-lg">Unlock your perfect wellness journey with our AI-powered retreat matching service. Share your thoughts and let our intelligent system guide you to transformative IRL experiences.</p>
             </motion.div>
 
             <motion.div initial={{
