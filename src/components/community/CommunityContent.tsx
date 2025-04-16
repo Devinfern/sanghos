@@ -9,6 +9,7 @@ import CommunityDiscussions from "./CommunityDiscussions";
 import CommunityEventsPage from "./CommunityEventsPage";
 import CommunityResourcesPage from "./CommunityResourcesPage";
 import CommunityMembersPage from "./CommunityMembersPage";
+import RetreatCommunityList from "./RetreatCommunityList";
 import { Button } from "@/components/ui/button";
 import { Settings } from "lucide-react";
 
@@ -41,6 +42,8 @@ const CommunityContent = ({
         return <CommunityResourcesPage />;
       case "members":
         return <CommunityMembersPage />;
+      case "retreats":
+        return <RetreatCommunityList />;
       default:
         return null;
     }

@@ -1,4 +1,3 @@
-
 // Forum data types
 export type ForumAuthor = {
   name: string;
@@ -17,6 +16,9 @@ export type ForumPost = {
   likes: number;
   comments: number;
   bookmarked: boolean;
+  retreatId?: string; // Link to specific retreat
+  retreatPhase?: "pre" | "post"; // Pre-retreat or post-retreat discussion
+  isPinned?: boolean; // For important announcements
 };
 
 export type ForumEvent = {
@@ -27,6 +29,7 @@ export type ForumEvent = {
   };
   title: string;
   time: string;
+  retreatId?: string; // Link to related retreat
 };
 
 export type TrendingPost = {
@@ -34,6 +37,19 @@ export type TrendingPost = {
   title: string;
   author: string;
   avatar: string;
+  retreatId?: string; // Link to specific retreat
+};
+
+export type ForumSpace = {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  icon: string;
+  count?: number;
+  retreatId?: string;
+  isPreRetreat?: boolean;
+  isPostRetreat?: boolean;
 };
 
 // Import the data from communityData to keep synchronized

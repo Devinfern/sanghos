@@ -15,6 +15,7 @@ const CommunityNavigation = ({
 }: CommunityNavigationProps) => {
   const sections = [
     { id: "discussions", label: "Discussions" },
+    { id: "retreats", label: "Retreats" },
     { id: "events", label: "Events" },
     { id: "resources", label: "Resources" },
     { id: "members", label: "Members" }
