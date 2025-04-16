@@ -12,6 +12,13 @@ import CreatePost from "./CreatePost";
 import CommunitySearchFilter from "./CommunitySearchFilter";
 import { ForumPost } from "@/lib/forumData";
 
+// Define the User type to match CommunityPost props
+type User = {
+  username?: string;
+  avatar_url?: string;
+  is_wellness_practitioner?: boolean;
+};
+
 interface RetreatDiscussionsProps {
   retreatId?: string;
   retreatName?: string;
@@ -146,7 +153,16 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
                 </Badge>
               )}
               <CommunityPost
-                post={post}
+                post={{
+                  id: post.id,
+                  title: post.title,
+                  content: post.content,
+                  user_id: post.user_id || '',
+                  created_at: post.created_at || new Date().toISOString(),
+                  likes: post.likes,
+                  category: post.category || post.postedIn,
+                  user_profiles: post.user_profiles
+                }}
                 currentUserId={null}
                 onPostUpdate={() => {}}
               />

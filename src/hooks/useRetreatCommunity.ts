@@ -36,6 +36,7 @@ type SupabaseForumPost = {
   is_pinned?: boolean;
   created_at: string;
   updated_at: string;
+  user_id?: string;
   user_profiles?: {
     username?: string;
     avatar_url?: string;
@@ -84,7 +85,7 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
         if (spacesError) throw new Error(`Error fetching spaces: ${spacesError.message}`);
 
         // Transform spaces data to match ForumSpace type
-        const transformedSpaces: ForumSpace[] = (spacesData as SupabaseForumSpace[]).map(space => ({
+        const transformedSpaces: ForumSpace[] = spacesData ? (spacesData as SupabaseForumSpace[]).map(space => ({
           id: space.id,
           name: space.name,
           description: space.description || '',
@@ -94,7 +95,7 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
           retreatId: space.retreat_id,
           isPreRetreat: space.is_pre_retreat,
           isPostRetreat: space.is_post_retreat
-        }));
+        })) : [];
 
         setSpaces(transformedSpaces);
 
@@ -127,7 +128,7 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
         if (postsError) throw new Error(`Error fetching posts: ${postsError.message}`);
 
         // Transform posts data
-        const transformedPosts: ForumPost[] = (postsData as SupabaseForumPost[]).map(post => {
+        const transformedPosts: ForumPost[] = postsData ? (postsData as SupabaseForumPost[]).map(post => {
           const userProfile = post.user_profiles || {
             username: undefined,
             avatar_url: undefined,
@@ -152,12 +153,12 @@ export const useRetreatCommunity = (retreatId?: string, phase?: "pre" | "post") 
             retreatId: post.retreat_id,
             retreatPhase: post.retreat_phase,
             isPinned: post.is_pinned,
-            // Added missing fields required by the ForumPost type
-            user_id: '',  // This would need to be populated if you're using it
+            // Added required fields for type compatibility
+            user_id: post.user_id || '',
             created_at: post.created_at,
             category: post.posted_in  // Using posted_in as category
           };
-        });
+        }) : [];
 
         setPosts(transformedPosts);
 
