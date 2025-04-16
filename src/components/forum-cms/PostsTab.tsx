@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
@@ -9,37 +8,36 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { ForumPost, ForumAuthor, forumPosts, updateForumPosts } from "@/lib/forumData";
+import { ForumPost, forumPosts, updateForumPosts } from "@/lib/forumData";
 
 export const PostsTab = () => {
-  const [posts, setPosts] = useState<ForumPost[]>([...forumPosts]);
+  const [posts, setPosts] = useState([...forumPosts]);
   const [editingPost, setEditingPost] = useState<Partial<ForumPost> | null>(null);
   const [postDialogOpen, setPostDialogOpen] = useState(false);
 
   const handleEditPost = (post: ForumPost) => {
-    const typedPost = {
-      ...post,
-      id: typeof post.id === 'string' ? parseInt(post.id) : post.id
-    };
-    setEditingPost(typedPost);
+    setEditingPost({...post});
     setPostDialogOpen(true);
   };
 
   const handleAddPost = () => {
     setEditingPost({
-      id: Date.now(),
+      id: Date.now().toString(),
       author: {
         name: "Admin",
         role: "Admin",
-        avatar: "/lovable-uploads/91da0c1f-b9f1-4310-aea3-1afbfe1358f7.png",
+        avatar: "/lovable-uploads/91da0c1f-b9f1-4310-aea3-1afbfe1358f7.png"
       },
       postedIn: "Open Conversation",
-      timeAgo: "just now",
+      timeAgo: "Just now",
       title: "",
       content: "",
       likes: 0,
       comments: 0,
       bookmarked: false,
+      user_id: "",
+      created_at: new Date().toISOString(),
+      category: "Open Conversation"
     });
     setPostDialogOpen(true);
   };
@@ -56,7 +54,7 @@ export const PostsTab = () => {
     const postIndex = newPosts.findIndex(p => p.id === editingPost.id);
     
     if (postIndex === -1) {
-      newPosts.unshift(editingPost as ForumPost);
+      newPosts.push(editingPost as ForumPost);
     } else {
       newPosts[postIndex] = editingPost as ForumPost;
     }
@@ -67,13 +65,8 @@ export const PostsTab = () => {
     toast.success(postIndex === -1 ? "Post added successfully" : "Post updated successfully");
   };
 
-  const handleDeletePost = (postId: string | number) => {
-    const idToDelete = typeof postId === 'string' ? postId : postId;
-    const newPosts = posts.filter(p => {
-      const currentId = p.id;
-      return currentId !== idToDelete;
-    });
-    
+  const handleDeletePost = (postId: string) => {
+    const newPosts = posts.filter(p => p.id !== postId);
     setPosts(newPosts);
     updateForumPosts(newPosts);
     toast.success("Post deleted successfully");
