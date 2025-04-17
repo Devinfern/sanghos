@@ -31,10 +31,9 @@ export type Retreat = {
   category: string[];
   amenities: string[];
   featured: boolean;
-  isSanghos: boolean; // New field to distinguish retreat types
+  isSanghos: boolean;
 };
 
-// This is where you modify the data with your own instructors
 export const instructors: Instructor[] = [
   {
     id: "inst-1",
@@ -65,123 +64,93 @@ export const instructors: Instructor[] = [
   }
 ];
 
-// This is where you modify the data with your own retreats
 export const retreats: Retreat[] = [
   {
     id: "ret-1",
-    title: "Weekend Mindfulness Immersion",
-    description: "Disconnect from the digital world and reconnect with yourself in this rejuvenating weekend retreat. Through guided meditation, mindful movement, and nature connection practices, you'll learn practical tools to bring greater presence and peace into your everyday life.",
+    title: "Forest Meditation & Yoga Immersion",
+    description: "Connect deeply with nature through mindful movement and meditation practices in the heart of an ancient forest. This transformative retreat combines gentle yoga, forest bathing, and guided meditations to help you find inner peace and renewal.",
     image: "https://images.unsplash.com/photo-1518002171953-a080ee817e1f",
     additionalImages: [
       "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9",
       "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86"
     ],
     location: {
-      name: "Cedar Ridge Retreat Center",
-      address: "142 Mountain View Road",
-      city: "Malibu",
+      name: "Sacred Grove Retreat Center",
+      address: "789 Redwood Way",
+      city: "Mount Shasta",
       state: "CA",
-      description: "Nestled in the Santa Monica Mountains with stunning ocean views, this peaceful property features meditation gardens, hiking trails, and comfortable eco-friendly accommodations."
+      description: "Nestled among ancient redwoods with stunning mountain views, our eco-friendly retreat center offers a perfect sanctuary for deep nature connection."
     },
-    instructor: instructors[0], // Reference to Emily Rodriguez
-    date: "2023-12-08",
-    time: "5:00 PM Friday - 2:00 PM Sunday",
-    duration: "2 days",
-    price: 695,
-    capacity: 15,
-    remaining: 6,
-    category: ["Meditation", "Mindfulness", "Yoga"],
-    amenities: ["Organic meals included", "Private and shared rooms", "Hot tub", "Hiking trails", "Meditation cushions provided"],
-    featured: true,
-    isSanghos: true
-  },
-  {
-    id: "ret-2",
-    title: "Sound Healing Journey",
-    description: "Experience the profound healing effects of sound vibration in this immersive day retreat. Using Tibetan singing bowls, gongs, and other instruments, Marcus will guide you through a sound journey combined with breathwork to release tension, reduce stress, and promote deep relaxation.",
-    image: "https://images.unsplash.com/photo-1518495973542-4542c06a5843",
-    additionalImages: [
-      "https://images.unsplash.com/photo-1469474968028-56623f02e42e",
-      "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86"
-    ],
-    location: {
-      name: "Urban Sanctuary",
-      address: "521 Oak Street",
-      city: "San Francisco",
-      state: "CA",
-      description: "A tranquil space in the heart of the city with hardwood floors, floor-to-ceiling windows, and a peaceful courtyard garden."
-    },
-    instructor: instructors[1], // Reference to Marcus Johnson
-    date: "2023-11-18",
-    time: "10:00 AM - 4:00 PM",
-    duration: "6 hours",
-    price: 185,
+    instructor: instructors[2],
+    date: "2025-04-12",
+    time: "3:00 PM Friday - 11:00 AM Monday",
+    duration: "3 days",
+    price: 895,
     capacity: 20,
-    remaining: 8,
-    category: ["Sound Healing", "Breathwork", "Stress Reduction"],
-    amenities: ["Plant-based lunch", "Tea service", "Yoga mats and blankets provided", "Journal for reflection"],
-    featured: true,
-    isSanghos: true
-  },
-  {
-    id: "ret-3",
-    title: "Forest Qigong Retreat",
-    description: "Connect with the healing energy of the forest through gentle qigong practices, guided forest bathing, and mindful awareness exercises. This retreat is perfect for anyone seeking to recharge their energy and deepen their relationship with the natural world.",
-    image: "https://images.unsplash.com/photo-1513806562344-c75007ad303d",
-    additionalImages: [
-      "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9",
-      "https://images.unsplash.com/photo-1469474968028-56623f02e42e"
-    ],
-    location: {
-      name: "Redwood Sanctuary",
-      address: "789 Forest Way",
-      city: "Santa Cruz",
-      state: "CA",
-      description: "A serene property surrounded by ancient redwood trees with meandering paths, a flowing creek, and a spacious indoor practice space with forest views."
-    },
-    instructor: instructors[2], // Reference to Sophia Chang
-    date: "2023-12-02",
-    time: "9:00 AM - 5:00 PM",
-    duration: "8 hours",
-    price: 210,
-    capacity: 12,
-    remaining: 5,
-    category: ["Qigong", "Forest Bathing", "Nature Connection"],
-    amenities: ["Local seasonal lunch", "Herbal teas", "Rain gear if needed", "Qigong props provided"],
+    remaining: 15,
+    category: ["Meditation", "Yoga", "Forest Bathing"],
+    amenities: ["Organic meals", "Private rooms", "Meditation cushions", "Yoga equipment", "Guided hikes"],
     featured: false,
     isSanghos: false
   },
   {
-    id: "ret-4",
-    title: "Mountain Yoga Escape",
-    description: "Rejuvenate your body and mind with daily yoga sessions overlooking breathtaking mountain vistas. This retreat combines energizing vinyasa flows, gentle restorative practices, and guided meditation to help you find balance and inner peace.",
-    image: "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86",
+    id: "ret-2",
+    title: "High Desert Wellness Journey",
+    description: "Experience profound healing in the serene desert landscape. This unique retreat combines sound healing, breathwork, and mindfulness practices with the naturally grounding energy of the high desert environment.",
+    image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e",
     additionalImages: [
-      "https://images.unsplash.com/photo-1518495973542-4542c06a5843",
+      "https://images.unsplash.com/photo-1513806562344-c75007ad303d",
       "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9"
     ],
     location: {
-      name: "Mountain View Lodge",
-      address: "456 Highland Road",
-      city: "Boulder",
+      name: "Desert Sage Retreat",
+      address: "1422 Mesa Verde Road",
+      city: "Sedona",
+      state: "AZ",
+      description: "A sustainable desert oasis with panoramic red rock views, meditation gardens, and sacred ceremony spaces."
+    },
+    instructor: instructors[1],
+    date: "2025-04-18",
+    time: "4:00 PM Thursday - 2:00 PM Sunday",
+    duration: "4 days",
+    price: 1295,
+    capacity: 16,
+    remaining: 12,
+    category: ["Sound Healing", "Breathwork", "Meditation"],
+    amenities: ["Farm-to-table meals", "Luxury tents", "Sound healing equipment", "Hot springs access", "Guided ceremonies"],
+    featured: true,
+    isSanghos: false
+  },
+  {
+    id: "ret-3",
+    title: "Mountain Wellness Reset",
+    description: "Reset your mind and body in the crisp mountain air. This comprehensive wellness retreat offers a perfect blend of yoga, hiking, meditation, and nutritional guidance to help you establish healthy habits that last.",
+    image: "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86",
+    additionalImages: [
+      "https://images.unsplash.com/photo-1518495973542-4542c06a5843",
+      "https://images.unsplash.com/photo-1469474968028-56623f02e42e"
+    ],
+    location: {
+      name: "Alpine Wellness Lodge",
+      address: "542 Mountain View Drive",
+      city: "Aspen",
       state: "CO",
-      description: "A cozy mountain lodge with panoramic views, spacious yoga deck, hot springs, and hiking trails just steps from your door."
+      description: "A luxurious mountain retreat center featuring panoramic views, spa facilities, and direct access to hiking trails."
     },
     instructor: instructors[0],
-    date: "2024-01-15",
-    time: "3:00 PM Friday - 11:00 AM Monday",
+    date: "2025-04-25",
+    time: "2:00 PM Friday - 11:00 AM Monday",
     duration: "3 days",
-    price: 850,
+    price: 1495,
     capacity: 18,
-    remaining: 10,
-    category: ["Yoga", "Meditation", "Nature"],
-    amenities: ["Farm-to-table meals", "Hot springs access", "Yoga equipment provided", "Guided hikes"],
+    remaining: 16,
+    category: ["Yoga", "Hiking", "Wellness", "Nutrition"],
+    amenities: ["Gourmet spa cuisine", "Luxury suites", "Spa access", "Yoga equipment", "Guided adventures"],
     featured: false,
     isSanghos: false
   }
 ];
 
-// Helper function to format currency
 export const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -190,7 +159,6 @@ export const formatCurrency = (amount: number): string => {
   }).format(amount);
 };
 
-// Helper function to format date
 export const formatDate = (dateString: string): string => {
   const options: Intl.DateTimeFormatOptions = { 
     weekday: 'long', 
@@ -201,7 +169,6 @@ export const formatDate = (dateString: string): string => {
   return new Date(dateString).toLocaleDateString('en-US', options);
 };
 
-// Helper to get remaining spots text
 export const getRemainingText = (remaining: number): string => {
   if (remaining <= 0) return "Sold out";
   if (remaining === 1) return "Only 1 spot left";
