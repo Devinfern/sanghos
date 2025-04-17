@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -79,13 +78,15 @@ const EventURLInput = ({ onEventDataExtracted }: EventURLInputProps) => {
     if (extractedData) {
       if (field.includes('.')) {
         const [parent, child] = field.split('.');
-        setExtractedData({
-          ...extractedData,
-          [parent]: {
-            ...extractedData[parent as keyof EventData],
-            [child]: value
-          }
-        });
+        if (parent === 'location' && typeof extractedData.location === 'object') {
+          setExtractedData({
+            ...extractedData,
+            location: {
+              ...extractedData.location,
+              [child]: value
+            }
+          });
+        }
       } else {
         setExtractedData({
           ...extractedData,
