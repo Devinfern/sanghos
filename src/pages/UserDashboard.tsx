@@ -1,8 +1,7 @@
-
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { Calendar, User, MessageCircle, BookOpen, Clock, ArrowRight } from "lucide-react";
+import { Calendar, User, MessageCircle, BookOpen, Clock, ArrowRight, Plus } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,13 +12,16 @@ import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { retreats, formatDate } from "@/lib/data";
 import { toast } from "sonner";
+import EventURLInput from "@/components/admin/EventURLInput";
+import { useAdminStatus } from "@/hooks/useAdminStatus";
 
 const UserDashboard = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState<any>(null);
   const [upcomingRetreats, setUpcomingRetreats] = useState<any[]>([]);
-  
+  const { isAdmin, isLoading: isAdminLoading } = useAdminStatus();
+
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -30,14 +32,12 @@ const UserDashboard = () => {
       }
 
       try {
-        // Try to fetch user profile from the user_profiles table
         const { data: profile, error } = await supabase
           .from('user_profiles')
           .select('*, full_name, username')
           .eq('id', session.user.id)
           .single();
 
-        // If there's an error with the user_profiles table, create a default user object
         if (error) {
           console.error("Error fetching user profile:", error);
           setUserData({
@@ -56,11 +56,10 @@ const UserDashboard = () => {
             membershipStatus: "active",
             completedRetreats: 0,
             points: 0,
-            avatar: profile.avatar_url // Added avatar support
+            avatar: profile.avatar_url
           });
         }
 
-        // Filter retreats to show as "upcoming"
         const today = new Date();
         const upcoming = retreats
           .filter(retreat => new Date(retreat.date) > today)
@@ -71,7 +70,6 @@ const UserDashboard = () => {
         console.error("Error in dashboard:", err);
         toast.error("Something went wrong loading your dashboard");
         
-        // Set default data even if there's an error
         setUserData({
           name: "User",
           email: "user@example.com",
@@ -88,7 +86,7 @@ const UserDashboard = () => {
     checkAuth();
   }, [navigate]);
 
-  if (isLoading) {
+  if (isLoading || isAdminLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-pulse text-center">
@@ -98,7 +96,6 @@ const UserDashboard = () => {
     );
   }
 
-  // Early return if userData is null (shouldn't happen with our fixes, but as a safety)
   if (!userData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -123,7 +120,6 @@ const UserDashboard = () => {
         <div className="container px-4 md:px-6">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8">
             <div className="flex items-center space-x-4">
-              {/* Optional avatar display */}
               {userData.avatar && (
                 <img 
                   src={userData.avatar} 
@@ -155,7 +151,6 @@ const UserDashboard = () => {
             </TabsList>
             
             <TabsContent value="overview" className="space-y-6">
-              {/* Quick Stats */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Card>
                   <CardHeader className="pb-2">
@@ -195,7 +190,6 @@ const UserDashboard = () => {
                 </Card>
               </div>
               
-              {/* Upcoming Retreats */}
               <Card>
                 <CardHeader>
                   <CardTitle>Your Upcoming Retreats</CardTitle>
@@ -251,7 +245,6 @@ const UserDashboard = () => {
                 </CardFooter>
               </Card>
               
-              {/* Wellness Journey */}
               <Card>
                 <CardHeader>
                   <CardTitle>Your Wellness Journey</CardTitle>
@@ -382,6 +375,26 @@ const UserDashboard = () => {
                 </CardContent>
               </Card>
             </TabsContent>
+            
+            {isAdmin && (
+              <TabsContent value="admin">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Admin Tools</CardTitle>
+                    <CardDescription>
+                      Quick tools for event and content management
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <EventURLInput 
+                      onEventDataExtracted={(eventData) => {
+                        toast.success("Event data extracted successfully!");
+                      }} 
+                    />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            )}
           </Tabs>
         </div>
       </main>
