@@ -46,7 +46,17 @@ const OnboardingFlow = ({
   // Use either external or internal state depending on what's provided
   const step = externalStep !== undefined ? externalStep : internalStep;
   const setStep = externalSetStep || setInternalStep;
-  const userData = externalUserData || internalUserData;
+  
+  // Ensure userData has all required properties by merging with default structure
+  const userData = externalUserData ? {
+    ...internalUserData,
+    ...externalUserData,
+    preferences: {
+      ...internalUserData.preferences,
+      ...(externalUserData.preferences || {})
+    }
+  } : internalUserData;
+  
   const setUserData = externalSetUserData || setInternalUserData;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +72,7 @@ const OnboardingFlow = ({
     setUserData((prev: any) => ({
       ...prev,
       preferences: {
-        ...prev.preferences,
+        ...(prev.preferences || {}),
         [preference]: checked
       }
     }));
@@ -96,6 +106,9 @@ const OnboardingFlow = ({
     onComplete(userData);
     setIsLoading(false);
   };
+
+  // Ensure preferences object exists
+  const preferences = userData.preferences || {};
 
   return (
     <Card className="w-full max-w-md mx-auto">
@@ -189,7 +202,7 @@ const OnboardingFlow = ({
                     <div key={item.id} className="flex items-center space-x-2">
                       <Checkbox 
                         id={item.id} 
-                        checked={userData.preferences[item.id]}
+                        checked={preferences[item.id] || false}
                         onCheckedChange={(checked) => 
                           handlePreferenceChange(item.id, checked as boolean)
                         }
