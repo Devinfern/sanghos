@@ -36,14 +36,8 @@ serve(async (req) => {
       throw new Error('Failed to crawl URL')
     }
 
-    console.log('Crawl successful, processing data')
-
-    // Extract relevant event information from the crawled data
     const rawData = response.data[0]?.content?.markdown || ''
-    
-    // Parse the event data using heuristics
     const eventData = extractEventData(rawData, url)
-
     console.log('Extracted event data:', eventData)
 
     return new Response(
@@ -65,9 +59,8 @@ serve(async (req) => {
   }
 })
 
-// Function to extract event information from raw text
+// Enhanced event data extraction with better pattern matching
 function extractEventData(text: string, sourceUrl: string) {
-  // Initialize event data with defaults
   const eventData = {
     title: '',
     description: '',
@@ -80,33 +73,49 @@ function extractEventData(text: string, sourceUrl: string) {
       state: ''
     },
     price: 0,
-    category: [],
+    category: [] as string[],
     instructorName: '',
     image: '',
+    capacity: 0,
+    remaining: 0,
     sourceUrl
   }
 
-  // Extract title - usually first line of significant length
-  const lines = text.split('\n')
-  for (const line of lines) {
-    const trimmedLine = line.trim()
-    if (trimmedLine.length > 15 && !trimmedLine.startsWith('#') && !trimmedLine.startsWith('!')) {
-      eventData.title = trimmedLine
+  // Extract title - look for prominent text patterns
+  const titlePatterns = [
+    /^#\s*(.+)$/m,  // Markdown h1
+    /<h1[^>]*>([^<]+)<\/h1>/i,  // HTML h1
+    /^(.{20,100}?)(?:\n|$)/m  // First substantial line
+  ]
+
+  for (const pattern of titlePatterns) {
+    const match = text.match(pattern)
+    if (match) {
+      eventData.title = match[1].trim()
       break
     }
   }
 
-  // Extract description - look for paragraphs
-  const paragraphs = text.match(/(?:\n|^)([^\n#].{20,}?)(?:\n|$)/g)
-  if (paragraphs && paragraphs.length > 0) {
-    eventData.description = paragraphs[0].trim()
+  // Extract description - look for substantial paragraphs
+  const descPatterns = [
+    /\n\n([^#\n].{100,500}?)(?:\n\n|$)/m,  // Markdown paragraph
+    /<p[^>]*>([^<]{100,500})<\/p>/i  // HTML paragraph
+  ]
+
+  for (const pattern of descPatterns) {
+    const match = text.match(pattern)
+    if (match) {
+      eventData.description = match[1].trim()
+      break
+    }
   }
 
-  // Extract date - look for date patterns
+  // Enhanced date extraction with multiple formats
   const datePatterns = [
-    /(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}/gi,
+    /(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4}/gi,
+    /\d{4}-\d{2}-\d{2}/g,
     /\d{1,2}\/\d{1,2}\/\d{4}/g,
-    /\d{4}-\d{2}-\d{2}/g
+    /(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*,\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},\s+\d{4}/gi
   ]
 
   for (const pattern of datePatterns) {
@@ -114,7 +123,6 @@ function extractEventData(text: string, sourceUrl: string) {
     if (match) {
       const dateStr = match[0]
       try {
-        // Attempt to format date as YYYY-MM-DD
         const date = new Date(dateStr)
         if (!isNaN(date.getTime())) {
           eventData.date = date.toISOString().split('T')[0]
@@ -126,38 +134,81 @@ function extractEventData(text: string, sourceUrl: string) {
     }
   }
 
-  // Extract time
+  // Enhanced time extraction with various formats
   const timePattern = /(?:\d{1,2}:\d{2}\s*(?:am|pm|AM|PM)|(?:\d{1,2})\s*(?:am|pm|AM|PM))/g
   const timeMatches = text.match(timePattern)
-  if (timeMatches && timeMatches.length > 0) {
+  if (timeMatches) {
     eventData.time = timeMatches[0]
   }
 
-  // Extract location
-  const cityStatePattern = /\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*),\s+([A-Z]{2})\b/g
-  const cityStateMatches = text.match(cityStatePattern)
-  if (cityStateMatches && cityStateMatches.length > 0) {
-    const [city, state] = cityStateMatches[0].split(',').map(s => s.trim())
-    eventData.location.city = city
-    eventData.location.state = state
+  // Enhanced location extraction
+  const cityStatePattern = /([A-Z][a-z\s]+),\s*([A-Z]{2})/g
+  const cityStateMatch = cityStatePattern.exec(text)
+  if (cityStateMatch) {
+    eventData.location.city = cityStateMatch[1].trim()
+    eventData.location.state = cityStateMatch[2]
   }
 
-  // Extract location name - look for venue keywords
-  const venueKeywords = ['center', 'venue', 'hall', 'space', 'studio', 'retreat']
-  const lines2 = text.split('\n')
-  for (const line of lines2) {
-    if (venueKeywords.some(keyword => line.toLowerCase().includes(keyword))) {
-      eventData.location.name = line.trim()
+  // Extract venue name
+  const venuePatterns = [
+    /(?:at|@)\s+([\w\s&]+(?:Center|Theatre|Theater|Hall|Studio|Space|Venue))/i,
+    /([\w\s&]+(?:Center|Theatre|Theater|Hall|Studio|Space|Venue))/i
+  ]
+
+  for (const pattern of venuePatterns) {
+    const match = text.match(pattern)
+    if (match) {
+      eventData.location.name = match[1].trim()
       break
     }
   }
 
-  // Extract price - look for dollar amounts
-  const pricePattern = /\$(\d+(?:\.\d{2})?)/g
-  const priceMatches = text.match(pricePattern)
-  if (priceMatches && priceMatches.length > 0) {
-    const priceText = priceMatches[0].replace('$', '')
-    eventData.price = parseFloat(priceText)
+  // Enhanced price extraction
+  const pricePatterns = [
+    /\$(\d+(?:\.\d{2})?)/g,
+    /(?:price|cost|fee):\s*\$(\d+(?:\.\d{2})?)/i,
+    /(\d+(?:\.\d{2})?)\s*(?:dollars|USD)/i
+  ]
+
+  for (const pattern of pricePatterns) {
+    const match = text.match(pattern)
+    if (match) {
+      const price = parseFloat(match[1])
+      if (!isNaN(price)) {
+        eventData.price = price
+        break
+      }
+    }
+  }
+
+  // Extract capacity and remaining spots
+  const capacityPatterns = [
+    /(?:capacity|limit|max):\s*(\d+)/i,
+    /limited to (\d+)/i
+  ]
+
+  for (const pattern of capacityPatterns) {
+    const match = text.match(pattern)
+    if (match) {
+      eventData.capacity = parseInt(match[1])
+      // Default remaining to capacity if not specified
+      eventData.remaining = eventData.capacity
+      break
+    }
+  }
+
+  // Extract instructor name
+  const instructorPatterns = [
+    /(?:instructor|teacher|guide|led by|with):\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,2})/i,
+    /([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,2})\s+(?:will|is)\s+(?:teach|lead|guide)/i
+  ]
+
+  for (const pattern of instructorPatterns) {
+    const match = text.match(pattern)
+    if (match) {
+      eventData.instructorName = match[1].trim()
+      break
+    }
   }
 
   // Extract categories based on keywords
@@ -175,13 +226,17 @@ function extractEventData(text: string, sourceUrl: string) {
     }
   }
 
-  // Try to find an image URL in the original text
-  const imagePattern = /!\[.*?\]\((https?:\/\/[^)]+)\)/g
-  const imageMatches = text.match(imagePattern)
-  if (imageMatches && imageMatches.length > 0) {
-    const imageUrl = imageMatches[0].match(/\((https?:\/\/[^)]+)\)/)?.[1]
-    if (imageUrl) {
-      eventData.image = imageUrl
+  // Extract image URL
+  const imagePatterns = [
+    /!\[.*?\]\((https?:\/\/[^)]+\.(jpg|jpeg|png|gif))\)/i,  // Markdown image
+    /<img[^>]+src=["'](https?:\/\/[^"']+\.(jpg|jpeg|png|gif))["']/i  // HTML image
+  ]
+
+  for (const pattern of imagePatterns) {
+    const match = text.match(pattern)
+    if (match) {
+      eventData.image = match[1]
+      break
     }
   }
 
