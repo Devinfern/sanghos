@@ -1,4 +1,3 @@
-
 // Forum data types
 export type ForumAuthor = {
   name: string;
@@ -31,14 +30,20 @@ export type ForumPost = {
 };
 
 export type ForumEvent = {
-  id: string | number; // Update to match communityData.ts
+  id: string | number;
   date: {
     day: number;
     month: string;
   };
   title: string;
   time: string;
-  retreatId?: string; // Link to related retreat
+  retreat_id?: string;
+  location?: string;
+  description?: string;
+  instructor_name?: string;
+  price?: number;
+  capacity?: number;
+  remaining?: number;
 };
 
 export type TrendingPost = {
@@ -61,11 +66,11 @@ export type ForumSpace = {
   isPostRetreat?: boolean;
 };
 
-// Import the data from communityData to keep synchronized
+// Import the data from communityData and the retreat data
 import {
   forumSpaces,
   forumPosts,
-  forumEvents,
+  forumEvents as communityEvents,
   trendingPosts,
   updateForumSpaces,
   updateForumPosts,
@@ -76,12 +81,17 @@ import {
   loadForumEvents,
   loadTrendingPosts
 } from "./communityData";
+import { retreats } from "./data";
+import { syncRetreatsToEvents } from "./eventUtils";
 
-// Export the same data and update functions
+// Combine community events with retreat events
+const combinedEvents = [...communityEvents, ...syncRetreatsToEvents(retreats)];
+
+// Export the combined data and update functions
 export {
   forumSpaces,
   forumPosts,
-  forumEvents,
+  combinedEvents as forumEvents,
   trendingPosts,
   updateForumSpaces,
   updateForumPosts,

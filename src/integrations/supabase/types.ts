@@ -124,28 +124,49 @@ export type Database = {
       }
       forum_events: {
         Row: {
+          capacity: number | null
           created_at: string
           date_day: number
           date_month: string
+          description: string | null
           id: string
+          instructor_name: string | null
+          location: string | null
+          price: number | null
+          remaining: number | null
+          retreat_id: string | null
           time: string
           title: string
           updated_at: string
         }
         Insert: {
+          capacity?: number | null
           created_at?: string
           date_day: number
           date_month: string
+          description?: string | null
           id?: string
+          instructor_name?: string | null
+          location?: string | null
+          price?: number | null
+          remaining?: number | null
+          retreat_id?: string | null
           time: string
           title: string
           updated_at?: string
         }
         Update: {
+          capacity?: number | null
           created_at?: string
           date_day?: number
           date_month?: string
+          description?: string | null
           id?: string
+          instructor_name?: string | null
+          location?: string | null
+          price?: number | null
+          remaining?: number | null
+          retreat_id?: string | null
           time?: string
           title?: string
           updated_at?: string
