@@ -1,13 +1,15 @@
 
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import EventURLInput from "@/components/admin/EventURLInput";
+import { EventURLForm } from "@/components/admin/EventURLForm";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Retreat } from "@/lib/data";
 import { supabase } from "@/integrations/supabase/client";
+import { convertEventDataToRetreat } from "@/lib/eventUtils";
+import { EventPreview } from "@/components/admin/EventPreview";
 
-// Define the event data interface to match what's used in the EventURLInput
+// Define the event data interface to match what's used in the EventURLForm
 interface EventData {
   title: string;
   description: string;
@@ -43,41 +45,32 @@ const DashboardAdmin = () => {
     setIsPublishing(true);
     try {
       // Convert the extracted data to the format expected by the retreats collection
-      const retreatData: Partial<Retreat> = {
-        title: extractedEventData.title,
-        description: extractedEventData.description,
-        image: extractedEventData.image || "https://images.unsplash.com/photo-1518002171953-a080ee817e1f", // Default image if none provided
-        additionalImages: [],
-        location: {
-          name: extractedEventData.location.name,
-          address: extractedEventData.location.address || "",
-          city: extractedEventData.location.city,
-          state: extractedEventData.location.state,
-          description: "Location extracted from event URL"
-        },
-        date: extractedEventData.date,
-        time: extractedEventData.time,
-        duration: "1 day", // Default duration
-        price: extractedEventData.price,
-        capacity: extractedEventData.capacity || 20,
-        remaining: extractedEventData.remaining || extractedEventData.capacity || 20,
-        category: extractedEventData.category,
-        amenities: [],
-        featured: false,
-        isSanghos: true // Mark as Sanghos event
-      };
+      const retreatData = convertEventDataToRetreat(extractedEventData);
 
+      // Get the current user's ID for the user_id field
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("You must be logged in to publish events");
+      }
+      
+      // Format the location string
+      const locationStr = `${extractedEventData.location.name}, ${extractedEventData.location.city}, ${extractedEventData.location.state}`;
+      
+      // Convert date to string format if it's not already
+      const eventDate = extractedEventData.date;
+      
       // Save to database
       const { error } = await supabase
         .from('wellness_events')
         .insert({
           title: extractedEventData.title,
           description: extractedEventData.description,
-          event_date: new Date(extractedEventData.date),
-          location: `${extractedEventData.location.name}, ${extractedEventData.location.city}, ${extractedEventData.location.state}`,
+          event_date: eventDate, // Using the string date directly
+          location: locationStr,
           price: extractedEventData.price,
-          max_participants: extractedEventData.capacity,
-          category: extractedEventData.category[0] || "Wellness"
+          max_participants: extractedEventData.capacity || 20,
+          category: extractedEventData.category[0] || "Wellness",
+          user_id: session.user.id
         });
 
       if (error) {
@@ -103,22 +96,36 @@ const DashboardAdmin = () => {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <EventURLInput onEventDataExtracted={handleEventDataExtracted} />
+        <EventURLForm onEventDataExtracted={handleEventDataExtracted} />
         
         {extractedEventData && (
-          <div className="mt-6 text-center">
-            <h3 className="text-lg font-semibold mb-2">Ready to Publish</h3>
-            <p className="text-muted-foreground mb-4">
-              The event "{extractedEventData.title}" is ready to be published to the retreats page.
-            </p>
-            <Button 
-              onClick={handlePublishEvent} 
-              disabled={isPublishing}
-              className="w-full md:w-auto"
-            >
-              {isPublishing ? "Publishing..." : "Publish Event"}
-            </Button>
-          </div>
+          <EventPreview
+            eventData={extractedEventData}
+            onUseData={handlePublishEvent}
+            onEdit={(field, value) => {
+              setExtractedEventData(prev => {
+                if (!prev) return prev;
+                
+                if (field.includes('.')) {
+                  const [parent, child] = field.split('.');
+                  if (parent === 'location') {
+                    return {
+                      ...prev,
+                      location: {
+                        ...prev.location,
+                        [child]: value
+                      }
+                    };
+                  }
+                }
+                
+                return {
+                  ...prev,
+                  [field]: field === 'price' || field === 'capacity' ? Number(value) : value
+                };
+              });
+            }}
+          />
         )}
       </CardContent>
     </Card>
