@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,7 @@ import { retreats } from "@/lib/data";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 import { cn } from "@/lib/utils";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface RetreatRecommendation {
   retreatId: string;
@@ -142,7 +144,6 @@ export default function WellnessJournal() {
                 placeholders={journalPlaceholders}
                 onChange={handleInputChange}
                 onSubmit={handleFormSubmit}
-                className="bg-sage-50/50 border-sage-200 text-sage-900 placeholder:text-sage-500 focus:ring-sage-300"
               />
             )}
             {journalEntry.length > 0 && !isAnalyzing && (
@@ -164,29 +165,35 @@ export default function WellnessJournal() {
             
             {recommendations.length > 0 ? (
               <div className="space-y-4">
-                {recommendations.map((rec) => (
-                  <Card
+                {recommendations.map((rec, index) => (
+                  <motion.div
                     key={rec.retreatId}
-                    className="border border-sage-200/20 hover:border-sage-300/30 transition-all duration-300 hover:shadow-md"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
                   >
-                    <CardContent className="pt-6">
-                      <h4 className="font-semibold text-lg mb-2 text-sage-900">{rec.title}</h4>
-                      <p className="text-sage-600 mb-4">{rec.reason}</p>
-                      <div className="flex justify-between items-center">
-                        <div className="bg-sage-100/50 text-sage-700 text-sm py-1 px-3 rounded-full">
-                          {Math.round(rec.matchScore * 100)}% match
+                    <Card
+                      className="border border-sage-200/20 hover:border-sage-300/30 transition-all duration-300 hover:shadow-md"
+                    >
+                      <CardContent className="pt-6">
+                        <h4 className="font-semibold text-lg mb-2 text-sage-900">{rec.title}</h4>
+                        <p className="text-sage-600 mb-4">{rec.reason}</p>
+                        <div className="flex justify-between items-center">
+                          <div className="bg-sage-100/50 text-sage-700 text-sm py-1 px-3 rounded-full">
+                            {Math.round(rec.matchScore * 100)}% match
+                          </div>
+                          <Button
+                            variant="outline"
+                            onClick={() => navigateToRetreat(rec.retreatId)}
+                            className="border-sage-300 text-sage-700 hover:bg-sage-50 hover:text-sage-800"
+                          >
+                            View Retreat
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                          </Button>
                         </div>
-                        <Button
-                          variant="outline"
-                          onClick={() => navigateToRetreat(rec.retreatId)}
-                          className="border-sage-300 text-sage-700 hover:bg-sage-50 hover:text-sage-800"
-                        >
-                          View Retreat
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
                 ))}
               </div>
             ) : (

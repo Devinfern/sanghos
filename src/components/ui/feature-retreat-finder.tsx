@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart, Compass, Sparkles } from "lucide-react";
@@ -5,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import WellnessJournal from "@/components/WellnessJournal";
 import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
+
 interface TabContent {
   badge: string;
   title: string;
@@ -13,18 +16,21 @@ interface TabContent {
   imageSrc: string;
   imageAlt: string;
 }
+
 interface Tab {
   value: string;
   icon: React.ReactNode;
   label: string;
   content: TabContent;
 }
+
 interface FeatureRetreatFinderProps {
   badge?: string;
   heading?: string;
   description?: string;
   tabs?: Tab[];
 }
+
 const FeatureRetreatFinder = ({
   badge = "AI-Powered Matching",
   heading = "Find Your Perfect Wellness Journey",
@@ -68,6 +74,20 @@ const FeatureRetreatFinder = ({
   }]
 }: FeatureRetreatFinderProps) => {
   const [showJournal, setShowJournal] = useState(false);
+  const [activeTab, setActiveTab] = useState(tabs[0].value);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  
+  const handleTabChange = (value: string) => {
+    if (value !== activeTab && !isTransitioning) {
+      setIsTransitioning(true);
+      setActiveTab(value);
+      // Reset transitioning state after animation completes
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 300);
+    }
+  };
+  
   const handleButtonClick = () => {
     setShowJournal(true);
     // Smooth scroll to journal section
@@ -78,6 +98,7 @@ const FeatureRetreatFinder = ({
       });
     }
   };
+  
   return <section className="relative py-24">
       <div className="absolute inset-0 bg-gradient-to-br from-sage-50 via-sage-100/50 to-sage-50"></div>
       
@@ -92,37 +113,70 @@ const FeatureRetreatFinder = ({
           <p className="text-sage-700 max-w-2xl">{description}</p>
         </div>
         
-        <Tabs defaultValue={tabs[0].value} className="mt-12">
+        <Tabs 
+          defaultValue={tabs[0].value} 
+          value={activeTab}
+          onValueChange={handleTabChange}
+          className="mt-12"
+        >
           <TabsList className="container flex flex-col items-center justify-center gap-4 sm:flex-row md:gap-10 bg-transparent">
-            {tabs.map(tab => <TabsTrigger key={tab.value} value={tab.value} className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-sage-600 data-[state=active]:bg-sage-100 data-[state=active]:text-sage-900 transition-all duration-300">
+            {tabs.map(tab => (
+              <TabsTrigger 
+                key={tab.value} 
+                value={tab.value} 
+                disabled={isTransitioning}
+                className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-sage-600 data-[state=active]:bg-sage-100 data-[state=active]:text-sage-900 transition-all duration-300"
+              >
                 {tab.icon} {tab.label}
-              </TabsTrigger>)}
+              </TabsTrigger>
+            ))}
           </TabsList>
           
           <div className="mx-auto mt-8 max-w-screen-xl rounded-2xl bg-white/80 backdrop-blur-sm p-6 lg:p-16 shadow-lg border border-sage-200/50">
-            {tabs.map(tab => <TabsContent key={tab.value} value={tab.value} className="space-y-12">
-                <div className="grid place-items-center gap-20 lg:grid-cols-2 lg:gap-10">
-                  <div className="flex flex-col gap-5">
-                    <Badge variant="outline" className="w-fit bg-sage-50 text-sage-700 border-sage-200">
-                      {tab.content.badge}
-                    </Badge>
-                    <h3 className="text-3xl font-semibold lg:text-4xl text-sage-900">
-                      {tab.content.title}
-                    </h3>
-                    <p className="text-sage-700 lg:text-lg">
-                      {tab.content.description}
-                    </p>
-                    <Button className="mt-2.5 w-fit gap-2 bg-sage-700 hover:bg-sage-800 text-white" size="lg" onClick={handleButtonClick}>
-                      {tab.content.buttonText}
-                    </Button>
-                  </div>
-                  <img src={tab.content.imageSrc} alt={tab.content.imageAlt} className="rounded-xl shadow-lg w-full h-[400px] object-cover" />
-                </div>
+            <AnimatePresence mode="wait">
+              {tabs.map(tab => (
+                <TabsContent 
+                  key={tab.value} 
+                  value={tab.value} 
+                  className="space-y-12"
+                >
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                    className="grid place-items-center gap-20 lg:grid-cols-2 lg:gap-10"
+                  >
+                    <div className="flex flex-col gap-5">
+                      <Badge variant="outline" className="w-fit bg-sage-50 text-sage-700 border-sage-200">
+                        {tab.content.badge}
+                      </Badge>
+                      <h3 className="text-3xl font-semibold lg:text-4xl text-sage-900">
+                        {tab.content.title}
+                      </h3>
+                      <p className="text-sage-700 lg:text-lg">
+                        {tab.content.description}
+                      </p>
+                      <Button className="mt-2.5 w-fit gap-2 bg-sage-700 hover:bg-sage-800 text-white" size="lg" onClick={handleButtonClick}>
+                        {tab.content.buttonText}
+                      </Button>
+                    </div>
+                    <motion.img 
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.4, delay: 0.1 }}
+                      src={tab.content.imageSrc} 
+                      alt={tab.content.imageAlt} 
+                      className="rounded-xl shadow-lg w-full h-[400px] object-cover" 
+                    />
+                  </motion.div>
 
-                <div id="wellness-journal" className={cn("transition-all duration-500", showJournal ? "opacity-100 transform translate-y-0" : "opacity-0 transform translate-y-8 pointer-events-none h-0")}>
-                  <WellnessJournal />
-                </div>
-              </TabsContent>)}
+                  <div id="wellness-journal" className={cn("transition-all duration-500", showJournal ? "opacity-100 transform translate-y-0" : "opacity-0 transform translate-y-8 pointer-events-none h-0")}>
+                    <WellnessJournal />
+                  </div>
+                </TabsContent>
+              ))}
+            </AnimatePresence>
           </div>
         </Tabs>
       </div>

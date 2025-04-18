@@ -5,15 +5,19 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
+interface PlaceholdersAndVanishInputProps {
+  placeholders: string[];
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  className?: string; // Added className prop
+}
+
 export function PlaceholdersAndVanishInput({
   placeholders,
   onChange,
   onSubmit,
-}: {
-  placeholders: string[];
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-}) {
+  className,
+}: PlaceholdersAndVanishInputProps) {
   const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -175,11 +179,13 @@ export function PlaceholdersAndVanishInput({
     vanishAndSubmit();
     onSubmit && onSubmit(e);
   };
+  
   return (
     <form
       className={cn(
         "w-full relative max-w-xl mx-auto bg-white dark:bg-zinc-800 h-12 rounded-full overflow-hidden shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),_0px_1px_0px_0px_rgba(25,28,33,0.02),_0px_0px_0px_1px_rgba(25,28,33,0.08)] transition duration-200",
-        value && "bg-gray-50"
+        value && "bg-gray-50",
+        className
       )}
       onSubmit={handleSubmit}
     >
