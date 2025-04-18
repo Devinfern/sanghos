@@ -28,7 +28,13 @@ export const EventURLForm = ({ onEventDataExtracted }: EventURLFormProps) => {
     console.log("Submitting URL for extraction:", url);
 
     try {
-      // Use the Supabase client to call the edge function instead of direct fetch
+      // Check if user is authenticated (needed for Supabase function calls)
+      const { data: session } = await supabase.auth.getSession();
+      if (!session?.session) {
+        console.warn("User not authenticated, function call may fail");
+      }
+      
+      console.log("Calling Supabase function: extract-event-data");
       const { data, error: functionError } = await supabase.functions.invoke('extract-event-data', {
         body: { url },
       });

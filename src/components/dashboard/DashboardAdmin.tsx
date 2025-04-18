@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { EventURLForm } from "@/components/admin/EventURLForm";
 import { toast } from "sonner";
@@ -7,7 +7,7 @@ import { Retreat } from "@/lib/data";
 import { supabase } from "@/integrations/supabase/client";
 import { convertEventDataToRetreat } from "@/lib/eventUtils";
 import { EventPreview } from "@/components/admin/EventPreview";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, AlertTriangle } from "lucide-react";
 
 // Define the event data interface to match what's used in the EventURLForm
 interface EventData {
@@ -34,6 +34,29 @@ const DashboardAdmin = () => {
   const [extractedEventData, setExtractedEventData] = useState<EventData | null>(null);
   const [isPublishing, setIsPublishing] = useState(false);
   const [urlFormError, setUrlFormError] = useState<string | null>(null);
+  const [isApiKeyConfigured, setIsApiKeyConfigured] = useState<boolean | null>(null);
+
+  // Check if FIRECRAWL_API_KEY is configured
+  useEffect(() => {
+    const checkApiKey = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('extract-event-data', {
+          body: { check: 'api_key' }
+        });
+        if (error || !data?.configured) {
+          console.warn("FIRECRAWL_API_KEY may not be configured:", error);
+          setIsApiKeyConfigured(false);
+        } else {
+          setIsApiKeyConfigured(true);
+        }
+      } catch (e) {
+        console.error("Error checking API key:", e);
+        setIsApiKeyConfigured(false);
+      }
+    };
+    
+    checkApiKey();
+  }, []);
 
   const handleEventDataExtracted = (eventData: EventData) => {
     setUrlFormError(null);
@@ -121,6 +144,19 @@ const DashboardAdmin = () => {
           <p className="text-sm text-muted-foreground mb-4">
             Paste an event URL to extract information and quickly create a new event
           </p>
+          
+          {isApiKeyConfigured === false && (
+            <div className="mb-4 bg-amber-50 border border-amber-200 rounded-md p-4 text-amber-600">
+              <div className="flex items-center gap-2 mb-2">
+                <AlertTriangle className="h-4 w-4" />
+                <p className="font-medium">Firecrawl API Key Not Configured</p>
+              </div>
+              <p className="text-sm">
+                The Firecrawl API key appears to be missing or invalid. Contact your administrator to set up the FIRECRAWL_API_KEY in Supabase Edge Function secrets.
+              </p>
+            </div>
+          )}
+          
           <EventURLForm onEventDataExtracted={handleEventDataExtracted} />
           
           {urlFormError && (
