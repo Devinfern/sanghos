@@ -92,8 +92,7 @@ const FeatureRetreatFinder = ({
 
   return (
     <section className="relative py-24">
-      {/* Updated background gradient with darker tones */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#1A1F2C]/50 via-[#222638]/30 to-[#1A1F2C]/50"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-sage-50 via-sage-100/50 to-sage-50"></div>
       
       <div className="container mx-auto relative">
         <div className="flex flex-col items-center gap-4 text-center">
@@ -124,45 +123,47 @@ const FeatureRetreatFinder = ({
               <TabsContent
                 key={tab.value}
                 value={tab.value}
-                className="grid place-items-center gap-20 lg:grid-cols-2 lg:gap-10"
+                className="space-y-12"
               >
-                <div className="flex flex-col gap-5">
-                  <Badge variant="outline" className="w-fit bg-sage-50 text-sage-700 border-sage-200">
-                    {tab.content.badge}
-                  </Badge>
-                  <h3 className="text-3xl font-semibold lg:text-4xl text-sage-900">
-                    {tab.content.title}
-                  </h3>
-                  <p className="text-sage-700 lg:text-lg">
-                    {tab.content.description}
-                  </p>
-                  <Button 
-                    className="mt-2.5 w-fit gap-2 bg-sage-700 hover:bg-sage-800 text-white" 
-                    size="lg"
-                    onClick={handleButtonClick}
-                  >
-                    {tab.content.buttonText}
-                  </Button>
+                <div className="grid place-items-center gap-20 lg:grid-cols-2 lg:gap-10">
+                  <div className="flex flex-col gap-5">
+                    <Badge variant="outline" className="w-fit bg-sage-50 text-sage-700 border-sage-200">
+                      {tab.content.badge}
+                    </Badge>
+                    <h3 className="text-3xl font-semibold lg:text-4xl text-sage-900">
+                      {tab.content.title}
+                    </h3>
+                    <p className="text-sage-700 lg:text-lg">
+                      {tab.content.description}
+                    </p>
+                    <Button 
+                      className="mt-2.5 w-fit gap-2 bg-sage-700 hover:bg-sage-800 text-white" 
+                      size="lg"
+                      onClick={handleButtonClick}
+                    >
+                      {tab.content.buttonText}
+                    </Button>
+                  </div>
+                  <img
+                    src={tab.content.imageSrc}
+                    alt={tab.content.imageAlt}
+                    className="rounded-xl shadow-lg w-full h-[400px] object-cover"
+                  />
                 </div>
-                <img
-                  src={tab.content.imageSrc}
-                  alt={tab.content.imageAlt}
-                  className="rounded-xl shadow-lg w-full h-[400px] object-cover"
-                />
+
+                <div 
+                  id="wellness-journal"
+                  className={cn(
+                    "transition-all duration-500",
+                    showJournal ? "opacity-100 transform translate-y-0" : "opacity-0 transform translate-y-8 pointer-events-none h-0"
+                  )}
+                >
+                  <WellnessJournal />
+                </div>
               </TabsContent>
             ))}
           </div>
         </Tabs>
-
-        <div 
-          id="wellness-journal"
-          className={cn(
-            "mt-12 max-w-4xl mx-auto transition-all duration-500",
-            showJournal ? "opacity-100 transform translate-y-0" : "opacity-0 transform translate-y-8 pointer-events-none"
-          )}
-        >
-          <WellnessJournal />
-        </div>
       </div>
     </section>
   );
