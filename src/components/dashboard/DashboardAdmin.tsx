@@ -7,6 +7,7 @@ import { Retreat } from "@/lib/data";
 import { supabase } from "@/integrations/supabase/client";
 import { convertEventDataToRetreat } from "@/lib/eventUtils";
 import { EventPreview } from "@/components/admin/EventPreview";
+import { AlertCircle } from "lucide-react";
 
 // Define the event data interface to match what's used in the EventURLForm
 interface EventData {
@@ -32,9 +33,23 @@ interface EventData {
 const DashboardAdmin = () => {
   const [extractedEventData, setExtractedEventData] = useState<EventData | null>(null);
   const [isPublishing, setIsPublishing] = useState(false);
+  const [urlFormError, setUrlFormError] = useState<string | null>(null);
 
   const handleEventDataExtracted = (eventData: EventData) => {
+    setUrlFormError(null);
+    console.log("Event data received in DashboardAdmin:", eventData);
     setExtractedEventData(eventData);
+    
+    // Validate essential fields
+    const missingFields = [];
+    if (!eventData.title) missingFields.push('title');
+    if (!eventData.date) missingFields.push('date');
+    if (!eventData.location?.name) missingFields.push('location');
+    
+    if (missingFields.length > 0) {
+      const warning = `Some important fields are missing: ${missingFields.join(', ')}. You may need to edit these details.`;
+      toast.warning(warning);
+    }
   };
 
   const handlePublishEvent = async () => {
@@ -51,8 +66,19 @@ const DashboardAdmin = () => {
       // Format the location string
       const locationStr = `${extractedEventData.location?.name || 'Venue TBD'}, ${extractedEventData.location?.city || ''}, ${extractedEventData.location?.state || ''}`.trim().replace(/,\s*$/, '');
       
+      console.log("Publishing event with data:", {
+        title: extractedEventData.title,
+        description: extractedEventData.description,
+        event_date: extractedEventData.date,
+        location: locationStr,
+        price: Number(extractedEventData.price) || 0,
+        max_participants: Number(extractedEventData.capacity) || 20,
+        category: extractedEventData.category?.[0] || "Wellness",
+        user_id: session.user.id
+      });
+      
       // Save to database - using the string date directly from extractedEventData
-      const { error } = await supabase
+      const { error, data } = await supabase
         .from('wellness_events')
         .insert({
           title: extractedEventData.title,
@@ -66,9 +92,11 @@ const DashboardAdmin = () => {
         });
 
       if (error) {
+        console.error("Supabase error when publishing:", error);
         throw new Error(error.message);
       }
 
+      console.log("Event published successfully:", data);
       toast.success("Event published successfully!");
       setExtractedEventData(null);
     } catch (error) {
@@ -94,6 +122,16 @@ const DashboardAdmin = () => {
             Paste an event URL to extract information and quickly create a new event
           </p>
           <EventURLForm onEventDataExtracted={handleEventDataExtracted} />
+          
+          {urlFormError && (
+            <div className="mt-4 bg-red-50 border border-red-200 rounded-md p-4 text-red-600">
+              <div className="flex items-center gap-2 mb-2">
+                <AlertCircle className="h-4 w-4" />
+                <p className="font-medium">Error extracting event data</p>
+              </div>
+              <p className="text-sm">{urlFormError}</p>
+            </div>
+          )}
         </div>
         
         {extractedEventData && (

@@ -12,6 +12,7 @@ interface EventURLFormProps {
 export const EventURLForm = ({ onEventDataExtracted }: EventURLFormProps) => {
   const [url, setUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,9 +23,15 @@ export const EventURLForm = ({ onEventDataExtracted }: EventURLFormProps) => {
     }
     
     setIsLoading(true);
+    setError(null);
+    console.log("Submitting URL for extraction:", url);
 
     try {
-      const response = await fetch("https://ordomvdrqjthpzfyrrzp.supabase.co/functions/v1/extract-event-data", {
+      // First check if the Supabase function endpoint is accessible
+      const endpointUrl = "https://raijubzrdhwizxtupguy.supabase.co/functions/v1/extract-event-data";
+      console.log("Calling endpoint:", endpointUrl);
+      
+      const response = await fetch(endpointUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -32,47 +39,70 @@ export const EventURLForm = ({ onEventDataExtracted }: EventURLFormProps) => {
         body: JSON.stringify({ url }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Full error response:", errorData);
-        throw new Error(errorData.error || "Failed to extract event data");
+      console.log("Response status:", response.status);
+      
+      const responseText = await response.text();
+      console.log("Raw response:", responseText);
+      
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error("Error parsing JSON response:", parseError);
+        throw new Error("Invalid response from server");
       }
 
-      const data = await response.json();
+      if (!response.ok) {
+        console.error("Error response from server:", data);
+        throw new Error(data.error || "Failed to extract event data");
+      }
+
       console.log("Extracted data:", data);
       onEventDataExtracted(data);
       toast.success("Event data extracted successfully!");
     } catch (error) {
       console.error("Error extracting event data:", error);
-      toast.error(error instanceof Error ? error.message : "Failed to extract event data from URL");
+      const errorMessage = error instanceof Error ? error.message : "Failed to extract event data from URL";
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-4">
-      <div className="flex-1 flex gap-2 items-center px-3 py-2 border rounded-md">
-        <LinkIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-        <Input
-          type="url"
-          placeholder="Paste event URL here..."
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          className="border-0 p-0 focus-visible:ring-0"
-          required
-        />
-      </div>
-      <Button type="submit" disabled={isLoading}>
-        {isLoading ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Extracting...
-          </>
-        ) : (
-          "Extract Event Data"
-        )}
-      </Button>
-    </form>
+    <div className="space-y-4">
+      <form onSubmit={handleSubmit} className="flex gap-4">
+        <div className="flex-1 flex gap-2 items-center px-3 py-2 border rounded-md">
+          <LinkIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+          <Input
+            type="url"
+            placeholder="Paste event URL here..."
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            className="border-0 p-0 focus-visible:ring-0"
+            required
+          />
+        </div>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Extracting...
+            </>
+          ) : (
+            "Extract Event Data"
+          )}
+        </Button>
+      </form>
+      
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-md p-4 text-red-600 text-sm">
+          <p className="font-medium mb-1">Error extracting data:</p>
+          <p>{error}</p>
+          <p className="mt-2 text-xs">Please check the URL and try again, or ensure the event data is accessible.</p>
+        </div>
+      )}
+    </div>
   );
 };

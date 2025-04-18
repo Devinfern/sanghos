@@ -16,64 +16,90 @@ serve(async (req) => {
   }
 
   try {
-    const { url } = await req.json()
+    console.log("Received request to extract-event-data function");
+    
+    let requestData;
+    try {
+      requestData = await req.json();
+    } catch (error) {
+      console.error("Failed to parse request body:", error);
+      return new Response(
+        JSON.stringify({ error: 'Invalid request body' }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 400 
+        }
+      );
+    }
+    
+    const { url } = requestData;
     
     if (!url || typeof url !== 'string') {
+      console.error("Invalid or missing URL:", url);
       return new Response(
         JSON.stringify({ error: 'Valid URL is required' }),
         { 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           status: 400 
         }
-      )
+      );
     }
     
-    console.log(`Starting crawl for URL: ${url}`)
+    console.log(`Starting crawl for URL: ${url}`);
     
-    const apiKey = Deno.env.get('FIRECRAWL_API_KEY')
+    const apiKey = Deno.env.get('FIRECRAWL_API_KEY');
     if (!apiKey) {
-      console.error('Firecrawl API key not configured')
+      console.error('Firecrawl API key not configured');
       return new Response(
-        JSON.stringify({ error: 'API configuration error' }),
+        JSON.stringify({ error: 'API configuration error: Missing FIRECRAWL_API_KEY' }),
         { 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           status: 500 
         }
-      )
+      );
     }
 
-    const firecrawl = new FirecrawlApp({ apiKey })
+    console.log("Initializing Firecrawl with API key");
+    const firecrawl = new FirecrawlApp({ apiKey });
+    
+    console.log("Sending crawl request to Firecrawl API");
     const response = await firecrawl.crawlUrl(url, {
       limit: 1,
       scrapeOptions: {
         formats: ['markdown', 'html'],
       }
-    })
+    });
+
+    console.log("Firecrawl response received:", JSON.stringify(response));
 
     if (!response.success) {
-      console.error('Crawl failed:', response)
+      console.error('Crawl failed:', response);
       return new Response(
-        JSON.stringify({ error: 'Failed to crawl URL' }),
+        JSON.stringify({ 
+          error: 'Failed to crawl URL', 
+          details: response 
+        }),
         { 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           status: 500 
         }
-      )
+      );
     }
 
-    const rawData = response.data[0]?.content?.markdown || ''
+    const rawData = response.data && response.data[0] && response.data[0].content && response.data[0].content.markdown;
     if (!rawData) {
+      console.error('No content found in Firecrawl response:', response);
       return new Response(
         JSON.stringify({ error: 'No content found at the provided URL' }),
         { 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           status: 404 
         }
-      )
+      );
     }
     
-    const eventData = extractEventData(rawData, url)
-    console.log('Extracted event data:', eventData)
+    const eventData = extractEventData(rawData, url);
+    console.log('Extracted event data:', eventData);
 
     return new Response(
       JSON.stringify(eventData),
@@ -81,16 +107,20 @@ serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200 
       },
-    )
+    );
   } catch (error) {
-    console.error('Error in extract-event-data:', error)
+    console.error('Error in extract-event-data:', error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: error.message, 
+        stack: error.stack,
+        type: error.name 
+      }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 500 
       },
-    )
+    );
   }
 })
 
