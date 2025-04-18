@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LinkIcon, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface EventURLFormProps {
   onEventDataExtracted: (data: any) => void;
@@ -27,42 +28,30 @@ export const EventURLForm = ({ onEventDataExtracted }: EventURLFormProps) => {
     console.log("Submitting URL for extraction:", url);
 
     try {
-      // First check if the Supabase function endpoint is accessible
-      const endpointUrl = "https://raijubzrdhwizxtupguy.supabase.co/functions/v1/extract-event-data";
-      console.log("Calling endpoint:", endpointUrl);
-      
-      const response = await fetch(endpointUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ url }),
+      // Use the Supabase client to call the edge function instead of direct fetch
+      const { data, error: functionError } = await supabase.functions.invoke('extract-event-data', {
+        body: { url },
       });
-
-      console.log("Response status:", response.status);
       
-      const responseText = await response.text();
-      console.log("Raw response:", responseText);
+      if (functionError) {
+        console.error("Function error:", functionError);
+        throw new Error(functionError.message || "Failed to extract event data");
+      }
       
-      let data;
-      try {
-        data = JSON.parse(responseText);
-      } catch (parseError) {
-        console.error("Error parsing JSON response:", parseError);
-        throw new Error("Invalid response from server");
-      }
-
-      if (!response.ok) {
-        console.error("Error response from server:", data);
-        throw new Error(data.error || "Failed to extract event data");
-      }
-
       console.log("Extracted data:", data);
+      
+      if (!data) {
+        throw new Error("No data returned from extraction");
+      }
+
       onEventDataExtracted(data);
       toast.success("Event data extracted successfully!");
     } catch (error) {
       console.error("Error extracting event data:", error);
-      const errorMessage = error instanceof Error ? error.message : "Failed to extract event data from URL";
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : "Failed to extract event data from URL";
+        
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {
