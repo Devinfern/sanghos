@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 interface EventData {
   title: string;
@@ -22,21 +22,23 @@ interface EventData {
   image?: string;
   capacity?: number;
   remaining?: number;
+  sourceUrl?: string;
 }
 
 interface EventPreviewProps {
   eventData: EventData;
-  onUseData: (data: EventData) => void;
+  onUseData: () => void;
   onEdit: (field: string, value: string) => void;
+  isPublishing?: boolean;
 }
 
-export const EventPreview = ({ eventData, onUseData, onEdit }: EventPreviewProps) => {
+export const EventPreview = ({ eventData, onUseData, onEdit, isPublishing = false }: EventPreviewProps) => {
   return (
     <div className="mt-6 space-y-6 bg-sage-50 p-4 rounded-md border border-sage-100">
       <div className="text-center mb-4">
         <h3 className="font-semibold text-lg">Extracted Event Data</h3>
         <p className="text-sm text-muted-foreground">
-          Review and edit the extracted information before using it
+          Review and edit the extracted information before publishing
         </p>
       </div>
 
@@ -46,7 +48,7 @@ export const EventPreview = ({ eventData, onUseData, onEdit }: EventPreviewProps
             <Label htmlFor="title">Event Title</Label>
             <Input
               id="title"
-              value={eventData.title}
+              value={eventData.title || ''}
               onChange={(e) => onEdit('title', e.target.value)}
             />
           </div>
@@ -55,7 +57,7 @@ export const EventPreview = ({ eventData, onUseData, onEdit }: EventPreviewProps
             <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
-              value={eventData.description}
+              value={eventData.description || ''}
               onChange={(e) => onEdit('description', e.target.value)}
               rows={4}
             />
@@ -67,7 +69,7 @@ export const EventPreview = ({ eventData, onUseData, onEdit }: EventPreviewProps
               <Input
                 id="date"
                 type="date"
-                value={eventData.date}
+                value={eventData.date || ''}
                 onChange={(e) => onEdit('date', e.target.value)}
               />
             </div>
@@ -76,7 +78,7 @@ export const EventPreview = ({ eventData, onUseData, onEdit }: EventPreviewProps
               <Label htmlFor="time">Time</Label>
               <Input
                 id="time"
-                value={eventData.time}
+                value={eventData.time || ''}
                 onChange={(e) => onEdit('time', e.target.value)}
               />
             </div>
@@ -88,7 +90,7 @@ export const EventPreview = ({ eventData, onUseData, onEdit }: EventPreviewProps
             <Label htmlFor="location-name">Location Name</Label>
             <Input
               id="location-name"
-              value={eventData.location.name}
+              value={eventData.location?.name || ''}
               onChange={(e) => onEdit('location.name', e.target.value)}
             />
           </div>
@@ -98,7 +100,7 @@ export const EventPreview = ({ eventData, onUseData, onEdit }: EventPreviewProps
               <Label htmlFor="location-city">City</Label>
               <Input
                 id="location-city"
-                value={eventData.location.city}
+                value={eventData.location?.city || ''}
                 onChange={(e) => onEdit('location.city', e.target.value)}
               />
             </div>
@@ -107,7 +109,7 @@ export const EventPreview = ({ eventData, onUseData, onEdit }: EventPreviewProps
               <Label htmlFor="location-state">State</Label>
               <Input
                 id="location-state"
-                value={eventData.location.state}
+                value={eventData.location?.state || ''}
                 onChange={(e) => onEdit('location.state', e.target.value)}
               />
             </div>
@@ -119,7 +121,7 @@ export const EventPreview = ({ eventData, onUseData, onEdit }: EventPreviewProps
               <Input
                 id="price"
                 type="number"
-                value={eventData.price}
+                value={eventData.price || 0}
                 onChange={(e) => onEdit('price', e.target.value)}
               />
             </div>
@@ -154,8 +156,15 @@ export const EventPreview = ({ eventData, onUseData, onEdit }: EventPreviewProps
       </div>
 
       <div className="pt-3 flex justify-end">
-        <Button onClick={() => onUseData(eventData)} className="w-full md:w-auto">
-          Use This Data
+        <Button onClick={onUseData} className="w-full md:w-auto" disabled={isPublishing}>
+          {isPublishing ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Publishing...
+            </>
+          ) : (
+            "Publish Event"
+          )}
         </Button>
       </div>
     </div>

@@ -36,7 +36,6 @@ const DashboardAdmin = () => {
 
   const handleEventDataExtracted = (eventData: EventData) => {
     setExtractedEventData(eventData);
-    toast.success("Event data extracted successfully!");
   };
 
   const handlePublishEvent = async () => {
@@ -44,9 +43,6 @@ const DashboardAdmin = () => {
 
     setIsPublishing(true);
     try {
-      // Convert the extracted data to the format expected by the retreats collection
-      const retreatData = convertEventDataToRetreat(extractedEventData);
-
       // Get the current user's ID for the user_id field
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
@@ -54,22 +50,19 @@ const DashboardAdmin = () => {
       }
       
       // Format the location string
-      const locationStr = `${extractedEventData.location.name}, ${extractedEventData.location.city}, ${extractedEventData.location.state}`;
-      
-      // Convert date to string format if it's not already
-      const eventDate = extractedEventData.date;
+      const locationStr = `${extractedEventData.location?.name || 'Venue TBD'}, ${extractedEventData.location?.city || ''}, ${extractedEventData.location?.state || ''}`.trim().replace(/,\s*$/, '');
       
       // Save to database
       const { error } = await supabase
         .from('wellness_events')
         .insert({
           title: extractedEventData.title,
-          description: extractedEventData.description,
-          event_date: eventDate, // Using the string date directly
+          description: extractedEventData.description || "No description provided",
+          event_date: extractedEventData.date, // Using the string date directly
           location: locationStr,
-          price: extractedEventData.price,
-          max_participants: extractedEventData.capacity || 20,
-          category: extractedEventData.category[0] || "Wellness",
+          price: Number(extractedEventData.price) || 0,
+          max_participants: Number(extractedEventData.capacity) || 20,
+          category: extractedEventData.category?.[0] || "Wellness",
           user_id: session.user.id
         });
 
@@ -81,7 +74,7 @@ const DashboardAdmin = () => {
       setExtractedEventData(null);
     } catch (error) {
       console.error("Error publishing event:", error);
-      toast.error("Failed to publish event. Please try again.");
+      toast.error(error instanceof Error ? error.message : "Failed to publish event. Please try again.");
     } finally {
       setIsPublishing(false);
     }
@@ -96,12 +89,19 @@ const DashboardAdmin = () => {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <EventURLForm onEventDataExtracted={handleEventDataExtracted} />
+        <div className="mb-6">
+          <h3 className="text-lg font-medium mb-2">Quick Event Creation</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Paste an event URL to extract information and quickly create a new event
+          </p>
+          <EventURLForm onEventDataExtracted={handleEventDataExtracted} />
+        </div>
         
         {extractedEventData && (
           <EventPreview
             eventData={extractedEventData}
             onUseData={handlePublishEvent}
+            isPublishing={isPublishing}
             onEdit={(field, value) => {
               setExtractedEventData(prev => {
                 if (!prev) return prev;

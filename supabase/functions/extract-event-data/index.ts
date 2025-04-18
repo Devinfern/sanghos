@@ -10,19 +10,38 @@ const corsHeaders = {
 }
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
 
   try {
     const { url } = await req.json()
-    const apiKey = Deno.env.get('FIRECRAWL_API_KEY')
     
+    if (!url || typeof url !== 'string') {
+      return new Response(
+        JSON.stringify({ error: 'Valid URL is required' }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 400 
+        }
+      )
+    }
+    
+    console.log(`Starting crawl for URL: ${url}`)
+    
+    const apiKey = Deno.env.get('FIRECRAWL_API_KEY')
     if (!apiKey) {
-      throw new Error('Firecrawl API key not configured')
+      console.error('Firecrawl API key not configured')
+      return new Response(
+        JSON.stringify({ error: 'API configuration error' }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 500 
+        }
+      )
     }
 
-    console.log(`Starting crawl for URL: ${url}`)
     const firecrawl = new FirecrawlApp({ apiKey })
     const response = await firecrawl.crawlUrl(url, {
       limit: 1,
@@ -33,10 +52,26 @@ serve(async (req) => {
 
     if (!response.success) {
       console.error('Crawl failed:', response)
-      throw new Error('Failed to crawl URL')
+      return new Response(
+        JSON.stringify({ error: 'Failed to crawl URL' }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 500 
+        }
+      )
     }
 
     const rawData = response.data[0]?.content?.markdown || ''
+    if (!rawData) {
+      return new Response(
+        JSON.stringify({ error: 'No content found at the provided URL' }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 404 
+        }
+      )
+    }
+    
     const eventData = extractEventData(rawData, url)
     console.log('Extracted event data:', eventData)
 
@@ -109,6 +144,15 @@ function extractEventData(text: string, sourceUrl: string) {
       break
     }
   }
+  
+  // If no description was found with the patterns above, take the first substantial paragraph
+  if (!eventData.description) {
+    const fallbackDescPattern = /\n\n([^#\n].{30,}?)(?:\n\n|$)/m;
+    const match = text.match(fallbackDescPattern);
+    if (match) {
+      eventData.description = match[1].trim();
+    }
+  }
 
   // Enhanced date extraction with multiple formats
   const datePatterns = [
@@ -133,12 +177,19 @@ function extractEventData(text: string, sourceUrl: string) {
       }
     }
   }
+  
+  // If no valid date was found, default to today's date
+  if (!eventData.date) {
+    eventData.date = new Date().toISOString().split('T')[0];
+  }
 
   // Enhanced time extraction with various formats
   const timePattern = /(?:\d{1,2}:\d{2}\s*(?:am|pm|AM|PM)|(?:\d{1,2})\s*(?:am|pm|AM|PM))/g
   const timeMatches = text.match(timePattern)
   if (timeMatches) {
     eventData.time = timeMatches[0]
+  } else {
+    eventData.time = "12:00 PM"; // Default time if none is found
   }
 
   // Enhanced location extraction
@@ -152,7 +203,8 @@ function extractEventData(text: string, sourceUrl: string) {
   // Extract venue name
   const venuePatterns = [
     /(?:at|@)\s+([\w\s&]+(?:Center|Theatre|Theater|Hall|Studio|Space|Venue))/i,
-    /([\w\s&]+(?:Center|Theatre|Theater|Hall|Studio|Space|Venue))/i
+    /([\w\s&]+(?:Center|Theatre|Theater|Hall|Studio|Space|Venue))/i,
+    /(?:Location|Venue|Place):\s*([\w\s&]+)/i
   ]
 
   for (const pattern of venuePatterns) {
@@ -161,6 +213,11 @@ function extractEventData(text: string, sourceUrl: string) {
       eventData.location.name = match[1].trim()
       break
     }
+  }
+  
+  // If no venue name was found, use a default
+  if (!eventData.location.name) {
+    eventData.location.name = "Event Venue";
   }
 
   // Enhanced price extraction
@@ -184,7 +241,8 @@ function extractEventData(text: string, sourceUrl: string) {
   // Extract capacity and remaining spots
   const capacityPatterns = [
     /(?:capacity|limit|max):\s*(\d+)/i,
-    /limited to (\d+)/i
+    /limited to (\d+)/i,
+    /(?:up to|maximum of) (\d+) (?:people|participants|attendees)/i
   ]
 
   for (const pattern of capacityPatterns) {
@@ -195,6 +253,12 @@ function extractEventData(text: string, sourceUrl: string) {
       eventData.remaining = eventData.capacity
       break
     }
+  }
+  
+  // If no capacity was found, use a reasonable default
+  if (!eventData.capacity) {
+    eventData.capacity = 20;
+    eventData.remaining = 20;
   }
 
   // Extract instructor name
@@ -224,6 +288,11 @@ function extractEventData(text: string, sourceUrl: string) {
     if (keywords.some(keyword => text.toLowerCase().includes(keyword.toLowerCase()))) {
       eventData.category.push(category)
     }
+  }
+  
+  // If no categories were found, default to Wellness
+  if (eventData.category.length === 0) {
+    eventData.category.push("Wellness");
   }
 
   // Extract image URL

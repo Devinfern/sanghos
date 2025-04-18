@@ -25,14 +25,15 @@ export const convertEventDataToRetreat = (
   eventData: any, 
   defaultInstructorId: string = "inst-1"
 ): Partial<Retreat> => {
-  // Convert the category array to a proper format if it's not already
+  // Make sure we have arrays for categories and other array properties
   let categories = eventData.category || [];
   if (!Array.isArray(categories)) {
     categories = categories ? [categories] : [];
   }
   
+  // Create a retreat object from the extracted data
   return {
-    title: eventData.title,
+    title: eventData.title || "New Event",
     description: eventData.description || "No description provided",
     image: eventData.image || "https://images.unsplash.com/photo-1518002171953-a080ee817e1f",
     additionalImages: [],

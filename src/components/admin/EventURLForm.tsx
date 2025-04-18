@@ -15,6 +15,12 @@ export const EventURLForm = ({ onEventDataExtracted }: EventURLFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!url.trim()) {
+      toast.error("Please enter a valid URL");
+      return;
+    }
+    
     setIsLoading(true);
 
     try {
@@ -32,7 +38,9 @@ export const EventURLForm = ({ onEventDataExtracted }: EventURLFormProps) => {
       }
 
       const data = await response.json();
+      console.log("Extracted data:", data);
       onEventDataExtracted(data);
+      toast.success("Event data extracted successfully!");
     } catch (error) {
       console.error("Error extracting event data:", error);
       toast.error(error instanceof Error ? error.message : "Failed to extract event data from URL");
