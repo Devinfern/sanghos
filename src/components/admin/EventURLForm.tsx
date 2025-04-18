@@ -33,7 +33,6 @@ export const EventURLForm = ({ onEventDataExtracted }: EventURLFormProps) => {
 
       const data = await response.json();
       onEventDataExtracted(data);
-      toast.success("Event data extracted successfully!");
     } catch (error) {
       console.error("Error extracting event data:", error);
       toast.error(error instanceof Error ? error.message : "Failed to extract event data from URL");
