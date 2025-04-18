@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { Calendar, User, MessageCircle, BookOpen, Clock, ArrowRight, Plus } from "lucide-react";
+import { Calendar, User, MessageCircle, BookOpen, Clock, ArrowRight, Plus, Shield } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -148,6 +149,12 @@ const UserDashboard = () => {
               <TabsTrigger value="retreats">My Retreats</TabsTrigger>
               <TabsTrigger value="community">Community</TabsTrigger>
               <TabsTrigger value="account">Account</TabsTrigger>
+              {isAdmin && (
+                <TabsTrigger value="admin" className="flex items-center">
+                  <Shield className="mr-1 h-4 w-4" />
+                  Admin
+                </TabsTrigger>
+              )}
             </TabsList>
             
             <TabsContent value="overview" className="space-y-6">
