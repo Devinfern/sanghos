@@ -24,6 +24,7 @@ export const EventURLForm = ({ onEventDataExtracted }: EventURLFormProps) => {
     setIsLoading(true);
 
     try {
+      // Use the correct Supabase function URL format
       const response = await fetch("https://ordomvdrqjthpzfyrrzp.supabase.co/functions/v1/extract-event-data", {
         method: "POST",
         headers: {

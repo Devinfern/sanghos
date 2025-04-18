@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { EventURLForm } from "@/components/admin/EventURLForm";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Retreat } from "@/lib/data";
 import { supabase } from "@/integrations/supabase/client";
@@ -52,7 +51,7 @@ const DashboardAdmin = () => {
       // Format the location string
       const locationStr = `${extractedEventData.location?.name || 'Venue TBD'}, ${extractedEventData.location?.city || ''}, ${extractedEventData.location?.state || ''}`.trim().replace(/,\s*$/, '');
       
-      // Save to database
+      // Save to database - using the string date directly from extractedEventData
       const { error } = await supabase
         .from('wellness_events')
         .insert({
