@@ -24,7 +24,6 @@ export const EventURLForm = ({ onEventDataExtracted }: EventURLFormProps) => {
     setIsLoading(true);
 
     try {
-      // Use the correct Supabase function URL format
       const response = await fetch("https://ordomvdrqjthpzfyrrzp.supabase.co/functions/v1/extract-event-data", {
         method: "POST",
         headers: {
@@ -35,6 +34,7 @@ export const EventURLForm = ({ onEventDataExtracted }: EventURLFormProps) => {
 
       if (!response.ok) {
         const errorData = await response.json();
+        console.error("Full error response:", errorData);
         throw new Error(errorData.error || "Failed to extract event data");
       }
 
