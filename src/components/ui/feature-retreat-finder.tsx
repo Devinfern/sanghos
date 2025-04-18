@@ -1,9 +1,10 @@
-
+import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart, Compass, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import WellnessJournal from "@/components/WellnessJournal";
+import { cn } from "@/lib/utils";
 
 interface TabContent {
   badge: string;
@@ -77,6 +78,17 @@ const FeatureRetreatFinder = ({
     },
   ],
 }: FeatureRetreatFinderProps) => {
+  const [showJournal, setShowJournal] = useState(false);
+
+  const handleButtonClick = () => {
+    setShowJournal(true);
+    // Smooth scroll to journal section
+    const journalSection = document.getElementById('wellness-journal');
+    if (journalSection) {
+      journalSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="relative py-24">
       <div className="absolute inset-0 bg-gradient-to-br from-sage-50 via-sage-100/50 to-sage-50"></div>
@@ -125,6 +137,7 @@ const FeatureRetreatFinder = ({
                   <Button 
                     className="mt-2.5 w-fit gap-2 bg-sage-700 hover:bg-sage-800 text-white" 
                     size="lg"
+                    onClick={handleButtonClick}
                   >
                     {tab.content.buttonText}
                   </Button>
@@ -139,7 +152,13 @@ const FeatureRetreatFinder = ({
           </div>
         </Tabs>
 
-        <div className="mt-12 max-w-4xl mx-auto">
+        <div 
+          id="wellness-journal"
+          className={cn(
+            "mt-12 max-w-4xl mx-auto transition-all duration-500",
+            showJournal ? "opacity-100 transform translate-y-0" : "opacity-0 transform translate-y-8 pointer-events-none"
+          )}
+        >
           <WellnessJournal />
         </div>
       </div>
