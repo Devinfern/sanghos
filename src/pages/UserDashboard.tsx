@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
-import { retreats } from "@/lib/data";
+import { retreats, formatDate } from "@/lib/data";
 import { toast } from "sonner";
 import { useAdminStatus } from "@/hooks/useAdminStatus";
 import DashboardOverview from "@/components/dashboard/DashboardOverview";
