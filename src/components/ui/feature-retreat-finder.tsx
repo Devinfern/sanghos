@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart, Compass, Sparkles } from "lucide-react";
@@ -91,7 +92,8 @@ const FeatureRetreatFinder = ({
 
   return (
     <section className="relative py-24">
-      <div className="absolute inset-0 bg-gradient-to-br from-sage-50 via-sage-100/50 to-sage-50"></div>
+      {/* Updated background gradient with darker tones */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#1A1F2C]/50 via-[#222638]/30 to-[#1A1F2C]/50"></div>
       
       <div className="container mx-auto relative">
         <div className="flex flex-col items-center gap-4 text-center">
