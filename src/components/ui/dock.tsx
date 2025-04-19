@@ -10,17 +10,7 @@ import {
   type SpringOptions,
   AnimatePresence,
 } from 'framer-motion';
-import {
-  Children,
-  cloneElement,
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  isValidElement,
-} from 'react';
+import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 const DOCK_HEIGHT = 100;
@@ -55,7 +45,7 @@ type DockIconProps = {
 };
 
 type DocContextType = {
-  mouseX: MotionValue;
+  mouseX: MotionValue<number>;
   spring: SpringOptions;
   magnification: number;
   distance: number;
@@ -66,14 +56,14 @@ type DockProviderProps = {
   value: DocContextType;
 };
 
-const DockContext = createContext<DocContextType | undefined>(undefined);
+const DockContext = React.createContext<DocContextType | undefined>(undefined);
 
 function DockProvider({ children, value }: DockProviderProps) {
   return <DockContext.Provider value={value}>{children}</DockContext.Provider>;
 }
 
 function useDock() {
-  const context = useContext(DockContext);
+  const context = React.useContext(DockContext);
   if (!context) {
     throw new Error('useDock must be used within an DockProvider');
   }
@@ -89,10 +79,10 @@ function Dock({
   panelHeight = DEFAULT_PANEL_HEIGHT,
   onClick,
 }: DockProps) {
-  const mouseX = useMotionValue(Infinity);
-  const isHovered = useMotionValue(0);
+  const mouseX = useMotionValue<number>(Infinity);
+  const isHovered = useMotionValue<number>(0);
 
-  const maxHeight = useMemo(() => {
+  const maxHeight = React.useMemo(() => {
     return Math.max(DOCK_HEIGHT, panelHeight);
   }, [panelHeight]);
 
@@ -126,7 +116,7 @@ function Dock({
 }
 
 function DockItem({ children, className, onClick }: DockItemProps) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = React.useRef<HTMLDivElement>(null);
   const { distance, magnification, mouseX, spring } = useDock();
   const isHovered = useMotionValue(0);
 
@@ -160,9 +150,9 @@ function DockItem({ children, className, onClick }: DockItemProps) {
       aria-haspopup='true'
       onClick={onClick}
     >
-      {Children.map(children, (child) => {
-        if (!isValidElement(child)) return child;
-        return cloneElement(child as React.ReactElement, { 
+      {React.Children.map(children, (child) => {
+        if (!React.isValidElement(child)) return child;
+        return React.cloneElement(child as React.ReactElement, { 
           width, 
           isHovered 
         });
@@ -174,9 +164,9 @@ function DockItem({ children, className, onClick }: DockItemProps) {
 function DockLabel({ children, className, ...rest }: DockLabelProps) {
   const restProps = rest as Record<string, unknown>;
   const isHovered = restProps['isHovered'] as MotionValue<number>;
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!isHovered) return;
     
     const unsubscribe = isHovered.on('change', (latest) => {
