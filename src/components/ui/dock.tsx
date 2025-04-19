@@ -19,6 +19,7 @@ import {
   useMemo,
   useRef,
   useState,
+  isValidElement,
 } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -160,7 +161,7 @@ function DockItem({ children, className, onClick }: DockItemProps) {
       onClick={onClick}
     >
       {Children.map(children, (child) => {
-        if (!React.isValidElement(child)) return child;
+        if (!isValidElement(child)) return child;
         return cloneElement(child as React.ReactElement, { 
           width, 
           isHovered 
