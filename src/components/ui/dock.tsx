@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -22,9 +21,9 @@ import {
 } from 'react';
 import { cn } from '@/lib/utils';
 
-const DOCK_HEIGHT = 100; // Reduced from 128
-const DEFAULT_MAGNIFICATION = 60; // Reduced from 80
-const DEFAULT_DISTANCE = 100; // Reduced from 150
+const DOCK_HEIGHT = 100;
+const DEFAULT_MAGNIFICATION = 60;
+const DEFAULT_DISTANCE = 100;
 const DEFAULT_PANEL_HEIGHT = 64;
 
 type DockProps = {
@@ -82,7 +81,7 @@ function useDock() {
 function Dock({
   children,
   className,
-  spring = { mass: 0.2, stiffness: 100, damping: 15 }, // More gentle animation
+  spring = { mass: 0.2, stiffness: 100, damping: 15 },
   magnification = DEFAULT_MAGNIFICATION,
   distance = DEFAULT_DISTANCE,
   panelHeight = DEFAULT_PANEL_HEIGHT,
@@ -104,7 +103,7 @@ function Dock({
         height: height,
         scrollbarWidth: 'none',
       }}
-      className='mx-2 flex max-w-full items-end overflow-x-auto'
+      className='mx-2 flex max-w-full items-center justify-center overflow-x-auto'
     >
       <motion.div
         onMouseMove={({ pageX }) => {
@@ -116,7 +115,7 @@ function Dock({
           mouseX.set(Infinity);
         }}
         className={cn(
-          'mx-auto flex w-fit gap-4 rounded-2xl bg-gray-50 px-4 dark:bg-neutral-900',
+          'mx-auto flex w-fit gap-6 rounded-2xl px-4',
           className
         )}
         style={{ height: panelHeight }}
@@ -134,9 +133,7 @@ function Dock({
 
 function DockItem({ children, className, onClick }: DockItemProps) {
   const ref = useRef<HTMLDivElement>(null);
-
   const { distance, magnification, mouseX, spring } = useDock();
-
   const isHovered = useMotionValue(0);
 
   const mouseDistance = useTransform(mouseX, (val) => {
@@ -144,7 +141,6 @@ function DockItem({ children, className, onClick }: DockItemProps) {
     return val - domRect.x - domRect.width / 2;
   });
 
-  // Instead of using a very wide range, use a narrower range for width transformation
   const widthTransform = useTransform(
     mouseDistance,
     [-distance, 0, distance],
@@ -157,13 +153,10 @@ function DockItem({ children, className, onClick }: DockItemProps) {
     <motion.div
       ref={ref}
       className={cn(
-        'relative flex items-center justify-center rounded-full overflow-hidden',
+        'relative flex items-center justify-center rounded-full overflow-hidden aspect-square',
         className
       )}
-      style={{ 
-        width, 
-        height: width // Ensure height equals width
-      }}
+      style={{ width }}
       onHoverStart={() => isHovered.set(1)}
       onHoverEnd={() => isHovered.set(0)}
       onFocus={() => isHovered.set(1)}

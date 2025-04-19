@@ -2,7 +2,6 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Pencil, Clock, Zap } from "lucide-react";
 import { Dock, DockItem, DockIcon, DockLabel } from "@/components/ui/dock";
-import { useEffect } from "react";
 
 interface JournalTabsProps {
   hasRecommendations: boolean;
@@ -31,9 +30,9 @@ const JournalTabs = ({ hasRecommendations, activeTab, onTabChange }: JournalTabs
   ];
 
   return (
-    <div className="flex items-center justify-center mb-8">
+    <div className="flex items-center justify-center mb-8 py-6">
       <Dock 
-        className="bg-sage-50/80 backdrop-blur-sm border border-sage-200/30" 
+        className="bg-sage-50/80 backdrop-blur-sm border border-sage-200/30 px-8 py-4 rounded-2xl" 
         distance={100} 
         magnification={60}
         spring={{ mass: 0.2, stiffness: 100, damping: 15 }}
