@@ -1,8 +1,11 @@
+
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WellnessJournal from "@/components/WellnessJournal";
+import { Badge } from "@/components/ui/badge";
+
 const WellnessJournalPage = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
@@ -28,6 +31,12 @@ const WellnessJournalPage = () => {
         
         <div className="container mx-auto py-12 px-4 relative z-10 max-w-4xl my-[80px]">
           <div className="text-center mb-12">
+            <Badge 
+              variant="outline" 
+              className="inline-flex items-center justify-center p-1.5 px-3 rounded-full bg-sage-100 text-sage-800 text-sm font-medium mb-4"
+            >
+              AI-Powered Wellness Recommendations
+            </Badge>
             <h1 className="text-3xl md:text-4xl font-semibold text-sage-900 mb-4">Your AI Retreat Finder</h1>
             <p className="text-sage-700 max-w-2xl mx-auto">Express yourself through journaling and let our AI recommend personalized retreat experiences and local wellness events that match your needs.</p>
           </div>
@@ -40,3 +49,4 @@ const WellnessJournalPage = () => {
     </>;
 };
 export default WellnessJournalPage;
+
