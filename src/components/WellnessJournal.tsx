@@ -3,13 +3,13 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Spinner } from "./ui/spinner";
 import { toast } from "sonner";
 import { retreats } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Book, Calendar, Clock, MapPin, BookOpen, PenLine, History, Sparkles, ExternalLink, Search } from "lucide-react";
+import { BookOpen, PenLine, History, Sparkles, ArrowRight, Search, Book, MapPin, Calendar, Clock, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -365,16 +365,26 @@ export default function WellnessJournal() {
 
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid grid-cols-3 mb-6">
-            <TabsTrigger value="write" className="flex items-center gap-2">
+          <TabsList className="w-full flex space-x-2 bg-sage-50/50 p-1 rounded-lg">
+            <TabsTrigger 
+              value="write" 
+              className="flex-1 flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-sage-600 data-[state=active]:bg-white data-[state=active]:text-sage-900 data-[state=active]:shadow-sm transition-all"
+            >
               <PenLine className="h-4 w-4" />
               <span>Write</span>
             </TabsTrigger>
-            <TabsTrigger value="history" className="flex items-center gap-2">
+            <TabsTrigger 
+              value="history" 
+              className="flex-1 flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-sage-600 data-[state=active]:bg-white data-[state=active]:text-sage-900 data-[state=active]:shadow-sm transition-all"
+            >
               <History className="h-4 w-4" />
               <span>History</span>
             </TabsTrigger>
-            <TabsTrigger value="recommendations" disabled={recommendations.length === 0} className="flex items-center gap-2">
+            <TabsTrigger 
+              value="recommendations" 
+              disabled={recommendations.length === 0}
+              className="flex-1 flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-sage-600 data-[state=active]:bg-white data-[state=active]:text-sage-900 data-[state=active]:shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               <Sparkles className="h-4 w-4" />
               <span>Local Events</span>
             </TabsTrigger>
