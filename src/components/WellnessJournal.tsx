@@ -3,13 +3,13 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Spinner } from "./ui/spinner";
 import { toast } from "sonner";
 import { retreats } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import { BookOpen, PenLine, History, Sparkles, ArrowRight, Search, Book, MapPin, Calendar, Clock, ExternalLink } from "lucide-react";
+import { Layout, Pointer, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -353,7 +353,7 @@ export default function WellnessJournal() {
     <Card className="w-full border-sage-200/30 shadow-lg bg-white/95 backdrop-blur-sm">
       <CardHeader className="text-center space-y-2">
         <div className="mx-auto bg-sage-100/50 w-fit p-2 rounded-full">
-          <BookOpen className="w-5 h-5 text-sage-600" />
+          <Layout className="w-5 h-5 text-sage-600" />
         </div>
         <CardTitle className="text-2xl font-semibold text-sage-900">
           Wellness Journal
@@ -365,30 +365,32 @@ export default function WellnessJournal() {
 
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="w-full flex space-x-2 bg-sage-50/50 p-1 rounded-lg">
-            <TabsTrigger 
-              value="write" 
-              className="flex-1 flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-sage-600 data-[state=active]:bg-white data-[state=active]:text-sage-900 data-[state=active]:shadow-sm transition-all"
-            >
-              <PenLine className="h-4 w-4" />
-              <span>Write</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="history" 
-              className="flex-1 flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-sage-600 data-[state=active]:bg-white data-[state=active]:text-sage-900 data-[state=active]:shadow-sm transition-all"
-            >
-              <History className="h-4 w-4" />
-              <span>History</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="recommendations" 
-              disabled={recommendations.length === 0}
-              className="flex-1 flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-sage-600 data-[state=active]:bg-white data-[state=active]:text-sage-900 data-[state=active]:shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <Sparkles className="h-4 w-4" />
-              <span>Local Events</span>
-            </TabsTrigger>
-          </TabsList>
+          <div className="flex items-center justify-center mb-8">
+            <TabsList className="grid grid-cols-3 gap-4 p-1 bg-transparent">
+              <TabsTrigger
+                value="write"
+                className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white p-3 shadow-md hover:bg-sage-50 data-[state=active]:bg-sage-700 data-[state=active]:text-white"
+              >
+                <Pointer className="h-5 w-5" />
+                <span className="text-sm font-medium">Write</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="history"
+                className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white p-3 shadow-md hover:bg-sage-50 data-[state=active]:bg-sage-700 data-[state=active]:text-white"
+              >
+                <Layout className="h-5 w-5" />
+                <span className="text-sm font-medium">History</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="recommendations"
+                disabled={recommendations.length === 0}
+                className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white p-3 shadow-md hover:bg-sage-50 data-[state=active]:bg-sage-700 data-[state=active]:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Zap className="h-5 w-5" />
+                <span className="text-sm font-medium">Local Events</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           {/* Write Tab */}
           <TabsContent value="write" className="space-y-4">
