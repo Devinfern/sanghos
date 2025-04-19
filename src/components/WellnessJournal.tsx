@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -303,12 +304,12 @@ export default function WellnessJournal() {
       <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/10 to-brand-sky/20 opacity-50 pointer-events-none" />
       
       <CardContent className="relative z-10">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6 my-[60px]">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6 mt-[140px]">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="absolute -top-12 left-0 right-0 z-20"
+            className="absolute -top-28 left-0 right-0 z-20"
           >
             <JournalTabs 
               hasRecommendations={recommendations.length > 0} 
@@ -317,7 +318,7 @@ export default function WellnessJournal() {
             />
           </motion.div>
 
-          <TabsContent value="write" className="mt-16">
+          <TabsContent value="write" className="mt-8">
             <div className="relative">
               {/* Prominent prompt section with enhanced contrast */}
               <div className="absolute -top-8 left-0 right-0 bg-brand-primary/10 rounded-t-xl p-2 text-center">
