@@ -13,7 +13,7 @@ interface JournalEntryFormProps {
   userLocation: string;
   isLocationLoading: boolean;
   onJournalChange: (value: string) => void;
-  onLocationChange: (value: string) => void;
+  onLocationChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onLocationDetect: () => void;
   onNewPrompt: () => void;
   onSave: () => void;

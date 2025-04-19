@@ -5,7 +5,7 @@ import { Spinner } from "@/components/ui/spinner";
 interface LocationInputProps {
   location: string;
   isLoading: boolean;
-  onChange: (value: string) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onDetect: () => void;
 }
 
@@ -26,7 +26,7 @@ const LocationInput = ({
             type="text"
             id="location"
             value={location}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={onChange}
             placeholder="Enter your location"
             className="px-3 py-1 text-sm border rounded-md flex-grow"
             disabled={isLoading}
