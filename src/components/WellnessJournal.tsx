@@ -193,10 +193,7 @@ export default function WellnessJournal() {
             }
           });
           
-          if (error) {
-            console.error("Error from fetch-local-events:", error);
-            throw new Error(error.message);
-          }
+          if (error) throw new Error(error.message);
           
           if (data && data.recommendations) {
             console.log("Events received from API:", data.recommendations);
@@ -208,32 +205,35 @@ export default function WellnessJournal() {
               setIsAnalyzing(false);
               setIsLoadingEvents(false);
               return;
-            } else {
-              toast.info("No local wellness events found for your area. Showing retreat recommendations instead.");
             }
           }
+          
+          // If no events found, show toast and fall back to mock recommendations
+          toast.info("No local wellness events found for your area. Showing retreat recommendations instead.");
+          const mockRecommendations = generateMockRecommendations(entry);
+          setRecommendations(mockRecommendations);
+          
         } catch (apiError: any) {
           console.error("Error fetching local events:", apiError);
-          setEventError(apiError.message || "Failed to fetch events");
+          setEventError(apiError.message);
           toast.error(`Couldn't find local events: ${apiError.message}`);
+          
+          // Fall back to mock recommendations
+          const mockRecommendations = generateMockRecommendations(entry);
+          setRecommendations(mockRecommendations);
         }
       }
       
-      const mockRecommendations = generateMockRecommendations(entry);
-      setRecommendations(mockRecommendations);
-      setIsJournalSubmitted(true);
-      setActiveTab("recommendations");
-      
     } catch (error: any) {
       console.error("Error analyzing journal entry:", error);
-      setEventError(error.message || "Unknown error occurred");
+      setEventError(error.message);
       toast.error("Something went wrong analyzing your journal. Please try again.");
       
       const mockRecommendations = generateMockRecommendations(entry);
       setRecommendations(mockRecommendations);
+    } finally {
       setIsJournalSubmitted(true);
       setActiveTab("recommendations");
-    } finally {
       setIsAnalyzing(false);
       setIsLoadingEvents(false);
     }
@@ -378,7 +378,8 @@ export default function WellnessJournal() {
               <span>Local Events</span>
             </TabsTrigger>
           </TabsList>
-          
+
+          {/* Write Tab */}
           <TabsContent value="write" className="space-y-4">
             {isAnalyzing ? (
               <div className="min-h-[200px] flex items-center justify-center">
@@ -454,7 +455,8 @@ export default function WellnessJournal() {
               </div>
             )}
           </TabsContent>
-          
+
+          {/* History Tab */}
           <TabsContent value="history" className="space-y-6">
             {journalEntries.length === 0 ? (
               <div className="text-center py-12 text-sage-600">
@@ -473,7 +475,7 @@ export default function WellnessJournal() {
                         </CardTitle>
                         <Button 
                           variant="ghost" 
-                          size="sm" 
+                          size="sm"
                           className="text-sage-600 hover:text-sage-700"
                           onClick={() => analyzeJournal(entry.content)}
                         >
@@ -494,7 +496,8 @@ export default function WellnessJournal() {
               </div>
             )}
           </TabsContent>
-          
+
+          {/* Recommendations Tab */}
           <TabsContent value="recommendations" className="space-y-6">
             {isLoadingEvents ? (
               <div className="min-h-[200px] flex items-center justify-center">
@@ -533,7 +536,7 @@ export default function WellnessJournal() {
                           </div>
                         )}
                         
-                        <CardContent className={`pt-6 space-y-4 ${rec.image ? 'md:w-3/4' : 'w-full'}`}>
+                        <CardContent className={cn("pt-6 space-y-4", rec.image ? "md:w-3/4" : "w-full")}>
                           <div className="flex justify-between items-start">
                             <h4 className="font-semibold text-lg text-sage-900">{rec.title}</h4>
                             <div className="bg-sage-100/50 text-sage-700 text-sm py-1 px-3 rounded-full">
