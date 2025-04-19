@@ -17,8 +17,11 @@ serve(async (req) => {
     const EVENTBRITE_API_KEY = Deno.env.get('EVENTBRITE_API_KEY');
     
     if (!EVENTBRITE_API_KEY) {
+      console.error("Eventbrite API key is missing from environment variables");
       throw new Error("Eventbrite API key is not configured");
     }
+
+    console.log("API Key available:", EVENTBRITE_API_KEY ? "Yes (not showing for security)" : "No");
 
     const { location, interests, startDatetime, endDatetime } = await req.json();
     
@@ -27,7 +30,6 @@ serve(async (req) => {
     }
 
     console.log("Request received:", { location, interests, startDatetime, endDatetime });
-    console.log("Using API key:", EVENTBRITE_API_KEY ? "API key is set" : "API key is missing");
 
     // Build the Eventbrite API URL with query parameters
     const baseUrl = "https://www.eventbriteapi.com/v3/events/search/";
@@ -85,6 +87,7 @@ serve(async (req) => {
     const eventData = await response.json();
     console.log(`Found ${eventData.events?.length || 0} events`);
     
+    // If no events found, return empty array
     if (!eventData.events || eventData.events.length === 0) {
       console.log("No events found, returning empty array");
       return new Response(JSON.stringify({ 
