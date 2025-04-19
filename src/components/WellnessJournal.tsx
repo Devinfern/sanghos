@@ -295,16 +295,18 @@ export default function WellnessJournal() {
     setActiveTab(value);
   };
 
-  return <Card className="w-full border-sage-200/30 shadow-lg bg-white/95 backdrop-blur-sm">
-      <CardContent>
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6 my-[60px]">
-          <JournalTabs 
-            hasRecommendations={recommendations.length > 0} 
-            activeTab={activeTab}
-            onTabChange={handleTabChange}
-          />
+  return <Card className="w-full border-sage-200/30 shadow-lg bg-white/95 backdrop-blur-sm -mt-[60px]">
+      <CardContent className="relative">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <div className="absolute -top-[60px] left-0 right-0">
+            <JournalTabs 
+              hasRecommendations={recommendations.length > 0} 
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+            />
+          </div>
 
-          <TabsContent value="write">
+          <TabsContent value="write" className="mt-16">
             <JournalEntryForm 
               isAnalyzing={isAnalyzing} 
               journalEntry={journalEntry} 
