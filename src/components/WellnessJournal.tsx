@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -9,7 +8,7 @@ import { Spinner } from "./ui/spinner";
 import { toast } from "sonner";
 import { retreats } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Book, Calendar, Clock, MapPin, BookOpen, PenLine, History, Sparkles } from "lucide-react";
+import { ArrowRight, Book, Calendar, Clock, MapPin, BookOpen, PenLine, History, Sparkles, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -28,6 +27,10 @@ interface RetreatRecommendation {
   location?: string;
   date?: string;
   time?: string;
+  description?: string;
+  url?: string;
+  image?: string;
+  category?: string[];
 }
 
 const wellnessPrompts = [
@@ -51,6 +54,8 @@ export default function WellnessJournal() {
   const [recommendations, setRecommendations] = useState<RetreatRecommendation[]>([]);
   const [isJournalSubmitted, setIsJournalSubmitted] = useState(false);
   const [activeTab, setActiveTab] = useState("write");
+  const [userLocation, setUserLocation] = useState<string>(""); // Store user location
+  const [isLocationLoading, setIsLocationLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,10 +68,69 @@ export default function WellnessJournal() {
     if (savedEntries) {
       setJournalEntries(JSON.parse(savedEntries));
     }
+    
+    // Try to get stored location or detect it
+    const savedLocation = localStorage.getItem("userLocation");
+    if (savedLocation) {
+      setUserLocation(savedLocation);
+    } else {
+      detectUserLocation();
+    }
   }, []);
+
+  const detectUserLocation = () => {
+    setIsLocationLoading(true);
+    // Try to get user's location using browser geolocation API
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          try {
+            // Convert coordinates to address using nominatim (OpenStreetMap)
+            const { latitude, longitude } = position.coords;
+            const response = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=14&addressdetails=1`
+            );
+            
+            if (response.ok) {
+              const data = await response.json();
+              const city = data.address.city || data.address.town || data.address.village || data.address.county;
+              const state = data.address.state;
+              const country = data.address.country;
+              
+              const locationString = city ? `${city}, ${state || country}` : `${state}, ${country}`;
+              setUserLocation(locationString);
+              localStorage.setItem("userLocation", locationString);
+            } else {
+              // Default to a general location if reverse geocoding fails
+              setUserLocation("San Francisco, CA");
+            }
+          } catch (error) {
+            console.error("Error getting location details:", error);
+            setUserLocation("San Francisco, CA");
+          } finally {
+            setIsLocationLoading(false);
+          }
+        },
+        (error) => {
+          console.error("Error getting geolocation:", error);
+          setUserLocation("San Francisco, CA");
+          setIsLocationLoading(false);
+        }
+      );
+    } else {
+      // Geolocation not supported
+      setUserLocation("San Francisco, CA");
+      setIsLocationLoading(false);
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setJournalEntry(e.target.value);
+  };
+
+  const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserLocation(e.target.value);
+    localStorage.setItem("userLocation", e.target.value);
   };
 
   const saveJournalEntry = () => {
@@ -92,31 +156,90 @@ export default function WellnessJournal() {
 
   const analyzeJournal = async (entry: string) => {
     if (entry.trim().length < 20) {
-      toast.error("Please write at least a few sentences to get a personalized recommendation.");
+      toast.error("Please write at least a few sentences to get personalized recommendations.");
       return;
     }
     
     setIsAnalyzing(true);
     
     try {
-      // Try to use Supabase Edge Function if available, otherwise use mock data
-      let recommendations: RetreatRecommendation[];
+      // Extract wellness keywords for better event matching
+      const extractKeywords = (text: string): string[] => {
+        const wellnessKeywords = [
+          "yoga", "meditation", "mindfulness", "stress", "anxiety",
+          "wellness", "health", "fitness", "nature", "outdoors",
+          "breathing", "relaxation", "community", "healing", "therapy",
+          "mental health", "exercise", "movement", "peace", "balance"
+        ];
+        
+        const lowerText = text.toLowerCase();
+        return wellnessKeywords.filter(keyword => lowerText.includes(keyword));
+      };
       
+      const keywords = extractKeywords(entry);
+      console.log("Extracted keywords:", keywords);
+      
+      // Current date and time in ISO format
+      const now = new Date();
+      const startDatetime = now.toISOString();
+      
+      // End datetime (7 days from now)
+      const endDate = new Date();
+      endDate.setDate(now.getDate() + 7);
+      const endDatetime = endDate.toISOString();
+      
+      // Try using the local events API first if we have a location
+      if (userLocation) {
+        try {
+          const { data, error } = await supabase.functions.invoke('fetch-local-events', {
+            body: { 
+              location: userLocation,
+              interests: keywords,
+              startDatetime,
+              endDatetime
+            }
+          });
+          
+          if (error) throw new Error(error.message);
+          
+          if (data && data.recommendations && data.recommendations.length > 0) {
+            console.log("Found local events:", data.recommendations);
+            setRecommendations(data.recommendations);
+            setIsJournalSubmitted(true);
+            setActiveTab("recommendations");
+            return;
+          }
+          
+          console.log("No local events found, falling back to retreat recommendations");
+        } catch (apiError) {
+          console.error("Error fetching local events:", apiError);
+          toast.error("Couldn't find local events. Showing retreat recommendations instead.");
+        }
+      }
+      
+      // Fallback to using Supabase Edge Function for retreat recommendations
       try {
         const { data, error } = await supabase.functions.invoke('analyze-journal', {
           body: { journalEntry: entry }
         });
         
         if (error) throw new Error(error.message);
-        recommendations = data.recommendations;
+        
+        // Handle response from analyze-journal function
+        if (data && data.recommendations) {
+          setRecommendations(data.recommendations);
+          setIsJournalSubmitted(true);
+          setActiveTab("recommendations");
+        } else {
+          throw new Error("Invalid response format");
+        }
       } catch (err) {
         console.log("Using fallback mock data for recommendations");
-        recommendations = generateMockRecommendations(entry);
+        const mockRecommendations = generateMockRecommendations(entry);
+        setRecommendations(mockRecommendations);
+        setIsJournalSubmitted(true);
+        setActiveTab("recommendations");
       }
-      
-      setRecommendations(recommendations);
-      setIsJournalSubmitted(true);
-      setActiveTab("recommendations");
     } catch (error) {
       console.error("Error analyzing journal entry:", error);
       toast.error("Something went wrong analyzing your journal. Please try again.");
@@ -220,7 +343,15 @@ export default function WellnessJournal() {
   };
 
   const navigateToRetreat = (retreatId: string) => {
-    navigate(`/retreat/${retreatId}`);
+    const recommendation = recommendations.find(rec => rec.retreatId === retreatId);
+    
+    if (recommendation && recommendation.url) {
+      // It's an external event, open in new tab
+      window.open(recommendation.url, '_blank');
+    } else {
+      // It's an internal retreat, navigate normally
+      navigate(`/retreat/${retreatId}`);
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -241,7 +372,7 @@ export default function WellnessJournal() {
           Wellness Journal
         </CardTitle>
         <CardDescription className="text-sage-600 max-w-lg mx-auto">
-          Express yourself and discover retreats that align with your wellness journey
+          Express yourself and discover local wellness events that align with your journey
         </CardDescription>
       </CardHeader>
 
@@ -258,7 +389,7 @@ export default function WellnessJournal() {
             </TabsTrigger>
             <TabsTrigger value="recommendations" disabled={recommendations.length === 0} className="flex items-center gap-2">
               <Sparkles className="h-4 w-4" />
-              <span>Recommended</span>
+              <span>Local Events</span>
             </TabsTrigger>
           </TabsList>
           
@@ -284,6 +415,36 @@ export default function WellnessJournal() {
                   className="min-h-[200px] p-4 text-sage-900 border-sage-200"
                 />
 
+                <div className="bg-sage-50 p-4 rounded-lg border border-sage-200/50 space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 justify-between">
+                    <label htmlFor="location" className="text-sm font-medium text-sage-700">Your Location</label>
+                    <div className="flex items-center gap-2 flex-grow sm:max-w-xs">
+                      <input
+                        type="text"
+                        id="location"
+                        value={userLocation}
+                        onChange={handleLocationChange}
+                        placeholder="Enter your location"
+                        className="px-3 py-1 text-sm border rounded-md flex-grow"
+                        disabled={isLocationLoading}
+                      />
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={detectUserLocation}
+                        disabled={isLocationLoading}
+                        className="border-sage-300 text-sage-700 hover:bg-sage-50"
+                      >
+                        {isLocationLoading ? <Spinner className="h-4 w-4" /> : "Detect"}
+                      </Button>
+                    </div>
+                  </div>
+                  <p className="text-xs text-sage-500">
+                    We'll use your location to find relevant wellness events near you
+                  </p>
+                </div>
+
                 <div className="flex justify-end space-x-2">
                   <Button
                     variant="outline"
@@ -301,7 +462,7 @@ export default function WellnessJournal() {
                     className="bg-sage-700 hover:bg-sage-800 text-white flex items-center gap-2"
                     disabled={journalEntry.trim().length < 10}
                   >
-                    <span>Save & Analyze</span>
+                    <span>Save & Find Events</span>
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </div>
@@ -352,6 +513,12 @@ export default function WellnessJournal() {
           <TabsContent value="recommendations" className="space-y-6">
             {recommendations.length > 0 ? (
               <div className="space-y-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-lg font-medium text-sage-900">
+                    Wellness Events Near {userLocation}
+                  </h3>
+                </div>
+                
                 {recommendations.map((rec, index) => (
                   <motion.div
                     key={rec.retreatId}
@@ -399,8 +566,17 @@ export default function WellnessJournal() {
                             onClick={() => navigateToRetreat(rec.retreatId)}
                             className="border-sage-300 text-sage-700 hover:bg-sage-50 hover:text-sage-800"
                           >
-                            View Retreat
-                            <ArrowRight className="ml-2 h-4 w-4" />
+                            {rec.url ? (
+                              <>
+                                View Event
+                                <ExternalLink className="ml-2 h-4 w-4" />
+                              </>
+                            ) : (
+                              <>
+                                View Retreat
+                                <ArrowRight className="ml-2 h-4 w-4" />
+                              </>
+                            )}
                           </Button>
                         </div>
                       </CardContent>
@@ -410,7 +586,7 @@ export default function WellnessJournal() {
               </div>
             ) : (
               <div className="text-center py-12">
-                <p className="text-sage-600">No matching retreats found yet. Write in your journal to get recommendations.</p>
+                <p className="text-sage-600">No matching events found yet. Write in your journal to get recommendations.</p>
               </div>
             )}
           </TabsContent>
@@ -420,8 +596,8 @@ export default function WellnessJournal() {
       <CardFooter className="flex justify-between border-t border-sage-200/20 pt-4">
         <div className="text-xs text-sage-500">
           {recommendations.length > 0 ? 
-            `${recommendations.length} retreat${recommendations.length === 1 ? '' : 's'} found based on your journal` : 
-            'Share your thoughts to get personalized retreat recommendations'}
+            `${recommendations.length} event${recommendations.length === 1 ? '' : 's'} found based on your journal` : 
+            'Share your thoughts to get personalized event recommendations'}
         </div>
         
         <Button variant="ghost" onClick={handleReset} className="text-sage-600 hover:text-sage-700 hover:bg-sage-50">
