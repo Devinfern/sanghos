@@ -12,14 +12,12 @@ import JournalEntryForm from "./journal/JournalEntryForm";
 import JournalHistory from "./journal/JournalHistory";
 import EventRecommendations from "./journal/EventRecommendations";
 import JournalTabs from "./journal/JournalTabs";
-
 interface JournalEntry {
   id: string;
   content: string;
   createdAt: string;
   prompt?: string;
 }
-
 interface RetreatRecommendation {
   retreatId: string;
   title: string;
@@ -33,9 +31,7 @@ interface RetreatRecommendation {
   image?: string;
   category?: string[];
 }
-
 const wellnessPrompts = ["What are you grateful for today?", "How are you taking care of your body this week?", "What's one area of your wellness journey you'd like to explore more?", "Describe a moment of peace you experienced recently.", "What's causing you stress right now, and how might you address it?", "How connected do you feel to your community lately?", "What type of movement would feel good for your body today?", "Describe your ideal wellness retreat experience.", "What self-care practice would you like to develop?", "How has your relationship with mindfulness changed recently?"];
-
 export default function WellnessJournal() {
   const [journalEntry, setJournalEntry] = useState("");
   const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
@@ -49,7 +45,6 @@ export default function WellnessJournal() {
   const [isLoadingEvents, setIsLoadingEvents] = useState(false);
   const [eventError, setEventError] = useState<string | null>(null);
   const navigate = useNavigate();
-
   useEffect(() => {
     const randomPrompt = wellnessPrompts[Math.floor(Math.random() * wellnessPrompts.length)];
     setSelectedPrompt(randomPrompt);
@@ -64,7 +59,6 @@ export default function WellnessJournal() {
       detectUserLocation();
     }
   }, []);
-
   const detectUserLocation = () => {
     setIsLocationLoading(true);
     if (navigator.geolocation) {
@@ -102,16 +96,13 @@ export default function WellnessJournal() {
       setIsLocationLoading(false);
     }
   };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setJournalEntry(e.target.value);
   };
-
   const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserLocation(e.target.value);
     localStorage.setItem("userLocation", e.target.value);
   };
-
   const saveJournalEntry = () => {
     if (journalEntry.trim().length < 10) {
       toast.error("Please write at least a few sentences in your journal entry.");
@@ -129,7 +120,6 @@ export default function WellnessJournal() {
     toast.success("Journal entry saved successfully!");
     analyzeJournal(journalEntry);
   };
-
   const analyzeJournal = async (entry: string) => {
     if (entry.trim().length < 20) {
       toast.error("Please write at least a few sentences to get personalized recommendations.");
@@ -176,7 +166,6 @@ export default function WellnessJournal() {
               return;
             }
           }
-
           toast.info("No local wellness events found for your area. Showing retreat recommendations instead.");
           const mockRecommendations = generateMockRecommendations(entry);
           setRecommendations(mockRecommendations);
@@ -184,7 +173,6 @@ export default function WellnessJournal() {
           console.error("Error fetching local events:", apiError);
           setEventError(apiError.message);
           toast.error(`Couldn't find local events: ${apiError.message}`);
-
           const mockRecommendations = generateMockRecommendations(entry);
           setRecommendations(mockRecommendations);
         }
@@ -202,7 +190,6 @@ export default function WellnessJournal() {
       setIsLoadingEvents(false);
     }
   };
-
   const generateMockRecommendations = (journal: string): RetreatRecommendation[] => {
     const text = journal.toLowerCase();
     const availableRetreats = retreats.slice(0, 3);
@@ -265,7 +252,6 @@ export default function WellnessJournal() {
       };
     }).sort((a, b) => b.matchScore - a.matchScore);
   };
-
   const handleReset = () => {
     setJournalEntry("");
     setRecommendations([]);
@@ -275,7 +261,6 @@ export default function WellnessJournal() {
     const randomPrompt = wellnessPrompts[Math.floor(Math.random() * wellnessPrompts.length)];
     setSelectedPrompt(randomPrompt);
   };
-
   const navigateToRetreat = (retreatId: string) => {
     const recommendation = recommendations.find(rec => rec.retreatId === retreatId);
     if (recommendation && recommendation.url) {
@@ -284,7 +269,6 @@ export default function WellnessJournal() {
       navigate(`/retreat/${retreatId}`);
     }
   };
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       month: 'short',
@@ -292,79 +276,38 @@ export default function WellnessJournal() {
       year: 'numeric'
     });
   };
-
-  return (
-    <Card className="w-full border-sage-200/30 shadow-lg bg-white/95 backdrop-blur-sm">
-      <CardHeader className="text-center space-y-2">
-        <div className="mx-auto bg-sage-100/50 w-fit p-2 rounded-full">
-          <Layout className="w-5 h-5 text-sage-600" />
-        </div>
-        <CardTitle className="text-2xl font-semibold text-sage-900">
-          Wellness Journal
-        </CardTitle>
-        <CardDescription className="text-sage-600 max-w-lg mx-auto">
-          Express yourself and discover local wellness events that align with your journey
-        </CardDescription>
-      </CardHeader>
+  return <Card className="w-full border-sage-200/30 shadow-lg bg-white/95 backdrop-blur-sm">
+      
 
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <JournalTabs hasRecommendations={recommendations.length > 0} />
 
           <TabsContent value="write">
-            <JournalEntryForm
-              isAnalyzing={isAnalyzing}
-              journalEntry={journalEntry}
-              selectedPrompt={selectedPrompt}
-              userLocation={userLocation}
-              isLocationLoading={isLocationLoading}
-              onJournalChange={setJournalEntry}
-              onLocationChange={handleLocationChange}
-              onLocationDetect={detectUserLocation}
-              onNewPrompt={() => {
-                const randomPrompt = wellnessPrompts[Math.floor(Math.random() * wellnessPrompts.length)];
-                setSelectedPrompt(randomPrompt);
-              }}
-              onSave={saveJournalEntry}
-            />
+            <JournalEntryForm isAnalyzing={isAnalyzing} journalEntry={journalEntry} selectedPrompt={selectedPrompt} userLocation={userLocation} isLocationLoading={isLocationLoading} onJournalChange={setJournalEntry} onLocationChange={handleLocationChange} onLocationDetect={detectUserLocation} onNewPrompt={() => {
+            const randomPrompt = wellnessPrompts[Math.floor(Math.random() * wellnessPrompts.length)];
+            setSelectedPrompt(randomPrompt);
+          }} onSave={saveJournalEntry} />
           </TabsContent>
 
           <TabsContent value="history">
-            <JournalHistory
-              entries={journalEntries}
-              onAnalyze={analyzeJournal}
-              formatDate={formatDate}
-            />
+            <JournalHistory entries={journalEntries} onAnalyze={analyzeJournal} formatDate={formatDate} />
           </TabsContent>
 
           <TabsContent value="recommendations">
-            <EventRecommendations
-              isLoading={isLoadingEvents}
-              recommendations={recommendations}
-              userLocation={userLocation}
-              error={eventError}
-              onRetry={handleReset}
-              onNavigateToRetreat={navigateToRetreat}
-            />
+            <EventRecommendations isLoading={isLoadingEvents} recommendations={recommendations} userLocation={userLocation} error={eventError} onRetry={handleReset} onNavigateToRetreat={navigateToRetreat} />
           </TabsContent>
         </Tabs>
       </CardContent>
       
       <CardFooter className="flex justify-between border-t border-sage-200/20 pt-4">
         <div className="text-xs text-sage-500">
-          {recommendations.length > 0
-            ? `${recommendations.length} event${recommendations.length === 1 ? '' : 's'} found based on your journal`
-            : 'Share your thoughts to get personalized event recommendations'}
+          {recommendations.length > 0 ? `${recommendations.length} event${recommendations.length === 1 ? '' : 's'} found based on your journal` : 'Share your thoughts to get personalized event recommendations'}
         </div>
         
-        <Button
-          variant="ghost"
-          onClick={handleReset}
-          className="text-sage-600 hover:text-sage-700 hover:bg-sage-50"
-        >
+        <Button variant="ghost" onClick={handleReset} className="text-sage-600 hover:text-sage-700 hover:bg-sage-50">
           Start New Entry
         </Button>
       </CardFooter>
-    </Card>
-  );
+    </Card>;
 }
