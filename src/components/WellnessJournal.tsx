@@ -9,7 +9,19 @@ import { Spinner } from "./ui/spinner";
 import { toast } from "sonner";
 import { retreats } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import { Layout, Pointer, Zap } from "lucide-react";
+import { 
+  Layout, 
+  Pointer, 
+  Zap, 
+  ArrowRight, 
+  Book, 
+  Sparkles, 
+  MapPin, 
+  Calendar, 
+  Clock, 
+  ExternalLink, 
+  Search 
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 
