@@ -70,9 +70,16 @@ const JournalEntryForm = ({
             variant="outline"
             onClick={onNewPrompt}
             disabled={isSubmitting}
-            className="border-sage-300 text-sage-700 hover:bg-sage-50 mx-auto block"
+            className="border-sage-300 text-sage-700 hover:bg-sage-50 mx-auto block 
+              transition-all duration-300 
+              hover:border-sage-400 
+              hover:shadow-md 
+              group"
           >
-            Try Another Prompt
+            <span className="flex items-center gap-2 group-hover:translate-x-1 transition-transform duration-300">
+              Try Another Prompt
+              <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 group-hover:ml-2 transition-all duration-300" />
+            </span>
           </Button>
         </div>
       </div>
