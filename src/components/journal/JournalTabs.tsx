@@ -30,7 +30,7 @@ const JournalTabs = ({ hasRecommendations, activeTab, onTabChange }: JournalTabs
   ];
 
   return (
-    <div className="flex items-center justify-center mb-8 py-6">
+    <div className="flex items-center justify-center mb-8 py-6 h-[120px]">
       <Dock 
         className="bg-sage-50/80 backdrop-blur-sm border border-sage-200/30 px-8 py-4 rounded-2xl" 
         distance={100} 

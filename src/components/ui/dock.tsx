@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -91,20 +92,12 @@ function Dock({
   const isHovered = useMotionValue(0);
 
   const maxHeight = useMemo(() => {
-    return Math.max(DOCK_HEIGHT, magnification + magnification / 2 + 4);
-  }, [magnification]);
+    return Math.max(DOCK_HEIGHT, panelHeight);
+  }, [panelHeight]);
 
-  const heightRow = useTransform(isHovered, [0, 1], [panelHeight, maxHeight]);
-  const height = useSpring(heightRow, spring);
-
+  // Use a fixed height instead of a dynamic one
   return (
-    <motion.div
-      style={{
-        height: height,
-        scrollbarWidth: 'none',
-      }}
-      className='mx-2 flex max-w-full items-center justify-center overflow-x-auto'
-    >
+    <div className="relative h-[100px] mx-2 flex max-w-full items-center justify-center overflow-visible">
       <motion.div
         onMouseMove={({ pageX }) => {
           isHovered.set(1);
@@ -127,7 +120,7 @@ function Dock({
           {children}
         </DockProvider>
       </motion.div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -166,9 +159,13 @@ function DockItem({ children, className, onClick }: DockItemProps) {
       aria-haspopup='true'
       onClick={onClick}
     >
-      {Children.map(children, (child) =>
-        cloneElement(child as React.ReactElement, { width, isHovered })
-      )}
+      {Children.map(children, (child) => {
+        if (!React.isValidElement(child)) return child;
+        return cloneElement(child as React.ReactElement, { 
+          width, 
+          isHovered 
+        });
+      })}
     </motion.div>
   );
 }
@@ -179,6 +176,8 @@ function DockLabel({ children, className, ...rest }: DockLabelProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    if (!isHovered) return;
+    
     const unsubscribe = isHovered.on('change', (latest) => {
       setIsVisible(latest === 1);
     });
@@ -190,15 +189,15 @@ function DockLabel({ children, className, ...rest }: DockLabelProps) {
       {isVisible && (
         <motion.div
           initial={{ opacity: 0, y: 0 }}
-          animate={{ opacity: 1, y: -10 }}
+          animate={{ opacity: 1, y: -20 }}
           exit={{ opacity: 0, y: 0 }}
           transition={{ duration: 0.2 }}
           className={cn(
-            'absolute -top-6 left-1/2 w-fit whitespace-pre rounded-md border border-gray-200 bg-gray-100 px-2 py-0.5 text-xs text-neutral-700 dark:border-neutral-900 dark:bg-neutral-800 dark:text-white',
+            'absolute -top-10 left-1/2 w-fit whitespace-pre rounded-md border border-sage-200 bg-white px-2 py-1 text-xs text-sage-700 shadow-sm z-50',
             className
           )}
           role='tooltip'
-          style={{ x: '-50%' }}
+          style={{ x: '-50%', pointerEvents: 'none' }}
         >
           {children}
         </motion.div>
