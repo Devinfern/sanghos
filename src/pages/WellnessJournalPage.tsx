@@ -1,20 +1,16 @@
-
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WellnessJournal from "@/components/WellnessJournal";
-
 const WellnessJournalPage = () => {
   const [isLoaded, setIsLoaded] = useState(false);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(true);
     }, 100);
     return () => clearTimeout(timer);
   }, []);
-
   return <>
       <Helmet>
         <title>Wellness Journal & Local Events | Sanghos</title>
@@ -32,11 +28,8 @@ const WellnessJournalPage = () => {
         
         <div className="container mx-auto py-12 px-4 relative z-10 max-w-4xl my-[80px]">
           <div className="text-center mb-12">
-            <h1 className="text-3xl md:text-4xl font-semibold text-sage-900 mb-4">Your Wellness Journal</h1>
-            <p className="text-sage-700 max-w-2xl mx-auto">
-              Express yourself and discover local wellness events happening now near you. 
-              Your journal entries help us find the perfect wellness activities for your current needs.
-            </p>
+            <h1 className="text-3xl md:text-4xl font-semibold text-sage-900 mb-4">Your AI Retreat Finder</h1>
+            <p className="text-sage-700 max-w-2xl mx-auto">Use our journal to discover local wellness events happening now near you. Your journal entries help us find the perfect wellness activities for your current needs.</p>
           </div>
           
           <WellnessJournal />
@@ -46,5 +39,4 @@ const WellnessJournalPage = () => {
       <Footer />
     </>;
 };
-
 export default WellnessJournalPage;
