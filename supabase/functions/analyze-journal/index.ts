@@ -38,9 +38,10 @@ serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: `You are a wellness coach specializing in analyzing journal entries to recommend wellness retreats.
+            content: `You are a wellness coach specializing in analyzing journal entries to recommend wellness retreats and local wellness events.
             
-            You'll be given retreat data from our database and asked to match the user's journal entry to the most suitable retreats. 
+            You'll be given a journal entry to analyze and you need to identify the user's wellness needs, interests, and emotional state.
+            Then recommend both retreat options and local wellness events that would address their needs.
             
             Retreat data:
             1. Weekend Mindfulness Immersion (ret-1): Focus on meditation, mindfulness, yoga for stress reduction and finding peace.
@@ -48,24 +49,32 @@ serve(async (req) => {
             3. Forest Qigong Retreat (ret-3): Nature connection, gentle movement, mindful awareness in forest settings.
             4. Mountain Yoga Escape (ret-4): Yoga sessions, meditation, balance and inner peace in mountain settings.
             
-            Analyze the emotional state, wellness needs, and interests in the journal entry. Then recommend 1-3 retreats that would best address their needs.`
+            For local events, create relevant fictional events based on the user's needs. Be creative but realistic.
+            
+            Analyze the emotional state, wellness needs, and interests in the journal entry. Then recommend 2-4 retreat options and local events.`
           },
           {
             role: 'user',
             content: `Journal entry: "${journalEntry}"
             
-            Based on this journal entry, recommend the most suitable retreats (up to 3) from our database. For each retreat, provide:
-            1. The retreat ID
-            2. A match score (0.0-1.0) indicating how well it matches their needs
-            3. A brief, personalized explanation of why this retreat would benefit them
+            Based on this journal entry, recommend the most suitable retreats and local wellness events. For each recommendation, provide:
+            1. The retreat ID (for retreats) or a unique event ID (for local events, use "local-1", "local-2", etc.)
+            2. A title
+            3. A match score (0.0-1.0) indicating how well it matches their needs
+            4. A brief, personalized explanation of why this retreat/event would benefit them
+            5. For local events, include a fictional location, date and time
             
             Format your response as valid JSON like this example:
             {
               "recommendations": [
                 {
                   "retreatId": "ret-1",
+                  "title": "Weekend Mindfulness Immersion",
                   "matchScore": 0.85,
-                  "reason": "This retreat's focus on mindfulness would help address your anxiety and burnout."
+                  "reason": "This retreat's focus on mindfulness would help address your anxiety and burnout.",
+                  "location": "Portland Community Center",
+                  "date": "June 15, 2025",
+                  "time": "10:00 AM"
                 }
               ]
             }`
