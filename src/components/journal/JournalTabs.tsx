@@ -29,12 +29,12 @@ const JournalTabs = ({ hasRecommendations, activeTab, onTabChange }: JournalTabs
   ];
 
   return (
-    <div className="flex items-center justify-center mb-8 h-[150px]">
+    <div className="flex items-center justify-center mb-8 h-[120px]">
       <Dock 
         className="bg-sage-50/80 backdrop-blur-sm border border-sage-200/30 px-12 py-4 rounded-2xl" 
-        distance={160} 
-        magnification={100}
-        spring={{ mass: 0.1, stiffness: 150, damping: 12 }}
+        distance={120} 
+        magnification={60}
+        spring={{ mass: 0.2, stiffness: 200, damping: 20 }}
       >
         {tabs.map((tab) => (
           <DockItem
