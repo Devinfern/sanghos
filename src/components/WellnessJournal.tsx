@@ -280,7 +280,7 @@ export default function WellnessJournal() {
       
 
       <CardContent>
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6 my-[60px]">
           <JournalTabs hasRecommendations={recommendations.length > 0} />
 
           <TabsContent value="write">
