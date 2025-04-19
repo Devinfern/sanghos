@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
-import { Spinner } from "./ui/spinner";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { retreats } from "@/lib/data";
-import { cn } from "@/lib/utils";
 import { Layout, Pointer, Zap, ArrowRight, Book, Sparkles, MapPin, Calendar, Clock, ExternalLink, Search, Pencil } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import { retreats } from "@/lib/data";
+import JournalEntryForm from "./journal/JournalEntryForm";
+import JournalHistory from "./journal/JournalHistory";
+import EventRecommendations from "./journal/EventRecommendations";
+import JournalTabs from "./journal/JournalTabs";
 
 interface JournalEntry {
   id: string;
@@ -308,187 +309,59 @@ export default function WellnessJournal() {
 
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <div className="flex items-center justify-center mb-8">
-            <TabsList className="grid grid-cols-3 gap-4 p-1 bg-transparent">
-              <TabsTrigger value="write" className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white p-3 shadow-md hover:bg-sage-50 data-[state=active]:bg-sage-700 data-[state=active]:text-white">
-                <Pencil className="h-5 w-5" />
-                <span className="text-sm font-medium">Write</span>
-              </TabsTrigger>
-              <TabsTrigger value="history" className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white p-3 shadow-md hover:bg-sage-50 data-[state=active]:bg-sage-700 data-[state=active]:text-white">
-                <Clock className="h-5 w-5" />
-                <span className="text-sm font-medium">History</span>
-              </TabsTrigger>
-              <TabsTrigger value="recommendations" disabled={recommendations.length === 0} className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white p-3 shadow-md hover:bg-sage-50 data-[state=active]:bg-sage-700 data-[state=active]:text-white disabled:opacity-50 disabled:cursor-not-allowed my-0 py-[14px]">
-                <Zap className="h-5 w-5" />
-                <span className="text-sm font-medium">Local Events</span>
-              </TabsTrigger>
-            </TabsList>
-          </div>
+          <JournalTabs hasRecommendations={recommendations.length > 0} />
 
-          <TabsContent value="write" className="space-y-4">
-            {isAnalyzing ? <div className="min-h-[200px] flex items-center justify-center">
-                <div className="text-center">
-                  <Spinner className="mx-auto mb-4 h-8 w-8 text-sage-600" />
-                  <p className="text-sage-600">Analyzing your wellness aspirations...</p>
-                </div>
-              </div> : <div className="space-y-6 my-[60px]">
-                <div className="bg-sage-50 p-4 rounded-lg border border-sage-200/50 text-sage-800 my-0">
-                  <p className="font-medium mb-1">Today's Prompt</p>
-                  <p className="italic">{selectedPrompt}</p>
-                </div>
-                
-                <Textarea placeholder="Start writing your thoughts here..." value={journalEntry} onChange={handleInputChange} className="min-h-[200px] p-4 text-sage-900 border-sage-200" />
-
-                <div className="bg-sage-50 p-4 rounded-lg border border-sage-200/50 space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 justify-between">
-                    <label htmlFor="location" className="text-sm font-medium text-sage-700">Your Location</label>
-                    <div className="flex items-center gap-2 flex-grow sm:max-w-xs">
-                      <input type="text" id="location" value={userLocation} onChange={handleLocationChange} placeholder="Enter your location" className="px-3 py-1 text-sm border rounded-md flex-grow" disabled={isLocationLoading} />
-                      <Button type="button" variant="outline" size="sm" onClick={detectUserLocation} disabled={isLocationLoading} className="border-sage-300 text-sage-700 hover:bg-sage-50">
-                        {isLocationLoading ? <Spinner className="h-4 w-4" /> : "Detect"}
-                      </Button>
-                    </div>
-                  </div>
-                  <p className="text-xs text-sage-500">
-                    We'll use your location to find relevant wellness events near you
-                  </p>
-                </div>
-
-                <div className="flex justify-end space-x-2">
-                  <Button variant="outline" onClick={() => {
+          <TabsContent value="write">
+            <JournalEntryForm
+              isAnalyzing={isAnalyzing}
+              journalEntry={journalEntry}
+              selectedPrompt={selectedPrompt}
+              userLocation={userLocation}
+              isLocationLoading={isLocationLoading}
+              onJournalChange={setJournalEntry}
+              onLocationChange={handleLocationChange}
+              onLocationDetect={detectUserLocation}
+              onNewPrompt={() => {
                 const randomPrompt = wellnessPrompts[Math.floor(Math.random() * wellnessPrompts.length)];
                 setSelectedPrompt(randomPrompt);
-              }} className="border-sage-300 text-sage-700 hover:bg-sage-50">
-                    New Prompt
-                  </Button>
-                  <Button onClick={saveJournalEntry} className="bg-sage-700 hover:bg-sage-800 text-white flex items-center gap-2" disabled={journalEntry.trim().length < 10}>
-                    <span>Save & Find Events</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>}
+              }}
+              onSave={saveJournalEntry}
+            />
           </TabsContent>
 
-          <TabsContent value="history" className="space-y-6">
-            {journalEntries.length === 0 ? <div className="text-center py-12 text-sage-600">
-                <Book className="mx-auto h-12 w-12 mb-4 text-sage-400" />
-                <h3 className="text-lg font-medium mb-2">No journal entries yet</h3>
-                <p>Start writing to create your wellness journey</p>
-              </div> : <div className="space-y-4">
-                {journalEntries.map(entry => <Card key={entry.id} className="border-sage-200/20 hover:border-sage-300/50 transition-all">
-                    <CardHeader className="pb-2">
-                      <div className="flex justify-between items-center">
-                        <CardTitle className="text-sm font-medium text-sage-500">
-                          {formatDate(entry.createdAt)}
-                        </CardTitle>
-                        <Button variant="ghost" size="sm" className="text-sage-600 hover:text-sage-700" onClick={() => analyzeJournal(entry.content)}>
-                          <Sparkles className="h-4 w-4 mr-1" /> Analyze
-                        </Button>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      {entry.prompt && <div className="mb-2 text-sm italic text-sage-600">
-                          Prompt: {entry.prompt}
-                        </div>}
-                      <p className="text-sage-800 line-clamp-3">{entry.content}</p>
-                    </CardContent>
-                  </Card>)}
-              </div>}
+          <TabsContent value="history">
+            <JournalHistory
+              entries={journalEntries}
+              onAnalyze={analyzeJournal}
+              formatDate={formatDate}
+            />
           </TabsContent>
 
-          <TabsContent value="recommendations" className="space-y-6">
-            {isLoadingEvents ? <div className="min-h-[200px] flex items-center justify-center">
-                <div className="text-center">
-                  <Spinner className="mx-auto mb-4 h-8 w-8 text-sage-600" />
-                  <p className="text-sage-600">Finding events near you...</p>
-                </div>
-              </div> : recommendations.length > 0 ? <div className="space-y-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-lg font-medium text-sage-900">
-                    {recommendations[0].url ? 'Wellness Events Near ' + userLocation : 'Retreat Recommendations'}
-                  </h3>
-                </div>
-                
-                {recommendations.map((rec, index) => <motion.div key={rec.retreatId} initial={{
-              opacity: 0,
-              y: 10
-            }} animate={{
-              opacity: 1,
-              y: 0
-            }} transition={{
-              duration: 0.3,
-              delay: index * 0.1
-            }}>
-                    <Card className="border border-sage-200/20 hover:border-sage-300/30 transition-all duration-300 hover:shadow-md overflow-hidden">
-                      <div className="flex flex-col md:flex-row">
-                        {rec.image && <div className="md:w-1/4 h-40 md:h-auto">
-                            <img src={rec.image} alt={rec.title} className="w-full h-full object-cover" onError={e => {
-                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86";
-                    }} />
-                          </div>}
-                        
-                        <CardContent className={cn("pt-6 space-y-4", rec.image ? "md:w-3/4" : "w-full")}>
-                          <div className="flex justify-between items-start">
-                            <h4 className="font-semibold text-lg text-sage-900">{rec.title}</h4>
-                            <div className="bg-sage-100/50 text-sage-700 text-sm py-1 px-3 rounded-full">
-                              {Math.round(rec.matchScore * 100)}% match
-                            </div>
-                          </div>
-                          
-                          <p className="text-sage-600">{rec.reason}</p>
-                          
-                          {rec.description && <p className="text-sage-700 text-sm line-clamp-2">{rec.description}</p>}
-                          
-                          {(rec.location || rec.date || rec.time) && <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-sage-50/50 p-3 rounded-lg">
-                              {rec.location && <div className="flex items-center text-sage-700">
-                                  <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
-                                  <span className="text-sm">{rec.location}</span>
-                                </div>}
-                              {rec.date && <div className="flex items-center text-sage-700">
-                                  <Calendar className="h-4 w-4 mr-2 flex-shrink-0" />
-                                  <span className="text-sm">{rec.date}</span>
-                                </div>}
-                              {rec.time && <div className="flex items-center text-sage-700">
-                                  <Clock className="h-4 w-4 mr-2 flex-shrink-0" />
-                                  <span className="text-sm">{rec.time}</span>
-                                </div>}
-                            </div>}
-                          
-                          <div className="flex justify-end">
-                            <Button variant="outline" onClick={() => navigateToRetreat(rec.retreatId)} className="border-sage-300 text-sage-700 hover:bg-sage-50 hover:text-sage-800">
-                              {rec.url ? <>
-                                  View Event
-                                  <ExternalLink className="ml-2 h-4 w-4" />
-                                </> : <>
-                                  View Retreat
-                                  <ArrowRight className="ml-2 h-4 w-4" />
-                                </>}
-                            </Button>
-                          </div>
-                        </CardContent>
-                      </div>
-                    </Card>
-                  </motion.div>)}
-              </div> : <div className="text-center py-12">
-                {eventError ? <div className="space-y-3">
-                    <Search className="h-12 w-12 mx-auto text-sage-400" />
-                    <p className="text-sage-700 font-medium">Unable to find events</p>
-                    <p className="text-sage-600 max-w-md mx-auto text-sm">{eventError}</p>
-                    <Button variant="outline" onClick={handleReset} className="mt-4">
-                      Try Again
-                    </Button>
-                  </div> : <p className="text-sage-600">No matching events found yet. Write in your journal to get recommendations.</p>}
-              </div>}
+          <TabsContent value="recommendations">
+            <EventRecommendations
+              isLoading={isLoadingEvents}
+              recommendations={recommendations}
+              userLocation={userLocation}
+              error={eventError}
+              onRetry={handleReset}
+              onNavigateToRetreat={navigateToRetreat}
+            />
           </TabsContent>
         </Tabs>
       </CardContent>
       
       <CardFooter className="flex justify-between border-t border-sage-200/20 pt-4">
         <div className="text-xs text-sage-500">
-          {recommendations.length > 0 ? `${recommendations.length} event${recommendations.length === 1 ? '' : 's'} found based on your journal` : 'Share your thoughts to get personalized event recommendations'}
+          {recommendations.length > 0
+            ? `${recommendations.length} event${recommendations.length === 1 ? '' : 's'} found based on your journal`
+            : 'Share your thoughts to get personalized event recommendations'}
         </div>
         
-        <Button variant="ghost" onClick={handleReset} className="text-sage-600 hover:text-sage-700 hover:bg-sage-50">
+        <Button
+          variant="ghost"
+          onClick={handleReset}
+          className="text-sage-600 hover:text-sage-700 hover:bg-sage-50"
+        >
           Start New Entry
         </Button>
       </CardFooter>
