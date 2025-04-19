@@ -1,9 +1,9 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Spinner } from "@/components/ui/spinner";
 import { ArrowRight } from "lucide-react";
+import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 import LocationInput from "./LocationInput";
 
 interface JournalEntryFormProps {
@@ -31,6 +31,21 @@ const JournalEntryForm = ({
   onNewPrompt,
   onSave
 }: JournalEntryFormProps) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (journalEntry.trim().length < 10) return;
+    setIsSubmitting(true);
+    onSave();
+    // Reset submitting state after a delay to allow animation to complete
+    setTimeout(() => setIsSubmitting(false), 1000);
+  };
+
+  const handleJournalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onJournalChange(e.target.value);
+  };
+
   if (isAnalyzing) {
     return (
       <div className="min-h-[200px] flex items-center justify-center">
@@ -44,17 +59,23 @@ const JournalEntryForm = ({
 
   return (
     <div className="space-y-6 my-[60px]">
-      <div className="bg-sage-50 p-4 rounded-lg border border-sage-200/50 text-sage-800 my-0">
-        <p className="font-medium mb-1">Today's Prompt</p>
-        <p className="italic">{selectedPrompt}</p>
+      <div className="flex flex-col items-center justify-center">
+        <div className="w-full max-w-2xl mx-auto space-y-8">
+          <PlaceholdersAndVanishInput
+            placeholders={[selectedPrompt]}
+            onChange={handleJournalChange}
+            onSubmit={handleSubmit}
+          />
+          <Button
+            variant="outline"
+            onClick={onNewPrompt}
+            disabled={isSubmitting}
+            className="border-sage-300 text-sage-700 hover:bg-sage-50 mx-auto block"
+          >
+            Try Another Prompt
+          </Button>
+        </div>
       </div>
-      
-      <Textarea 
-        placeholder="Start writing your thoughts here..." 
-        value={journalEntry} 
-        onChange={(e) => onJournalChange(e.target.value)} 
-        className="min-h-[200px] p-4 text-sage-900 border-sage-200" 
-      />
 
       <LocationInput
         location={userLocation}
@@ -62,24 +83,6 @@ const JournalEntryForm = ({
         onChange={onLocationChange}
         onDetect={onLocationDetect}
       />
-
-      <div className="flex justify-end space-x-2">
-        <Button 
-          variant="outline" 
-          onClick={onNewPrompt}
-          className="border-sage-300 text-sage-700 hover:bg-sage-50"
-        >
-          New Prompt
-        </Button>
-        <Button 
-          onClick={onSave} 
-          className="bg-sage-700 hover:bg-sage-800 text-white flex items-center gap-2" 
-          disabled={journalEntry.trim().length < 10}
-        >
-          <span>Save & Find Events</span>
-          <ArrowRight className="h-4 w-4" />
-        </Button>
-      </div>
     </div>
   );
 };
