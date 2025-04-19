@@ -49,8 +49,8 @@ const JournalTabs = ({ hasRecommendations, activeTab, onTabChange }: JournalTabs
             }`}
             onClick={() => !tab.disabled && onTabChange(tab.value)}
           >
-            <DockLabel>{tab.label}</DockLabel>
             <DockIcon>{tab.icon}</DockIcon>
+            <DockLabel>{tab.label}</DockLabel>
           </DockItem>
         ))}
       </Dock>

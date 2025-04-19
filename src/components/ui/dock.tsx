@@ -118,7 +118,7 @@ function Dock({
 function DockItem({ children, className, onClick }: DockItemProps) {
   const ref = React.useRef<HTMLDivElement>(null);
   const { distance, magnification, mouseX, spring } = useDock();
-  const isHovered = useMotionValue(0);
+  const isHovered = useMotionValue<number>(0);
 
   const mouseDistance = useTransform(mouseX, (val) => {
     const domRect = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
@@ -152,6 +152,8 @@ function DockItem({ children, className, onClick }: DockItemProps) {
     >
       {React.Children.map(children, (child) => {
         if (!React.isValidElement(child)) return child;
+        
+        // Pass isHovered to the child elements
         return React.cloneElement(child as React.ReactElement, { 
           width, 
           isHovered 
@@ -172,6 +174,7 @@ function DockLabel({ children, className, ...rest }: DockLabelProps) {
     const unsubscribe = isHovered.on('change', (latest) => {
       setIsVisible(latest === 1);
     });
+    
     return () => unsubscribe();
   }, [isHovered]);
 
