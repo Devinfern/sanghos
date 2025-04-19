@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -134,7 +133,9 @@ function Dock({
 
 function DockItem({ children, className, onClick }: DockItemProps) {
   const ref = useRef<HTMLDivElement>(null);
+
   const { distance, magnification, mouseX, spring } = useDock();
+
   const isHovered = useMotionValue(0);
 
   const mouseDistance = useTransform(mouseX, (val) => {
@@ -153,12 +154,15 @@ function DockItem({ children, className, onClick }: DockItemProps) {
   return (
     <motion.div
       ref={ref}
-      style={{ width }}
+      style={{ width, aspectRatio: '1/1' }}  // Ensure perfect circle
       onHoverStart={() => isHovered.set(1)}
       onHoverEnd={() => isHovered.set(0)}
       onFocus={() => isHovered.set(1)}
       onBlur={() => isHovered.set(0)}
-      className={cn('relative inline-flex items-center justify-center', className)}
+      className={cn(
+        'relative inline-flex items-center justify-center rounded-full overflow-hidden',  // Added rounded-full and overflow-hidden
+        className
+      )}
       tabIndex={0}
       role='button'
       aria-haspopup='true'
