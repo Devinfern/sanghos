@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart, Compass, Sparkles } from "lucide-react";
@@ -104,6 +103,13 @@ const FeatureRetreatFinder = ({
       
       <div className="container mx-auto relative my-[50px]">
         <div className="flex flex-col items-center gap-4 text-center">
+          <Badge 
+            variant="outline" 
+            className="inline-flex items-center justify-center p-1.5 px-3 rounded-full bg-sage-100 text-sage-800 text-sm font-medium mb-4"
+          >
+            AI-Powered Wellness Recommendations
+          </Badge>
+          
           <Badge variant="outline" className="bg-sage-50 text-sage-700 border-sage-200">
             {badge}
           </Badge>
@@ -182,4 +188,5 @@ const FeatureRetreatFinder = ({
       </div>
     </section>;
 };
+
 export { FeatureRetreatFinder };
