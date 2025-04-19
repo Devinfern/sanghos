@@ -11,12 +11,15 @@ import { cn } from "@/lib/utils";
 import { Layout, Pointer, Zap, ArrowRight, Book, Sparkles, MapPin, Calendar, Clock, ExternalLink, Search } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import { Pencil, Clock, Zap } from "lucide-react";
+
 interface JournalEntry {
   id: string;
   content: string;
   createdAt: string;
   prompt?: string;
 }
+
 interface RetreatRecommendation {
   retreatId: string;
   title: string;
@@ -30,7 +33,9 @@ interface RetreatRecommendation {
   image?: string;
   category?: string[];
 }
+
 const wellnessPrompts = ["What are you grateful for today?", "How are you taking care of your body this week?", "What's one area of your wellness journey you'd like to explore more?", "Describe a moment of peace you experienced recently.", "What's causing you stress right now, and how might you address it?", "How connected do you feel to your community lately?", "What type of movement would feel good for your body today?", "Describe your ideal wellness retreat experience.", "What self-care practice would you like to develop?", "How has your relationship with mindfulness changed recently?"];
+
 export default function WellnessJournal() {
   const [journalEntry, setJournalEntry] = useState("");
   const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
@@ -44,6 +49,7 @@ export default function WellnessJournal() {
   const [isLoadingEvents, setIsLoadingEvents] = useState(false);
   const [eventError, setEventError] = useState<string | null>(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     const randomPrompt = wellnessPrompts[Math.floor(Math.random() * wellnessPrompts.length)];
     setSelectedPrompt(randomPrompt);
@@ -58,6 +64,7 @@ export default function WellnessJournal() {
       detectUserLocation();
     }
   }, []);
+
   const detectUserLocation = () => {
     setIsLocationLoading(true);
     if (navigator.geolocation) {
@@ -95,13 +102,16 @@ export default function WellnessJournal() {
       setIsLocationLoading(false);
     }
   };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setJournalEntry(e.target.value);
   };
+
   const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserLocation(e.target.value);
     localStorage.setItem("userLocation", e.target.value);
   };
+
   const saveJournalEntry = () => {
     if (journalEntry.trim().length < 10) {
       toast.error("Please write at least a few sentences in your journal entry.");
@@ -119,6 +129,7 @@ export default function WellnessJournal() {
     toast.success("Journal entry saved successfully!");
     analyzeJournal(journalEntry);
   };
+
   const analyzeJournal = async (entry: string) => {
     if (entry.trim().length < 20) {
       toast.error("Please write at least a few sentences to get personalized recommendations.");
@@ -166,7 +177,6 @@ export default function WellnessJournal() {
             }
           }
 
-          // If no events found, show toast and fall back to mock recommendations
           toast.info("No local wellness events found for your area. Showing retreat recommendations instead.");
           const mockRecommendations = generateMockRecommendations(entry);
           setRecommendations(mockRecommendations);
@@ -175,7 +185,6 @@ export default function WellnessJournal() {
           setEventError(apiError.message);
           toast.error(`Couldn't find local events: ${apiError.message}`);
 
-          // Fall back to mock recommendations
           const mockRecommendations = generateMockRecommendations(entry);
           setRecommendations(mockRecommendations);
         }
@@ -193,6 +202,7 @@ export default function WellnessJournal() {
       setIsLoadingEvents(false);
     }
   };
+
   const generateMockRecommendations = (journal: string): RetreatRecommendation[] => {
     const text = journal.toLowerCase();
     const availableRetreats = retreats.slice(0, 3);
@@ -255,6 +265,7 @@ export default function WellnessJournal() {
       };
     }).sort((a, b) => b.matchScore - a.matchScore);
   };
+
   const handleReset = () => {
     setJournalEntry("");
     setRecommendations([]);
@@ -264,6 +275,7 @@ export default function WellnessJournal() {
     const randomPrompt = wellnessPrompts[Math.floor(Math.random() * wellnessPrompts.length)];
     setSelectedPrompt(randomPrompt);
   };
+
   const navigateToRetreat = (retreatId: string) => {
     const recommendation = recommendations.find(rec => rec.retreatId === retreatId);
     if (recommendation && recommendation.url) {
@@ -272,6 +284,7 @@ export default function WellnessJournal() {
       navigate(`/retreat/${retreatId}`);
     }
   };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       month: 'short',
@@ -279,7 +292,9 @@ export default function WellnessJournal() {
       year: 'numeric'
     });
   };
-  return <Card className="w-full border-sage-200/30 shadow-lg bg-white/95 backdrop-blur-sm">
+
+  return (
+    <Card className="w-full border-sage-200/30 shadow-lg bg-white/95 backdrop-blur-sm">
       <CardHeader className="text-center space-y-2">
         <div className="mx-auto bg-sage-100/50 w-fit p-2 rounded-full">
           <Layout className="w-5 h-5 text-sage-600" />
@@ -297,11 +312,11 @@ export default function WellnessJournal() {
           <div className="flex items-center justify-center mb-8">
             <TabsList className="grid grid-cols-3 gap-4 p-1 bg-transparent">
               <TabsTrigger value="write" className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white p-3 shadow-md hover:bg-sage-50 data-[state=active]:bg-sage-700 data-[state=active]:text-white">
-                <Pointer className="h-5 w-5" />
+                <Pencil className="h-5 w-5" />
                 <span className="text-sm font-medium">Write</span>
               </TabsTrigger>
               <TabsTrigger value="history" className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white p-3 shadow-md hover:bg-sage-50 data-[state=active]:bg-sage-700 data-[state=active]:text-white">
-                <Layout className="h-5 w-5" />
+                <Clock className="h-5 w-5" />
                 <span className="text-sm font-medium">History</span>
               </TabsTrigger>
               <TabsTrigger value="recommendations" disabled={recommendations.length === 0} className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white p-3 shadow-md hover:bg-sage-50 data-[state=active]:bg-sage-700 data-[state=active]:text-white disabled:opacity-50 disabled:cursor-not-allowed my-0 py-[14px]">
@@ -311,7 +326,6 @@ export default function WellnessJournal() {
             </TabsList>
           </div>
 
-          {/* Write Tab */}
           <TabsContent value="write" className="space-y-4">
             {isAnalyzing ? <div className="min-h-[200px] flex items-center justify-center">
                 <div className="text-center">
@@ -356,7 +370,6 @@ export default function WellnessJournal() {
               </div>}
           </TabsContent>
 
-          {/* History Tab */}
           <TabsContent value="history" className="space-y-6">
             {journalEntries.length === 0 ? <div className="text-center py-12 text-sage-600">
                 <Book className="mx-auto h-12 w-12 mb-4 text-sage-400" />
@@ -384,7 +397,6 @@ export default function WellnessJournal() {
               </div>}
           </TabsContent>
 
-          {/* Recommendations Tab */}
           <TabsContent value="recommendations" className="space-y-6">
             {isLoadingEvents ? <div className="min-h-[200px] flex items-center justify-center">
                 <div className="text-center">
@@ -481,5 +493,6 @@ export default function WellnessJournal() {
           Start New Entry
         </Button>
       </CardFooter>
-    </Card>;
+    </Card>
+  );
 }
