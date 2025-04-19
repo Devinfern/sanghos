@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
@@ -295,31 +295,55 @@ export default function WellnessJournal() {
     setActiveTab(value);
   };
 
-  return <Card className="w-full border-sage-200/30 shadow-lg bg-white/95 backdrop-blur-sm">
-      <CardContent>
+  return (
+    <Card 
+      className="w-full border-sage-200/30 shadow-lg bg-gradient-to-br from-sage-50 to-sage-100/80 relative overflow-hidden"
+    >
+      {/* Decorative gradient overlay to enhance contrast */}
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/10 to-brand-sky/20 opacity-50 pointer-events-none" />
+      
+      <CardContent className="relative z-10">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6 my-[60px]">
-          <JournalTabs 
-            hasRecommendations={recommendations.length > 0} 
-            activeTab={activeTab}
-            onTabChange={handleTabChange}
-          />
-
-          <TabsContent value="write">
-            <JournalEntryForm 
-              isAnalyzing={isAnalyzing} 
-              journalEntry={journalEntry} 
-              selectedPrompt={selectedPrompt} 
-              userLocation={userLocation} 
-              isLocationLoading={isLocationLoading} 
-              onJournalChange={setJournalEntry} 
-              onLocationChange={handleLocationChange} 
-              onLocationDetect={detectUserLocation} 
-              onNewPrompt={() => {
-                const randomPrompt = wellnessPrompts[Math.floor(Math.random() * wellnessPrompts.length)];
-                setSelectedPrompt(randomPrompt);
-              }} 
-              onSave={saveJournalEntry} 
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="absolute -top-12 left-0 right-0 z-20"
+          >
+            <JournalTabs 
+              hasRecommendations={recommendations.length > 0} 
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
             />
+          </motion.div>
+
+          <TabsContent value="write" className="mt-16">
+            <div className="relative">
+              {/* Prominent prompt section with enhanced contrast */}
+              <div className="absolute -top-8 left-0 right-0 bg-brand-primary/10 rounded-t-xl p-2 text-center">
+                <div className="flex items-center justify-center gap-2 text-brand-primary">
+                  <Sparkles className="w-5 h-5" />
+                  <span className="text-sm font-semibold">Your Wellness Insight Starts Here</span>
+                  <Sparkles className="w-5 h-5" />
+                </div>
+              </div>
+              
+              <JournalEntryForm 
+                isAnalyzing={isAnalyzing} 
+                journalEntry={journalEntry} 
+                selectedPrompt={selectedPrompt} 
+                userLocation={userLocation} 
+                isLocationLoading={isLocationLoading} 
+                onJournalChange={setJournalEntry} 
+                onLocationChange={handleLocationChange} 
+                onLocationDetect={detectUserLocation} 
+                onNewPrompt={() => {
+                  const randomPrompt = wellnessPrompts[Math.floor(Math.random() * wellnessPrompts.length)];
+                  setSelectedPrompt(randomPrompt);
+                }} 
+                onSave={saveJournalEntry} 
+              />
+            </div>
           </TabsContent>
 
           <TabsContent value="history">
@@ -332,14 +356,22 @@ export default function WellnessJournal() {
         </Tabs>
       </CardContent>
       
-      <CardFooter className="flex justify-between border-t border-sage-200/20 pt-4">
+      <CardFooter className="flex justify-between border-t border-sage-200/20 pt-4 relative z-10">
         <div className="text-xs text-sage-500">
-          {recommendations.length > 0 ? `${recommendations.length} event${recommendations.length === 1 ? '' : 's'} found based on your journal` : 'Share your thoughts to get personalized event recommendations'}
+          {recommendations.length > 0 
+            ? `${recommendations.length} event${recommendations.length === 1 ? '' : 's'} found based on your journal` 
+            : 'Share your thoughts to get personalized event recommendations'}
         </div>
         
-        <Button variant="ghost" onClick={handleReset} className="text-sage-600 hover:text-sage-700 hover:bg-sage-50">
+        <Button 
+          variant="ghost" 
+          onClick={handleReset} 
+          className="text-sage-600 hover:text-sage-700 hover:bg-sage-50 group"
+        >
           Start New Entry
+          <ArrowRight className="ml-2 h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
         </Button>
       </CardFooter>
-    </Card>;
+    </Card>
+  );
 }
