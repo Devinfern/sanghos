@@ -8,7 +8,7 @@ import { Spinner } from "./ui/spinner";
 import { toast } from "sonner";
 import { retreats } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Book, Calendar, Clock, MapPin, BookOpen, PenLine, History, Sparkles, ExternalLink } from "lucide-react";
+import { ArrowRight, Book, Calendar, Clock, MapPin, BookOpen, PenLine, History, Sparkles, ExternalLink, Search } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -54,22 +54,21 @@ export default function WellnessJournal() {
   const [recommendations, setRecommendations] = useState<RetreatRecommendation[]>([]);
   const [isJournalSubmitted, setIsJournalSubmitted] = useState(false);
   const [activeTab, setActiveTab] = useState("write");
-  const [userLocation, setUserLocation] = useState<string>(""); // Store user location
+  const [userLocation, setUserLocation] = useState<string>("");
   const [isLocationLoading, setIsLocationLoading] = useState(false);
+  const [isLoadingEvents, setIsLoadingEvents] = useState(false);
+  const [eventError, setEventError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Get random prompt when component loads
     const randomPrompt = wellnessPrompts[Math.floor(Math.random() * wellnessPrompts.length)];
     setSelectedPrompt(randomPrompt);
     
-    // Load past entries from local storage
     const savedEntries = localStorage.getItem("journalEntries");
     if (savedEntries) {
       setJournalEntries(JSON.parse(savedEntries));
     }
     
-    // Try to get stored location or detect it
     const savedLocation = localStorage.getItem("userLocation");
     if (savedLocation) {
       setUserLocation(savedLocation);
@@ -80,12 +79,10 @@ export default function WellnessJournal() {
 
   const detectUserLocation = () => {
     setIsLocationLoading(true);
-    // Try to get user's location using browser geolocation API
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           try {
-            // Convert coordinates to address using nominatim (OpenStreetMap)
             const { latitude, longitude } = position.coords;
             const response = await fetch(
               `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=14&addressdetails=1`
@@ -101,7 +98,6 @@ export default function WellnessJournal() {
               setUserLocation(locationString);
               localStorage.setItem("userLocation", locationString);
             } else {
-              // Default to a general location if reverse geocoding fails
               setUserLocation("San Francisco, CA");
             }
           } catch (error) {
@@ -118,7 +114,6 @@ export default function WellnessJournal() {
         }
       );
     } else {
-      // Geolocation not supported
       setUserLocation("San Francisco, CA");
       setIsLocationLoading(false);
     }
@@ -161,9 +156,10 @@ export default function WellnessJournal() {
     }
     
     setIsAnalyzing(true);
+    setIsLoadingEvents(true);
+    setEventError(null);
     
     try {
-      // Extract wellness keywords for better event matching
       const extractKeywords = (text: string): string[] => {
         const wellnessKeywords = [
           "yoga", "meditation", "mindfulness", "stress", "anxiety",
@@ -179,16 +175,13 @@ export default function WellnessJournal() {
       const keywords = extractKeywords(entry);
       console.log("Extracted keywords:", keywords);
       
-      // Current date and time in ISO format
       const now = new Date();
       const startDatetime = now.toISOString();
       
-      // End datetime (7 days from now)
       const endDate = new Date();
       endDate.setDate(now.getDate() + 7);
       const endDatetime = endDate.toISOString();
       
-      // Try using the local events API first if we have a location
       if (userLocation) {
         try {
           const { data, error } = await supabase.functions.invoke('fetch-local-events', {
@@ -200,51 +193,49 @@ export default function WellnessJournal() {
             }
           });
           
-          if (error) throw new Error(error.message);
-          
-          if (data && data.recommendations && data.recommendations.length > 0) {
-            console.log("Found local events:", data.recommendations);
-            setRecommendations(data.recommendations);
-            setIsJournalSubmitted(true);
-            setActiveTab("recommendations");
-            return;
+          if (error) {
+            console.error("Error from fetch-local-events:", error);
+            throw new Error(error.message);
           }
           
-          console.log("No local events found, falling back to retreat recommendations");
-        } catch (apiError) {
+          if (data && data.recommendations) {
+            console.log("Events received from API:", data.recommendations);
+            
+            if (data.recommendations.length > 0) {
+              setRecommendations(data.recommendations);
+              setIsJournalSubmitted(true);
+              setActiveTab("recommendations");
+              setIsAnalyzing(false);
+              setIsLoadingEvents(false);
+              return;
+            } else {
+              toast.info("No local wellness events found for your area. Showing retreat recommendations instead.");
+            }
+          }
+        } catch (apiError: any) {
           console.error("Error fetching local events:", apiError);
-          toast.error("Couldn't find local events. Showing retreat recommendations instead.");
+          setEventError(apiError.message || "Failed to fetch events");
+          toast.error(`Couldn't find local events: ${apiError.message}`);
         }
       }
       
-      // Fallback to using Supabase Edge Function for retreat recommendations
-      try {
-        const { data, error } = await supabase.functions.invoke('analyze-journal', {
-          body: { journalEntry: entry }
-        });
-        
-        if (error) throw new Error(error.message);
-        
-        // Handle response from analyze-journal function
-        if (data && data.recommendations) {
-          setRecommendations(data.recommendations);
-          setIsJournalSubmitted(true);
-          setActiveTab("recommendations");
-        } else {
-          throw new Error("Invalid response format");
-        }
-      } catch (err) {
-        console.log("Using fallback mock data for recommendations");
-        const mockRecommendations = generateMockRecommendations(entry);
-        setRecommendations(mockRecommendations);
-        setIsJournalSubmitted(true);
-        setActiveTab("recommendations");
-      }
-    } catch (error) {
+      const mockRecommendations = generateMockRecommendations(entry);
+      setRecommendations(mockRecommendations);
+      setIsJournalSubmitted(true);
+      setActiveTab("recommendations");
+      
+    } catch (error: any) {
       console.error("Error analyzing journal entry:", error);
+      setEventError(error.message || "Unknown error occurred");
       toast.error("Something went wrong analyzing your journal. Please try again.");
+      
+      const mockRecommendations = generateMockRecommendations(entry);
+      setRecommendations(mockRecommendations);
+      setIsJournalSubmitted(true);
+      setActiveTab("recommendations");
     } finally {
       setIsAnalyzing(false);
+      setIsLoadingEvents(false);
     }
   };
 
@@ -299,11 +290,9 @@ export default function WellnessJournal() {
         score = getMatchScore(stressKeywords);
       }
       
-      // Add mock location data
       const locations = ["Portland, OR", "Seattle, WA", "San Francisco, CA", "Los Angeles, CA"];
       const randomLocation = locations[Math.floor(Math.random() * locations.length)];
       
-      // Generate a random date in the next 30 days
       const currentDate = new Date();
       const futureDate = new Date(currentDate);
       futureDate.setDate(currentDate.getDate() + Math.floor(Math.random() * 30) + 1);
@@ -313,7 +302,6 @@ export default function WellnessJournal() {
         year: 'numeric'
       });
       
-      // Generate a random time
       const hours = Math.floor(Math.random() * 12) + 1;
       const minutes = Math.random() < 0.5 ? '00' : '30';
       const ampm = Math.random() < 0.5 ? 'AM' : 'PM';
@@ -336,8 +324,8 @@ export default function WellnessJournal() {
     setRecommendations([]);
     setIsJournalSubmitted(false);
     setActiveTab("write");
+    setEventError(null);
     
-    // Get new random prompt
     const randomPrompt = wellnessPrompts[Math.floor(Math.random() * wellnessPrompts.length)];
     setSelectedPrompt(randomPrompt);
   };
@@ -346,10 +334,8 @@ export default function WellnessJournal() {
     const recommendation = recommendations.find(rec => rec.retreatId === retreatId);
     
     if (recommendation && recommendation.url) {
-      // It's an external event, open in new tab
       window.open(recommendation.url, '_blank');
     } else {
-      // It's an internal retreat, navigate normally
       navigate(`/retreat/${retreatId}`);
     }
   };
@@ -449,7 +435,6 @@ export default function WellnessJournal() {
                   <Button
                     variant="outline"
                     onClick={() => {
-                      // Get new random prompt
                       const randomPrompt = wellnessPrompts[Math.floor(Math.random() * wellnessPrompts.length)];
                       setSelectedPrompt(randomPrompt);
                     }}
@@ -511,11 +496,18 @@ export default function WellnessJournal() {
           </TabsContent>
           
           <TabsContent value="recommendations" className="space-y-6">
-            {recommendations.length > 0 ? (
+            {isLoadingEvents ? (
+              <div className="min-h-[200px] flex items-center justify-center">
+                <div className="text-center">
+                  <Spinner className="mx-auto mb-4 h-8 w-8 text-sage-600" />
+                  <p className="text-sage-600">Finding events near you...</p>
+                </div>
+              </div>
+            ) : recommendations.length > 0 ? (
               <div className="space-y-4">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-lg font-medium text-sage-900">
-                    Wellness Events Near {userLocation}
+                    {recommendations[0].url ? 'Wellness Events Near ' + userLocation : 'Retreat Recommendations'}
                   </h3>
                 </div>
                 
@@ -526,67 +518,101 @@ export default function WellnessJournal() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                   >
-                    <Card className="border border-sage-200/20 hover:border-sage-300/30 transition-all duration-300 hover:shadow-md">
-                      <CardContent className="pt-6 space-y-4">
-                        <div className="flex justify-between items-start">
-                          <h4 className="font-semibold text-lg text-sage-900">{rec.title}</h4>
-                          <div className="bg-sage-100/50 text-sage-700 text-sm py-1 px-3 rounded-full">
-                            {Math.round(rec.matchScore * 100)}% match
-                          </div>
-                        </div>
-                        
-                        <p className="text-sage-600">{rec.reason}</p>
-                        
-                        {(rec.location || rec.date || rec.time) && (
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-sage-50/50 p-3 rounded-lg">
-                            {rec.location && (
-                              <div className="flex items-center text-sage-700">
-                                <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
-                                <span className="text-sm">{rec.location}</span>
-                              </div>
-                            )}
-                            {rec.date && (
-                              <div className="flex items-center text-sage-700">
-                                <Calendar className="h-4 w-4 mr-2 flex-shrink-0" />
-                                <span className="text-sm">{rec.date}</span>
-                              </div>
-                            )}
-                            {rec.time && (
-                              <div className="flex items-center text-sage-700">
-                                <Clock className="h-4 w-4 mr-2 flex-shrink-0" />
-                                <span className="text-sm">{rec.time}</span>
-                              </div>
-                            )}
+                    <Card className="border border-sage-200/20 hover:border-sage-300/30 transition-all duration-300 hover:shadow-md overflow-hidden">
+                      <div className="flex flex-col md:flex-row">
+                        {rec.image && (
+                          <div className="md:w-1/4 h-40 md:h-auto">
+                            <img 
+                              src={rec.image} 
+                              alt={rec.title} 
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86";
+                              }}
+                            />
                           </div>
                         )}
                         
-                        <div className="flex justify-end">
-                          <Button
-                            variant="outline"
-                            onClick={() => navigateToRetreat(rec.retreatId)}
-                            className="border-sage-300 text-sage-700 hover:bg-sage-50 hover:text-sage-800"
-                          >
-                            {rec.url ? (
-                              <>
-                                View Event
-                                <ExternalLink className="ml-2 h-4 w-4" />
-                              </>
-                            ) : (
-                              <>
-                                View Retreat
-                                <ArrowRight className="ml-2 h-4 w-4" />
-                              </>
-                            )}
-                          </Button>
-                        </div>
-                      </CardContent>
+                        <CardContent className={`pt-6 space-y-4 ${rec.image ? 'md:w-3/4' : 'w-full'}`}>
+                          <div className="flex justify-between items-start">
+                            <h4 className="font-semibold text-lg text-sage-900">{rec.title}</h4>
+                            <div className="bg-sage-100/50 text-sage-700 text-sm py-1 px-3 rounded-full">
+                              {Math.round(rec.matchScore * 100)}% match
+                            </div>
+                          </div>
+                          
+                          <p className="text-sage-600">{rec.reason}</p>
+                          
+                          {rec.description && (
+                            <p className="text-sage-700 text-sm line-clamp-2">{rec.description}</p>
+                          )}
+                          
+                          {(rec.location || rec.date || rec.time) && (
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-sage-50/50 p-3 rounded-lg">
+                              {rec.location && (
+                                <div className="flex items-center text-sage-700">
+                                  <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
+                                  <span className="text-sm">{rec.location}</span>
+                                </div>
+                              )}
+                              {rec.date && (
+                                <div className="flex items-center text-sage-700">
+                                  <Calendar className="h-4 w-4 mr-2 flex-shrink-0" />
+                                  <span className="text-sm">{rec.date}</span>
+                                </div>
+                              )}
+                              {rec.time && (
+                                <div className="flex items-center text-sage-700">
+                                  <Clock className="h-4 w-4 mr-2 flex-shrink-0" />
+                                  <span className="text-sm">{rec.time}</span>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                          
+                          <div className="flex justify-end">
+                            <Button
+                              variant="outline"
+                              onClick={() => navigateToRetreat(rec.retreatId)}
+                              className="border-sage-300 text-sage-700 hover:bg-sage-50 hover:text-sage-800"
+                            >
+                              {rec.url ? (
+                                <>
+                                  View Event
+                                  <ExternalLink className="ml-2 h-4 w-4" />
+                                </>
+                              ) : (
+                                <>
+                                  View Retreat
+                                  <ArrowRight className="ml-2 h-4 w-4" />
+                                </>
+                              )}
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </div>
                     </Card>
                   </motion.div>
                 ))}
               </div>
             ) : (
               <div className="text-center py-12">
-                <p className="text-sage-600">No matching events found yet. Write in your journal to get recommendations.</p>
+                {eventError ? (
+                  <div className="space-y-3">
+                    <Search className="h-12 w-12 mx-auto text-sage-400" />
+                    <p className="text-sage-700 font-medium">Unable to find events</p>
+                    <p className="text-sage-600 max-w-md mx-auto text-sm">{eventError}</p>
+                    <Button 
+                      variant="outline" 
+                      onClick={handleReset}
+                      className="mt-4"
+                    >
+                      Try Again
+                    </Button>
+                  </div>
+                ) : (
+                  <p className="text-sage-600">No matching events found yet. Write in your journal to get recommendations.</p>
+                )}
               </div>
             )}
           </TabsContent>
