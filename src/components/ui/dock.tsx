@@ -22,9 +22,9 @@ import {
 } from 'react';
 import { cn } from '@/lib/utils';
 
-const DOCK_HEIGHT = 128;
-const DEFAULT_MAGNIFICATION = 80;
-const DEFAULT_DISTANCE = 150;
+const DOCK_HEIGHT = 100; // Reduced from 128
+const DEFAULT_MAGNIFICATION = 60; // Reduced from 80
+const DEFAULT_DISTANCE = 100; // Reduced from 150
 const DEFAULT_PANEL_HEIGHT = 64;
 
 type DockProps = {
@@ -34,11 +34,13 @@ type DockProps = {
   panelHeight?: number;
   magnification?: number;
   spring?: SpringOptions;
+  onClick?: () => void;
 };
 
 type DockItemProps = {
   className?: string;
   children: React.ReactNode;
+  onClick?: () => void;
 };
 
 type DockLabelProps = {
@@ -80,10 +82,11 @@ function useDock() {
 function Dock({
   children,
   className,
-  spring = { mass: 0.1, stiffness: 150, damping: 12 },
+  spring = { mass: 0.2, stiffness: 100, damping: 15 }, // More gentle animation
   magnification = DEFAULT_MAGNIFICATION,
   distance = DEFAULT_DISTANCE,
   panelHeight = DEFAULT_PANEL_HEIGHT,
+  onClick,
 }: DockProps) {
   const mouseX = useMotionValue(Infinity);
   const isHovered = useMotionValue(0);
@@ -119,6 +122,7 @@ function Dock({
         style={{ height: panelHeight }}
         role='toolbar'
         aria-label='Application dock'
+        onClick={onClick}
       >
         <DockProvider value={{ mouseX, spring, distance, magnification }}>
           {children}
@@ -128,7 +132,7 @@ function Dock({
   );
 }
 
-function DockItem({ children, className }: DockItemProps) {
+function DockItem({ children, className, onClick }: DockItemProps) {
   const ref = useRef<HTMLDivElement>(null);
   const { distance, magnification, mouseX, spring } = useDock();
   const isHovered = useMotionValue(0);
@@ -158,6 +162,7 @@ function DockItem({ children, className }: DockItemProps) {
       tabIndex={0}
       role='button'
       aria-haspopup='true'
+      onClick={onClick}
     >
       {Children.map(children, (child) =>
         cloneElement(child as React.ReactElement, { width, isHovered })
