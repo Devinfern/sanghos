@@ -41,7 +41,7 @@ const JournalTabs = ({ hasRecommendations, activeTab, onTabChange }: JournalTabs
         {tabs.map((tab) => (
           <DockItem
             key={tab.value}
-            className={`aspect-square rounded-full cursor-pointer ${
+            className={`cursor-pointer ${
               activeTab === tab.value
                 ? 'bg-white shadow-md border border-sage-200/50'
                 : tab.disabled

@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -143,6 +144,7 @@ function DockItem({ children, className, onClick }: DockItemProps) {
     return val - domRect.x - domRect.width / 2;
   });
 
+  // Instead of using a very wide range, use a narrower range for width transformation
   const widthTransform = useTransform(
     mouseDistance,
     [-distance, 0, distance],
@@ -154,15 +156,18 @@ function DockItem({ children, className, onClick }: DockItemProps) {
   return (
     <motion.div
       ref={ref}
-      style={{ width, aspectRatio: '1/1' }}  // Ensure perfect circle
+      className={cn(
+        'relative flex items-center justify-center rounded-full overflow-hidden',
+        className
+      )}
+      style={{ 
+        width, 
+        height: width // Ensure height equals width
+      }}
       onHoverStart={() => isHovered.set(1)}
       onHoverEnd={() => isHovered.set(0)}
       onFocus={() => isHovered.set(1)}
       onBlur={() => isHovered.set(0)}
-      className={cn(
-        'relative inline-flex items-center justify-center rounded-full overflow-hidden',  // Added rounded-full and overflow-hidden
-        className
-      )}
       tabIndex={0}
       role='button'
       aria-haspopup='true'
