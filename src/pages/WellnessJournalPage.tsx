@@ -1,16 +1,20 @@
+
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WellnessJournal from "@/components/WellnessJournal";
+
 const WellnessJournalPage = () => {
   const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(true);
     }, 100);
     return () => clearTimeout(timer);
   }, []);
+
   return <>
       <Helmet>
         <title>Wellness Journal & Local Events | Sanghos</title>
@@ -42,4 +46,5 @@ const WellnessJournalPage = () => {
       <Footer />
     </>;
 };
+
 export default WellnessJournalPage;

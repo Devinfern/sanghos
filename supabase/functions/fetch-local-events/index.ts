@@ -14,14 +14,15 @@ serve(async (req) => {
   }
 
   try {
-    const EVENTBRITE_API_KEY = Deno.env.get('EVENTBRITE_API_KEY');
+    // Use the API key provided by the user
+    const EVENTBRITE_API_KEY = "MOMPRUBS6TSGJEACONBE";
     
     if (!EVENTBRITE_API_KEY) {
-      console.error("Eventbrite API key is missing from environment variables");
+      console.error("Eventbrite API key is missing");
       throw new Error("Eventbrite API key is not configured");
     }
 
-    console.log("API Key available:", EVENTBRITE_API_KEY ? "Yes (not showing for security)" : "No");
+    console.log("API Key available:", EVENTBRITE_API_KEY ? "Yes (masked for security)" : "No");
 
     const { location, interests, startDatetime, endDatetime } = await req.json();
     
