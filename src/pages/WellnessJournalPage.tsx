@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Header from "@/components/Header";
@@ -23,13 +24,13 @@ const WellnessJournalPage = () => {
 
       <main className="min-h-screen relative">
         <div className="absolute inset-0 bg-cover bg-center opacity-25" style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')",
-          backgroundAttachment: "fixed"
-        }} />
+        backgroundImage: "url('https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')",
+        backgroundAttachment: "fixed"
+      }} />
         <div className="absolute inset-0 bg-gradient-to-b from-sage-50/85 to-sage-100/95" />
         
-        <div className="container mx-auto px-4 relative z-10 max-w-4xl mt-12">
-          <div className="text-center mb-4">
+        <div className="container mx-auto py-12 px-4 relative z-10 max-w-4xl my-[80px]">
+          <div className="text-center mb-12">
             <Badge 
               variant="outline" 
               className="inline-flex items-center justify-center p-1.5 px-3 rounded-full bg-sage-100 text-sage-800 text-sm font-medium mb-4"
@@ -48,3 +49,4 @@ const WellnessJournalPage = () => {
     </>;
 };
 export default WellnessJournalPage;
+
