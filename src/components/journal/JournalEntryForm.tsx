@@ -1,9 +1,11 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 import LocationInput from "./LocationInput";
+
 interface JournalEntryFormProps {
   isAnalyzing: boolean;
   journalEntry: string;
@@ -16,6 +18,7 @@ interface JournalEntryFormProps {
   onNewPrompt: () => void;
   onSave: () => void;
 }
+
 const JournalEntryForm = ({
   isAnalyzing,
   journalEntry,
@@ -26,46 +29,84 @@ const JournalEntryForm = ({
   onLocationChange,
   onLocationDetect,
   onNewPrompt,
-  onSave
+  onSave,
 }: JournalEntryFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (journalEntry.trim().length < 10) return;
     setIsSubmitting(true);
     onSave();
-    // Reset submitting state after a delay to allow animation to complete
     setTimeout(() => setIsSubmitting(false), 1000);
   };
+
   const handleJournalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onJournalChange(e.target.value);
   };
+
   if (isAnalyzing) {
-    return <div className="min-h-[200px] flex items-center justify-center">
-        <div className="text-center">
-          <Spinner className="mx-auto mb-4 h-8 w-8 text-sage-600" />
-          <p className="text-sage-600">Analyzing your wellness aspirations...</p>
-        </div>
-      </div>;
-  }
-  return <div className="space-y-6 my-[16px]">
-      <div className="flex flex-col items-center justify-center">
-        <div className="w-full max-w-2xl space-y-8 my-0 mx-0 py-0 px-0">
-          <PlaceholdersAndVanishInput placeholders={[selectedPrompt]} onChange={handleJournalChange} onSubmit={handleSubmit} />
-          <Button variant="outline" onClick={onNewPrompt} disabled={isSubmitting} className="border-sage-300 text-sage-700 hover:bg-sage-50 mx-auto block 
-              transition-all duration-300 
-              hover:border-sage-400 
-              hover:shadow-md 
-              group">
-            <span className="flex items-center gap-2 group-hover:translate-x-1 transition-transform duration-300">
-              Try Another Prompt
-              <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 group-hover:ml-2 transition-all duration-300" />
-            </span>
-          </Button>
+    return (
+      <div className="min-h-[300px] flex items-center justify-center bg-white/50 rounded-lg border border-sage-200/30 shadow-lg backdrop-blur-sm">
+        <div className="text-center space-y-3">
+          <Spinner className="mx-auto h-8 w-8 text-brand-primary" />
+          <p className="text-sage-700 font-medium">
+            Analyzing your wellness aspirations...
+          </p>
+          <p className="text-sage-600 text-sm">
+            Finding personalized recommendations just for you
+          </p>
         </div>
       </div>
+    );
+  }
 
-      <LocationInput location={userLocation} isLoading={isLocationLoading} onChange={onLocationChange} onDetect={onLocationDetect} />
-    </div>;
+  return (
+    <div className="space-y-8">
+      <div className="relative">
+        <div className="absolute -top-16 left-0 right-0 text-center">
+          <div className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-brand-primary/10 text-brand-primary rounded-full">
+            <Sparkles className="w-4 h-4" />
+            <span className="text-sm font-medium">Your Wellness Insight Starts Here</span>
+            <Sparkles className="w-4 h-4" />
+          </div>
+        </div>
+
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-sage-200/30 shadow-lg p-6 space-y-6">
+          <div className="flex flex-col items-center justify-center space-y-6">
+            <div className="w-full max-w-2xl space-y-6">
+              <PlaceholdersAndVanishInput
+                placeholders={[selectedPrompt]}
+                onChange={handleJournalChange}
+                onSubmit={handleSubmit}
+              />
+
+              <Button
+                variant="outline"
+                onClick={onNewPrompt}
+                disabled={isSubmitting}
+                className="mx-auto block transition-all duration-300 
+                  border-sage-300 text-sage-700 hover:bg-sage-50 
+                  hover:border-sage-400 hover:shadow-md group"
+              >
+                <span className="flex items-center gap-2 group-hover:translate-x-1 transition-transform duration-300">
+                  Try Another Prompt
+                  <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                </span>
+              </Button>
+            </div>
+          </div>
+
+          <LocationInput
+            location={userLocation}
+            isLoading={isLocationLoading}
+            onChange={onLocationChange}
+            onDetect={onLocationDetect}
+          />
+        </div>
+      </div>
+    </div>
+  );
 };
+
 export default JournalEntryForm;
