@@ -63,47 +63,37 @@ const JournalEntryForm = ({
 
   return (
     <div className="space-y-8">
-      <div className="relative">
-        <div className="absolute -top-16 left-0 right-0 text-center">
-          <div className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-brand-primary/10 text-brand-primary rounded-full">
-            <Sparkles className="w-4 h-4" />
-            <span className="text-sm font-medium">Your Wellness Insight Starts Here</span>
-            <Sparkles className="w-4 h-4" />
+      <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-sage-200/30 shadow-lg p-6 space-y-6">
+        <div className="flex flex-col items-center justify-center space-y-6">
+          <div className="w-full max-w-2xl space-y-6">
+            <PlaceholdersAndVanishInput
+              placeholders={[selectedPrompt]}
+              onChange={handleJournalChange}
+              onSubmit={handleSubmit}
+            />
+
+            <Button
+              variant="outline"
+              onClick={onNewPrompt}
+              disabled={isSubmitting}
+              className="mx-auto block transition-all duration-300 
+                border-sage-300 text-sage-700 hover:bg-sage-50 
+                hover:border-sage-400 hover:shadow-md group"
+            >
+              <span className="flex items-center gap-2 group-hover:translate-x-1 transition-transform duration-300">
+                Try Another Prompt
+                <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-300" />
+              </span>
+            </Button>
           </div>
         </div>
 
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-sage-200/30 shadow-lg p-6 space-y-6">
-          <div className="flex flex-col items-center justify-center space-y-6">
-            <div className="w-full max-w-2xl space-y-6">
-              <PlaceholdersAndVanishInput
-                placeholders={[selectedPrompt]}
-                onChange={handleJournalChange}
-                onSubmit={handleSubmit}
-              />
-
-              <Button
-                variant="outline"
-                onClick={onNewPrompt}
-                disabled={isSubmitting}
-                className="mx-auto block transition-all duration-300 
-                  border-sage-300 text-sage-700 hover:bg-sage-50 
-                  hover:border-sage-400 hover:shadow-md group"
-              >
-                <span className="flex items-center gap-2 group-hover:translate-x-1 transition-transform duration-300">
-                  Try Another Prompt
-                  <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                </span>
-              </Button>
-            </div>
-          </div>
-
-          <LocationInput
-            location={userLocation}
-            isLoading={isLocationLoading}
-            onChange={onLocationChange}
-            onDetect={onLocationDetect}
-          />
-        </div>
+        <LocationInput
+          location={userLocation}
+          isLoading={isLocationLoading}
+          onChange={onLocationChange}
+          onDetect={onLocationDetect}
+        />
       </div>
     </div>
   );
