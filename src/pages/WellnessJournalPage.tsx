@@ -29,7 +29,7 @@ const WellnessJournalPage = () => {
         <div className="container mx-auto py-12 px-4 relative z-10 max-w-4xl my-[80px]">
           <div className="text-center mb-12">
             <h1 className="text-3xl md:text-4xl font-semibold text-sage-900 mb-4">Your AI Retreat Finder</h1>
-            <p className="text-sage-700 max-w-2xl mx-auto">Use our journal to discover local wellness events happening now near you. Your journal entries help us find the perfect wellness activities for your current needs.</p>
+            <p className="text-sage-700 max-w-2xl mx-auto">Express yourself through journaling and let our AI recommend personalized retreat experiences and local wellness events that match your needs.</p>
           </div>
           
           <WellnessJournal />
