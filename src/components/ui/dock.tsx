@@ -13,6 +13,7 @@ interface DockItemProps {
   active?: boolean;
   onClick?: () => void;
   disabled?: boolean;
+  tabIndex?: number;
 }
 interface DockLabelProps {
   className?: string;
@@ -66,7 +67,7 @@ export function DockItem({
   onClick,
   disabled,
   tabIndex,
-}: DockItemProps & { tabIndex?: number }) {
+}: DockItemProps) {
   return (
     <button
       type="button"
