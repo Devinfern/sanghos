@@ -33,28 +33,27 @@ const JournalTabs = ({
   ];
 
   return (
-    <div className="flex items-center justify-center mb-10 md:mb-14 h-[105px] md:h-[110px]">
+    <div className="flex items-center justify-center mb-8 md:mb-10 h-[90px] md:h-[95px]">
       <Dock
-        // More spacing, subtle magnification, much less bounce
         className="bg-sage-50/90 backdrop-blur-lg border border-sage-200/30 px-20 md:px-24 py-6 rounded-2xl shadow-lg"
-        distance={69}
-        magnification={43}
+        distance={50}
+        magnification={30}
         spring={{
           mass: 0.4,
-          stiffness: 300,
-          damping: 38,
+          stiffness: 350,
+          damping: 40,
         }}
       >
         {tabs.map((tab) => (
           <DockItem
             key={tab.value}
-            className={`aspect-square rounded-full transition-all duration-200 cursor-pointer group ${
+            className={`aspect-square rounded-full transition-all duration-200 cursor-pointer group mx-5 md:mx-7 w-[54px] h-[54px] md:w-[60px] md:h-[60px] ${
               activeTab === tab.value
                 ? 'bg-white ring-2 ring-brand-primary shadow-md border border-sage-200'
                 : tab.disabled
                   ? 'bg-sage-100/60 cursor-not-allowed opacity-60'
                   : 'bg-white/80 hover:bg-white shadow'
-            } mx-4 md:mx-6 w-[54px] h-[54px] md:w-[64px] md:h-[64px]`}
+            }`}
             onClick={() => !tab.disabled && onTabChange(tab.value)}
           >
             <DockLabel className="mb-3 text-sage-700 group-hover:text-brand-primary text-xs md:text-sm">{tab.label}</DockLabel>

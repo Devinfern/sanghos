@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart, Compass, Sparkles } from "lucide-react";
@@ -6,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import WellnessJournal from "@/components/WellnessJournal";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 interface TabContent {
   badge: string;
@@ -75,6 +77,7 @@ const FeatureRetreatFinder = ({
   const [showJournal, setShowJournal] = useState(false);
   const [activeTab, setActiveTab] = useState(tabs[0].value);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const navigate = useNavigate();
   
   const handleTabChange = (value: string) => {
     if (value !== activeTab && !isTransitioning) {
@@ -88,34 +91,25 @@ const FeatureRetreatFinder = ({
   };
   
   const handleButtonClick = () => {
-    setShowJournal(true);
-    // Smooth scroll to journal section
-    const journalSection = document.getElementById('wellness-journal');
-    if (journalSection) {
-      journalSection.scrollIntoView({
-        behavior: 'smooth'
-      });
-    }
+    navigate("/wellness-journal");
   };
   
-  return <section className="relative py-24">
+  return (
+    <section className="relative py-24">
       <div className="absolute inset-0 bg-gradient-to-br from-sage-50 via-sage-100/50 to-sage-50"></div>
       
       <div className="container mx-auto relative my-[50px]">
         <div className="flex flex-col items-center gap-4 text-center">
           <Badge 
             variant="outline" 
-            className="inline-flex items-center justify-center p-1.5 px-3 rounded-full bg-sage-100 text-sage-800 text-sm font-medium mb-4"
+            className="inline-flex items-center justify-center p-1.5 px-3 rounded-full bg-brand-primary/20 text-brand-primary text-sm font-medium mb-4"
           >
-            AI-Powered Wellness Recommendations
+            AI-Powered Wellness
           </Badge>
           
-          <Badge variant="outline" className="bg-sage-50 text-sage-700 border-sage-200">
-            {badge}
-          </Badge>
-          <h1 className="max-w-2xl text-3xl font-semibold md:text-4xl text-sage-900">
+          <h2 className="max-w-2xl text-3xl font-semibold md:text-4xl text-sage-900">
             {heading}
-          </h1>
+          </h2>
           <p className="text-sage-700 max-w-2xl">{description}</p>
         </div>
         
@@ -163,8 +157,9 @@ const FeatureRetreatFinder = ({
                       <p className="text-sage-700 lg:text-lg">
                         {tab.content.description}
                       </p>
-                      <Button className="mt-2.5 w-fit gap-2 bg-sage-700 hover:bg-sage-800 text-white" size="lg" onClick={handleButtonClick}>
+                      <Button className="mt-2.5 w-fit gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white" size="lg" onClick={handleButtonClick}>
                         {tab.content.buttonText}
+                        <ArrowRight className="ml-1 h-4 w-4" />
                       </Button>
                     </div>
                     <motion.img 
@@ -176,17 +171,14 @@ const FeatureRetreatFinder = ({
                       className="rounded-xl shadow-lg w-full h-[400px] object-cover" 
                     />
                   </motion.div>
-
-                  <div id="wellness-journal" className={cn("transition-all duration-500", showJournal ? "opacity-100 transform translate-y-0" : "opacity-0 transform translate-y-8 pointer-events-none h-0")}>
-                    <WellnessJournal />
-                  </div>
                 </TabsContent>
               ))}
             </AnimatePresence>
           </div>
         </Tabs>
       </div>
-    </section>;
+    </section>
+  );
 };
 
 export { FeatureRetreatFinder };
