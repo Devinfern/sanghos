@@ -20,6 +20,10 @@ export type Retreat = {
     city: string;
     state: string;
     description: string;
+    coordinates?: {
+      lat: number;
+      lng: number;
+    };
   };
   instructor: Instructor;
   date: string;

@@ -9,7 +9,14 @@ interface JournalTabsProps {
   onTabChange: (value: string) => void;
 }
 
-const TABS = [
+interface TabType {
+  value: string;
+  label: string;
+  icon: React.ElementType;
+  disabled?: boolean;
+}
+
+const TABS: TabType[] = [
   {
     value: "write",
     label: "Write",
@@ -32,8 +39,6 @@ const JournalTabs = ({
   activeTab,
   onTabChange,
 }: JournalTabsProps) => {
-  // Dynamically calculate width/offset for underline
-  // (Simple method works with flexible layouts)
   const activeIdx = TABS.findIndex(tab => tab.value === activeTab);
   const actualTabs = TABS.map((tab, i) =>
     tab.value === "recommendations"
@@ -103,4 +108,3 @@ const JournalTabs = ({
 };
 
 export default JournalTabs;
-

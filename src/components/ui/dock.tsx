@@ -43,16 +43,17 @@ export function Dock({ children, className }: DockProps) {
         role="tablist"
         aria-label="Application dock"
       >
-        {items.map((child, idx) =>
-          React.isValidElement(child)
-            ? cloneElement(child, {
-                active: activeIndex === idx,
-                tabIndex: 0,
-                onClick: () => setActiveIndex(idx),
-                key: idx,
-              })
-            : child
-        )}
+        {items.map((child, idx) => {
+          if (React.isValidElement<DockItemProps>(child)) {
+            return React.cloneElement(child, {
+              key: idx,
+              active: activeIndex === idx,
+              tabIndex: 0,
+              onClick: () => setActiveIndex(idx),
+            });
+          }
+          return child;
+        })}
       </div>
     </DockContext.Provider>
   );
@@ -87,10 +88,13 @@ export function DockItem({
       onClick={!disabled ? onClick : undefined}
       role="tab"
     >
-      {Children.map(children, (child) =>
-        // Pass active prop for possible use in label/icon styling.
-        cloneElement(child as React.ReactElement, { active })
-      )}
+      {Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+          // Pass active prop for possible use in label/icon styling.
+          return React.cloneElement(child, { active } as any);
+        }
+        return child;
+      })}
       {/* Underline on active */}
       <AnimatePresence>
         {active && (
