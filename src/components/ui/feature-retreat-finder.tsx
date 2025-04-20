@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Heart, Compass, Sparkles } from "lucide-react";
+import { Heart, Compass, Sparkles, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import WellnessJournal from "@/components/WellnessJournal";
@@ -83,7 +82,6 @@ const FeatureRetreatFinder = ({
     if (value !== activeTab && !isTransitioning) {
       setIsTransitioning(true);
       setActiveTab(value);
-      // Reset transitioning state after animation completes
       setTimeout(() => {
         setIsTransitioning(false);
       }, 300);
