@@ -1,6 +1,7 @@
 
 import { Pencil, Clock, Zap } from "lucide-react";
-import { Dock, DockItem, DockIcon, DockLabel } from "@/components/ui/dock";
+import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 interface JournalTabsProps {
   hasRecommendations: boolean;
@@ -8,61 +9,98 @@ interface JournalTabsProps {
   onTabChange: (value: string) => void;
 }
 
+const TABS = [
+  {
+    value: "write",
+    label: "Write",
+    icon: Pencil,
+  },
+  {
+    value: "history",
+    label: "History",
+    icon: Clock,
+  },
+  {
+    value: "recommendations",
+    label: "Local Events",
+    icon: Zap,
+  },
+];
+
 const JournalTabs = ({
   hasRecommendations,
   activeTab,
   onTabChange,
 }: JournalTabsProps) => {
-  const tabs = [
-    {
-      value: "write",
-      label: "Write",
-      icon: <Pencil className="h-full w-full text-sage-600 dark:text-sage-300" />,
-    },
-    {
-      value: "history",
-      label: "History",
-      icon: <Clock className="h-full w-full text-sage-600 dark:text-sage-300" />,
-    },
-    {
-      value: "recommendations",
-      label: "Local Events",
-      icon: <Zap className="h-full w-full text-sage-600 dark:text-sage-300" />,
-      disabled: !hasRecommendations,
-    },
-  ];
+  // Dynamically calculate width/offset for underline
+  // (Simple method works with flexible layouts)
+  const activeIdx = TABS.findIndex(tab => tab.value === activeTab);
+  const actualTabs = TABS.map((tab, i) =>
+    tab.value === "recommendations"
+      ? { ...tab, disabled: !hasRecommendations }
+      : tab
+  );
 
   return (
-    <div className="flex items-center justify-center mb-8 md:mb-10 h-[90px] md:h-[95px]">
-      <Dock
-        className="bg-sage-50/90 backdrop-blur-lg border border-sage-200/30 px-20 md:px-24 py-6 rounded-2xl shadow-lg"
-        distance={50}
-        magnification={30}
-        spring={{
-          mass: 0.4,
-          stiffness: 350,
-          damping: 40,
-        }}
-      >
-        {tabs.map((tab) => (
-          <DockItem
-            key={tab.value}
-            className={`aspect-square rounded-full transition-all duration-200 cursor-pointer group mx-5 md:mx-7 w-[54px] h-[54px] md:w-[60px] md:h-[60px] ${
-              activeTab === tab.value
-                ? 'bg-white ring-2 ring-brand-primary shadow-md border border-sage-200'
-                : tab.disabled
-                  ? 'bg-sage-100/60 cursor-not-allowed opacity-60'
-                  : 'bg-white/80 hover:bg-white shadow'
-            }`}
-            onClick={() => !tab.disabled && onTabChange(tab.value)}
-          >
-            <DockLabel className="mb-3 text-sage-700 group-hover:text-brand-primary text-xs md:text-sm">{tab.label}</DockLabel>
-            <DockIcon>{tab.icon}</DockIcon>
-          </DockItem>
-        ))}
-      </Dock>
-    </div>
+    <nav
+      className="relative flex justify-center items-center w-full max-w-lg mx-auto px-2 pt-2 pb-3 rounded-xl bg-white/80 shadow border border-sage-100"
+      aria-label="Journal Tabs"
+    >
+      <div className="flex w-full">
+        {actualTabs.map((tab, idx) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.value;
+          return (
+            <button
+              key={tab.value}
+              className={cn(
+                "relative flex-1 flex items-center justify-center gap-2 py-3 px-3 transition font-semibold outline-none text-base rounded-lg",
+                tab.disabled
+                  ? "text-sage-400 cursor-not-allowed opacity-60"
+                  : isActive
+                  ? "text-brand-primary"
+                  : "text-sage-700 hover:bg-brand-primary/10 hover:text-brand-primary"
+              )}
+              tabIndex={tab.disabled ? -1 : 0}
+              type="button"
+              aria-selected={isActive}
+              aria-disabled={tab.disabled}
+              role="tab"
+              onClick={() => !tab.disabled && onTabChange(tab.value)}
+            >
+              <Icon
+                size={20}
+                className={
+                  isActive
+                    ? "text-brand-primary mr-1"
+                    : tab.disabled
+                    ? "text-sage-300 mr-1"
+                    : "text-sage-500 mr-1"
+                }
+                aria-hidden="true"
+              />
+              <span>{tab.label}</span>
+            </button>
+          );
+        })}
+      </div>
+      {/* Animated Underline Indicator */}
+      <div className="absolute bottom-0 left-2 right-2 h-0 flex">
+        <motion.div
+          layout
+          layoutId="journal-tab-underline"
+          className="bg-brand-primary h-[3px] rounded-full"
+          style={{
+            width: `calc((100% - 0.5rem) / ${TABS.length})`,
+            marginLeft: `calc(${activeIdx} * ((100% - 0.5rem) / ${TABS.length}))`,
+            boxShadow: "0 1px 8px 0 rgba(155, 135, 245, 0.10)",
+          }}
+          transition={{ type: "spring", stiffness: 420, damping: 30 }}
+        />
+      </div>
+    </nav>
   );
 };
 
 export default JournalTabs;
+
