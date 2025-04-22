@@ -1,12 +1,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { MoveRight, PhoneCall } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
-/**
- * Animated Hero headline that cycles through given titles.
- */
 function AnimatedHero() {
   const [titleNumber, setTitleNumber] = useState(0);
   // Use the requested titles for animation
@@ -49,7 +44,7 @@ function AnimatedHero() {
                   </motion.span>
                 ))}
               </span>
-              &nbsp;Wellness Journey
+              &nbsp;Experience
             </h1>
           </div>
         </div>
@@ -59,4 +54,3 @@ function AnimatedHero() {
 }
 
 export { AnimatedHero };
-
