@@ -13,6 +13,7 @@ import JoinCommunity from "@/components/JoinCommunity";
 import AIWellnessSection from "@/components/AIWellnessSection";
 import { FeatureRetreatFinder } from "@/components/ui/feature-retreat-finder";
 import HomeCategories from "@/components/HomeCategories";
+import FeaturedRetreatsGrid from "@/components/FeaturedRetreatsGrid";
 
 const Index = () => {
   return (
@@ -28,6 +29,10 @@ const Index = () => {
       <Header />
       <Hero />
       <SanghosStory />
+
+      {/* Featured Retreats Section */}
+      <FeaturedRetreatsGrid />
+
       <HomeCategories />
       <FeatureRetreatFinder />
       <HowItWorks />
