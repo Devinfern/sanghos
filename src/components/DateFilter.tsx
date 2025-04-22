@@ -48,9 +48,9 @@ const DateFilter: React.FC<DateFilterProps> = ({
           onClick={() => onSelectOption(option.id)}
           className={`
             ${selectedOption === option.id 
-              ? "bg-purple-600 text-white hover:bg-purple-700" 
-              : "border-purple-400 text-purple-600 hover:bg-purple-50"}
-            transition-colors duration-300
+              ? "bg-brand-primary text-white hover:bg-brand-primary/90" 
+              : "border-sage-200 text-sage-700 bg-white hover:bg-sage-50"}
+            transition-all duration-300 rounded-full
           `}
         >
           {option.label}
@@ -63,9 +63,9 @@ const DateFilter: React.FC<DateFilterProps> = ({
             variant={selectedOption === 'custom' ? "default" : "outline"}
             className={`
               ${selectedOption === 'custom' 
-                ? "bg-purple-600 text-white hover:bg-purple-700" 
-                : "border-purple-400 text-purple-600 hover:bg-purple-50"}
-              flex items-center gap-2 transition-colors duration-300
+                ? "bg-brand-primary text-white hover:bg-brand-primary/90" 
+                : "border-sage-200 text-sage-700 bg-white hover:bg-sage-50"}
+              flex items-center gap-2 transition-all duration-300 rounded-full
             `}
           >
             <CalendarIcon className="h-4 w-4" />
