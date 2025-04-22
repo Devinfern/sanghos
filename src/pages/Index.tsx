@@ -19,7 +19,7 @@ import EventList from "@/components/EventList";
 import { Event, EventCategory } from "@/types/event";
 import DateFilter, { DateFilterOption } from "@/components/DateFilter";
 import { useState, useMemo } from "react";
-import { isThisWeekend, isThisWeek, isToday, isTomorrow, isSameDay, startOfDay } from "date-fns";
+import { isThisWeek, isToday, isTomorrow, isSameDay, startOfDay, getDay } from "date-fns";
 
 // Correct types for the event category
 const featuredEvents: Event[] = [
@@ -101,9 +101,10 @@ const Index = () => {
   const [selectedDateFilter, setSelectedDateFilter] = useState<DateFilterOption>('all');
   const [customDate, setCustomDate] = useState<Date | undefined>(undefined);
 
-  // Helper: isDateInThisWeekend
+  // Helper: isDateInThisWeekend - custom implementation
   function isDateInThisWeekend(date: Date) {
-    return isThisWeekend(date);
+    const day = getDay(date); // 0 is Sunday, 6 is Saturday
+    return day === 0 || day === 6; // Weekend is Saturday (6) or Sunday (0)
   }
 
   const filteredEvents = useMemo(() => {
