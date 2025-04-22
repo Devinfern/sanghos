@@ -1,93 +1,16 @@
 
 import React, { useState } from "react";
+import { Event } from "@/types/event";
+import { getCategoryLabel, getCategoryColor } from "@/data/mockEvents";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Calendar, MapPin, Clock, Heart, Share, ExternalLink } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
-// Define a simple mock event type for this demo.
-export interface EventLocation {
-  locationType: "venue" | "online";
-  name: string;
-  address?: string;
-  city?: string;
-  state?: string;
-  zip?: string;
-}
-export interface Organizer {
-  name: string;
-  website?: string;
-}
-export type EventCategory =
-  | "yoga"
-  | "meditation"
-  | "fitness"
-  | "nutrition"
-  | "workshop"
-  | "retreat"
-  | "online";
-export interface Event {
-  id: string;
-  title: string;
-  shortDescription: string;
-  description: string;
-  imageUrl: string;
-  category: EventCategory;
-  startDate: Date;
-  endDate: Date;
-  location: EventLocation;
-  bookingUrl: string;
-  price: string | number;
-  source: string;
-  organizer: Organizer;
-}
-
-// Helpers:
-const getCategoryLabel = (category: EventCategory): string => {
-  switch (category) {
-    case "yoga":
-      return "Yoga";
-    case "meditation":
-      return "Meditation";
-    case "fitness":
-      return "Fitness";
-    case "nutrition":
-      return "Nutrition";
-    case "workshop":
-      return "Workshop";
-    case "retreat":
-      return "Retreats";
-    case "online":
-      return "Online";
-    default:
-      return "";
-  }
-};
-const getCategoryColor = (category: EventCategory): string => {
-  // Map to bg-colors/text-colors as Tailwind classes
-  switch (category) {
-    case "yoga":
-      return "bg-green-100 text-green-700";
-    case "meditation":
-      return "bg-blue-100 text-blue-700";
-    case "fitness":
-      return "bg-orange-100 text-orange-700";
-    case "nutrition":
-      return "bg-lime-100 text-lime-700";
-    case "workshop":
-      return "bg-yellow-100 text-yellow-700";
-    case "retreat":
-      return "bg-purple-100 text-purple-700";
-    case "online":
-      return "bg-pink-100 text-pink-700";
-    default:
-      return "bg-gray-100 text-gray-700";
-  }
-};
-
 interface EventCardProps {
   event: Event;
 }
+
 const EventCard: React.FC<EventCardProps> = ({ event }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
@@ -121,7 +44,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
         <div className="relative h-48 overflow-hidden">
           <img src={event.imageUrl} alt={event.title} className="w-full h-full object-cover" />
           <div className="absolute top-3 left-3">
-            <span className={`category-badge px-2 py-1 rounded ${categoryClass} text-xs font-semibold`}>
+            <span className={`category-badge ${categoryClass}`}>
               {getCategoryLabel(event.category)}
             </span>
           </div>
@@ -238,7 +161,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
 
             <div className="bg-gray-50 rounded-lg p-4">
               <div className="mb-4">
-                <div className={`category-badge ${categoryClass} mb-4 px-2 py-1 rounded text-xs font-semibold`}>
+                <div className={`category-badge ${categoryClass} mb-4`}>
                   {getCategoryLabel(event.category)}
                 </div>
                 <div className="space-y-3">
@@ -297,4 +220,3 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
 };
 
 export default EventCard;
-

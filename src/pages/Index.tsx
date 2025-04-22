@@ -1,3 +1,4 @@
+
 import { Helmet } from "react-helmet";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
@@ -15,8 +16,9 @@ import { FeatureRetreatFinder } from "@/components/ui/feature-retreat-finder";
 import HomeCategories from "@/components/HomeCategories";
 import FeaturedRetreatsGrid from "@/components/FeaturedRetreatsGrid";
 import EventList from "@/components/EventList";
+import { Event } from "@/types/event";
 
-const featuredEvents = [
+const featuredEvents: Event[] = [
   {
     id: "ev-1",
     title: "Outdoor Sunrise Yoga",

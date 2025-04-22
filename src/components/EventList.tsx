@@ -1,6 +1,7 @@
 
 import React from "react";
-import EventCard, { Event } from "./EventCard";
+import EventCard from "./EventCard";
+import { Event } from "@/types/event";
 
 interface EventListProps {
   events: Event[];
@@ -30,4 +31,3 @@ const EventList: React.FC<EventListProps> = ({ events, title }) => {
 };
 
 export default EventList;
-
