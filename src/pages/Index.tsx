@@ -16,8 +16,12 @@ import { FeatureRetreatFinder } from "@/components/ui/feature-retreat-finder";
 import HomeCategories from "@/components/HomeCategories";
 import FeaturedRetreatsGrid from "@/components/FeaturedRetreatsGrid";
 import EventList from "@/components/EventList";
-import { Event } from "@/types/event";
+import { Event, EventCategory } from "@/types/event";
+import DateFilter, { DateFilterOption } from "@/components/DateFilter";
+import { useState, useMemo } from "react";
+import { isThisWeekend, isThisWeek, isToday, isTomorrow, isSameDay, startOfDay } from "date-fns";
 
+// Correct types for the event category
 const featuredEvents: Event[] = [
   {
     id: "ev-1",
@@ -93,6 +97,49 @@ const featuredEvents: Event[] = [
 ];
 
 const Index = () => {
+  // Date filter state
+  const [selectedDateFilter, setSelectedDateFilter] = useState<DateFilterOption>('all');
+  const [customDate, setCustomDate] = useState<Date | undefined>(undefined);
+
+  // Helper: isDateInThisWeekend
+  function isDateInThisWeekend(date: Date) {
+    return isThisWeekend(date);
+  }
+
+  const filteredEvents = useMemo(() => {
+    if (selectedDateFilter === "all") return featuredEvents;
+
+    const today = startOfDay(new Date());
+    switch (selectedDateFilter) {
+      case "today":
+        return featuredEvents.filter(event =>
+          isSameDay(event.startDate, today)
+        );
+      case "tomorrow":
+        const tomorrow = startOfDay(new Date(today.getTime() + 24 * 60 * 60 * 1000));
+        return featuredEvents.filter(event =>
+          isSameDay(event.startDate, tomorrow)
+        );
+      case "this-week":
+        return featuredEvents.filter(event =>
+          isThisWeek(event.startDate, { weekStartsOn: 1 })
+        );
+      case "this-weekend":
+        return featuredEvents.filter(event =>
+          isDateInThisWeekend(event.startDate)
+        );
+      case "custom":
+        if (customDate) {
+          return featuredEvents.filter(event =>
+            isSameDay(event.startDate, startOfDay(customDate))
+          );
+        }
+        return featuredEvents;
+      default:
+        return featuredEvents;
+    }
+  }, [selectedDateFilter, customDate]);
+
   return (
     <>
       <Helmet>
@@ -118,7 +165,16 @@ const Index = () => {
               A selection of curated wellness events for you to explore and book.
             </p>
           </div>
-          <EventList events={featuredEvents} />
+          {/* Date filter bar */}
+          <div className="flex justify-center mb-8">
+            <DateFilter
+              selectedOption={selectedDateFilter}
+              customDate={customDate}
+              onSelectOption={setSelectedDateFilter}
+              onSelectCustomDate={setCustomDate}
+            />
+          </div>
+          <EventList events={filteredEvents} />
         </div>
       </section>
 
