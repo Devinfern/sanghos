@@ -28,7 +28,7 @@ const Hero = () => {
       <div className="container relative z-20 px-4 md:px-6 py-24 sm:py-32">
         <div className="max-w-3xl mx-auto text-center">
           <div className={`transition-all duration-700 delay-300 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">Discover Wellness Retreats in Private Spaces</h1>
+            <h1 className="text-4xl md:text-5xl text-white mb-6 font-extrabold lg:text-5xl">Discover Daylong Retreats + Wellness Experiences Near You</h1>
             <p className="text-lg md:text-xl text-white/90 mb-8">
               Join daylong retreats with expert instructors in unique,
               intimate settings
