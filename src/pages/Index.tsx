@@ -1,4 +1,3 @@
-
 import { Helmet } from "react-helmet";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
@@ -13,6 +12,7 @@ import HowItWorks from "@/components/HowItWorks";
 import JoinCommunity from "@/components/JoinCommunity";
 import AIWellnessSection from "@/components/AIWellnessSection";
 import { FeatureRetreatFinder } from "@/components/ui/feature-retreat-finder";
+import HomeCategories from "@/components/HomeCategories";
 
 const Index = () => {
   return (
@@ -28,7 +28,7 @@ const Index = () => {
       <Header />
       <Hero />
       <SanghosStory />
-      <FeaturedRetreats />
+      <HomeCategories />
       <FeatureRetreatFinder />
       <HowItWorks />
       <JoinCommunity />
