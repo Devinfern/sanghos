@@ -46,9 +46,12 @@ const DateFilter: React.FC<DateFilterProps> = ({
           key={option.id}
           variant={selectedOption === option.id ? "default" : "outline"}
           onClick={() => onSelectOption(option.id)}
-          className={selectedOption === option.id 
-            ? "bg-sand-500 text-white hover:bg-sand-600" 
-            : ""}
+          className={`
+            ${selectedOption === option.id 
+              ? "bg-purple-600 text-white hover:bg-purple-700" 
+              : "border-purple-400 text-purple-600 hover:bg-purple-50"}
+            transition-colors duration-300
+          `}
         >
           {option.label}
         </Button>
@@ -58,9 +61,12 @@ const DateFilter: React.FC<DateFilterProps> = ({
         <PopoverTrigger asChild>
           <Button
             variant={selectedOption === 'custom' ? "default" : "outline"}
-            className={`${selectedOption === 'custom' 
-              ? "bg-sand-500 text-white hover:bg-sand-600" 
-              : ""} flex items-center gap-2`}
+            className={`
+              ${selectedOption === 'custom' 
+                ? "bg-purple-600 text-white hover:bg-purple-700" 
+                : "border-purple-400 text-purple-600 hover:bg-purple-50"}
+              flex items-center gap-2 transition-colors duration-300
+            `}
           >
             <CalendarIcon className="h-4 w-4" />
             {selectedOption === 'custom' && customDate
