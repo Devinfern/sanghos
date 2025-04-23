@@ -25,9 +25,10 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
-      {/* Background image with overlay */}
+      {/* Background image container with overlay */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-brand-dark/40 via-brand-dark/20 to-transparent z-10 w-full h-full"></div>
+        {/* Fixed overlay with improved opacity and coverage */}
+        <div className="absolute inset-0 bg-gradient-to-b from-brand-dark/70 via-brand-dark/60 to-brand-dark/40 z-10 w-full h-full"></div>
         <OptimizedImage 
           src="https://cdn.prod.website-files.com/5ff4fbd49286ac4facd6bbce/67cfba7e2604665f5076bdb7_HEROIMG.jpg" 
           alt="Peaceful retreat setting" 
@@ -40,7 +41,7 @@ const Hero = () => {
       </div>
 
       {/* Content */}
-      <div className="container relative z-20 px-4 md:px-6 py-24 sm:py-32 bg-black/[0.71]">
+      <div className="container relative z-20 px-4 md:px-6 py-24 sm:py-32">
         <div className="max-w-3xl mx-auto text-center">
           <div className={`transition-all duration-700 delay-300 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
             <AnimatedHero />
