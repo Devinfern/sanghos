@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 
 function AnimatedHero() {
   const [titleNumber, setTitleNumber] = useState(0);
-  // Use the requested titles for animation
+  // Updated titles to include the new suggestions
   const titles = useMemo(
-    () => ["Daylong Retreat", "Meditation Retreat", "Breathwork"],
+    () => ["Daylong Retreat", "Meditation Retreat", "Breathwork", "Yoga", "Group Therapy", "Nature"],
     []
   );
 
