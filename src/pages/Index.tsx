@@ -12,7 +12,7 @@ import EventList from "@/components/EventList";
 import { Event } from "@/types/event";
 import SanghosStory from "@/components/SanghosStory";
 import HomeCategories from "@/components/HomeCategories";
-import FeatureRetreatFinder from "@/components/ui/feature-retreat-finder";
+import { FeatureRetreatFinder } from "@/components/ui/feature-retreat-finder";
 import HowItWorks from "@/components/HowItWorks";
 import JoinCommunity from "@/components/JoinCommunity";
 import Footer from "@/components/Footer";
