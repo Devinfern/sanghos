@@ -17,6 +17,7 @@ interface RetreatRecommendation {
   description?: string;
   url?: string;
   image?: string;
+  category?: string[];
 }
 
 interface EventRecommendationsProps {
@@ -141,7 +142,7 @@ const EventRecommendations = ({
                 <div className="flex justify-end">
                   <Button
                     variant="outline"
-                    onClick={() => onNavigateToRetreat(rec.retreatId)}
+                    onClick={() => rec.url ? window.open(rec.url, "_blank") : onNavigateToRetreat(rec.retreatId)}
                     className="border-sage-300 text-sage-700 hover:bg-sage-50 hover:text-sage-800"
                   >
                     {rec.url ? (

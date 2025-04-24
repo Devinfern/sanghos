@@ -48,6 +48,7 @@ export default function WellnessJournal() {
   const [isLocationLoading, setIsLocationLoading] = useState(false);
   const [isLoadingEvents, setIsLoadingEvents] = useState(false);
   const [eventError, setEventError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -198,6 +199,48 @@ export default function WellnessJournal() {
       setActiveTab("recommendations");
       setIsAnalyzing(false);
       setIsLoadingEvents(false);
+    }
+  };
+
+  const fetchRetreatRecommendations = async (
+    journalText: string,
+    location: string,
+    interests: string[]
+  ) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      console.log("Fetching events with:", { location, interests });
+      
+      const { data, error } = await supabase.functions.invoke("fetch-local-events", {
+        body: {
+          location,
+          interests,
+          startDatetime: new Date().toISOString(),
+        },
+      });
+
+      console.log("Edge function response:", data, error);
+      
+      if (error) {
+        console.error("Error calling edge function:", error);
+        setError(`Error fetching events: ${error.message}`);
+        setRecommendations([]);
+      } else {
+        if (data?.recommendations && data.recommendations.length > 0) {
+          setRecommendations(data.recommendations);
+        } else {
+          setRecommendations([]);
+          setError("No events found matching your criteria. Try broadening your search.");
+        }
+      }
+    } catch (err) {
+      console.error("Error in fetchRetreatRecommendations:", err);
+      setError(`Failed to fetch events: ${err.message}`);
+      setRecommendations([]);
+    } finally {
+      setLoading(false);
     }
   };
 
