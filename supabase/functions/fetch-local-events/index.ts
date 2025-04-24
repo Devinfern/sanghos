@@ -1,3 +1,4 @@
+
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 
@@ -15,11 +16,8 @@ serve(async (req) => {
     const EVENTBRITE_API_KEY = Deno.env.get("EVENTBRITE_API_KEY");
     
     if (!EVENTBRITE_API_KEY) {
-      console.error("Eventbrite API key is missing");
       throw new Error("Eventbrite API key is not configured");
     }
-
-    console.log("Using Eventbrite API Key:", EVENTBRITE_API_KEY ? "Yes (masked for security)" : "No");
 
     const { location, interests, startDatetime, endDatetime } = await req.json();
     
@@ -27,7 +25,7 @@ serve(async (req) => {
       throw new Error("Location is required");
     }
 
-    console.log("Request received:", { location, interests, startDatetime, endDatetime });
+    console.log("Request received:", { location, interests, startDatetime });
 
     const baseUrl = "https://www.eventbriteapi.com/v3/events/search/";
     
@@ -35,6 +33,8 @@ serve(async (req) => {
       "location.address": location,
       "location.within": "20km",
       "start_date.range_start": startDatetime || new Date().toISOString(),
+      "categories": "107", // Health & Wellness category
+      "expand": "venue,ticket_availability"
     });
 
     if (endDatetime) {
@@ -42,13 +42,8 @@ serve(async (req) => {
     }
 
     if (interests && interests.length > 0) {
-      params.append("categories", "107");
       params.append("q", interests.join(" OR "));
-    } else {
-      params.append("categories", "107");
     }
-    
-    params.append("expand", "venue,category");
     
     const url = `${baseUrl}?${params.toString()}`;
     
@@ -61,11 +56,6 @@ serve(async (req) => {
         'Content-Type': 'application/json'
       }
     });
-
-    const responseStatus = response.status;
-    const responseStatusText = response.statusText;
-    
-    console.log("Eventbrite API response status:", responseStatus, responseStatusText);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -89,48 +79,33 @@ serve(async (req) => {
       const venueInfo = event.venue || {};
       const startInfo = event.start || {};
       const endInfo = event.end || {};
-      
-      const startDate = new Date(startInfo.local || startInfo.utc);
-      
-      let matchScore = 0.75;
-      
-      if (interests && interests.length > 0) {
-        const eventText = (event.name?.text || "") + " " + (event.description?.text || "");
-        const matchCount = interests.filter(keyword => 
-          eventText.toLowerCase().includes(keyword.toLowerCase())
-        ).length;
-        
-        if (matchCount > 0) {
-          matchScore = Math.min(0.75 + (matchCount * 0.05), 0.95);
-        }
-      }
-      
-      const imageUrl = event.logo?.url || 
-                      event.logo?.original?.url || 
-                      "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86";
+      const ticketInfo = event.ticket_availability || {};
       
       return {
         retreatId: `event-${event.id}`,
         title: event.name?.text || "Unnamed Event",
-        matchScore: matchScore,
         reason: "This event matches your wellness interests",
         location: venueInfo.address?.localized_address_display || 
-                  venueInfo.name || 
-                  "Location TBD",
-        date: startDate.toLocaleDateString('en-US', { 
+                 venueInfo.name || 
+                 "Location TBD",
+        date: new Date(startInfo.local || startInfo.utc).toLocaleDateString('en-US', { 
           month: 'short', 
           day: 'numeric',
           year: 'numeric'
         }),
-        time: startDate.toLocaleTimeString('en-US', { 
+        time: new Date(startInfo.local || startInfo.utc).toLocaleTimeString('en-US', { 
           hour: 'numeric', 
           minute: '2-digit',
           hour12: true 
         }),
         description: event.description?.text || "",
         url: event.url,
-        image: imageUrl,
-        category: event.category_id ? [event.category_id.toString()] : ["Wellness"],
+        image: event.logo?.url || 
+               event.logo?.original?.url || 
+               "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86",
+        category: ["Wellness"],
+        remaining: ticketInfo.available || null,
+        capacity: ticketInfo.capacity || null,
       };
     });
 
