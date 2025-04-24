@@ -1,3 +1,5 @@
+
+import React, { useState, useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
@@ -6,6 +8,16 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { supabase } from "@/integrations/supabase/client";
+import EventList from "@/components/EventList";
+import { Event } from "@/types/event";
+import SanghosStory from "@/components/SanghosStory";
+import HomeCategories from "@/components/HomeCategories";
+import FeatureRetreatFinder from "@/components/ui/feature-retreat-finder";
+import HowItWorks from "@/components/HowItWorks";
+import JoinCommunity from "@/components/JoinCommunity";
+import Footer from "@/components/Footer";
+import DateFilter, { DateFilterOption } from "@/components/DateFilter";
+import { startOfDay, getDay, isSameDay, isThisWeek } from "date-fns";
 
 const featuredEvents: Event[] = [
   {
