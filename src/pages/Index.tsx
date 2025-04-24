@@ -1,25 +1,11 @@
 import { Helmet } from "react-helmet";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import FeaturedRetreats from "@/components/FeaturedRetreats";
-import Footer from "@/components/Footer";
-import { instructors } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import SanghosStory from "@/components/SanghosStory";
-import HowItWorks from "@/components/HowItWorks";
-import JoinCommunity from "@/components/JoinCommunity";
-import AIWellnessSection from "@/components/AIWellnessSection";
-import { FeatureRetreatFinder } from "@/components/ui/feature-retreat-finder";
-import HomeCategories from "@/components/HomeCategories";
-import FeaturedRetreatsGrid from "@/components/FeaturedRetreatsGrid";
-import EventList from "@/components/EventList";
-import { Event, EventCategory } from "@/types/event";
-import DateFilter, { DateFilterOption } from "@/components/DateFilter";
-import { useState, useMemo, useEffect } from "react";
-import { isThisWeek, isToday, isTomorrow, isSameDay, startOfDay, getDay } from "date-fns";
-import { supabase } from "@/lib/supabase";
+import { Spinner } from "@/components/ui/spinner";
+import { supabase } from "@/integrations/supabase/client";
 
 const featuredEvents: Event[] = [
   {
