@@ -223,4 +223,3 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
 };
 
 export default EventCard;
-

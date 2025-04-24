@@ -15,7 +15,7 @@ serve(async (req) => {
 
   try {
     // Use the API key provided by the user
-    const EVENTBRITE_API_KEY = "MOMPRUBS6TSGJEACONBE";
+    const EVENTBRITE_API_KEY = Deno.env.get("EVENTBRITE_API_KEY") || "MOMPRUBS6TSGJEACONBE";
     
     if (!EVENTBRITE_API_KEY) {
       console.error("Eventbrite API key is missing");
