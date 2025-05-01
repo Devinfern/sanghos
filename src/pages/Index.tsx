@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
@@ -11,9 +11,34 @@ import JoinCommunity from "@/components/JoinCommunity";
 import Footer from "@/components/Footer";
 import EventsSection from "@/components/sections/EventsSection";
 import { useEvents } from "@/hooks/useEvents";
+import { motion } from "framer-motion";
 
 const Index = () => {
   const { events, isLoading } = useEvents();
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // Add a slight delay before showing content for smoother transitions
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+  };
 
   return (
     <>
@@ -27,12 +52,38 @@ const Index = () => {
 
       <Header />
       <Hero />
-      <SanghosStory />
-      <EventsSection events={events} isLoading={isLoading} />
-      <HomeCategories />
-      <FeatureRetreatFinder />
-      <HowItWorks />
-      <JoinCommunity />
+
+      <motion.div 
+        className="overflow-hidden"
+        initial="hidden"
+        animate={isVisible ? "visible" : "hidden"}
+        variants={containerVariants}
+      >
+        <motion.div variants={itemVariants}>
+          <SanghosStory />
+        </motion.div>
+        
+        <motion.div variants={itemVariants}>
+          <EventsSection events={events} isLoading={isLoading} />
+        </motion.div>
+        
+        <motion.div variants={itemVariants}>
+          <HomeCategories />
+        </motion.div>
+        
+        <motion.div variants={itemVariants}>
+          <FeatureRetreatFinder />
+        </motion.div>
+        
+        <motion.div variants={itemVariants}>
+          <HowItWorks />
+        </motion.div>
+        
+        <motion.div variants={itemVariants}>
+          <JoinCommunity />
+        </motion.div>
+      </motion.div>
+      
       <Footer />
     </>
   );

@@ -3,14 +3,21 @@ import { useState, useEffect } from "react";
 import { Event } from "@/types/event";
 import { supabase } from "@/integrations/supabase/client";
 import { defaultEvents } from "@/data/mockFeaturedEvents";
+import { toast } from "sonner";
 
 export function useEvents(location: string = "San Francisco, CA") {
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
+      setIsLoading(true);
+      setError(null);
+      
       try {
+        console.log(`Fetching events for location: ${location}`);
+        
         const { data, error } = await supabase.functions.invoke("fetch-local-events", {
           body: {
             location,
@@ -21,20 +28,26 @@ export function useEvents(location: string = "San Francisco, CA") {
         
         if (error) {
           console.error("Error fetching events:", error);
+          setError(`Failed to fetch events: ${error.message}`);
           setEvents(defaultEvents);
+          toast.error("Couldn't load events. Using fallback data.");
         } else if (data?.recommendations && data.recommendations.length > 0) {
+          console.log(`Successfully fetched ${data.recommendations.length} events`);
+          
           const transformedEvents: Event[] = data.recommendations.map((rec: any, index: number) => {
-            const startDate = new Date();
-            const endDate = new Date();
+            // Parse dates properly
+            let startDate = new Date();
+            let endDate = new Date();
             endDate.setHours(endDate.getHours() + 2);
             
             if (rec.date && rec.time) {
               try {
                 const dateTimeStr = `${rec.date} ${rec.time}`;
                 const parsedDate = new Date(dateTimeStr);
+                
                 if (!isNaN(parsedDate.getTime())) {
-                  startDate.setTime(parsedDate.getTime());
-                  endDate.setTime(parsedDate.getTime() + (2 * 60 * 60 * 1000));
+                  startDate = new Date(parsedDate.getTime());
+                  endDate = new Date(parsedDate.getTime() + (2 * 60 * 60 * 1000));
                 }
               } catch (e) {
                 console.warn("Error parsing event date/time:", e);
@@ -47,7 +60,7 @@ export function useEvents(location: string = "San Francisco, CA") {
               shortDescription: rec.reason || "A wellness event near you",
               description: rec.description || "Join this event to improve your wellness journey.",
               imageUrl: rec.image || "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-              category: rec.category?.[0] || "yoga",
+              category: Array.isArray(rec.category) ? rec.category[0] : "wellness",
               startDate,
               endDate,
               location: {
@@ -59,22 +72,26 @@ export function useEvents(location: string = "San Francisco, CA") {
                 zip: ""
               },
               bookingUrl: rec.url || "https://www.example.com",
-              price: "Free",
-              source: "Eventbrite",
+              price: rec.price || "Free",
+              source: rec.source || "Eventbrite",
               organizer: {
-                name: "Event Organizer",
+                name: rec.organizer || "Event Organizer",
                 website: rec.url
               }
             };
           });
           
+          toast.success(`Found ${transformedEvents.length} wellness events`);
           setEvents(transformedEvents);
         } else {
+          console.log("No events returned, using default events");
           setEvents(defaultEvents);
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error("Error in fetchEvents:", err);
+        setError(`Unexpected error: ${err.message}`);
         setEvents(defaultEvents);
+        toast.error("Something went wrong. Using fallback data.");
       } finally {
         setIsLoading(false);
       }
@@ -83,5 +100,5 @@ export function useEvents(location: string = "San Francisco, CA") {
     fetchEvents();
   }, [location]);
 
-  return { events, isLoading };
+  return { events, isLoading, error };
 }

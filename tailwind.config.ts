@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -176,7 +177,19 @@ export default {
 				'wiggle': {
 					'0%, 100%': { transform: 'rotate(-3deg)' },
 					'50%': { transform: 'rotate(3deg)' }
-				}
+				},
+				'subtle-zoom': {
+					'0%': { transform: 'scale(1)' },
+					'100%': { transform: 'scale(1.05)' },
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-8px)' }
+				},
+				'pulse-glow': {
+					'0%, 100%': { boxShadow: '0 0 0 0 rgba(42, 157, 143, 0)' },
+					'50%': { boxShadow: '0 0 0 12px rgba(42, 157, 143, 0.2)' }
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
@@ -188,7 +201,10 @@ export default {
 				'button-pulse': 'button-pulse 2s ease-in-out infinite',
 				'button-bounce': 'button-bounce 1s ease-in-out infinite',
 				'button-ripple': 'button-ripple 0.6s linear',
-				'wiggle': 'wiggle 0.3s ease-in-out'
+				'wiggle': 'wiggle 0.3s ease-in-out',
+				'subtle-zoom': 'subtle-zoom 15s ease-in-out infinite alternate',
+				'float': 'float 6s ease-in-out infinite',
+				'pulse-glow': 'pulse-glow 2.5s ease-out infinite',
 			}
 		}
 	},
