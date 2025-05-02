@@ -1,4 +1,3 @@
-
 // Community data types
 import { supabase } from "@/integrations/supabase/client";
 
@@ -19,6 +18,7 @@ export type ForumPost = {
   likes: number;
   comments: number;
   bookmarked: boolean;
+  isPinned?: boolean; // Added property for important announcements
 };
 
 export type ForumEvent = {
@@ -314,7 +314,8 @@ export const loadForumPosts = async () => {
         content: post.content,
         likes: post.likes,
         comments: post.comments,
-        bookmarked: post.bookmarked
+        bookmarked: post.bookmarked,
+        isPinned: post.is_pinned // Added property for important announcements
       }));
       
       forumPosts = transformedPosts;
@@ -434,7 +435,8 @@ const seedForumPosts = async () => {
       content: post.content,
       likes: post.likes,
       comments: post.comments,
-      bookmarked: post.bookmarked
+      bookmarked: post.bookmarked,
+      is_pinned: post.isPinned // Added property for important announcements
     }));
     
     const { error } = await supabase
@@ -563,7 +565,8 @@ export const updateForumPosts = async (newPosts: typeof forumPosts) => {
       content: post.content,
       likes: post.likes,
       comments: post.comments,
-      bookmarked: post.bookmarked
+      bookmarked: post.bookmarked,
+      is_pinned: post.isPinned // Added property for important announcements
     }));
     
     const { error: insertError } = await supabase
