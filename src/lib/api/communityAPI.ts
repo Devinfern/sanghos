@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { 
   ForumCategory, 
@@ -75,7 +76,7 @@ export const loadForumPosts = async () => {
       return [];
     }
     
-    return data.map(post => ({
+    return data.map((post: any) => ({
       id: post.id,
       title: post.title,
       content: post.content,

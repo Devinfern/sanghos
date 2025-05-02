@@ -1,7 +1,7 @@
 
 // Forum data types
 import { 
-  ForumAuthor, 
+  ForumAuthor as AuthorType, 
   ForumPost as BaseForumPost, 
   ForumEvent as BaseForumEvent, 
   TrendingPost as BaseTrendingPost, 
@@ -58,7 +58,7 @@ const combinedEvents = [...communityEvents, ...syncRetreatsToEvents(retreats)];
 
 // Export the combined data and update functions
 export {
-  ForumAuthor,
+  type AuthorType as ForumAuthor,
   forumSpaces,
   forumPosts,
   combinedEvents as forumEvents,

@@ -4,7 +4,6 @@ import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import SanghosStory from "@/components/SanghosStory";
 import HomeCategories from "@/components/HomeCategories";
 import { FeatureRetreatFinder } from "@/components/ui/feature-retreat-finder";
 import HowItWorks from "@/components/HowItWorks";
@@ -61,10 +60,6 @@ const Index = () => {
         animate={isVisible ? "visible" : "hidden"}
         variants={containerVariants}
       >
-        <motion.div variants={itemVariants}>
-          <SanghosStory />
-        </motion.div>
-        
         <motion.div variants={itemVariants}>
           <EventsSection events={events} isLoading={isLoading} />
         </motion.div>
