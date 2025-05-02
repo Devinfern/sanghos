@@ -20,9 +20,9 @@ const CommunitySearchFilter = ({
     <div className="flex flex-col md:flex-row gap-4">
       <div className="flex-1">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
           <Input
-            className="pl-10"
+            className="pl-10 rounded-full border-brand-subtle/30 focus:border-brand-primary transition-colors"
             placeholder="Search discussions..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
@@ -31,10 +31,10 @@ const CommunitySearchFilter = ({
       </div>
       <div className="w-full md:w-48">
         <Select value={categoryFilter} onValueChange={onCategoryChange}>
-          <SelectTrigger>
+          <SelectTrigger className="rounded-full border-brand-subtle/30 focus:border-brand-primary hover:border-brand-primary transition-colors">
             <SelectValue placeholder="Filter by category" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-white border-brand-subtle/20 shadow-md rounded-lg">
             <SelectItem value="all">All Categories</SelectItem>
             <SelectItem value="question">Questions</SelectItem>
             <SelectItem value="discussion">Discussions</SelectItem>

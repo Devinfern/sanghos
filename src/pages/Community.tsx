@@ -27,9 +27,8 @@ const CommunityPage = () => {
     };
     
     loadData();
-  }, []);
 
-  useEffect(() => {
+    // Check login status
     const checkLoginStatus = () => {
       const userString = localStorage.getItem("sanghos_user");
       setIsLoggedIn(userString !== null);
@@ -37,10 +36,6 @@ const CommunityPage = () => {
     
     checkLoginStatus();
   }, []);
-
-  useEffect(() => {
-    setCurrentEvents(forumEvents);
-  }, [forumEvents]);
 
   const toggleCMS = () => {
     if (!isAdmin) {
@@ -54,10 +49,15 @@ const CommunityPage = () => {
     return (
       <CommunityLayout>
         <div className="container mx-auto px-4 text-center py-12">
-          <div className="animate-pulse">
-            <div className="h-8 bg-brand-subtle rounded w-1/3 mx-auto mb-4"></div>
-            <div className="h-4 bg-brand-subtle rounded w-1/2 mx-auto mb-8"></div>
-            <div className="h-32 bg-brand-subtle rounded w-full max-w-md mx-auto"></div>
+          <div className="animate-pulse flex flex-col space-y-4 items-center">
+            <div className="h-8 bg-brand-subtle/50 rounded w-1/3 mx-auto"></div>
+            <div className="h-4 bg-brand-subtle/50 rounded w-1/2 mx-auto"></div>
+            <div className="h-32 bg-brand-subtle/50 rounded w-full max-w-xl mx-auto"></div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
+              <div className="h-24 bg-brand-subtle/50 rounded"></div>
+              <div className="h-24 bg-brand-subtle/50 rounded"></div>
+              <div className="h-24 bg-brand-subtle/50 rounded"></div>
+            </div>
           </div>
         </div>
       </CommunityLayout>
@@ -88,4 +88,3 @@ const CommunityPage = () => {
 };
 
 export default CommunityPage;
-

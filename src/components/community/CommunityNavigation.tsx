@@ -22,7 +22,7 @@ const CommunityNavigation = ({
   ];
 
   return (
-    <div className="border-b border-brand-subtle/30 bg-white sticky top-16 z-30">
+    <div className="border-b border-brand-subtle/20 bg-white/80 backdrop-blur-md sticky top-16 z-30 shadow-sm">
       <div className="container px-4">
         <div className="flex flex-col md:flex-row justify-between items-center py-4 gap-4">
           <div className="flex overflow-x-auto no-scrollbar">
@@ -31,8 +31,8 @@ const CommunityNavigation = ({
                 key={section.id}
                 variant="ghost"
                 className={cn(
-                  "px-4 py-2 text-brand-slate hover:text-brand-dark",
-                  activeSection === section.id && "text-brand-primary font-medium"
+                  "px-4 py-2 text-brand-slate hover:text-brand-dark transition-all duration-300",
+                  activeSection === section.id && "text-brand-primary font-medium border-b-2 border-brand-primary rounded-none"
                 )}
                 onClick={() => onSectionChange(section.id)}
               >
@@ -44,7 +44,7 @@ const CommunityNavigation = ({
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input 
               placeholder="Search discussions..." 
-              className="pl-10 pr-4 bg-transparent border-brand-subtle/50 focus:border-brand-primary"
+              className="pl-10 pr-4 bg-transparent border-brand-subtle/30 focus:border-brand-primary rounded-full"
             />
           </div>
         </div>
