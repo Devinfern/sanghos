@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, ArrowRight, Sparkles } from "lucide-react";
@@ -84,7 +85,7 @@ const Hero = () => {
                 Browse Retreats
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
-              <Button size="lg" variant="outline" className="bg-white/90 hover:bg-white text-brand-dark border-transparent hover:border-brand-subtle/40 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.03] py-6 px-7 text-base rounded-xl" onClick={() => navigate("/instructors")}>Join our Community</Button>
+              <Button size="lg" variant="outline" className="bg-white/90 hover:bg-white text-brand-dark border-transparent hover:border-brand-subtle/40 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.03] py-6 px-7 text-base rounded-xl" onClick={() => navigate("/community-teaser")}>Join our Community</Button>
             </div>
           </motion.div>
         </motion.div>
