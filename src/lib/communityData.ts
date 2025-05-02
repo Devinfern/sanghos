@@ -311,7 +311,7 @@ export const loadForumPosts = async () => {
       likes: post.likes || 0,
       comments: post.comments || 0,
       bookmarked: post.bookmarked || false,
-      isPinned: post.is_pinned || false,
+      isPinned: post.is_pinned || false,  // Make sure we map is_pinned from database to isPinned in our model
       created_at: post.created_at,
       updated_at: post.updated_at
     }));
@@ -429,7 +429,7 @@ const seedForumPosts = async () => {
       likes: post.likes,
       comments: post.comments,
       bookmarked: post.bookmarked,
-      is_pinned: post.isPinned // Added property for important announcements
+      is_pinned: post.isPinned // Ensure we map isPinned to is_pinned when seeding the database
     }));
     
     const { error } = await supabase
