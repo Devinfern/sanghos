@@ -61,9 +61,9 @@ const WellnessCommunityTeaser = () => {
             
             <Button 
               asChild 
-              variant="outline" 
+              variant="default" 
               size="lg" 
-              className="group text-white border-white hover:bg-white/10 hover:text-white mt-4"
+              className="group bg-brand-primary hover:bg-brand-primary/90 text-white"
             >
               <Link to="/community" className="flex items-center space-x-2">
                 <span className="text-lg">Join Our Community</span>
