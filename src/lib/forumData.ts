@@ -1,27 +1,17 @@
 
 // Forum data types
-export type ForumAuthor = {
-  name: string;
-  role: string; // Admin, Host, Member
-  avatar: string;
-  tag?: string;
-};
+import { 
+  ForumAuthor, 
+  ForumPost, 
+  ForumEvent, 
+  TrendingPost, 
+  ForumSpace as ForumSpaceType 
+} from "./types/community";
 
-export type ForumPost = {
-  id: string | number; // Update to match communityData.ts
-  author: ForumAuthor;
-  postedIn: string;
-  timeAgo: string;
-  title: string;
-  content: string;
-  likes: number;
-  comments: number;
-  bookmarked: boolean;
+// Define more detailed types for the forum
+export type ForumPost = ForumPost & {
   retreatId?: string; // Link to specific retreat
   retreatPhase?: "pre" | "post"; // Pre-retreat or post-retreat discussion
-  isPinned?: boolean; // Added property for important announcements
-  user_id?: string;
-  created_at?: string;
   category?: string;
   user_profiles?: {
     username?: string;
@@ -30,38 +20,16 @@ export type ForumPost = {
   } | null;
 };
 
-export type ForumEvent = {
-  id: string | number;
-  date: {
-    day: number;
-    month: string;
-  };
-  title: string;
-  time: string;
-  retreat_id?: string;
-  location?: string;
-  description?: string;
-  instructor_name?: string;
-  price?: number;
-  capacity?: number;
-  remaining?: number;
-};
+export type ForumEvent = ForumEvent;
 
-export type TrendingPost = {
-  id: string | number; // Update to match communityData.ts
-  title: string;
-  author: string;
-  avatar: string;
+export type TrendingPost = TrendingPost & {
   retreatId?: string; // Link to specific retreat
 };
 
-export type ForumSpace = {
+export type ForumSpace = ForumSpaceType & {
   id: string;
-  name: string;
   description: string;
   category: string;
-  icon: string;
-  count?: number;
   retreatId?: string;
   isPreRetreat?: boolean;
   isPostRetreat?: boolean;
@@ -81,7 +49,7 @@ import {
   loadForumPosts,
   loadForumEvents,
   loadTrendingPosts
-} from "./communityData";
+} from "./api/communityAPI";
 import { retreats } from "./data";
 import { syncRetreatsToEvents } from "./eventUtils";
 
@@ -90,6 +58,7 @@ const combinedEvents = [...communityEvents, ...syncRetreatsToEvents(retreats)];
 
 // Export the combined data and update functions
 export {
+  ForumAuthor,
   forumSpaces,
   forumPosts,
   combinedEvents as forumEvents,

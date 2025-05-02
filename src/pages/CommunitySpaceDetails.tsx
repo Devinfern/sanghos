@@ -7,12 +7,18 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { forumSpaces, forumPosts, loadForumSpaces, loadForumPosts, updateForumPosts } from "@/lib/communityData";
+import { 
+  forumSpaces, 
+  forumPosts, 
+  loadForumSpaces, 
+  loadForumPosts, 
+  updateForumPosts,
+  ForumPost 
+} from "@/lib/communityData";
 import { MessageSquare, Calendar, Users, Plus, Loader2, Bell, PinIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
 import CommunityPostEditor from "@/components/CommunityPostEditor";
-import { ForumPost } from "@/lib/communityData";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 
