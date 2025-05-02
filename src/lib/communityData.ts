@@ -311,7 +311,7 @@ export const loadForumPosts = async () => {
       likes: post.likes || 0,
       comments: post.comments || 0,
       bookmarked: post.bookmarked || false,
-      isPinned: post.is_pinned || false,  // Make sure we map is_pinned from database to isPinned in our model
+      isPinned: post.is_pinned !== undefined ? post.is_pinned : false,  // Safely handle is_pinned which might not exist
       created_at: post.created_at,
       updated_at: post.updated_at
     }));
