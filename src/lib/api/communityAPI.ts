@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { 
   ForumCategory, 
@@ -91,7 +90,7 @@ export const loadForumPosts = async () => {
       likes: post.likes || 0,
       comments: post.comments || 0,
       bookmarked: post.bookmarked || false,
-      isPinned: post.is_pinned !== undefined ? post.is_pinned : false,
+      isPinned: post.is_pinned || false,
       created_at: post.created_at,
       updated_at: post.updated_at
     }));
@@ -209,7 +208,7 @@ const seedForumPosts = async () => {
       likes: post.likes,
       comments: post.comments,
       bookmarked: post.bookmarked,
-      // Don't include is_pinned if not present in the model
+      is_pinned: post.isPinned || false, // Add is_pinned with null fallback
     }));
     
     const { error } = await supabase
@@ -339,8 +338,7 @@ export const updateForumPosts = async (newPosts: typeof forumPosts) => {
       likes: post.likes,
       comments: post.comments,
       bookmarked: post.bookmarked,
-      // Only include is_pinned if the post has an isPinned property
-      ...(post.isPinned !== undefined && { is_pinned: post.isPinned })
+      is_pinned: post.isPinned || false // Properly handle the isPinned field
     }));
     
     const { error: insertError } = await supabase

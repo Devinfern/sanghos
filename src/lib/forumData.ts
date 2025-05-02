@@ -2,14 +2,14 @@
 // Forum data types
 import { 
   ForumAuthor, 
-  ForumPost, 
-  ForumEvent, 
-  TrendingPost, 
+  ForumPost as BaseForumPost, 
+  ForumEvent as BaseForumEvent, 
+  TrendingPost as BaseTrendingPost, 
   ForumSpace as ForumSpaceType 
 } from "./types/community";
 
 // Define more detailed types for the forum
-export type ForumPost = ForumPost & {
+export type ForumPost = BaseForumPost & {
   retreatId?: string; // Link to specific retreat
   retreatPhase?: "pre" | "post"; // Pre-retreat or post-retreat discussion
   category?: string;
@@ -20,9 +20,9 @@ export type ForumPost = ForumPost & {
   } | null;
 };
 
-export type ForumEvent = ForumEvent;
+export type ForumEvent = BaseForumEvent;
 
-export type TrendingPost = TrendingPost & {
+export type TrendingPost = BaseTrendingPost & {
   retreatId?: string; // Link to specific retreat
 };
 
