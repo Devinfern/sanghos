@@ -11,7 +11,8 @@ import CommunityResourcesPage from "./CommunityResourcesPage";
 import CommunityMembersPage from "./CommunityMembersPage";
 import RetreatCommunityList from "./RetreatCommunityList";
 import { Button } from "@/components/ui/button";
-import { Settings } from "lucide-react";
+import { Settings, Bell } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface CommunityContentProps {
   isAdmin: boolean;
@@ -49,6 +50,11 @@ const CommunityContent = ({
     }
   };
 
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+  };
+
   return (
     <>
       <CommunityHero />
@@ -65,7 +71,13 @@ const CommunityContent = ({
         <div className="flex flex-col lg:flex-row gap-6">
           <div className="lg:w-64 w-full shrink-0">
             <div className="sticky top-24 space-y-8">
-              <CommunityResources />
+              <motion.div 
+                initial="hidden" 
+                animate="visible" 
+                variants={fadeInUp}
+              >
+                <CommunityResources />
+              </motion.div>
             </div>
           </div>
 
@@ -74,25 +86,52 @@ const CommunityContent = ({
               <h1 className="text-2xl font-bold text-brand-dark">
                 {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
               </h1>
-              {isAdmin && (
-                <Button 
-                  variant="outline" 
-                  onClick={onToggleCMS}
-                  className="border-brand-primary text-brand-primary hover:bg-brand-primary/5"
-                >
-                  <Settings className="h-4 w-4 mr-2" />
-                  Manage Content
+              <div className="flex gap-2">
+                <Button variant="outline" size="icon" className="text-muted-foreground">
+                  <Bell className="h-4 w-4" />
                 </Button>
-              )}
+                {isAdmin && (
+                  <Button 
+                    variant="outline" 
+                    onClick={onToggleCMS}
+                    className="border-brand-primary text-brand-primary hover:bg-brand-primary/5"
+                  >
+                    <Settings className="h-4 w-4 mr-2" />
+                    Manage Content
+                  </Button>
+                )}
+              </div>
             </div>
 
-            {renderActiveSection()}
+            <motion.div 
+              key={activeSection}
+              initial="hidden" 
+              animate="visible" 
+              variants={fadeInUp}
+              className="min-h-[50vh]"
+            >
+              {renderActiveSection()}
+            </motion.div>
           </div>
 
           <div className="lg:w-80 w-full shrink-0">
             <div className="sticky top-24 space-y-6">
-              <CommunityEvents events={currentEvents} />
-              <CommunityMembers trendingPosts={trendingPosts} />
+              <motion.div 
+                initial="hidden" 
+                animate="visible" 
+                variants={fadeInUp}
+                custom={1}
+              >
+                <CommunityEvents events={currentEvents} />
+              </motion.div>
+              <motion.div 
+                initial="hidden" 
+                animate="visible" 
+                variants={fadeInUp}
+                custom={2}
+              >
+                <CommunityMembers trendingPosts={trendingPosts} />
+              </motion.div>
             </div>
           </div>
         </div>
