@@ -1,5 +1,5 @@
 // Community data types
-import { supabase } from "@/integrations/supabase/client";
+import { supabaseClient } from "@/integrations/supabase/client";
 
 export type ForumAuthor = {
   name: string;
@@ -244,7 +244,7 @@ const formatTimeAgo = (timestamp: string) => {
 // Function to load forum spaces from Supabase
 export const loadForumSpaces = async () => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('forum_spaces')
       .select('*')
       .order('created_at', { ascending: true });
@@ -288,50 +288,43 @@ export const loadForumSpaces = async () => {
 // Function to load forum posts from Supabase
 export const loadForumPosts = async () => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('forum_posts')
-      .select('*')
-      .order('created_at', { ascending: false });
-      
+      .select('*');
+    
     if (error) {
-      console.error('Error loading forum posts:', error);
-      return;
+      console.error("Error loading forum posts:", error);
+      return [];
     }
     
-    if (data && data.length > 0) {
-      // Transform data to match our format
-      const transformedPosts = data.map(post => ({
-        id: post.id,
-        author: {
-          name: post.author_name,
-          role: post.author_role,
-          avatar: post.author_avatar,
-          tag: post.author_tag
-        },
-        postedIn: post.posted_in,
-        timeAgo: formatTimeAgo(post.created_at),
-        title: post.title,
-        content: post.content,
-        likes: post.likes,
-        comments: post.comments,
-        bookmarked: post.bookmarked,
-        isPinned: post.is_pinned // Added property for important announcements
-      }));
-      
-      forumPosts = transformedPosts;
-    } else {
-      // If no data, seed the database with our initial data
-      await seedForumPosts();
-    }
+    return data.map(post => ({
+      id: post.id,
+      title: post.title,
+      content: post.content,
+      author_name: post.author_name,
+      author_role: post.author_role,
+      author_avatar: post.author_avatar,
+      author_tag: post.author_tag,
+      author_id: post.author_id,
+      posted_in: post.posted_in,
+      timeAgo: formatTimeAgo(post.created_at),
+      likes: post.likes || 0,
+      comments: post.comments || 0,
+      bookmarked: post.bookmarked || false,
+      isPinned: post.is_pinned || false,
+      created_at: post.created_at,
+      updated_at: post.updated_at
+    }));
   } catch (error) {
-    console.error('Error in loadForumPosts:', error);
+    console.error("Error in loadForumPosts:", error);
+    return [];
   }
 };
 
 // Function to load forum events from Supabase
 export const loadForumEvents = async () => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('forum_events')
       .select('*')
       .order('created_at', { ascending: true });
@@ -366,7 +359,7 @@ export const loadForumEvents = async () => {
 // Function to load trending posts from Supabase
 export const loadTrendingPosts = async () => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('trending_posts')
       .select('*')
       .order('created_at', { ascending: true });
@@ -411,7 +404,7 @@ const seedForumSpaces = async () => {
       }
     }
     
-    const { error } = await supabase
+    const { error } = await supabaseClient
       .from('forum_spaces')
       .insert(spacesToInsert);
       
@@ -439,7 +432,7 @@ const seedForumPosts = async () => {
       is_pinned: post.isPinned // Added property for important announcements
     }));
     
-    const { error } = await supabase
+    const { error } = await supabaseClient
       .from('forum_posts')
       .insert(postsToInsert);
       
@@ -460,7 +453,7 @@ const seedForumEvents = async () => {
       time: event.time
     }));
     
-    const { error } = await supabase
+    const { error } = await supabaseClient
       .from('forum_events')
       .insert(eventsToInsert);
       
@@ -480,7 +473,7 @@ const seedTrendingPosts = async () => {
       avatar: post.avatar
     }));
     
-    const { error } = await supabase
+    const { error } = await supabaseClient
       .from('trending_posts')
       .insert(postsToInsert);
       
@@ -496,7 +489,7 @@ const seedTrendingPosts = async () => {
 export const updateForumSpaces = async (newSpaces: typeof forumSpaces) => {
   try {
     // First, delete all existing spaces - fixed method that avoids using neq('id', 'dummy')
-    const { error: deleteError } = await supabase
+    const { error: deleteError } = await supabaseClient
       .from('forum_spaces')
       .delete()
       .gte('id', '00000000-0000-0000-0000-000000000000');
@@ -520,7 +513,7 @@ export const updateForumSpaces = async (newSpaces: typeof forumSpaces) => {
       }
     }
     
-    const { error: insertError } = await supabase
+    const { error: insertError } = await supabaseClient
       .from('forum_spaces')
       .insert(spacesToInsert);
       
@@ -544,7 +537,7 @@ export const updateForumSpaces = async (newSpaces: typeof forumSpaces) => {
 export const updateForumPosts = async (newPosts: typeof forumPosts) => {
   try {
     // First, delete all existing posts - fixed method that avoids using neq('id', 'dummy')
-    const { error: deleteError } = await supabase
+    const { error: deleteError } = await supabaseClient
       .from('forum_posts')
       .delete()
       .gte('id', '00000000-0000-0000-0000-000000000000');
@@ -569,7 +562,7 @@ export const updateForumPosts = async (newPosts: typeof forumPosts) => {
       is_pinned: post.isPinned // Added property for important announcements
     }));
     
-    const { error: insertError } = await supabase
+    const { error: insertError } = await supabaseClient
       .from('forum_posts')
       .insert(postsToInsert);
       
@@ -593,7 +586,7 @@ export const updateForumPosts = async (newPosts: typeof forumPosts) => {
 export const updateForumEvents = async (newEvents: typeof forumEvents) => {
   try {
     // First, delete all existing events - fixed method that avoids using neq('id', 'dummy')
-    const { error: deleteError } = await supabase
+    const { error: deleteError } = await supabaseClient
       .from('forum_events')
       .delete()
       .gte('id', '00000000-0000-0000-0000-000000000000');
@@ -611,7 +604,7 @@ export const updateForumEvents = async (newEvents: typeof forumEvents) => {
       time: event.time
     }));
     
-    const { error: insertError } = await supabase
+    const { error: insertError } = await supabaseClient
       .from('forum_events')
       .insert(eventsToInsert);
       
@@ -635,7 +628,7 @@ export const updateForumEvents = async (newEvents: typeof forumEvents) => {
 export const updateTrendingPosts = async (newTrendingPosts: typeof trendingPosts) => {
   try {
     // First, delete all existing trending posts - fixed method that avoids using neq('id', 'dummy')
-    const { error: deleteError } = await supabase
+    const { error: deleteError } = await supabaseClient
       .from('trending_posts')
       .delete()
       .gte('id', '00000000-0000-0000-0000-000000000000');
@@ -652,7 +645,7 @@ export const updateTrendingPosts = async (newTrendingPosts: typeof trendingPosts
       avatar: post.avatar
     }));
     
-    const { error: insertError } = await supabase
+    const { error: insertError } = await supabaseClient
       .from('trending_posts')
       .insert(postsToInsert);
       
