@@ -1,3 +1,4 @@
+
 // Forum data types
 export type ForumAuthor = {
   name: string;
@@ -18,7 +19,7 @@ export type ForumPost = {
   bookmarked: boolean;
   retreatId?: string; // Link to specific retreat
   retreatPhase?: "pre" | "post"; // Pre-retreat or post-retreat discussion
-  isPinned?: boolean; // For important announcements
+  isPinned?: boolean; // Added property for important announcements
   user_id?: string;
   created_at?: string;
   category?: string;
