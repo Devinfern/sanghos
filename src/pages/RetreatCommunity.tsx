@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -10,31 +9,31 @@ import { Avatar } from "@/components/ui/avatar";
 import CommunityLayout from "@/components/layouts/CommunityLayout";
 import RetreatDiscussions from "@/components/community/RetreatDiscussions";
 import { supabase } from "@/integrations/supabase/client";
-
 const RetreatCommunity = () => {
-  const { retreatId } = useParams<{ retreatId: string }>();
+  const {
+    retreatId
+  } = useParams<{
+    retreatId: string;
+  }>();
   const [retreat, setRetreat] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [participants, setParticipants] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<string>("discussions");
-
   useEffect(() => {
     const checkLoginStatus = () => {
       const userString = localStorage.getItem("sanghos_user");
       setIsLoggedIn(userString !== null);
     };
-    
     const loadRetreatData = async () => {
       setIsLoading(true);
-      
       try {
         // For demo purposes, we'll just simulate fetching retreat data
         // In a real app, this would be a Supabase query
-        
+
         // Simulate API delay
         await new Promise(resolve => setTimeout(resolve, 500));
-        
+
         // Mock data for demo - in a real app, this would come from Supabase
         setRetreat({
           id: retreatId,
@@ -45,15 +44,25 @@ const RetreatCommunity = () => {
           location: "Peaceful Valley Resort, California",
           image: "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
         });
-        
+
         // Mock participants data
-        setParticipants([
-          { id: 1, name: "Alex Morgan", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" },
-          { id: 2, name: "Jamie Lee", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" },
-          { id: 3, name: "Taylor Kim", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" },
-          { id: 4, name: "Jordan Smith", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" }
-        ]);
-        
+        setParticipants([{
+          id: 1,
+          name: "Alex Morgan",
+          avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+        }, {
+          id: 2,
+          name: "Jamie Lee",
+          avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+        }, {
+          id: 3,
+          name: "Taylor Kim",
+          avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+        }, {
+          id: 4,
+          name: "Jordan Smith",
+          avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+        }]);
         checkLoginStatus();
       } catch (error) {
         console.error("Error loading retreat data:", error);
@@ -61,26 +70,20 @@ const RetreatCommunity = () => {
         setIsLoading(false);
       }
     };
-    
     loadRetreatData();
   }, [retreatId]);
-
   if (isLoading) {
-    return (
-      <CommunityLayout>
+    return <CommunityLayout>
         <div className="container mx-auto px-4 text-center py-12">
           <div className="flex items-center justify-center">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
             <span className="ml-2">Loading retreat community...</span>
           </div>
         </div>
-      </CommunityLayout>
-    );
+      </CommunityLayout>;
   }
-
   if (!retreat) {
-    return (
-      <CommunityLayout>
+    return <CommunityLayout>
         <div className="container mx-auto px-4 py-12">
           <div className="text-center">
             <h2 className="text-2xl font-bold mb-4">Retreat not found</h2>
@@ -90,13 +93,10 @@ const RetreatCommunity = () => {
             </Button>
           </div>
         </div>
-      </CommunityLayout>
-    );
+      </CommunityLayout>;
   }
-
-  return (
-    <CommunityLayout title={`${retreat.title} Community`}>
-      <div className="container px-4 md:px-6 mx-auto">
+  return <CommunityLayout title={`${retreat.title} Community`}>
+      <div className="container px-4 md:px-6 mx-auto py-[100px]">
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-6">
             <Button variant="link" className="p-0" asChild>
@@ -109,11 +109,7 @@ const RetreatCommunity = () => {
           
           <div className="flex flex-col md:flex-row gap-6 items-start">
             <div className="rounded-lg overflow-hidden w-full md:w-48 h-32 md:h-auto">
-              <img 
-                src={retreat.image} 
-                alt={retreat.title} 
-                className="w-full h-full object-cover"
-              />
+              <img src={retreat.image} alt={retreat.title} className="w-full h-full object-cover" />
             </div>
             <div className="flex-1">
               <h1 className="text-3xl font-bold mb-2">{retreat.title} Community</h1>
@@ -133,22 +129,14 @@ const RetreatCommunity = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2">
-            <Tabs 
-              defaultValue="discussions" 
-              onValueChange={setActiveTab}
-              className="space-y-6"
-            >
+            <Tabs defaultValue="discussions" onValueChange={setActiveTab} className="space-y-6">
               <TabsList className="grid grid-cols-2">
                 <TabsTrigger value="discussions">Discussions</TabsTrigger>
                 <TabsTrigger value="resources">Resources</TabsTrigger>
               </TabsList>
               
               <TabsContent value="discussions" className="space-y-6">
-                <RetreatDiscussions 
-                  retreatId={retreatId} 
-                  retreatName={retreat.title}
-                  isLoggedIn={isLoggedIn}
-                />
+                <RetreatDiscussions retreatId={retreatId} retreatName={retreat.title} isLoggedIn={isLoggedIn} />
               </TabsContent>
               
               <TabsContent value="resources">
@@ -195,14 +183,12 @@ const RetreatCommunity = () => {
                 <Users className="h-5 w-5 text-muted-foreground" />
               </div>
               <div className="space-y-4">
-                {participants.map((participant) => (
-                  <div key={participant.id} className="flex items-center gap-3">
+                {participants.map(participant => <div key={participant.id} className="flex items-center gap-3">
                     <Avatar className="h-8 w-8">
                       <img src={participant.avatar} alt={participant.name} />
                     </Avatar>
                     <span>{participant.name}</span>
-                  </div>
-                ))}
+                  </div>)}
                 <div className="text-center pt-2">
                   <Button variant="ghost" size="sm" className="text-brand-primary">
                     View all participants
@@ -231,8 +217,6 @@ const RetreatCommunity = () => {
           </div>
         </div>
       </div>
-    </CommunityLayout>
-  );
+    </CommunityLayout>;
 };
-
 export default RetreatCommunity;
