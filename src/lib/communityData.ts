@@ -301,17 +301,18 @@ export const loadForumPosts = async () => {
       id: post.id,
       title: post.title,
       content: post.content,
-      author_name: post.author_name,
-      author_role: post.author_role,
-      author_avatar: post.author_avatar,
-      author_tag: post.author_tag,
-      author_id: post.author_id,
-      posted_in: post.posted_in,
+      author: {
+        name: post.author_name,
+        role: post.author_role,
+        avatar: post.author_avatar,
+        tag: post.author_tag,
+      },
+      postedIn: post.posted_in,
       timeAgo: formatTimeAgo(post.created_at),
       likes: post.likes || 0,
       comments: post.comments || 0,
       bookmarked: post.bookmarked || false,
-      isPinned: post.is_pinned !== undefined ? post.is_pinned : false,  // Safely handle is_pinned which might not exist
+      isPinned: false,  // Default value since is_pinned might not exist in older records
       created_at: post.created_at,
       updated_at: post.updated_at
     }));
@@ -429,7 +430,7 @@ const seedForumPosts = async () => {
       likes: post.likes,
       comments: post.comments,
       bookmarked: post.bookmarked,
-      is_pinned: post.isPinned // Ensure we map isPinned to is_pinned when seeding the database
+      // Don't include is_pinned if not present in the model
     }));
     
     const { error } = await supabase
@@ -559,7 +560,8 @@ export const updateForumPosts = async (newPosts: typeof forumPosts) => {
       likes: post.likes,
       comments: post.comments,
       bookmarked: post.bookmarked,
-      is_pinned: post.isPinned // Added property for important announcements
+      // Only include is_pinned if the post has an isPinned property
+      ...(post.isPinned !== undefined && { is_pinned: post.isPinned })
     }));
     
     const { error: insertError } = await supabase
