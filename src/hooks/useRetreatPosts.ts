@@ -25,6 +25,17 @@ interface ProfileData {
   is_wellness_practitioner: boolean | null;
 }
 
+// Define explicit response types to avoid deep type inference
+interface PostQueryResponse {
+  data: RawPostData[] | null;
+  error: Error | null;
+}
+
+interface ProfileQueryResponse {
+  data: ProfileData | null;
+  error: Error | null;
+}
+
 export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPhase) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,16 +45,16 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
     
     setIsLoading(true);
     try {
-      // Use typecasting to avoid deep type inference
-      const response = await supabase
+      // Make the query with explicit response typing
+      const { data, error } = await supabase
         .from('community_posts')
         .select('*')
         .eq('retreat_id', retreatId)
         .eq('retreat_phase', phase)
-        .order('created_at', { ascending: false }) as { 
-          data: RawPostData[] | null; 
-          error: Error | null;
-        };
+        .order('created_at', { ascending: false });
+        
+      // Cast the response to our known types immediately after receiving
+      const response: PostQueryResponse = { data: data as RawPostData[] | null, error };
       
       if (response.error) throw response.error;
       
@@ -56,17 +67,20 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
       // Transform the post data into our app's Post type
       const transformedPosts: Post[] = [];
       
-      // Process each post individually with explicit typing
+      // Process each post individually
       for (const rawPost of response.data) {
-        // Fetch the user profile with explicit typing
-        const profileResponse = await supabase
+        // Fetch the user profile
+        const profileQueryResult = await supabase
           .from('user_profiles')
           .select('username, avatar_url, is_wellness_practitioner')
           .eq('id', rawPost.user_id)
-          .single() as {
-            data: ProfileData | null;
-            error: Error | null;
-          };
+          .single();
+          
+        // Cast to our known profile response type
+        const profileResponse: ProfileQueryResponse = { 
+          data: profileQueryResult.data as ProfileData | null, 
+          error: profileQueryResult.error 
+        };
         
         if (profileResponse.error) {
           console.error('Error fetching profile:', profileResponse.error);
