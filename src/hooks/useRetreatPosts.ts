@@ -32,17 +32,16 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
     
     setIsLoading(true);
     try {
-      // Use explicit typing to avoid TypeScript recursion issues
-      const { data, error } = await supabase
+      const result = await supabase
         .from('community_posts')
         .select('*')
         .eq('retreat_id', retreatId)
         .eq('retreat_phase', phase)
         .order('created_at', { ascending: false });
       
-      if (error) throw error;
+      if (result.error) throw result.error;
       
-      const rawPosts = data as RawPost[] | null;
+      const rawPosts = result.data as RawPost[];
       
       if (!rawPosts || rawPosts.length === 0) {
         setPosts([]);
@@ -55,16 +54,18 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
       
       // Process each post individually
       for (const rawPost of rawPosts) {
-        // Fetch the user profile with explicit typing
-        const { data: profileData, error: profileError } = await supabase
+        // Fetch the user profile
+        const profileResult = await supabase
           .from('user_profiles')
           .select('username, avatar_url, is_wellness_practitioner')
           .eq('id', rawPost.user_id)
           .single();
         
-        if (profileError) {
-          console.error('Error fetching profile:', profileError);
+        if (profileResult.error) {
+          console.error('Error fetching profile:', profileResult.error);
         }
+        
+        const profileData = profileResult.data as RawProfile | null;
         
         // Create properly typed user profile
         const userProfile: UserProfile | null = profileData ? {

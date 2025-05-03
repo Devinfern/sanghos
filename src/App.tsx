@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import { Toaster } from "sonner";
 import ScrollToTop from "./components/ScrollToTop";
 import Index from "./pages/Index";
@@ -22,6 +22,25 @@ import AdminCMS from "./pages/AdminCMS";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import UserDashboard from "./pages/UserDashboard";
+import { useAdminStatus } from "./hooks/useAdminStatus";
+
+// Admin protected route component
+const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAdmin, isLoading } = useAdminStatus();
+
+  // Show loading state while checking
+  if (isLoading) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
+  // If not admin, redirect to dashboard
+  if (!isAdmin) {
+    return <Navigate to="/dashboard" />;
+  }
+
+  // If admin, render the children
+  return <>{children}</>;
+};
 
 function App() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -59,7 +78,13 @@ function App() {
           <Route path="/host/retreats/new" element={<HostRetreatNew />} />
           <Route path="/host/retreats/edit/:retreatId" element={<HostRetreatEdit />} />
         </Route>
-        <Route path="/admin/cms" element={<AdminCMS />} />
+
+        {/* Wrap the admin route with protection */}
+        <Route path="/admin/cms" element={
+          <AdminProtectedRoute>
+            <AdminCMS />
+          </AdminProtectedRoute>
+        } />
       </Routes>
       <ScrollToTop />
       <Toaster position="top-center" />

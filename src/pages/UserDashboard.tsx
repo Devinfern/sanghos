@@ -88,6 +88,12 @@ const UserDashboard = () => {
     checkAuth();
   }, [navigate]);
 
+  // Add debugging to see admin status
+  useEffect(() => {
+    console.log("Admin status:", isAdmin);
+    console.log("Admin loading:", isAdminLoading);
+  }, [isAdmin, isAdminLoading]);
+
   if (isLoading || isAdminLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -141,6 +147,11 @@ const UserDashboard = () => {
               <Badge variant="secondary" className="bg-sage-100 text-sage-800">
                 {userData.points} Points
               </Badge>
+              {isAdmin && (
+                <Badge variant="destructive" className="flex items-center">
+                  <Shield className="h-3.5 w-3.5 mr-1" /> Admin
+                </Badge>
+              )}
             </div>
           </div>
 
