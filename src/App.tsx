@@ -19,6 +19,9 @@ import CommunityEventsPage from "./components/community/CommunityEventsPage";
 import ForumCMS from "./components/ForumCMS";
 import HostProtectedRoute from "./components/HostProtectedRoute";
 import AdminCMS from "./pages/AdminCMS";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import UserDashboard from "./pages/UserDashboard";
 
 function App() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -43,6 +46,9 @@ function App() {
         <Route path="/community/retreat/:retreatId" element={<RetreatCommunity />} />
         <Route path="/retreats" element={<Retreats />} />
         <Route path="/retreat/:retreatId" element={<RetreatCommunity />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/dashboard" element={<UserDashboard />} />
         
         <Route path="/host/login" element={<HostLogin />} />
         <Route path="/host/signup" element={<HostSignup />} />

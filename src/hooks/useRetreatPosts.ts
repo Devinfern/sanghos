@@ -4,7 +4,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { Post, UserProfile, RetreatPhase } from "@/types/community";
 import { toast } from "sonner";
 
-// Use any for the raw database query to avoid TypeScript recursion
+// Simple interfaces to handle raw data
+interface RawPost {
+  id: string;
+  title: string;
+  content: string;
+  user_id: string;
+  created_at: string;
+  likes?: number;
+  category: string;
+}
+
 export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPhase) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -14,8 +24,8 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
     
     setIsLoading(true);
     try {
-      // Use raw query approach to avoid type recursion
-      const { data: rawPosts, error } = await supabase
+      // Bypass TypeScript's deep type inference by using "any"
+      const { data: rawPosts, error }: { data: any, error: any } = await supabase
         .from('community_posts')
         .select('*')
         .eq('retreat_id', retreatId)
@@ -35,8 +45,8 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
       
       // Process each post individually
       for (const rawPost of rawPosts) {
-        // Fetch the user profile
-        const { data: profileData, error: profileError } = await supabase
+        // Fetch the user profile with explicit typing
+        const { data: profileData, error: profileError }: { data: any, error: any } = await supabase
           .from('user_profiles')
           .select('username, avatar_url, is_wellness_practitioner')
           .eq('id', rawPost.user_id)
