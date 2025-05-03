@@ -13,7 +13,7 @@ const CommunityHero = () => {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="container px-4 py-12"
+        className="container px-4 py-16 pt-28"
       >
         <div className="max-w-3xl mx-auto text-center space-y-4">
           <h1 className="text-3xl md:text-4xl font-bold text-brand-dark">
