@@ -2,8 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Calendar, MessageCircle, Users, AlertCircle, PlusCircle } from "lucide-react";
+import { Calendar, MessageCircle, Users, PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -35,8 +34,8 @@ interface Post {
   user_profiles?: UserProfile | null;
 }
 
-// Define a more specific type for Supabase query results
-interface SupabasePostResult {
+// Simple type for raw database results
+type RawPost = {
   id: string;
   title: string;
   content: string;
@@ -48,7 +47,7 @@ interface SupabasePostResult {
   retreat_phase: string;
   is_pinned?: boolean;
   updated_at: string;
-}
+};
 
 const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscussionsProps) => {
   const [activePhase, setActivePhase] = useState<"pre" | "post">("pre");
@@ -63,24 +62,24 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
     
     setIsLoading(true);
     try {
-      // Use a more direct approach without chaining methods that cause type issues
-      const response = await supabase
+      // Use a simpler approach with explicit typing
+      const { data, error } = await supabase
         .from('community_posts')
         .select('*')
         .eq('retreat_id', retreatId)
         .eq('retreat_phase', activePhase)
         .order('created_at', { ascending: false });
 
-      if (response.error) throw response.error;
+      if (error) throw error;
       
-      const data = response.data as SupabasePostResult[];
+      const rawPosts = data as RawPost[];
       
       // Get profiles for each post
       const postsWithProfiles: Post[] = [];
       
-      for (const post of data) {
+      for (const post of rawPosts) {
         // Try to get the user profile
-        const profileResponse = await supabase
+        const { data: profileData } = await supabase
           .from('user_profiles')
           .select('username, avatar_url, is_wellness_practitioner')
           .eq('id', post.user_id)
@@ -94,7 +93,7 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
           created_at: post.created_at,
           likes: post.likes || 0,
           category: post.category,
-          user_profiles: profileResponse.data || null
+          user_profiles: profileData || null
         });
       }
       
