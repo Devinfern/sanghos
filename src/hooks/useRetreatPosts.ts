@@ -4,8 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Post, UserProfile, RetreatPhase } from "@/types/community";
 import { toast } from "sonner";
 
-// Define explicit types for raw database results
-type RawPostData = {
+// Define explicit interface for raw database results
+interface RawPostData {
   id: string;
   title: string;
   content: string;
@@ -17,13 +17,13 @@ type RawPostData = {
   retreat_phase: string;
   is_pinned?: boolean;
   updated_at?: string;
-};
+}
 
-type ProfileData = {
+interface ProfileData {
   username: string;
   avatar_url: string | null;
   is_wellness_practitioner: boolean | null;
-};
+}
 
 export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPhase) {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -34,47 +34,44 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
     
     setIsLoading(true);
     try {
-      // Use explicit typing for the Supabase query result
-      const { data, error } = await supabase
+      const result = await supabase
         .from('community_posts')
         .select('*')
         .eq('retreat_id', retreatId)
         .eq('retreat_phase', phase)
         .order('created_at', { ascending: false });
-
-      if (error) throw error;
       
-      // Cast data to our explicit type and handle null case
-      const postsData = data as RawPostData[] | null;
-      
-      if (!postsData || postsData.length === 0) {
+      if (result.error) throw result.error;
+      if (!result.data || result.data.length === 0) {
         setPosts([]);
         setIsLoading(false);
         return;
       }
+      
+      // Safely cast the data to our known type
+      const postsData = result.data as unknown as RawPostData[];
       
       // Transform the post data into our app's Post type
       const transformedPosts: Post[] = [];
       
       // Process each post individually
       for (const rawPost of postsData) {
-        // Explicitly type the profile query result
+        // Fetch the user profile separately
         const profileResult = await supabase
           .from('user_profiles')
           .select('username, avatar_url, is_wellness_practitioner')
           .eq('id', rawPost.user_id)
           .single();
         
-        const profileData = profileResult.data as ProfileData | null;
-        
         // Create properly typed user profile
         let userProfile: UserProfile | null = null;
         
-        if (profileData) {
+        if (profileResult.data) {
+          const profile = profileResult.data as unknown as ProfileData;
           userProfile = {
-            username: profileData.username,
-            avatar_url: profileData.avatar_url || '',
-            is_wellness_practitioner: Boolean(profileData.is_wellness_practitioner)
+            username: profile.username,
+            avatar_url: profile.avatar_url || '',
+            is_wellness_practitioner: Boolean(profile.is_wellness_practitioner)
           };
         }
         
