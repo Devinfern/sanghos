@@ -43,7 +43,7 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
 
       if (error) throw error;
       
-      // Explicitly cast to our safe type
+      // Explicitly cast to our safe type to avoid deep instantiation
       const rawPosts = data as SupabasePostResult[];
       
       // Get profiles for each post
@@ -57,6 +57,12 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
           .eq('id', post.user_id)
           .single();
           
+        const userProfile: UserProfile | null = profileData ? {
+          username: profileData.username,
+          avatar_url: profileData.avatar_url,
+          is_wellness_practitioner: profileData.is_wellness_practitioner
+        } : null;
+        
         postsWithProfiles.push({
           id: post.id,
           title: post.title,
@@ -65,7 +71,7 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
           created_at: post.created_at,
           likes: post.likes || 0,
           category: post.category,
-          user_profiles: profileData as UserProfile || null
+          user_profiles: userProfile
         });
       }
       
