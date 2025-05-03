@@ -30,7 +30,9 @@ export function useEvents(location: string = "San Francisco, CA") {
           console.error("Error fetching events:", error);
           setError(`Failed to fetch events: ${error.message}`);
           setEvents(defaultEvents);
-          toast.error("Couldn't load events. Using fallback data.");
+          
+          // Don't show error toast - just load fallback data silently
+          console.log("Using fallback events data due to API error");
         } else if (data?.recommendations && data.recommendations.length > 0) {
           console.log(`Successfully fetched ${data.recommendations.length} events`);
           
@@ -81,17 +83,26 @@ export function useEvents(location: string = "San Francisco, CA") {
             };
           });
           
-          toast.success(`Found ${transformedEvents.length} wellness events`);
+          // Only show success toast if events were actually fetched
+          if (transformedEvents.length > 0) {
+            toast.success(`Found ${transformedEvents.length} wellness events`);
+          }
+          
           setEvents(transformedEvents);
         } else {
           console.log("No events returned, using default events");
           setEvents(defaultEvents);
+          
+          // Don't show error toast - just load fallback data silently
+          console.log("Using fallback events data due to no results");
         }
       } catch (err: any) {
         console.error("Error in fetchEvents:", err);
         setError(`Unexpected error: ${err.message}`);
         setEvents(defaultEvents);
-        toast.error("Something went wrong. Using fallback data.");
+        
+        // Don't show error toast - just load fallback data silently
+        console.log("Using fallback events data due to exception");
       } finally {
         setIsLoading(false);
       }

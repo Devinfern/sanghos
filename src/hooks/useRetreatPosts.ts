@@ -41,6 +41,7 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
       
       if (result.error) throw result.error;
       
+      // Explicitly type the result data
       const rawPosts = result.data as RawPost[];
       
       if (!rawPosts || rawPosts.length === 0) {
@@ -65,6 +66,7 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
           console.error('Error fetching profile:', profileResult.error);
         }
         
+        // Use explicit typing
         const profileData = profileResult.data as RawProfile | null;
         
         // Create properly typed user profile
