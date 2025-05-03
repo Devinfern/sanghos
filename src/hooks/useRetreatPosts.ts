@@ -34,17 +34,17 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
     
     setIsLoading(true);
     try {
-      // Use any type to avoid deep type instantiation
-      const query = await supabase
+      // Manually type the query to avoid deep type inference
+      const { data, error } = await supabase
         .from('community_posts')
         .select('*')
         .eq('retreat_id', retreatId)
         .eq('retreat_phase', phase)
         .order('created_at', { ascending: false });
       
-      if (query.error) throw query.error;
+      if (error) throw error;
       
-      if (!query.data || query.data.length === 0) {
+      if (!data || data.length === 0) {
         setPosts([]);
         setIsLoading(false);
         return;
@@ -53,22 +53,26 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
       // Transform the post data into our app's Post type
       const transformedPosts: Post[] = [];
       
-      // Process each post individually with explicit casting
-      for (const rawData of query.data) {
-        const rawPost = rawData as unknown as RawPostData;
+      // Process each post individually with explicit typing
+      for (const rawData of data) {
+        // Type assertion to RawPostData
+        const rawPost = rawData as RawPostData;
         
-        // Fetch the user profile with minimal type inference
-        const profileQuery = await supabase
+        // Fetch the user profile with explicit typing
+        const { data: profileData, error: profileError } = await supabase
           .from('user_profiles')
           .select('username, avatar_url, is_wellness_practitioner')
           .eq('id', rawPost.user_id)
           .single();
         
-        // Create properly typed user profile with explicit casting
+        if (profileError) {
+          console.error('Error fetching profile:', profileError);
+        }
+        
+        // Create properly typed user profile
         let userProfile: UserProfile | null = null;
         
-        if (profileQuery.data) {
-          const profileData = profileQuery.data as unknown as ProfileData;
+        if (profileData) {
           userProfile = {
             username: profileData.username,
             avatar_url: profileData.avatar_url || '',
