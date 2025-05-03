@@ -8,6 +8,7 @@ import RetreatHeader from "@/components/community/RetreatHeader";
 import RetreatTabs from "@/components/community/RetreatTabs";
 import RetreatParticipants from "@/components/community/RetreatParticipants";
 import RetreatQuickLinks from "@/components/community/RetreatQuickLinks";
+import { supabase } from "@/integrations/supabase/client";
 
 const RetreatCommunity = () => {
   const { retreatId } = useParams<{ retreatId: string }>();
@@ -18,54 +19,29 @@ const RetreatCommunity = () => {
   const [activeTab, setActiveTab] = useState<string>("discussions");
 
   useEffect(() => {
-    const checkLoginStatus = () => {
-      const userString = localStorage.getItem("sanghos_user");
-      setIsLoggedIn(userString !== null);
+    const checkLoginStatus = async () => {
+      const { data } = await supabase.auth.getSession();
+      setIsLoggedIn(!!data.session);
     };
     
     const loadRetreatData = async () => {
       setIsLoading(true);
       try {
-        // For demo purposes, we'll just simulate fetching retreat data
-        // In a real app, this would be a Supabase query
-        await new Promise(resolve => setTimeout(resolve, 500));
-
-        // Mock data for demo - in a real app, this would come from Supabase
+        // In a real app, this would fetch data from Supabase
+        // For now we'll use minimal placeholder data
         setRetreat({
           id: retreatId,
-          title: "Inner Calm Meditation Retreat",
-          description: "A 5-day immersive experience to develop your meditation practice",
-          startDate: "2025-05-10",
-          endDate: "2025-05-15",
-          location: "Peaceful Valley Resort, California",
-          image: "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+          title: "Retreat",
+          description: "Retreat description will appear here",
+          startDate: "",
+          endDate: "",
+          location: "",
+          image: ""
         });
-
-        // Mock participants data
-        setParticipants([
-          {
-            id: 1,
-            name: "Alex Morgan",
-            avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-          },
-          {
-            id: 2,
-            name: "Jamie Lee",
-            avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-          },
-          {
-            id: 3,
-            name: "Taylor Kim",
-            avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-          },
-          {
-            id: 4,
-            name: "Jordan Smith",
-            avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-          }
-        ]);
         
-        checkLoginStatus();
+        setParticipants([]);
+        
+        await checkLoginStatus();
       } catch (error) {
         console.error("Error loading retreat data:", error);
       } finally {
@@ -74,6 +50,15 @@ const RetreatCommunity = () => {
     };
     
     loadRetreatData();
+    
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+      checkLoginStatus();
+    });
+    
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [retreatId]);
 
   if (isLoading) {

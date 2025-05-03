@@ -16,6 +16,7 @@ import { Switch } from "@/components/ui/switch";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useAdminStatus } from "@/hooks/useAdminStatus";
 
 interface CreatePostProps {
   onPostCreated: () => void;
@@ -30,6 +31,7 @@ const CreatePost = ({ onPostCreated, retreatId, retreatPhase }: CreatePostProps)
   const [category, setCategory] = useState("General Discussion");
   const [isPinned, setIsPinned] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isAdmin } = useAdminStatus();
 
   const handleSubmit = async () => {
     if (!title.trim()) {
@@ -66,7 +68,7 @@ const CreatePost = ({ onPostCreated, retreatId, retreatPhase }: CreatePostProps)
             category: category,
             retreat_id: retreatId,
             retreat_phase: retreatPhase,
-            is_pinned: isPinned
+            is_pinned: isAdmin && isPinned // Only admins can pin posts
           }
         ])
         .select();
@@ -153,21 +155,23 @@ const CreatePost = ({ onPostCreated, retreatId, retreatPhase }: CreatePostProps)
               className="col-span-3 min-h-[150px]"
             />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="post-pinned" className="text-right">
-              Pin post
-            </Label>
-            <div className="flex items-center space-x-2 col-span-3">
-              <Switch
-                id="post-pinned"
-                checked={isPinned}
-                onCheckedChange={setIsPinned}
-              />
-              <Label htmlFor="post-pinned" className="text-sm text-muted-foreground">
-                Important announcements appear at the top
+          {isAdmin && (
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="post-pinned" className="text-right">
+                Pin post
               </Label>
+              <div className="flex items-center space-x-2 col-span-3">
+                <Switch
+                  id="post-pinned"
+                  checked={isPinned}
+                  onCheckedChange={setIsPinned}
+                />
+                <Label htmlFor="post-pinned" className="text-sm text-muted-foreground">
+                  Important announcements appear at the top
+                </Label>
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <DialogFooter>
           <Button type="submit" onClick={handleSubmit} disabled={isSubmitting}>
