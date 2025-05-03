@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -18,7 +18,13 @@ interface RetreatDiscussionsProps {
   isLoggedIn: boolean;
 }
 
-type Post = {
+interface UserProfile {
+  username: string;
+  avatar_url: string;
+  is_wellness_practitioner: boolean;
+}
+
+interface Post {
   id: string;
   title: string;
   content: string;
@@ -26,12 +32,8 @@ type Post = {
   created_at: string;
   likes: number;
   category: string;
-  user_profiles?: {
-    username: string;
-    avatar_url: string;
-    is_wellness_practitioner: boolean;
-  } | null;
-};
+  user_profiles?: UserProfile | null;
+}
 
 const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscussionsProps) => {
   const [activePhase, setActivePhase] = useState<"pre" | "post">("pre");
@@ -46,18 +48,36 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
     
     setIsLoading(true);
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('community_posts')
-        .select(`
-          *,
-          user_profiles(username, avatar_url, is_wellness_practitioner)
-        `)
+        .select('*');
+        
+      // Try to get user profiles in a separate query if needed
+      const { data, error } = await query
         .eq('retreat_id', retreatId)
         .eq('retreat_phase', activePhase)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setPosts(data || []);
+      
+      // Get profiles for each post
+      const postsWithProfiles: Post[] = [];
+      
+      for (const post of (data || [])) {
+        // Try to get the user profile
+        const { data: profileData } = await supabase
+          .from('user_profiles')
+          .select('username, avatar_url, is_wellness_practitioner')
+          .eq('id', post.user_id)
+          .single();
+          
+        postsWithProfiles.push({
+          ...post,
+          user_profiles: profileData || null
+        });
+      }
+      
+      setPosts(postsWithProfiles);
     } catch (error) {
       console.error('Error fetching retreat posts:', error);
       toast.error('Failed to load retreat discussions');
@@ -65,6 +85,11 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
       setIsLoading(false);
     }
   };
+
+  // Fetch posts when the component mounts or when activePhase changes
+  useEffect(() => {
+    fetchPosts();
+  }, [retreatId, activePhase]);
 
   const createSpace = async () => {
     if (!isAdmin) {
@@ -143,6 +168,16 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
                 <div className="h-4 bg-gray-200 rounded w-full"></div>
               </div>
             </Card>
+          ))}
+        </div>
+      ) : posts.length > 0 ? (
+        <div className="space-y-4">
+          {posts.map((post) => (
+            <CommunityPost 
+              key={post.id}
+              post={post}
+              onPostUpdate={fetchPosts}
+            />
           ))}
         </div>
       ) : (

@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
@@ -10,23 +9,25 @@ import { formatDistanceToNow } from 'date-fns';
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
 
-interface User {
+interface UserProfile {
   username: string;
   avatar_url: string;
   is_wellness_practitioner: boolean;
 }
 
+interface Post {
+  id: string;
+  title: string;
+  content: string;
+  user_id: string;
+  created_at: string;
+  likes: number;
+  category: string;
+  user_profiles?: UserProfile | null;
+}
+
 interface CommunityPostProps {
-  post: {
-    id: string;
-    title: string;
-    content: string;
-    user_id: string;
-    created_at: string;
-    likes: number;
-    category: string;
-    user_profiles?: User | null;
-  };
+  post: Post;
   currentUserId?: string | null;
   onPostUpdate?: () => void;
 }
