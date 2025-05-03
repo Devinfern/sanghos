@@ -4,6 +4,27 @@ import { supabase } from "@/integrations/supabase/client";
 import { Post, UserProfile, RetreatPhase } from "@/types/community";
 import { toast } from "sonner";
 
+// Define explicit types for raw database results
+type RawPostData = {
+  id: string;
+  title: string;
+  content: string;
+  user_id: string;
+  created_at: string;
+  likes: number | null;
+  category: string;
+  retreat_id: string;
+  retreat_phase: string;
+  is_pinned?: boolean;
+  updated_at?: string;
+};
+
+type ProfileData = {
+  username: string;
+  avatar_url: string | null;
+  is_wellness_practitioner: boolean | null;
+};
+
 export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPhase) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -13,15 +34,18 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
     
     setIsLoading(true);
     try {
-      // Fetch posts from Supabase
-      const { data: postsData, error: postsError } = await supabase
+      // Use explicit typing for the Supabase query result
+      const { data, error } = await supabase
         .from('community_posts')
         .select('*')
         .eq('retreat_id', retreatId)
         .eq('retreat_phase', phase)
         .order('created_at', { ascending: false });
 
-      if (postsError) throw postsError;
+      if (error) throw error;
+      
+      // Cast data to our explicit type and handle null case
+      const postsData = data as RawPostData[] | null;
       
       if (!postsData || postsData.length === 0) {
         setPosts([]);
@@ -34,12 +58,14 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
       
       // Process each post individually
       for (const rawPost of postsData) {
-        // Fetch the user profile separately
-        const { data: profileData } = await supabase
+        // Explicitly type the profile query result
+        const profileResult = await supabase
           .from('user_profiles')
           .select('username, avatar_url, is_wellness_practitioner')
           .eq('id', rawPost.user_id)
           .single();
+        
+        const profileData = profileResult.data as ProfileData | null;
         
         // Create properly typed user profile
         let userProfile: UserProfile | null = null;
