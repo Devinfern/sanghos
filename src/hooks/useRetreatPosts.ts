@@ -34,17 +34,20 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
     
     setIsLoading(true);
     try {
-      // Manually type the query to avoid deep type inference
-      const { data, error } = await supabase
+      // Use typecasting to avoid deep type inference
+      const response = await supabase
         .from('community_posts')
         .select('*')
         .eq('retreat_id', retreatId)
         .eq('retreat_phase', phase)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false }) as { 
+          data: RawPostData[] | null; 
+          error: Error | null;
+        };
       
-      if (error) throw error;
+      if (response.error) throw response.error;
       
-      if (!data || data.length === 0) {
+      if (!response.data || response.data.length === 0) {
         setPosts([]);
         setIsLoading(false);
         return;
@@ -54,29 +57,29 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
       const transformedPosts: Post[] = [];
       
       // Process each post individually with explicit typing
-      for (const rawData of data) {
-        // Type assertion to RawPostData
-        const rawPost = rawData as RawPostData;
-        
+      for (const rawPost of response.data) {
         // Fetch the user profile with explicit typing
-        const { data: profileData, error: profileError } = await supabase
+        const profileResponse = await supabase
           .from('user_profiles')
           .select('username, avatar_url, is_wellness_practitioner')
           .eq('id', rawPost.user_id)
-          .single();
+          .single() as {
+            data: ProfileData | null;
+            error: Error | null;
+          };
         
-        if (profileError) {
-          console.error('Error fetching profile:', profileError);
+        if (profileResponse.error) {
+          console.error('Error fetching profile:', profileResponse.error);
         }
         
         // Create properly typed user profile
         let userProfile: UserProfile | null = null;
         
-        if (profileData) {
+        if (profileResponse.data) {
           userProfile = {
-            username: profileData.username,
-            avatar_url: profileData.avatar_url || '',
-            is_wellness_practitioner: Boolean(profileData.is_wellness_practitioner)
+            username: profileResponse.data.username,
+            avatar_url: profileResponse.data.avatar_url || '',
+            is_wellness_practitioner: Boolean(profileResponse.data.is_wellness_practitioner)
           };
         }
         
