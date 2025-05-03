@@ -1,6 +1,5 @@
 
 import CommunityHero from "./CommunityHero";
-import CommunityStats from "./CommunityStats";
 import CommunityNavigation from "./CommunityNavigation";
 import CommunityResources from "./CommunityResources";
 import CommunityEvents from "./CommunityEvents";
@@ -58,7 +57,6 @@ const CommunityContent = ({
   return (
     <>
       <CommunityHero />
-      <CommunityStats />
       
       <div className="bg-gradient-to-b from-white to-brand-subtle/5 py-6">
         <CommunityNavigation 
