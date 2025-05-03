@@ -63,3 +63,31 @@ export const syncRetreatsToEvents = (retreats: Retreat[]): ForumEvent[] => {
     ...convertRetreatToForumEvent(retreat)
   }));
 };
+
+// New utility function to handle retreat creation from form data
+export const createRetreatFromFormData = (
+  formData: any, 
+  instructors: any[]
+): Retreat => {
+  const instructor = instructors.find(i => i.id === formData.instructorId) || instructors[0];
+  
+  return {
+    id: formData.id || `ret-${Date.now().toString()}`,
+    title: formData.title,
+    description: formData.description,
+    image: formData.image,
+    additionalImages: formData.additionalImages || [],
+    location: formData.location,
+    instructor: instructor,
+    date: formData.date,
+    time: formData.time,
+    duration: formData.duration,
+    price: formData.price,
+    capacity: formData.capacity,
+    remaining: formData.capacity, // Default to full capacity
+    category: formData.category,
+    amenities: formData.amenities || [],
+    featured: formData.featured || false,
+    isSanghos: formData.isSanghos || true
+  };
+};

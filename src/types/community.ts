@@ -33,3 +33,33 @@ export type RawPost = {
 };
 
 export type RetreatPhase = "pre" | "post";
+
+// New types for retreat/event management
+export interface RetreatFormData {
+  id?: string;
+  title: string;
+  description: string;
+  image: string;
+  additionalImages?: string[];
+  location: {
+    name: string;
+    address: string;
+    city: string;
+    state: string;
+    description: string;
+    coordinates?: {
+      lat: number;
+      lng: number;
+    };
+  };
+  instructorId: string;
+  date: string;
+  time: string;
+  duration: string;
+  price: number;
+  capacity: number;
+  category: string[];
+  amenities?: string[];
+  featured: boolean;
+  isSanghos: boolean;
+}

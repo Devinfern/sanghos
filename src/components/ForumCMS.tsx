@@ -95,24 +95,29 @@ const ForumCMS = () => {
   return (
     <div className="container mx-auto py-4">
       <Card className="mb-6">
-        <CardHeader>
-          <CardTitle>Forum Content Management System</CardTitle>
-          <CardDescription>
-            Easily manage all your forum content in one place
-          </CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle>Forum Content Management System</CardTitle>
+            <CardDescription>
+              Easily manage all your forum content in one place
+            </CardDescription>
+          </div>
+          <div className="flex space-x-2">
+            <Button variant="outline" asChild>
+              <a href="/admin/cms">Back to Admin CMS</a>
+            </Button>
+            <Button onClick={handleSaveAll} disabled={isSaving}>
+              {isSaving ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Saving Changes...
+                </>
+              ) : (
+                'Save All Changes'
+              )}
+            </Button>
+          </div>
         </CardHeader>
-        <CardFooter>
-          <Button onClick={handleSaveAll} disabled={isSaving}>
-            {isSaving ? (
-              <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                Saving Changes...
-              </>
-            ) : (
-              'Save All Changes'
-            )}
-          </Button>
-        </CardFooter>
       </Card>
 
       <Tabs defaultValue="spaces">

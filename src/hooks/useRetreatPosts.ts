@@ -4,6 +4,21 @@ import { supabase } from "@/integrations/supabase/client";
 import { Post, RawPost, UserProfile, RetreatPhase } from "@/types/community";
 import { toast } from "sonner";
 
+// Define a type for the raw data returned from Supabase to avoid deep type instantiation
+type SupabasePostResult = {
+  id: string;
+  title: string;
+  content: string;
+  user_id: string;
+  created_at: string;
+  likes: number;
+  category: string;
+  retreat_id?: string;
+  retreat_phase?: string;
+  is_pinned?: boolean;
+  updated_at?: string;
+}
+
 export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPhase) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,7 +37,8 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
 
       if (error) throw error;
       
-      const rawPosts = data as RawPost[];
+      // Explicitly type the data to avoid deep instantiation
+      const rawPosts = data as SupabasePostResult[];
       
       // Get profiles for each post
       const postsWithProfiles: Post[] = [];
