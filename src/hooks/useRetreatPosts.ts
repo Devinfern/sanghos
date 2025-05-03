@@ -13,6 +13,14 @@ interface RawPost {
   created_at: string;
   likes?: number;
   category: string;
+  retreat_id?: string;
+  retreat_phase?: string;
+}
+
+interface RawProfile {
+  username: string;
+  avatar_url: string | null;
+  is_wellness_practitioner: boolean | null;
 }
 
 export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPhase) {
@@ -24,8 +32,8 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
     
     setIsLoading(true);
     try {
-      // Bypass TypeScript's deep type inference by using "any"
-      const { data: rawPosts, error }: { data: any, error: any } = await supabase
+      // Use explicit typing to avoid TypeScript recursion issues
+      const { data, error } = await supabase
         .from('community_posts')
         .select('*')
         .eq('retreat_id', retreatId)
@@ -33,6 +41,8 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
         .order('created_at', { ascending: false });
       
       if (error) throw error;
+      
+      const rawPosts = data as RawPost[] | null;
       
       if (!rawPosts || rawPosts.length === 0) {
         setPosts([]);
@@ -46,7 +56,7 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
       // Process each post individually
       for (const rawPost of rawPosts) {
         // Fetch the user profile with explicit typing
-        const { data: profileData, error: profileError }: { data: any, error: any } = await supabase
+        const { data: profileData, error: profileError } = await supabase
           .from('user_profiles')
           .select('username, avatar_url, is_wellness_practitioner')
           .eq('id', rawPost.user_id)
@@ -57,15 +67,11 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
         }
         
         // Create properly typed user profile
-        let userProfile: UserProfile | null = null;
-        
-        if (profileData) {
-          userProfile = {
-            username: profileData.username,
-            avatar_url: profileData.avatar_url || '',
-            is_wellness_practitioner: Boolean(profileData.is_wellness_practitioner)
-          };
-        }
+        const userProfile: UserProfile | null = profileData ? {
+          username: profileData.username,
+          avatar_url: profileData.avatar_url || '',
+          is_wellness_practitioner: Boolean(profileData.is_wellness_practitioner)
+        } : null;
         
         // Create properly typed post object
         transformedPosts.push({
