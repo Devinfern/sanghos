@@ -43,26 +43,37 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
 
       if (error) throw error;
       
-      // Explicitly cast to our safe type to avoid deep instantiation
-      const rawPosts = data as SupabasePostResult[];
+      if (!data) {
+        setPosts([]);
+        return;
+      }
       
-      // Get profiles for each post
+      // Explicitly type the raw data to break the deep instantiation
+      const rawPosts = data as unknown as SupabasePostResult[];
+      
+      // Process posts and fetch user profiles
       const postsWithProfiles: Post[] = [];
       
       for (const post of rawPosts) {
-        // Try to get the user profile
+        // Fetch user profile
         const { data: profileData } = await supabase
           .from('user_profiles')
           .select('username, avatar_url, is_wellness_practitioner')
           .eq('id', post.user_id)
           .single();
-          
-        const userProfile: UserProfile | null = profileData ? {
-          username: profileData.username,
-          avatar_url: profileData.avatar_url,
-          is_wellness_practitioner: profileData.is_wellness_practitioner
-        } : null;
         
+        // Create a properly typed user profile object
+        let userProfile: UserProfile | null = null;
+        
+        if (profileData) {
+          userProfile = {
+            username: profileData.username,
+            avatar_url: profileData.avatar_url,
+            is_wellness_practitioner: Boolean(profileData.is_wellness_practitioner)
+          };
+        }
+        
+        // Add processed post to the array
         postsWithProfiles.push({
           id: post.id,
           title: post.title,
