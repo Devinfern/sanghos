@@ -35,6 +35,17 @@ interface Post {
   user_profiles?: UserProfile | null;
 }
 
+// Define a type for community posts from the database
+type CommunityPostFromDB = {
+  id: string;
+  title: string;
+  content: string;
+  user_id: string;
+  created_at: string;
+  likes: number;
+  category: string;
+};
+
 const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscussionsProps) => {
   const [activePhase, setActivePhase] = useState<"pre" | "post">("pre");
   const [searchQuery, setSearchQuery] = useState("");
@@ -48,12 +59,10 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
     
     setIsLoading(true);
     try {
-      let query = supabase
+      // Use type assertion to avoid deep type instantiation
+      const { data, error } = await supabase
         .from('community_posts')
-        .select('*');
-        
-      // Try to get user profiles in a separate query if needed
-      const { data, error } = await query
+        .select('*')
         .eq('retreat_id', retreatId)
         .eq('retreat_phase', activePhase)
         .order('created_at', { ascending: false });
@@ -63,7 +72,7 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
       // Get profiles for each post
       const postsWithProfiles: Post[] = [];
       
-      for (const post of (data || [])) {
+      for (const post of (data || [] as CommunityPostFromDB[])) {
         // Try to get the user profile
         const { data: profileData } = await supabase
           .from('user_profiles')
