@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Toaster } from "sonner";
@@ -14,16 +15,9 @@ import HostLogin from "./pages/host/HostLogin";
 import HostSignup from "./pages/host/HostSignup";
 import HostRetreatNew from "./pages/host/HostRetreatNew";
 import HostRetreatEdit from "./pages/host/HostRetreatEdit";
-import { HostProvider } from "./contexts/HostContext";
-import Terms from "./pages/Terms";
-import Privacy from "./pages/Privacy";
-import Dashboard from "./pages/Dashboard";
-import { AuthProvider } from "./contexts/AuthContext";
-import Account from "./pages/Account";
-import HostProtectedRoute from "./components/HostProtectedRoute";
 import CommunityEventsPage from "./components/community/CommunityEventsPage";
 import ForumCMS from "./components/ForumCMS";
-import DashboardAdmin from "./components/dashboard/DashboardAdmin";
+import HostProtectedRoute from "./components/HostProtectedRoute";
 import AdminCMS from "./pages/AdminCMS";
 
 function App() {
@@ -49,12 +43,7 @@ function App() {
         <Route path="/community/retreat/:retreatId" element={<RetreatCommunity />} />
         <Route path="/retreats" element={<Retreats />} />
         <Route path="/retreat/:retreatId" element={<RetreatCommunity />} />
-        <Route path="/terms" element={<Terms />} />
-        <Route path="/privacy" element={<Privacy />} />
         
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/account" element={<Account />} />
-
         <Route path="/host/login" element={<HostLogin />} />
         <Route path="/host/signup" element={<HostSignup />} />
         

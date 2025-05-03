@@ -1,11 +1,11 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
-import { Post, RawPost, UserProfile, RetreatPhase } from "@/types/community";
+import { Post, UserProfile, RetreatPhase } from "@/types/community";
 import { toast } from "sonner";
 
-// Define a type for the raw data returned from Supabase to avoid deep type instantiation
-type SupabasePostResult = {
+// Define more specific types to avoid deep instantiation issues
+interface SupabasePostResult {
   id: string;
   title: string;
   content: string;
@@ -17,6 +17,12 @@ type SupabasePostResult = {
   retreat_phase?: string;
   is_pinned?: boolean;
   updated_at?: string;
+}
+
+interface SupabaseProfileResult {
+  username: string;
+  avatar_url: string;
+  is_wellness_practitioner: boolean;
 }
 
 export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPhase) {
@@ -37,7 +43,7 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
 
       if (error) throw error;
       
-      // Explicitly type the data to avoid deep instantiation
+      // Explicitly cast to our safe type
       const rawPosts = data as SupabasePostResult[];
       
       // Get profiles for each post
