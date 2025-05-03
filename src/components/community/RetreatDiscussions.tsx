@@ -18,13 +18,27 @@ interface RetreatDiscussionsProps {
   isLoggedIn: boolean;
 }
 
+type Post = {
+  id: string;
+  title: string;
+  content: string;
+  user_id: string;
+  created_at: string;
+  likes: number;
+  category: string;
+  user_profiles?: {
+    username: string;
+    avatar_url: string;
+    is_wellness_practitioner: boolean;
+  } | null;
+};
+
 const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscussionsProps) => {
   const [activePhase, setActivePhase] = useState<"pre" | "post">("pre");
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(false);
-  const [posts, setPosts] = useState<any[]>([]);
-  const [spaces, setSpaces] = useState<any[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const { isAdmin } = useAdminStatus();
 
   const fetchPosts = async () => {
