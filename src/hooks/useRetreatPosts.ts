@@ -4,27 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Post, UserProfile, RetreatPhase } from "@/types/community";
 import { toast } from "sonner";
 
-// Define more specific types to avoid deep instantiation issues
-interface SupabasePostResult {
-  id: string;
-  title: string;
-  content: string;
-  user_id: string;
-  created_at: string;
-  likes: number;
-  category: string;
-  retreat_id?: string;
-  retreat_phase?: string;
-  is_pinned?: boolean;
-  updated_at?: string;
-}
-
-interface SupabaseProfileResult {
-  username: string;
-  avatar_url: string;
-  is_wellness_practitioner: boolean;
-}
-
 export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPhase) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,59 +13,59 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
     
     setIsLoading(true);
     try {
-      const { data, error } = await supabase
+      // Fetch posts from Supabase
+      const { data: postsData, error: postsError } = await supabase
         .from('community_posts')
         .select('*')
         .eq('retreat_id', retreatId)
         .eq('retreat_phase', phase)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (postsError) throw postsError;
       
-      if (!data) {
+      if (!postsData || postsData.length === 0) {
         setPosts([]);
+        setIsLoading(false);
         return;
       }
       
-      // Explicitly type the raw data to break the deep instantiation
-      const rawPosts = data as unknown as SupabasePostResult[];
+      // Transform the post data into our app's Post type
+      const transformedPosts: Post[] = [];
       
-      // Process posts and fetch user profiles
-      const postsWithProfiles: Post[] = [];
-      
-      for (const post of rawPosts) {
-        // Fetch user profile
+      // Process each post individually
+      for (const rawPost of postsData) {
+        // Fetch the user profile separately
         const { data: profileData } = await supabase
           .from('user_profiles')
           .select('username, avatar_url, is_wellness_practitioner')
-          .eq('id', post.user_id)
+          .eq('id', rawPost.user_id)
           .single();
         
-        // Create a properly typed user profile object
+        // Create properly typed user profile
         let userProfile: UserProfile | null = null;
         
         if (profileData) {
           userProfile = {
             username: profileData.username,
-            avatar_url: profileData.avatar_url,
+            avatar_url: profileData.avatar_url || '',
             is_wellness_practitioner: Boolean(profileData.is_wellness_practitioner)
           };
         }
         
-        // Add processed post to the array
-        postsWithProfiles.push({
-          id: post.id,
-          title: post.title,
-          content: post.content,
-          user_id: post.user_id,
-          created_at: post.created_at,
-          likes: post.likes || 0,
-          category: post.category,
+        // Create properly typed post object
+        transformedPosts.push({
+          id: rawPost.id,
+          title: rawPost.title,
+          content: rawPost.content,
+          user_id: rawPost.user_id,
+          created_at: rawPost.created_at,
+          likes: rawPost.likes || 0,
+          category: rawPost.category,
           user_profiles: userProfile
         });
       }
       
-      setPosts(postsWithProfiles);
+      setPosts(transformedPosts);
     } catch (error) {
       console.error('Error fetching retreat posts:', error);
       toast.error('Failed to load retreat discussions');
