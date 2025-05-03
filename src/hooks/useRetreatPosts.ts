@@ -34,44 +34,45 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
     
     setIsLoading(true);
     try {
-      const result = await supabase
+      // Use any type to avoid deep type instantiation
+      const query = await supabase
         .from('community_posts')
         .select('*')
         .eq('retreat_id', retreatId)
         .eq('retreat_phase', phase)
         .order('created_at', { ascending: false });
       
-      if (result.error) throw result.error;
-      if (!result.data || result.data.length === 0) {
+      if (query.error) throw query.error;
+      
+      if (!query.data || query.data.length === 0) {
         setPosts([]);
         setIsLoading(false);
         return;
       }
       
-      // Safely cast the data to our known type
-      const postsData = result.data as unknown as RawPostData[];
-      
       // Transform the post data into our app's Post type
       const transformedPosts: Post[] = [];
       
-      // Process each post individually
-      for (const rawPost of postsData) {
-        // Fetch the user profile separately
-        const profileResult = await supabase
+      // Process each post individually with explicit casting
+      for (const rawData of query.data) {
+        const rawPost = rawData as unknown as RawPostData;
+        
+        // Fetch the user profile with minimal type inference
+        const profileQuery = await supabase
           .from('user_profiles')
           .select('username, avatar_url, is_wellness_practitioner')
           .eq('id', rawPost.user_id)
           .single();
         
-        // Create properly typed user profile
+        // Create properly typed user profile with explicit casting
         let userProfile: UserProfile | null = null;
         
-        if (profileResult.data) {
-          const profile = profileResult.data as unknown as ProfileData;
+        if (profileQuery.data) {
+          const profileData = profileQuery.data as unknown as ProfileData;
           userProfile = {
-            username: profile.username,
-            avatar_url: profile.avatar_url || '',
-            is_wellness_practitioner: Boolean(profile.is_wellness_practitioner)
+            username: profileData.username,
+            avatar_url: profileData.avatar_url || '',
+            is_wellness_practitioner: Boolean(profileData.is_wellness_practitioner)
           };
         }
         
