@@ -1,7 +1,6 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 
 export const useAdminStatus = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -29,22 +28,22 @@ export const useAdminStatus = () => {
 
         if (error) {
           console.error('Error checking admin status:', error);
-          toast.error("Failed to check admin status");
+          // Don't show error toast, just log to console
           setIsAdmin(false);
         } else {
           const isUserAdmin = !!data;
           console.log("Is admin:", isUserAdmin, "Data:", data);
           
-          // If user is admin, let them know
+          // If user is admin, let them know, but only once
           if (isUserAdmin) {
-            toast.success("Admin access granted");
+            console.log("Admin access granted");
           }
           
           setIsAdmin(isUserAdmin);
         }
       } catch (error) {
         console.error('Error checking admin status:', error);
-        toast.error("Error checking permissions");
+        // Don't show error toast, just log to console
         setIsAdmin(false);
       } finally {
         setIsLoading(false);

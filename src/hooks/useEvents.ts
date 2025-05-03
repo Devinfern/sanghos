@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { Event } from "@/types/event";
 import { supabase } from "@/integrations/supabase/client";
 import { defaultEvents } from "@/data/mockFeaturedEvents";
-import { toast } from "sonner";
 
 export function useEvents(location: string = "San Francisco, CA") {
   const [events, setEvents] = useState<Event[]>([]);
@@ -83,9 +82,9 @@ export function useEvents(location: string = "San Francisco, CA") {
             };
           });
           
-          // Only show success toast if events were actually fetched
+          // Only log success, don't show toast
           if (transformedEvents.length > 0) {
-            toast.success(`Found ${transformedEvents.length} wellness events`);
+            console.log(`Found ${transformedEvents.length} wellness events`);
           }
           
           setEvents(transformedEvents);
