@@ -3,6 +3,7 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 interface CommunityNavigationProps {
   activeSection: string;
@@ -22,17 +23,24 @@ const CommunityNavigation = ({
   ];
 
   return (
-    <div className="border-b border-brand-subtle/20 bg-white/80 backdrop-blur-md sticky top-16 z-30 shadow-sm">
+    <motion.div 
+      initial={{ opacity: 0, y: -5 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+      className="border-b border-brand-subtle/20 bg-white/95 backdrop-blur-md sticky top-16 z-30 shadow-sm"
+    >
       <div className="container px-4">
         <div className="flex flex-col md:flex-row justify-between items-center py-4 gap-4">
-          <div className="flex overflow-x-auto no-scrollbar">
+          <div className="flex overflow-x-auto no-scrollbar w-full md:w-auto">
             {sections.map((section) => (
               <Button
                 key={section.id}
                 variant="ghost"
                 className={cn(
-                  "px-4 py-2 text-brand-slate hover:text-brand-dark transition-all duration-300",
-                  activeSection === section.id && "text-brand-primary font-medium border-b-2 border-brand-primary rounded-none"
+                  "min-w-[100px] px-4 py-2 text-brand-slate hover:text-brand-dark transition-all duration-300",
+                  activeSection === section.id 
+                    ? "text-brand-primary font-medium border-b-2 border-brand-primary rounded-none bg-brand-primary/5" 
+                    : ""
                 )}
                 onClick={() => onSectionChange(section.id)}
               >
@@ -49,7 +57,7 @@ const CommunityNavigation = ({
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

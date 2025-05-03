@@ -30,7 +30,7 @@ const CommunityLayout = ({ children, title = "Community", showCMS = false }: Com
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="min-h-screen bg-gradient-to-b from-brand-subtle/10 via-white to-white"
+        className="min-h-screen bg-white"
       >
         {showCMS ? (
           <div className="pt-16">{children}</div>

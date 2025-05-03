@@ -1,26 +1,49 @@
+
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+
 const CommunityHero = () => {
   const navigate = useNavigate();
-  return <div className="relative bg-gradient-to-b from-brand-subtle/20 to-white">
-      <div className="container px-4 md:py-24 py-[130px]">
-        <div className="max-w-3xl mx-auto text-center space-y-6">
-          <h1 className="text-4xl md:text-5xl font-bold text-brand-dark">
-            Join Our Mindful Community
+  
+  return (
+    <div className="bg-gradient-to-b from-brand-subtle/5 to-transparent">
+      <motion.div 
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="container px-4 py-12"
+      >
+        <div className="max-w-3xl mx-auto text-center space-y-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-brand-dark">
+            Sanghos Community
           </h1>
-          <p className="text-lg md:text-xl text-brand-slate leading-relaxed">
-            Connect with like-minded individuals, share your wellness journey, and grow together in our supportive community dedicated to mindfulness and personal growth.
+          <p className="text-md md:text-lg text-brand-slate/80 leading-relaxed max-w-xl mx-auto">
+            Connect, share insights, and grow together in our mindful community
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Button onClick={() => navigate("/join")} size="lg" className="bg-brand-primary hover:bg-brand-primary/90">
-              Join Sanghos
-            </Button>
-            <Button onClick={() => navigate("/retreats")} variant="outline" size="lg" className="border-brand-primary text-brand-primary hover:bg-brand-primary/5">
+          <div className="flex flex-wrap justify-center gap-3 pt-2">
+            {!localStorage.getItem("sanghos_user") && (
+              <Button 
+                onClick={() => navigate("/join")} 
+                className="bg-brand-primary hover:bg-brand-primary/90 rounded-full"
+              >
+                Join Community
+                <ArrowRight className="h-4 w-4 ml-1" />
+              </Button>
+            )}
+            <Button 
+              variant="outline"
+              onClick={() => navigate("/retreats")}
+              className="border-brand-primary/50 text-brand-primary hover:bg-brand-primary/5 rounded-full"
+            >
               Explore Retreats
             </Button>
           </div>
         </div>
-      </div>
-    </div>;
+      </motion.div>
+    </div>
+  );
 };
+
 export default CommunityHero;
