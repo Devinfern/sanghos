@@ -4,38 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Post, UserProfile, RetreatPhase } from "@/types/community";
 import { toast } from "sonner";
 
-// Define explicit interface for raw database results
-interface RawPostData {
-  id: string;
-  title: string;
-  content: string;
-  user_id: string;
-  created_at: string;
-  likes: number | null;
-  category: string;
-  retreat_id: string;
-  retreat_phase: string;
-  is_pinned?: boolean;
-  updated_at?: string;
-}
-
-interface ProfileData {
-  username: string;
-  avatar_url: string | null;
-  is_wellness_practitioner: boolean | null;
-}
-
-// Define explicit response types to avoid deep type inference
-interface PostQueryResponse {
-  data: RawPostData[] | null;
-  error: Error | null;
-}
-
-interface ProfileQueryResponse {
-  data: ProfileData | null;
-  error: Error | null;
-}
-
+// Use any for the raw database query to avoid TypeScript recursion
 export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPhase) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -45,20 +14,17 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
     
     setIsLoading(true);
     try {
-      // Make the query with explicit response typing
-      const { data, error } = await supabase
+      // Use raw query approach to avoid type recursion
+      const { data: rawPosts, error } = await supabase
         .from('community_posts')
         .select('*')
         .eq('retreat_id', retreatId)
         .eq('retreat_phase', phase)
         .order('created_at', { ascending: false });
-        
-      // Cast the response to our known types immediately after receiving
-      const response: PostQueryResponse = { data: data as RawPostData[] | null, error };
       
-      if (response.error) throw response.error;
+      if (error) throw error;
       
-      if (!response.data || response.data.length === 0) {
+      if (!rawPosts || rawPosts.length === 0) {
         setPosts([]);
         setIsLoading(false);
         return;
@@ -68,32 +34,26 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
       const transformedPosts: Post[] = [];
       
       // Process each post individually
-      for (const rawPost of response.data) {
+      for (const rawPost of rawPosts) {
         // Fetch the user profile
-        const profileQueryResult = await supabase
+        const { data: profileData, error: profileError } = await supabase
           .from('user_profiles')
           .select('username, avatar_url, is_wellness_practitioner')
           .eq('id', rawPost.user_id)
           .single();
-          
-        // Cast to our known profile response type
-        const profileResponse: ProfileQueryResponse = { 
-          data: profileQueryResult.data as ProfileData | null, 
-          error: profileQueryResult.error 
-        };
         
-        if (profileResponse.error) {
-          console.error('Error fetching profile:', profileResponse.error);
+        if (profileError) {
+          console.error('Error fetching profile:', profileError);
         }
         
         // Create properly typed user profile
         let userProfile: UserProfile | null = null;
         
-        if (profileResponse.data) {
+        if (profileData) {
           userProfile = {
-            username: profileResponse.data.username,
-            avatar_url: profileResponse.data.avatar_url || '',
-            is_wellness_practitioner: Boolean(profileResponse.data.is_wellness_practitioner)
+            username: profileData.username,
+            avatar_url: profileData.avatar_url || '',
+            is_wellness_practitioner: Boolean(profileData.is_wellness_practitioner)
           };
         }
         
