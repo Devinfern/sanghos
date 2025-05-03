@@ -35,8 +35,8 @@ interface Post {
   user_profiles?: UserProfile | null;
 }
 
-// Define a type for community posts from the database
-type CommunityPostFromDB = {
+// Define a more specific type for Supabase query results
+interface SupabasePostResult {
   id: string;
   title: string;
   content: string;
@@ -44,7 +44,11 @@ type CommunityPostFromDB = {
   created_at: string;
   likes: number;
   category: string;
-};
+  retreat_id: string;
+  retreat_phase: string;
+  is_pinned?: boolean;
+  updated_at: string;
+}
 
 const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscussionsProps) => {
   const [activePhase, setActivePhase] = useState<"pre" | "post">("pre");
@@ -59,30 +63,38 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
     
     setIsLoading(true);
     try {
-      // Use type assertion to avoid deep type instantiation
-      const { data, error } = await supabase
+      // Use a more direct approach without chaining methods that cause type issues
+      const response = await supabase
         .from('community_posts')
         .select('*')
         .eq('retreat_id', retreatId)
         .eq('retreat_phase', activePhase)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (response.error) throw response.error;
+      
+      const data = response.data as SupabasePostResult[];
       
       // Get profiles for each post
       const postsWithProfiles: Post[] = [];
       
-      for (const post of (data || [] as CommunityPostFromDB[])) {
+      for (const post of data) {
         // Try to get the user profile
-        const { data: profileData } = await supabase
+        const profileResponse = await supabase
           .from('user_profiles')
           .select('username, avatar_url, is_wellness_practitioner')
           .eq('id', post.user_id)
           .single();
           
         postsWithProfiles.push({
-          ...post,
-          user_profiles: profileData || null
+          id: post.id,
+          title: post.title,
+          content: post.content,
+          user_id: post.user_id,
+          created_at: post.created_at,
+          likes: post.likes || 0,
+          category: post.category,
+          user_profiles: profileResponse.data || null
         });
       }
       
