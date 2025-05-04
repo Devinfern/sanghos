@@ -22,25 +22,7 @@ import AdminCMS from "./pages/AdminCMS";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import UserDashboard from "./pages/UserDashboard";
-import { useAdminStatus } from "./hooks/useAdminStatus";
-
-// Admin protected route component
-const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAdmin, isLoading } = useAdminStatus();
-
-  // Show loading state while checking
-  if (isLoading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
-  }
-
-  // If not admin, redirect to dashboard
-  if (!isAdmin) {
-    return <Navigate to="/dashboard" />;
-  }
-
-  // If admin, render the children
-  return <>{children}</>;
-};
+import AdminProtectedRoute from "./components/AdminProtectedRoute";
 
 function App() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -79,7 +61,7 @@ function App() {
           <Route path="/host/retreats/edit/:retreatId" element={<HostRetreatEdit />} />
         </Route>
 
-        {/* Wrap the admin route with protection */}
+        {/* Use our separate AdminProtectedRoute component */}
         <Route path="/admin/cms" element={
           <AdminProtectedRoute>
             <AdminCMS />

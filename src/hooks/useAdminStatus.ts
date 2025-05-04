@@ -20,6 +20,7 @@ export const useAdminStatus = () => {
         const userEmail = session.session.user.email.trim();
         console.log("Checking admin status for email:", userEmail);
 
+        // Use a direct check against the admin_users table
         const { data, error } = await supabase
           .from('admin_users')
           .select('email')
