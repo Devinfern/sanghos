@@ -43,7 +43,11 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/community" element={<Community />} />
         <Route path="/community/events" element={<CommunityEventsPage />} />
-        <Route path="/community/cms" element={<ForumCMS />} />
+        <Route path="/community/cms" element={
+          <AdminProtectedRoute>
+            <ForumCMS />
+          </AdminProtectedRoute>
+        } />
         <Route path="/community/retreat/:retreatId" element={<RetreatCommunity />} />
         <Route path="/retreats" element={<Retreats />} />
         <Route path="/retreat/:retreatId" element={<RetreatCommunity />} />
@@ -61,7 +65,7 @@ function App() {
           <Route path="/host/retreats/edit/:retreatId" element={<HostRetreatEdit />} />
         </Route>
 
-        {/* Use our separate AdminProtectedRoute component */}
+        {/* Admin protected routes */}
         <Route path="/admin/cms" element={
           <AdminProtectedRoute>
             <AdminCMS />

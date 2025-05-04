@@ -20,31 +20,23 @@ export const useAdminStatus = () => {
         const userEmail = session.session.user.email.trim();
         console.log("Checking admin status for email:", userEmail);
 
-        // Use a direct check against the admin_users table
+        // Use a direct database query with no RLS issues
         const { data, error } = await supabase
-          .from('admin_users')
-          .select('email')
-          .eq('email', userEmail)
-          .maybeSingle();
+          .rpc('is_user_admin', { user_email: userEmail });
 
         if (error) {
           console.error('Error checking admin status:', error);
-          // Don't show error toast, just log to console
           setIsAdmin(false);
         } else {
-          const isUserAdmin = !!data;
-          console.log("Is admin:", isUserAdmin, "Data:", data);
+          console.log("Admin check result:", data);
+          setIsAdmin(!!data);
           
-          // If user is admin, let them know, but only once
-          if (isUserAdmin) {
+          if (data) {
             console.log("Admin access granted");
           }
-          
-          setIsAdmin(isUserAdmin);
         }
       } catch (error) {
         console.error('Error checking admin status:', error);
-        // Don't show error toast, just log to console
         setIsAdmin(false);
       } finally {
         setIsLoading(false);

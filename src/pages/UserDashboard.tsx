@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -23,6 +22,18 @@ const UserDashboard = () => {
   const [userData, setUserData] = useState<any>(null);
   const [upcomingRetreats, setUpcomingRetreats] = useState<any[]>([]);
   const { isAdmin, isLoading: isAdminLoading } = useAdminStatus();
+  const [activeTab, setActiveTab] = useState("overview");
+
+  // Debug admin status
+  useEffect(() => {
+    console.log("Admin status in UserDashboard:", isAdmin);
+    console.log("Admin loading in UserDashboard:", isAdminLoading);
+    
+    // If admin check completes and user is admin, show a toast notification
+    if (!isAdminLoading && isAdmin) {
+      toast.success("Admin access granted", { id: "admin-access" });
+    }
+  }, [isAdmin, isAdminLoading]);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -88,12 +99,6 @@ const UserDashboard = () => {
     checkAuth();
   }, [navigate]);
 
-  // Add debugging to see admin status
-  useEffect(() => {
-    console.log("Admin status:", isAdmin);
-    console.log("Admin loading:", isAdminLoading);
-  }, [isAdmin, isAdminLoading]);
-
   if (isLoading || isAdminLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -155,7 +160,7 @@ const UserDashboard = () => {
             </div>
           </div>
 
-          <Tabs defaultValue="overview" className="space-y-6">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="bg-muted/50">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="retreats">My Retreats</TabsTrigger>
