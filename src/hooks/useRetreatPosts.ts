@@ -59,7 +59,7 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
           .from('user_profiles')
           .select('username, avatar_url, is_wellness_practitioner')
           .eq('id', rawPost.user_id)
-          .single();
+          .maybeSingle();
         
         if (profileResult.error) {
           console.error('Error fetching profile:', profileResult.error);
