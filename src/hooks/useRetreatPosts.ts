@@ -1,7 +1,6 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
-import { Post, UserProfile, RetreatPhase } from "@/types/community";
 import { toast } from "sonner";
 
 // Define simple interfaces for raw data
@@ -22,6 +21,26 @@ interface RawProfile {
   avatar_url: string | null;
   is_wellness_practitioner: boolean | null;
 }
+
+// Define simplified interfaces to avoid circular references
+interface UserProfile {
+  username: string;
+  avatar_url: string;
+  is_wellness_practitioner: boolean;
+}
+
+interface Post {
+  id: string;
+  title: string;
+  content: string;
+  user_id: string;
+  created_at: string;
+  likes: number;
+  category: string;
+  user_profiles: UserProfile | null;
+}
+
+export type RetreatPhase = 'pre' | 'during' | 'post';
 
 export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPhase) {
   const [posts, setPosts] = useState<Post[]>([]);
