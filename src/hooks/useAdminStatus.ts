@@ -22,7 +22,7 @@ export const useAdminStatus = () => {
 
         // Use a direct database query with no RLS issues
         const { data, error } = await supabase
-          .rpc('is_user_admin', { user_email: userEmail });
+          .rpc('is_admin', { user_email: userEmail });
 
         if (error) {
           console.error('Error checking admin status:', error);

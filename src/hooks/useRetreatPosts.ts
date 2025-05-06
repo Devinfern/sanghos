@@ -93,7 +93,6 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
           is_wellness_practitioner: Boolean(profileData.is_wellness_practitioner)
         } : null;
         
-        // Create properly typed post object without circular references
         transformedPosts.push({
           id: rawPost.id,
           title: rawPost.title,

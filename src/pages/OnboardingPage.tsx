@@ -6,34 +6,78 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import OnboardingFlow from "@/components/OnboardingFlow";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const OnboardingPage = () => {
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const handleOnboardingComplete = (userData: any) => {
-    // In a real app, you would save this data to the user's profile
-    console.log("Onboarding completed with data:", userData);
+  const handleOnboardingComplete = async (userData: any) => {
+    setIsSubmitting(true);
     
-    // Update the user data in localStorage
-    const existingUser = JSON.parse(localStorage.getItem("sanghos_user") || "{}");
-    localStorage.setItem("sanghos_user", JSON.stringify({
-      ...existingUser,
-      preferences: userData.preferences,
-      experience: userData.experience,
-      onboarded: true
-    }));
-    
-    toast.success("Your profile is all set up!");
-    navigate("/dashboard");
+    try {
+      // Get current user
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error("Your session has expired. Please log in again.");
+        navigate("/login");
+        return;
+      }
+      
+      // Update the user's profile in Supabase
+      const { error } = await supabase
+        .from('user_profiles')
+        .update({
+          preferences: userData.preferences,
+          experience_level: userData.experience
+        })
+        .eq('id', session.user.id);
+      
+      if (error) {
+        console.error("Error updating user profile:", error);
+        toast.error("Failed to save your preferences");
+      } else {
+        // Also update localStorage for compatibility with existing code
+        const existingUser = JSON.parse(localStorage.getItem("sanghos_user") || "{}");
+        localStorage.setItem("sanghos_user", JSON.stringify({
+          ...existingUser,
+          preferences: userData.preferences,
+          experience: userData.experience,
+          onboarded: true
+        }));
+        
+        toast.success("Your profile is all set up!");
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      console.error("Error in onboarding:", err);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   
-  const handleCancel = () => {
-    // Skip onboarding
-    const existingUser = JSON.parse(localStorage.getItem("sanghos_user") || "{}");
-    localStorage.setItem("sanghos_user", JSON.stringify({
-      ...existingUser,
-      onboarded: true
-    }));
+  const handleCancel = async () => {
+    try {
+      // Get current user
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        // Mark as onboarded in Supabase with minimal data
+        await supabase
+          .from('user_profiles')
+          .update({ onboarded: true })
+          .eq('id', session.user.id);
+      }
+      
+      // Update localStorage for compatibility
+      const existingUser = JSON.parse(localStorage.getItem("sanghos_user") || "{}");
+      localStorage.setItem("sanghos_user", JSON.stringify({
+        ...existingUser,
+        onboarded: true
+      }));
+    } catch (err) {
+      console.error("Error skipping onboarding:", err);
+    }
     
     navigate("/dashboard");
   };
@@ -57,6 +101,7 @@ const OnboardingPage = () => {
           <OnboardingFlow 
             onComplete={handleOnboardingComplete}
             onCancel={handleCancel}
+            isSubmitting={isSubmitting}
           />
         </div>
       </main>

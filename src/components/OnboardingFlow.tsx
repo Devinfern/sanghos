@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { CheckCircle2, User, Calendar, Heart, ChevronRight, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,6 +15,7 @@ interface OnboardingFlowProps {
   onUserDataChange?: (userData: any) => void;
   onComplete: (userData: any) => void;
   onCancel?: () => void;
+  isSubmitting?: boolean;
 }
 
 const OnboardingFlow = ({ 
@@ -24,10 +24,10 @@ const OnboardingFlow = ({
   userData: externalUserData,
   onUserDataChange: externalSetUserData,
   onComplete, 
-  onCancel 
+  onCancel,
+  isSubmitting = false
 }: OnboardingFlowProps) => {
   const [internalStep, setInternalStep] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
   const [internalUserData, setInternalUserData] = useState({
     fullName: "",
     birthdate: "",
@@ -97,14 +97,9 @@ const OnboardingFlow = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    
-    // Simulate API call to save user preferences
-    await new Promise(resolve => setTimeout(resolve, 1000));
     
     // Call the onComplete callback with the collected data
     onComplete(userData);
-    setIsLoading(false);
   };
 
   // Ensure preferences object exists
@@ -282,24 +277,24 @@ const OnboardingFlow = ({
       
       <CardFooter className="flex justify-between">
         {step > 1 ? (
-          <Button type="button" variant="outline" onClick={prevStep}>
+          <Button type="button" variant="outline" onClick={prevStep} disabled={isSubmitting}>
             <ChevronLeft className="mr-2 h-4 w-4" />
             Back
           </Button>
         ) : (
-          <Button type="button" variant="outline" onClick={onCancel}>
+          <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
             Cancel
           </Button>
         )}
         
         {step < 3 ? (
-          <Button type="button" onClick={nextStep}>
+          <Button type="button" onClick={nextStep} disabled={isSubmitting}>
             Next
             <ChevronRight className="ml-2 h-4 w-4" />
           </Button>
         ) : (
-          <Button type="submit" onClick={handleSubmit} disabled={isLoading}>
-            {isLoading ? "Saving..." : "Complete Setup"}
+          <Button type="submit" onClick={handleSubmit} disabled={isSubmitting}>
+            {isSubmitting ? "Saving..." : "Complete Setup"}
           </Button>
         )}
       </CardFooter>

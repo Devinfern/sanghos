@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -38,7 +37,7 @@ const SignUp = () => {
     try {
       setIsLoading(true);
       
-      // Sign up with Supabase auth - ensure email is used exactly as entered
+      // Sign up with Supabase auth
       const { data, error: signUpError } = await supabase.auth.signUp({
         email: email.trim(),
         password,
@@ -55,6 +54,22 @@ const SignUp = () => {
         throw new Error(signUpError.message);
       }
       
+      // Send welcome email via Edge Function
+      try {
+        const { error: emailError } = await supabase.functions.invoke('send-welcome-email', {
+          body: { 
+            name, 
+            email: email.trim() 
+          }
+        });
+        
+        if (emailError) {
+          console.error("Welcome email error:", emailError);
+        }
+      } catch (emailErr) {
+        console.error("Failed to send welcome email:", emailErr);
+      }
+      
       // Store user in localStorage with the exact email entered
       localStorage.setItem("sanghos_user", JSON.stringify({
         email: email.trim(),
@@ -64,8 +79,16 @@ const SignUp = () => {
       
       toast.success("Account created successfully! Check your email for login details.");
       
-      // Redirect to onboarding page 
-      navigate("/onboarding");
+      // If email verification is disabled in Supabase, user will be logged in automatically
+      if (data.session) {
+        // Redirect to onboarding page
+        navigate("/onboarding");
+      } else {
+        // Otherwise show success message and redirect to login
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      }
     } catch (err) {
       console.error(err);
       if (err instanceof Error) {
