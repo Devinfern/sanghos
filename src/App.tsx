@@ -23,6 +23,9 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import UserDashboard from "./pages/UserDashboard";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
+import JoinNow from "./pages/JoinNow";
+import OnboardingPage from "./pages/OnboardingPage";
+import CommunityTeaser from "./pages/CommunityTeaser";
 
 function App() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -53,7 +56,10 @@ function App() {
         <Route path="/retreat/:retreatId" element={<RetreatCommunity />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/join" element={<JoinNow />} />
+        <Route path="/community-teaser" element={<CommunityTeaser />} />
         <Route path="/dashboard" element={<UserDashboard />} />
+        <Route path="/onboarding" element={<OnboardingPage />} />
         
         <Route path="/host/login" element={<HostLogin />} />
         <Route path="/host/signup" element={<HostSignup />} />

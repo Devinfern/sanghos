@@ -8,6 +8,12 @@ import OnboardingFlow from "@/components/OnboardingFlow";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
+interface UserProfile {
+  preferences?: string[];
+  experience_level?: string;
+  onboarded?: boolean;
+}
+
 const OnboardingPage = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,7 +34,7 @@ const OnboardingPage = () => {
       const { error } = await supabase
         .from('user_profiles')
         .update({
-          preferences: userData.preferences,
+          // Only include fields that are defined in the user_profiles table
           experience_level: userData.experience
         })
         .eq('id', session.user.id);
@@ -37,7 +43,7 @@ const OnboardingPage = () => {
         console.error("Error updating user profile:", error);
         toast.error("Failed to save your preferences");
       } else {
-        // Also update localStorage for compatibility with existing code
+        // Store preferences in localStorage for client-side use
         const existingUser = JSON.parse(localStorage.getItem("sanghos_user") || "{}");
         localStorage.setItem("sanghos_user", JSON.stringify({
           ...existingUser,
@@ -62,14 +68,11 @@ const OnboardingPage = () => {
       // Get current user
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        // Mark as onboarded in Supabase with minimal data
-        await supabase
-          .from('user_profiles')
-          .update({ onboarded: true })
-          .eq('id', session.user.id);
+        // We don't need to update onboarded status in the database
+        // since that field doesn't exist in the user_profiles table
       }
       
-      // Update localStorage for compatibility
+      // Update localStorage for client-side tracking
       const existingUser = JSON.parse(localStorage.getItem("sanghos_user") || "{}");
       localStorage.setItem("sanghos_user", JSON.stringify({
         ...existingUser,
