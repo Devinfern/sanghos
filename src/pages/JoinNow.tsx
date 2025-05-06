@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { ArrowLeft, Mail, Lock, User, ArrowRight, Check } from "lucide-react";
@@ -9,7 +9,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { supabase } from "@/integrations/supabase/client";
 
 const JoinNow = () => {
   const navigate = useNavigate();
@@ -20,18 +19,6 @@ const JoinNow = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [step, setStep] = useState(1);
-
-  // Add debug logging when the component mounts
-  useEffect(() => {
-    console.log("JoinNow page loaded");
-    // Check if this component is actually mounted in the DOM
-    const timer = setTimeout(() => {
-      console.log("JoinNow component mounted check:", 
-        document.querySelector("form") ? "✅ Form found" : "❌ Form not found");
-    }, 500);
-    
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleNext = () => {
     if (step === 1 && !name.trim()) {
@@ -46,12 +33,10 @@ const JoinNow = () => {
     
     setError("");
     setStep(step + 1);
-    console.log("Moving to step:", step + 1);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted");
     setError("");
     
     // Basic validation
@@ -68,63 +53,16 @@ const JoinNow = () => {
     setIsLoading(true);
 
     try {
-      // Integrate with Supabase authentication
-      const { data, error: signUpError } = await supabase.auth.signUp({
-        email: email.trim(),
-        password,
-        options: {
-          data: {
-            full_name: name.trim()
-          }
-        }
-      });
-
-      if (signUpError) {
-        console.error("Signup error:", signUpError);
-        throw new Error(signUpError.message);
-      }
-
-      console.log("Signup successful:", data);
+      // Simulate API call with timeout
+      await new Promise(resolve => setTimeout(resolve, 1200));
       
-      // Send welcome email
-      try {
-        const { error: emailError } = await supabase.functions.invoke('send-welcome-email', {
-          body: { 
-            name, 
-            email: email.trim() 
-          }
-        });
-        
-        if (emailError) {
-          console.error("Welcome email error:", emailError);
-        } else {
-          console.log("Welcome email sent");
-        }
-      } catch (emailErr) {
-        console.error("Failed to send welcome email:", emailErr);
-      }
-
-      // Store user in localStorage
-      localStorage.setItem("sanghos_user", JSON.stringify({
-        email: email.trim(),
-        name,
-        onboarded: false
-      }));
-      
+      // This is a mock registration
+      // In a real app, you would send the credentials to your backend
       toast.success("Welcome to Sanghos! Your journey begins now.");
-      
-      // Redirect based on whether email confirmation is required
-      if (data.session) {
-        console.log("Redirecting to onboarding");
-        navigate("/onboarding");
-      } else {
-        console.log("User created, redirecting to login");
-        toast.info("Please check your email to verify your account.");
-        setTimeout(() => navigate("/login"), 3000);
-      }
+      navigate("/");
     } catch (err) {
-      console.error("Error during signup:", err);
-      setError(err instanceof Error ? err.message : "An error occurred during signup");
+      setError("An error occurred while creating your account");
+      console.error(err);
     } finally {
       setIsLoading(false);
     }
