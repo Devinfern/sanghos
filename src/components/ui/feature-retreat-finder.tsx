@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart, Compass, Sparkles, ArrowRight } from "lucide-react";
@@ -73,7 +74,6 @@ const FeatureRetreatFinder = ({
     }
   }]
 }: FeatureRetreatFinderProps) => {
-  const [showJournal, setShowJournal] = useState(false);
   const [activeTab, setActiveTab] = useState(tabs[0].value);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const navigate = useNavigate();
@@ -89,6 +89,7 @@ const FeatureRetreatFinder = ({
   };
   
   const handleButtonClick = () => {
+    // Navigate to the wellness journal page
     navigate("/wellness-journal");
   };
   

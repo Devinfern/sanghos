@@ -29,7 +29,7 @@ const OnboardingPage = () => {
         .from('user_profiles')
         .update({
           preferences: userData.preferences,
-          experience_level: userData.experience
+          years_experience: userData.experience // Using years_experience instead of experience_level
         })
         .eq('id', session.user.id);
       

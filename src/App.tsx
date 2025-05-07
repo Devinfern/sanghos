@@ -23,6 +23,8 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import UserDashboard from "./pages/UserDashboard";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
+import WellnessJournalPage from "./pages/WellnessJournalPage";
+import OnboardingPage from "./pages/OnboardingPage";
 
 function App() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -54,6 +56,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/dashboard" element={<UserDashboard />} />
+        <Route path="/wellness-journal" element={<WellnessJournalPage />} />
+        <Route path="/onboarding" element={<OnboardingPage />} />
         
         <Route path="/host/login" element={<HostLogin />} />
         <Route path="/host/signup" element={<HostSignup />} />

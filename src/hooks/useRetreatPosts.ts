@@ -51,16 +51,15 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
     
     setIsLoading(true);
     try {
-      const result = await supabase
+      // Query posts with retreat_id and phase filter
+      const { data: rawPosts, error } = await supabase
         .from('community_posts')
         .select('*')
         .eq('retreat_id', retreatId)
         .eq('retreat_phase', phase)
         .order('created_at', { ascending: false });
       
-      if (result.error) throw result.error;
-      
-      const rawPosts = result.data as RawPost[];
+      if (error) throw error;
       
       if (!rawPosts || rawPosts.length === 0) {
         setPosts([]);
@@ -68,42 +67,37 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
         return;
       }
       
-      // Transform the post data into our app's Post type
-      const transformedPosts: Post[] = [];
-      
-      // Process each post individually
-      for (const rawPost of rawPosts) {
-        // Fetch the user profile
-        const profileResult = await supabase
-          .from('user_profiles')
-          .select('username, avatar_url, is_wellness_practitioner')
-          .eq('id', rawPost.user_id)
-          .maybeSingle();
-        
-        if (profileResult.error) {
-          console.error('Error fetching profile:', profileResult.error);
-        }
-        
-        const profileData = profileResult.data as RawProfile | null;
-        
-        // Create properly typed user profile
-        const userProfile: UserProfile | null = profileData ? {
-          username: profileData.username,
-          avatar_url: profileData.avatar_url || '',
-          is_wellness_practitioner: Boolean(profileData.is_wellness_practitioner)
-        } : null;
-        
-        transformedPosts.push({
-          id: rawPost.id,
-          title: rawPost.title,
-          content: rawPost.content,
-          user_id: rawPost.user_id,
-          created_at: rawPost.created_at,
-          likes: rawPost.likes || 0,
-          category: rawPost.category,
-          user_profiles: userProfile
-        });
-      }
+      // Transform the post data
+      const transformedPosts = await Promise.all(
+        rawPosts.map(async (post: RawPost) => {
+          // Fetch the user profile
+          const { data: profile, error: profileError } = await supabase
+            .from('user_profiles')
+            .select('username, avatar_url, is_wellness_practitioner')
+            .eq('id', post.user_id)
+            .maybeSingle();
+          
+          if (profileError) {
+            console.error('Error fetching profile:', profileError);
+          }
+          
+          // Transform to our app's Post type
+          return {
+            id: post.id,
+            title: post.title,
+            content: post.content,
+            user_id: post.user_id,
+            created_at: post.created_at,
+            likes: post.likes || 0,
+            category: post.category,
+            user_profiles: profile ? {
+              username: profile.username,
+              avatar_url: profile.avatar_url || '',
+              is_wellness_practitioner: Boolean(profile.is_wellness_practitioner)
+            } : null
+          };
+        })
+      );
       
       setPosts(transformedPosts);
     } catch (error) {
