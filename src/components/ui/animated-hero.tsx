@@ -30,7 +30,7 @@ export const AnimatedHero = () => {
         }} transition={{
           duration: 0.7,
           delay: 0.6
-        }} className="bg-gradient-to-r from-brand-peach via-white to-brand-subtle bg-clip-text text-transparent">
+        }} className="bg-gradient-to-r from-brand-peach via-white to-brand-subtle bg-clip-text text-brand-primary">
             Wellness Retreat
           </motion.span>
           <motion.span initial={{
