@@ -21,6 +21,7 @@ import Retreats from '@/pages/Retreats';
 import Login from '@/pages/Login';
 import CommunityTeaser from '@/pages/CommunityTeaser';
 import JoinNow from '@/pages/JoinNow';
+import UserDashboard from '@/pages/UserDashboard';
 
 // Host pages
 import HostDashboard from '@/pages/host/HostDashboard';
@@ -33,6 +34,8 @@ import HostSignup from '@/pages/host/HostSignup';
 // Context providers
 import { AuthProvider } from '@/contexts/AuthContext';
 import { HostProvider } from '@/contexts/HostContext';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
+import AdminProtectedRoute from '@/components/AdminProtectedRoute';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -80,6 +83,9 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/join" element={<JoinNow />} />
             <Route path="/community-teaser" element={<CommunityTeaser />} />
+            
+            {/* Dashboard route - protected */}
+            <Route path="/dashboard" element={<ProtectedRoute><UserDashboard /></ProtectedRoute>} />
 
             {/* Host Routes */}
             <Route path="/host/login" element={<HostLogin />} />
@@ -90,8 +96,8 @@ function App() {
             <Route path="/host/retreats/edit/:retreatId" element={<HostRetreatEdit />} />
 
             {/* Admin Routes */}
-            <Route path="/admin/cms" element={<AdminCMS />} />
-            <Route path="/retreat-management" element={<RetreatManagementCMS />} />
+            <Route path="/admin/cms" element={<AdminProtectedRoute><AdminCMS /></AdminProtectedRoute>} />
+            <Route path="/retreat-management" element={<AdminProtectedRoute><RetreatManagementCMS /></AdminProtectedRoute>} />
 
             {/* Community CMS Route */}
             <Route path="/community/cms" element={<CommunityCMS />} />
