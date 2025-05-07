@@ -29,7 +29,7 @@ const OnboardingPage = () => {
         .from('user_profiles')
         .update({
           preferences: userData.preferences,
-          years_experience: userData.experience // Using years_experience instead of experience_level
+          years_experience: userData.experience 
         })
         .eq('id', session.user.id);
       
@@ -62,19 +62,13 @@ const OnboardingPage = () => {
       // Get current user
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        // Mark as onboarded in Supabase with minimal data
-        await supabase
-          .from('user_profiles')
-          .update({ onboarded: true })
-          .eq('id', session.user.id);
+        // Set a flag in localStorage for compatibility with existing code
+        const existingUser = JSON.parse(localStorage.getItem("sanghos_user") || "{}");
+        localStorage.setItem("sanghos_user", JSON.stringify({
+          ...existingUser,
+          onboarded: true
+        }));
       }
-      
-      // Update localStorage for compatibility
-      const existingUser = JSON.parse(localStorage.getItem("sanghos_user") || "{}");
-      localStorage.setItem("sanghos_user", JSON.stringify({
-        ...existingUser,
-        onboarded: true
-      }));
     } catch (err) {
       console.error("Error skipping onboarding:", err);
     }
