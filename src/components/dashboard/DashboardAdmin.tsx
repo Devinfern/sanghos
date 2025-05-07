@@ -47,16 +47,16 @@ const DashboardAdmin = () => {
                   <Settings className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-medium">Community Management</h3>
+                  <h3 className="font-medium">Retreat Management</h3>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Manage forum posts, topics, and user content
+                    Create and manage retreat listings easily
                   </p>
                 </div>
                 <Button 
                   className="w-full" 
-                  onClick={() => navigate("/community/cms")}
+                  onClick={() => navigate("/retreat-management")}
                 >
-                  Open Community CMS
+                  Manage Retreats
                 </Button>
               </div>
             </CardContent>
@@ -67,7 +67,7 @@ const DashboardAdmin = () => {
           <Button 
             variant="outline" 
             className="w-full"
-            onClick={() => navigate("/host/retreats/new")}
+            onClick={() => navigate("/retreat-management")}
           >
             <PlusCircle className="h-4 w-4 mr-2" />
             Create New Retreat

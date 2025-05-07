@@ -69,7 +69,7 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
       
       // Transform the post data
       const transformedPosts = await Promise.all(
-        (rawPosts as RawPost[]).map(async (post: RawPost) => {
+        rawPosts.map(async (post: RawPost) => {
           // Fetch the user profile
           const { data: profile, error: profileError } = await supabase
             .from('user_profiles')

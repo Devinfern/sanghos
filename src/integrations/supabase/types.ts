@@ -254,6 +254,87 @@ export type Database = {
         }
         Relationships: []
       }
+      retreats: {
+        Row: {
+          additional_images: string[] | null
+          amenities: string[] | null
+          capacity: number
+          category: string[]
+          created_at: string
+          date: string
+          description: string
+          duration: string
+          featured: boolean | null
+          id: string
+          image: string
+          instructor_id: string | null
+          is_sanghos: boolean | null
+          location_address: string | null
+          location_city: string
+          location_description: string | null
+          location_name: string
+          location_state: string
+          price: number
+          remaining: number
+          time: string
+          title: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          additional_images?: string[] | null
+          amenities?: string[] | null
+          capacity: number
+          category: string[]
+          created_at?: string
+          date: string
+          description: string
+          duration: string
+          featured?: boolean | null
+          id?: string
+          image: string
+          instructor_id?: string | null
+          is_sanghos?: boolean | null
+          location_address?: string | null
+          location_city: string
+          location_description?: string | null
+          location_name: string
+          location_state: string
+          price: number
+          remaining: number
+          time: string
+          title: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          additional_images?: string[] | null
+          amenities?: string[] | null
+          capacity?: number
+          category?: string[]
+          created_at?: string
+          date?: string
+          description?: string
+          duration?: string
+          featured?: boolean | null
+          id?: string
+          image?: string
+          instructor_id?: string | null
+          is_sanghos?: boolean | null
+          location_address?: string | null
+          location_city?: string
+          location_description?: string | null
+          location_name?: string
+          location_state?: string
+          price?: number
+          remaining?: number
+          time?: string
+          title?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       trending_posts: {
         Row: {
           author: string

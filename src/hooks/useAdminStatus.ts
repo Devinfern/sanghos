@@ -1,40 +1,31 @@
 
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
-export const useAdminStatus = () => {
+export function useAdminStatus() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkAdminStatus = async () => {
       try {
-        const { data: session } = await supabase.auth.getSession();
-        if (!session.session?.user?.email) {
-          console.log("No user session or email found");
+        // Get current session
+        const { data: sessionData } = await supabase.auth.getSession();
+        
+        if (!sessionData.session) {
           setIsAdmin(false);
           setIsLoading(false);
           return;
         }
-
-        const userEmail = session.session.user.email.trim();
-        console.log("Checking admin status for email:", userEmail);
-
-        // Use a direct database query with no RLS issues
-        const { data, error } = await supabase
-          .rpc('is_admin', { user_email: userEmail });
-
-        if (error) {
-          console.error('Error checking admin status:', error);
-          setIsAdmin(false);
-        } else {
-          console.log("Admin check result:", data);
-          setIsAdmin(!!data);
-          
-          if (data) {
-            console.log("Admin access granted");
-          }
-        }
+        
+        // Use the is_admin function to check admin status
+        const { data, error } = await supabase.rpc('is_admin', {
+          user_email: sessionData.session.user.email
+        });
+        
+        if (error) throw error;
+        
+        setIsAdmin(!!data);
       } catch (error) {
         console.error('Error checking admin status:', error);
         setIsAdmin(false);
@@ -44,16 +35,7 @@ export const useAdminStatus = () => {
     };
 
     checkAdminStatus();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
-      console.log("Auth state changed, rechecking admin status");
-      checkAdminStatus();
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
   }, []);
 
   return { isAdmin, isLoading };
-};
+}

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -283,7 +282,7 @@ export default function WellnessJournal() {
         location: randomLocation,
         date: formattedDate,
         time: time,
-        image: retreat.imageSrc
+        image: retreat.image  // Changed from retreat.imageSrc to retreat.image
       };
     }).sort((a, b) => b.matchScore - a.matchScore);
   };
