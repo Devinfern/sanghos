@@ -59,13 +59,14 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				brand: {
-					dark: '#264653',     // Dark blue/teal
-					primary: '#2A9D8F',  // Teal
-					sky: '#C0E8F9',      // Light blue
-					subtle: '#B8D3D1',   // Muted teal
-					peach: '#F0B67F',    // Peach/orange
-					rose: '#CE7B91',     // Rose/pink
-					slate: '#516072',    // Slate blue/gray
+					dark: '#1D4A4D',     // Dark teal (from image)
+					primary: '#25B6A4',  // Teal/mint (from image)
+					sand: '#C19A6B',     // Sand/beige (from image)
+					light: '#F5F2ED',    // Light beige/off-white (from image) 
+					rose: '#F26A65',     // Coral/rose (from image)
+					subtle: '#E5F5F2',   // Very light teal
+					sky: '#C0E8F9',      // Light blue (retained from previous)
+					slate: '#516072',    // Slate blue/gray (retained from previous)
 				},
 				sand: {
 					50: '#f9f7f4',

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 // Define simpler types without circular references
-type Post = {
+export type Post = {
   id: string;
   title: string;
   content: string;
@@ -14,9 +14,11 @@ type Post = {
   comments: number;
   author_avatar?: string;
   author_role?: string;
+  category?: string;
+  user_id?: string;
 };
 
-type RetreatPostsResult = {
+export type RetreatPostsResult = {
   posts: Post[];
   isLoading: boolean;
   error: string | null;
