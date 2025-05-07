@@ -22,8 +22,8 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
   const [categoryFilter, setCategoryFilter] = useState("all");
   const { isAdmin } = useAdminStatus();
   
-  // Use our new custom hook for fetching posts
-  const { posts, isLoading, refreshPosts } = useRetreatPosts(retreatId, activePhase);
+  // Use our custom hook for fetching posts
+  const { posts, isLoading, error, refetch } = useRetreatPosts(retreatId || "");
 
   const createSpace = async () => {
     if (!isAdmin) {
@@ -72,7 +72,7 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
         {isLoggedIn && (
           <div className="w-full md:w-48">
             <CreatePost 
-              onPostCreated={refreshPosts} 
+              onPostCreated={refetch} 
               retreatId={retreatId || ""} 
               retreatPhase={activePhase} 
             />
@@ -83,7 +83,7 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
       <PostList 
         posts={filteredPosts} 
         isLoading={isLoading} 
-        onPostUpdate={refreshPosts} 
+        onPostUpdate={refetch} 
       />
       
       {!isLoading && filteredPosts.length === 0 && (

@@ -76,6 +76,8 @@ function App() {
             <Route path="/retreats" element={<Retreats />} />
             <Route path="/community" element={<Community />} />
             <Route path="/about-us" element={<AboutUs />} />
+            {/* Add route for /about that redirects to /about-us */}
+            <Route path="/about" element={<Navigate to="/about-us" replace />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/retreat/:retreatId" element={<RetreatDetailsPage />} />
             <Route path="/wellness-journal" element={<WellnessJournalPage />} />
