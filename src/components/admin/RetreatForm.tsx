@@ -1,445 +1,459 @@
+
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { 
-  Form, 
-  FormControl, 
-  FormField, 
-  FormItem, 
-  FormLabel, 
-  FormMessage 
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { useNavigate, useParams } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { 
-  Card, 
-  CardHeader, 
-  CardTitle, 
-  CardDescription, 
-  CardContent, 
-  CardFooter 
-} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
   SelectValue 
 } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Loader2 } from "lucide-react";
 
 interface RetreatFormProps {
-  retreatData?: any;
-  onComplete: () => void;
+  isEdit?: boolean;
 }
 
-const formSchema = z.object({
-  title: z.string().min(2, "Title must be at least 2 characters"),
-  description: z.string().min(10, "Description must be at least 10 characters"),
-  image: z.string().url("Please enter a valid image URL"),
-  location_name: z.string().min(2, "Location name is required"),
-  location_address: z.string().optional(),
-  location_city: z.string().min(1, "City is required"),
-  location_state: z.string().min(1, "State is required"),
-  date: z.string().min(1, "Date is required"),
-  time: z.string().min(1, "Time is required"),
-  duration: z.string().min(1, "Duration is required"),
-  price: z.number().min(0, "Price must be a positive number"),
-  capacity: z.number().min(1, "Capacity must be at least 1"),
-  remaining: z.number().min(0, "Remaining spots must be a positive number"),
-  category: z.array(z.string()).min(1, "Select at least one category"),
-  featured: z.boolean().default(false),
-});
-
-type FormValues = z.infer<typeof formSchema>;
-
-const RetreatForm = ({ retreatData, onComplete }: RetreatFormProps) => {
+const RetreatForm: React.FC<RetreatFormProps> = ({ isEdit = false }) => {
+  const { user } = useAuth();
   const navigate = useNavigate();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [categories] = useState([
-    "meditation", "yoga", "wellness", "nature", "spiritual"
-  ]);
-
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      image: "",
-      location_name: "",
-      location_address: "",
-      location_city: "",
-      location_state: "",
-      date: "",
-      time: "",
-      duration: "",
-      price: 0,
-      capacity: 10,
-      remaining: 10,
-      category: [],
-      featured: false,
-    },
-  });
-
+  const { retreatId } = useParams();
+  
+  const [loading, setLoading] = useState(false);
+  const [formLoading, setFormLoading] = useState(isEdit);
+  
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
+  const [locationName, setLocationName] = useState("");
+  const [locationAddress, setLocationAddress] = useState("");
+  const [locationCity, setLocationCity] = useState("");
+  const [locationState, setLocationState] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [duration, setDuration] = useState("");
+  const [price, setPrice] = useState("");
+  const [capacity, setCapacity] = useState("");
+  const [remaining, setRemaining] = useState("");
+  const [categories, setCategories] = useState<string[]>([]);
+  const [amenities, setAmenities] = useState<string[]>([]);
+  const [featured, setFeatured] = useState(false);
+  
+  // Category options
+  const categoryOptions = ["yoga", "meditation", "wellness", "fitness", "nature", "spiritual", "adventure", "creative"];
+  
+  // Amenity options
+  const amenityOptions = ["wifi", "parking", "food", "tea", "mats", "props", "shower", "pool", "hot tub", "sauna"];
+  
+  // Fetch retreat data if editing
   useEffect(() => {
-    if (retreatData) {
-      form.reset({
-        title: retreatData.title || "",
-        description: retreatData.description || "",
-        image: retreatData.image || "",
-        location_name: retreatData.location_name || "",
-        location_address: retreatData.location_address || "",
-        location_city: retreatData.location_city || "",
-        location_state: retreatData.location_state || "",
-        date: retreatData.date || "",
-        time: retreatData.time || "",
-        duration: retreatData.duration || "",
-        price: retreatData.price || 0,
-        capacity: retreatData.capacity || 10,
-        remaining: retreatData.remaining || 10,
-        category: retreatData.category || [],
-        featured: retreatData.featured || false,
-      });
-    }
-  }, [retreatData, form]);
-
-  const onSubmit = async (values: FormValues) => {
-    setIsSubmitting(true);
-    try {
-      const { data: session } = await supabase.auth.getSession();
-      if (!session.session) {
-        toast.error("You must be logged in to create or edit retreats");
-        return;
-      }
-
-      const userId = session.session.user.id;
-      const retreatData = {
-        ...values,
-        user_id: userId,
-      };
-
-      if (retreatData && retreatData.id) {
-        // Update existing retreat
-        const { data, error } = await supabase
-          .from('retreats')
-          .update(retreatData)
-          .eq('id', retreatData.id);
-        
-        if (error) throw error;
-        toast.success("Retreat updated successfully");
+    const fetchRetreatData = async () => {
+      if (isEdit && retreatId) {
+        try {
+          const { data, error } = await supabase
+            .from("retreats")
+            .select("*")
+            .eq("id", retreatId)
+            .single();
+          
+          if (error) throw error;
+          
+          if (data) {
+            setTitle(data.title);
+            setDescription(data.description);
+            setImage(data.image);
+            setLocationName(data.location_name);
+            setLocationAddress(data.location_address || "");
+            setLocationCity(data.location_city);
+            setLocationState(data.location_state);
+            setDate(data.date);
+            setTime(data.time);
+            setDuration(data.duration);
+            setPrice(data.price.toString());
+            setCapacity(data.capacity.toString());
+            setRemaining(data.remaining.toString());
+            setCategories(data.category || []);
+            setAmenities(data.amenities || []);
+            setFeatured(data.featured || false);
+          }
+        } catch (error) {
+          console.error("Error fetching retreat data:", error);
+          toast.error("Failed to load retreat data");
+        } finally {
+          setFormLoading(false);
+        }
       } else {
-        // Create new retreat
-        const { data, error } = await supabase
-          .from('retreats')
+        setFormLoading(false);
+      }
+    };
+    
+    fetchRetreatData();
+  }, [isEdit, retreatId]);
+  
+  const handleCategoryToggle = (category: string) => {
+    setCategories((prevCategories) =>
+      prevCategories.includes(category)
+        ? prevCategories.filter((c) => c !== category)
+        : [...prevCategories, category]
+    );
+  };
+  
+  const handleAmenityToggle = (amenity: string) => {
+    setAmenities((prevAmenities) =>
+      prevAmenities.includes(amenity)
+        ? prevAmenities.filter((a) => a !== amenity)
+        : [...prevAmenities, amenity]
+    );
+  };
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!user) {
+      toast.error("You must be logged in to create or edit retreats");
+      return;
+    }
+    
+    if (!title || !description || !image || !locationName || !locationCity || 
+        !locationState || !date || !time || !duration || !price || !capacity || 
+        !remaining || categories.length === 0) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+    
+    setLoading(true);
+    
+    try {
+      const retreatData = {
+        user_id: user.id,
+        title,
+        description,
+        image,
+        location_name: locationName,
+        location_address: locationAddress,
+        location_city: locationCity,
+        location_state: locationState,
+        date,
+        time,
+        duration,
+        price: parseFloat(price),
+        capacity: parseInt(capacity),
+        remaining: parseInt(remaining),
+        category: categories,
+        amenities,
+        featured,
+      };
+      
+      let result;
+      
+      if (isEdit && retreatId) {
+        result = await supabase
+          .from("retreats")
+          .update(retreatData)
+          .eq("id", retreatId);
+      } else {
+        result = await supabase
+          .from("retreats")
           .insert([retreatData]);
-        
-        if (error) throw error;
-        toast.success("Retreat created successfully");
       }
       
-      onComplete();
+      const { error } = result;
+      
+      if (error) throw error;
+      
+      toast.success(`Retreat ${isEdit ? "updated" : "created"} successfully!`);
+      navigate("/retreat-management");
     } catch (error) {
       console.error("Error saving retreat:", error);
-      toast.error("Failed to save retreat");
+      toast.error(`Failed to ${isEdit ? "update" : "create"} retreat`);
     } finally {
-      setIsSubmitting(false);
+      setLoading(false);
     }
   };
-
+  
+  if (formLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-brand-primary" />
+        <span className="ml-2">Loading retreat data...</span>
+      </div>
+    );
+  }
+  
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle>{retreatData ? "Edit Retreat" : "Create New Retreat"}</CardTitle>
-        <CardDescription>
-          {retreatData 
-            ? "Update the retreat information below" 
-            : "Fill in the details to create a new retreat"}
-        </CardDescription>
-      </CardHeader>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Retreat Title</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter retreat title" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    <div className="w-full max-w-4xl mx-auto p-4">
+      <form onSubmit={handleSubmit} className="space-y-8">
+        <Card>
+          <CardContent className="pt-6">
+            <h2 className="text-xl font-semibold mb-4">Basic Information</h2>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="title">Title *</Label>
+                <Input
+                  id="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Enter retreat title"
+                  required
+                />
+              </div>
               
-              <FormField
-                control={form.control}
-                name="image"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Image URL</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter image URL" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea 
-                      placeholder="Describe the retreat experience" 
-                      className="min-h-[120px]" 
-                      {...field} 
+              <div>
+                <Label htmlFor="description">Description *</Label>
+                <Textarea
+                  id="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Describe your retreat"
+                  rows={6}
+                  required
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="image">Image URL *</Label>
+                <Input
+                  id="image"
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
+                  placeholder="Enter image URL"
+                  required
+                />
+                {image && (
+                  <div className="mt-2 relative w-full h-40">
+                    <img
+                      src={image}
+                      alt="Retreat preview"
+                      className="w-full h-full object-cover rounded-md"
                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField
-                control={form.control}
-                name="location_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Location Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g. Mountain Zen Center" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+                  </div>
                 )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="location_address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Address (Optional)</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Street address" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              </div>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField
-                control={form.control}
-                name="location_city"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>City</FormLabel>
-                    <FormControl>
-                      <Input placeholder="City" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="pt-6">
+            <h2 className="text-xl font-semibold mb-4">Location</h2>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="location_name">Location Name *</Label>
+                <Input
+                  id="location_name"
+                  value={locationName}
+                  onChange={(e) => setLocationName(e.target.value)}
+                  placeholder="Enter location name"
+                  required
+                />
+              </div>
               
-              <FormField
-                control={form.control}
-                name="location_state"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>State</FormLabel>
-                    <FormControl>
-                      <Input placeholder="State" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div>
+                <Label htmlFor="location_address">Address</Label>
+                <Input
+                  id="location_address"
+                  value={locationAddress}
+                  onChange={(e) => setLocationAddress(e.target.value)}
+                  placeholder="Enter street address"
+                />
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="location_city">City *</Label>
+                  <Input
+                    id="location_city"
+                    value={locationCity}
+                    onChange={(e) => setLocationCity(e.target.value)}
+                    placeholder="Enter city"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="location_state">State *</Label>
+                  <Input
+                    id="location_state"
+                    value={locationState}
+                    onChange={(e) => setLocationState(e.target.value)}
+                    placeholder="Enter state"
+                    required
+                  />
+                </div>
+              </div>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <FormField
-                control={form.control}
-                name="date"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Date</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g. June 15, 2025" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="pt-6">
+            <h2 className="text-xl font-semibold mb-4">Event Details</h2>
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="date">Date *</Label>
+                  <Input
+                    id="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    placeholder="YYYY-MM-DD"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="time">Time *</Label>
+                  <Input
+                    id="time"
+                    value={time}
+                    onChange={(e) => setTime(e.target.value)}
+                    placeholder="e.g., 9:00 AM"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="duration">Duration *</Label>
+                  <Input
+                    id="duration"
+                    value={duration}
+                    onChange={(e) => setDuration(e.target.value)}
+                    placeholder="e.g., 3 hours"
+                    required
+                  />
+                </div>
+              </div>
               
-              <FormField
-                control={form.control}
-                name="time"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Time</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g. 2:00 PM" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="price">Price ($) *</Label>
+                  <Input
+                    id="price"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    placeholder="0.00"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="capacity">Capacity *</Label>
+                  <Input
+                    id="capacity"
+                    type="number"
+                    min="1"
+                    value={capacity}
+                    onChange={(e) => setCapacity(e.target.value)}
+                    placeholder="Enter max capacity"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="remaining">Spots Remaining *</Label>
+                  <Input
+                    id="remaining"
+                    type="number"
+                    min="0"
+                    max={capacity}
+                    value={remaining}
+                    onChange={(e) => setRemaining(e.target.value)}
+                    placeholder="Enter remaining spots"
+                    required
+                  />
+                </div>
+              </div>
               
-              <FormField
-                control={form.control}
-                name="duration"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Duration</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g. 3 days" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="featured"
+                  checked={featured}
+                  onCheckedChange={(checked) => setFeatured(!!checked)}
+                />
+                <label htmlFor="featured" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Feature this retreat?
+                </label>
+              </div>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <FormField
-                control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price ($)</FormLabel>
-                    <FormControl>
-                      <Input 
-                        type="number" 
-                        placeholder="0" 
-                        {...field} 
-                        onChange={e => field.onChange(parseFloat(e.target.value))}
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="pt-6">
+            <h2 className="text-xl font-semibold mb-4">Categories & Amenities</h2>
+            <div className="space-y-4">
+              <div>
+                <Label className="block mb-2">Categories *</Label>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                  {categoryOptions.map((category) => (
+                    <div key={category} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`category-${category}`}
+                        checked={categories.includes(category)}
+                        onCheckedChange={() => handleCategoryToggle(category)}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="capacity"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Capacity</FormLabel>
-                    <FormControl>
-                      <Input 
-                        type="number" 
-                        placeholder="10" 
-                        {...field}
-                        onChange={e => field.onChange(parseInt(e.target.value, 10))}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="remaining"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Spots Remaining</FormLabel>
-                    <FormControl>
-                      <Input 
-                        type="number" 
-                        placeholder="10" 
-                        {...field}
-                        onChange={e => field.onChange(parseInt(e.target.value, 10))}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Categories</FormLabel>
-                  <div className="flex flex-wrap gap-2">
-                    {categories.map((category) => (
-                      <Button
-                        key={category}
-                        type="button"
-                        variant={field.value.includes(category) ? "default" : "outline"}
-                        onClick={() => {
-                          const newCategories = field.value.includes(category)
-                            ? field.value.filter(c => c !== category)
-                            : [...field.value, category];
-                          field.onChange(newCategories);
-                        }}
+                      <label
+                        htmlFor={`category-${category}`}
+                        className="text-sm font-medium leading-none capitalize peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                       >
                         {category}
-                      </Button>
-                    ))}
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="featured"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel>Featured Retreat</FormLabel>
-                    <p className="text-sm text-muted-foreground">
-                      Featured retreats will be highlighted on the homepage
-                    </p>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div>
+                <Label className="block mb-2">Amenities</Label>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                  {amenityOptions.map((amenity) => (
+                    <div key={amenity} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`amenity-${amenity}`}
+                        checked={amenities.includes(amenity)}
+                        onCheckedChange={() => handleAmenityToggle(amenity)}
+                      />
+                      <label
+                        htmlFor={`amenity-${amenity}`}
+                        className="text-sm font-medium leading-none capitalize peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        {amenity}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </CardContent>
-          
-          <CardFooter className="flex justify-between">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onComplete()}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Saving..." : retreatData ? "Update Retreat" : "Create Retreat"}
-            </Button>
-          </CardFooter>
-        </form>
-      </Form>
-    </Card>
+        </Card>
+        
+        <div className="flex justify-end space-x-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => navigate("/retreat-management")}
+          >
+            Cancel
+          </Button>
+          <Button type="submit" disabled={loading}>
+            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isEdit ? "Update Retreat" : "Create Retreat"}
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 };
 

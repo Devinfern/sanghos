@@ -6,32 +6,32 @@ import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 // Pages
-import Home from './pages/Home';
-import Pricing from './pages/Pricing';
-import Community from './pages/Community';
-import AboutUs from './pages/AboutUs';
-import ContactUs from './pages/ContactUs';
-import RetreatDetailsPage from './pages/RetreatDetailsPage';
-import WellnessJournalPage from './pages/WellnessJournalPage';
-import ForumPage from './pages/ForumPage';
-import AdminCMS from './pages/AdminCMS';
-import CommunityCMS from './pages/CommunityCMS';
-import RetreatManagementCMS from './pages/RetreatManagementCMS';
+import Home from '@/pages/Index';
+import Pricing from '@/pages/Pricing';
+import Community from '@/pages/Community';
+import AboutUs from '@/pages/About';
+import ContactUs from '@/pages/Contact';
+import RetreatDetailsPage from '@/pages/RetreatDetails';
+import WellnessJournalPage from '@/pages/WellnessJournalPage';
+import ForumPage from '@/pages/ForumPage';
+import AdminCMS from '@/pages/AdminCMS';
+import CommunityCMS from '@/pages/CommunityCMS';
+import RetreatManagementCMS from '@/pages/RetreatManagementCMS';
 
 // Host pages
-import HostDashboard from './pages/host/HostDashboard';
-import HostRetreats from './pages/host/HostRetreats';
-import HostRetreatNew from './pages/host/HostRetreatNew';
-import HostRetreatEdit from './pages/host/HostRetreatEdit';
-import HostLogin from './pages/host/HostLogin';
-import HostSignup from './pages/host/HostSignup';
+import HostDashboard from '@/pages/host/HostDashboard';
+import HostRetreats from '@/pages/host/HostRetreats';
+import HostRetreatNew from '@/pages/host/HostRetreatNew';
+import HostRetreatEdit from '@/pages/host/HostRetreatEdit';
+import HostLogin from '@/pages/host/HostLogin';
+import HostSignup from '@/pages/host/HostSignup';
 
 // Context providers
-import { AuthProvider } from './contexts/AuthContext';
-import { HostProvider } from './contexts/HostContext';
+import { AuthProvider } from '@/contexts/AuthContext';
+import { HostProvider } from '@/contexts/HostContext';
 
 // Components
-import AdminProtectedRoute from './components/AdminProtectedRoute';
+import AdminProtectedRoute from '@/components/AdminProtectedRoute';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);

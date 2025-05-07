@@ -71,7 +71,7 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
       const transformedPosts = await Promise.all(
         rawPosts.map(async (post: RawPost) => {
           // Fetch the user profile
-          const { data: profile, error: profileError } = await supabase
+          const { data: profileData, error: profileError } = await supabase
             .from('user_profiles')
             .select('username, avatar_url, is_wellness_practitioner')
             .eq('id', post.user_id)
@@ -80,6 +80,14 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
           if (profileError) {
             console.error('Error fetching profile:', profileError);
           }
+          
+          const profile: UserProfile | null = profileData 
+            ? {
+                username: profileData.username,
+                avatar_url: profileData.avatar_url || '',
+                is_wellness_practitioner: Boolean(profileData.is_wellness_practitioner)
+              }
+            : null;
           
           // Transform to our app's Post type
           return {
@@ -90,11 +98,7 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
             created_at: post.created_at,
             likes: post.likes || 0,
             category: post.category,
-            user_profiles: profile ? {
-              username: profile.username,
-              avatar_url: profile.avatar_url || '',
-              is_wellness_practitioner: Boolean(profile.is_wellness_practitioner)
-            } : null
+            user_profiles: profile
           };
         })
       );
