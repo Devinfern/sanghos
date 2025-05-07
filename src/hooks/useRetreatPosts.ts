@@ -16,12 +16,6 @@ interface RawPost {
   retreat_phase?: string;
 }
 
-interface RawProfile {
-  username: string;
-  avatar_url: string | null;
-  is_wellness_practitioner: boolean | null;
-}
-
 // Define simplified interfaces to avoid circular references
 interface UserProfile {
   username: string;

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,11 +18,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2 } from "lucide-react";
 
-interface RetreatFormProps {
+export interface RetreatFormProps {
   isEdit?: boolean;
+  retreatData?: any;
+  onComplete?: () => void;
 }
 
-const RetreatForm: React.FC<RetreatFormProps> = ({ isEdit = false }) => {
+const RetreatForm: React.FC<RetreatFormProps> = ({ isEdit = false, retreatData, onComplete }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { retreatId } = useParams();
@@ -57,15 +58,22 @@ const RetreatForm: React.FC<RetreatFormProps> = ({ isEdit = false }) => {
   // Fetch retreat data if editing
   useEffect(() => {
     const fetchRetreatData = async () => {
-      if (isEdit && retreatId) {
+      if (isEdit && (retreatId || retreatData)) {
         try {
-          const { data, error } = await supabase
-            .from("retreats")
-            .select("*")
-            .eq("id", retreatId)
-            .single();
+          let data;
           
-          if (error) throw error;
+          if (retreatData) {
+            data = retreatData;
+          } else {
+            const { data: fetchedData, error } = await supabase
+              .from("retreats")
+              .select("*")
+              .eq("id", retreatId)
+              .single();
+            
+            if (error) throw error;
+            data = fetchedData;
+          }
           
           if (data) {
             setTitle(data.title);
@@ -97,7 +105,7 @@ const RetreatForm: React.FC<RetreatFormProps> = ({ isEdit = false }) => {
     };
     
     fetchRetreatData();
-  }, [isEdit, retreatId]);
+  }, [isEdit, retreatId, retreatData]);
   
   const handleCategoryToggle = (category: string) => {
     setCategories((prevCategories) =>
@@ -171,7 +179,12 @@ const RetreatForm: React.FC<RetreatFormProps> = ({ isEdit = false }) => {
       if (error) throw error;
       
       toast.success(`Retreat ${isEdit ? "updated" : "created"} successfully!`);
-      navigate("/retreat-management");
+      
+      if (onComplete) {
+        onComplete();
+      } else {
+        navigate("/retreat-management");
+      }
     } catch (error) {
       console.error("Error saving retreat:", error);
       toast.error(`Failed to ${isEdit ? "update" : "create"} retreat`);
@@ -443,7 +456,13 @@ const RetreatForm: React.FC<RetreatFormProps> = ({ isEdit = false }) => {
           <Button
             type="button"
             variant="outline"
-            onClick={() => navigate("/retreat-management")}
+            onClick={() => {
+              if (onComplete) {
+                onComplete();
+              } else {
+                navigate("/retreat-management");
+              }
+            }}
           >
             Cancel
           </Button>
