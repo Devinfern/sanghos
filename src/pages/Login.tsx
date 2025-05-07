@@ -26,6 +26,20 @@ const Login = () => {
   });
 
   useEffect(() => {
+    // Check if this is a join request
+    const urlParams = new URLSearchParams(window.location.search);
+    const isJoin = urlParams.get('join') === 'true';
+    
+    if (isJoin) {
+      // If join=true is in the URL, you could redirect to signup
+      // or toggle a state to show signup form instead
+      // This depends on how your login/signup UI is structured
+      console.log("Join mode detected");
+      // For example: setShowSignupForm(true);
+    }
+  }, []);
+
+  useEffect(() => {
     const checkConnection = async () => {
       try {
         const { error } = await supabase.from('forum_posts').select('count', { count: 'exact', head: true });
