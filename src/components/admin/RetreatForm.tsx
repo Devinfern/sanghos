@@ -1,163 +1,178 @@
-
-import { useState, useEffect } from "react";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { 
+  Form, 
+  FormControl, 
+  FormField, 
+  FormItem, 
+  FormLabel, 
+  FormMessage 
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { 
+  Card, 
+  CardHeader, 
+  CardTitle, 
+  CardDescription, 
+  CardContent, 
+  CardFooter 
+} from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { supabase } from "@/integrations/supabase/client";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 import { toast } from "sonner";
-
-// Form schema
-const retreatFormSchema = z.object({
-  title: z.string().min(3, "Title must be at least 3 characters"),
-  description: z.string().min(10, "Description must be at least 10 characters"),
-  image: z.string().url("Must be a valid URL"),
-  location_name: z.string().min(3, "Location name is required"),
-  location_address: z.string().optional(),
-  location_city: z.string().min(1, "City is required"),
-  location_state: z.string().min(1, "State is required"),
-  location_description: z.string().optional(),
-  date: z.string().min(1, "Date is required"),
-  time: z.string().min(1, "Time is required"),
-  duration: z.string().min(1, "Duration is required"),
-  price: z.coerce.number().min(0, "Price must be 0 or greater"),
-  capacity: z.coerce.number().int().positive("Capacity must be a positive number"),
-  remaining: z.coerce.number().int().min(0, "Remaining spots must be 0 or greater"),
-  category: z.array(z.string()).nonempty("Select at least one category"),
-  featured: z.boolean().default(false),
-  is_sanghos: z.boolean().default(true)
-});
-
-type RetreatFormValues = z.infer<typeof retreatFormSchema>;
+import { supabase } from "@/integrations/supabase/client";
 
 interface RetreatFormProps {
   retreatData?: any;
   onComplete: () => void;
 }
 
-const RETREAT_CATEGORIES = [
-  "Yoga", 
-  "Meditation", 
-  "Wellness", 
-  "Hiking", 
-  "Nutrition", 
-  "Workshop", 
-  "Spiritual",
-  "Fitness",
-  "Mindfulness"
-];
+const formSchema = z.object({
+  title: z.string().min(2, "Title must be at least 2 characters"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  image: z.string().url("Please enter a valid image URL"),
+  location_name: z.string().min(2, "Location name is required"),
+  location_address: z.string().optional(),
+  location_city: z.string().min(1, "City is required"),
+  location_state: z.string().min(1, "State is required"),
+  date: z.string().min(1, "Date is required"),
+  time: z.string().min(1, "Time is required"),
+  duration: z.string().min(1, "Duration is required"),
+  price: z.number().min(0, "Price must be a positive number"),
+  capacity: z.number().min(1, "Capacity must be at least 1"),
+  remaining: z.number().min(0, "Remaining spots must be a positive number"),
+  category: z.array(z.string()).min(1, "Select at least one category"),
+  featured: z.boolean().default(false),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 const RetreatForm = ({ retreatData, onComplete }: RetreatFormProps) => {
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const isEditing = !!retreatData;
-  
-  // Initialize the form
-  const form = useForm<RetreatFormValues>({
-    resolver: zodResolver(retreatFormSchema),
-    defaultValues: retreatData ? {
-      ...retreatData,
-      price: parseFloat(retreatData.price || 0),
-      capacity: parseInt(retreatData.capacity || 20),
-      remaining: parseInt(retreatData.remaining || 20),
-      category: retreatData.category || []
-    } : {
+  const [categories] = useState([
+    "meditation", "yoga", "wellness", "nature", "spiritual"
+  ]);
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
       title: "",
       description: "",
-      image: "https://images.unsplash.com/photo-1518002171953-a080ee817e1f",
+      image: "",
       location_name: "",
       location_address: "",
       location_city: "",
       location_state: "",
-      location_description: "",
-      date: new Date().toISOString().split('T')[0],
-      time: "10:00 AM - 4:00 PM",
-      duration: "1 day",
-      price: 99,
-      capacity: 20,
-      remaining: 20,
-      category: ["Wellness"],
+      date: "",
+      time: "",
+      duration: "",
+      price: 0,
+      capacity: 10,
+      remaining: 10,
+      category: [],
       featured: false,
-      is_sanghos: true
-    }
+    },
   });
 
-  // Form submission handler
-  const onSubmit = async (values: RetreatFormValues) => {
+  useEffect(() => {
+    if (retreatData) {
+      form.reset({
+        title: retreatData.title || "",
+        description: retreatData.description || "",
+        image: retreatData.image || "",
+        location_name: retreatData.location_name || "",
+        location_address: retreatData.location_address || "",
+        location_city: retreatData.location_city || "",
+        location_state: retreatData.location_state || "",
+        date: retreatData.date || "",
+        time: retreatData.time || "",
+        duration: retreatData.duration || "",
+        price: retreatData.price || 0,
+        capacity: retreatData.capacity || 10,
+        remaining: retreatData.remaining || 10,
+        category: retreatData.category || [],
+        featured: retreatData.featured || false,
+      });
+    }
+  }, [retreatData, form]);
+
+  const onSubmit = async (values: FormValues) => {
     setIsSubmitting(true);
-    
     try {
-      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-      if (sessionError) throw sessionError;
-      
-      if (!sessionData.session) {
+      const { data: session } = await supabase.auth.getSession();
+      if (!session.session) {
         toast.error("You must be logged in to create or edit retreats");
         return;
       }
-      
-      const userId = sessionData.session.user.id;
-      
-      // Format data for Supabase
+
+      const userId = session.session.user.id;
       const retreatData = {
         ...values,
-        user_id: userId
+        user_id: userId,
       };
 
-      let result;
-      
-      if (isEditing) {
+      if (retreatData && retreatData.id) {
+        // Update existing retreat
         const { data, error } = await supabase
           .from('retreats')
           .update(retreatData)
           .eq('id', retreatData.id);
-          
-        result = { data, error };
         
         if (error) throw error;
-        toast.success("Retreat updated successfully!");
+        toast.success("Retreat updated successfully");
       } else {
+        // Create new retreat
         const { data, error } = await supabase
           .from('retreats')
-          .insert(retreatData)
-          .select();
-          
-        result = { data, error };
+          .insert([retreatData]);
         
         if (error) throw error;
-        toast.success("Retreat created successfully!");
+        toast.success("Retreat created successfully");
       }
       
       onComplete();
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error saving retreat:", error);
-      toast.error(error.message || "Failed to save retreat");
+      toast.error("Failed to save retreat");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
-        <CardTitle>{isEditing ? "Edit Retreat" : "Create New Retreat"}</CardTitle>
+        <CardTitle>{retreatData ? "Edit Retreat" : "Create New Retreat"}</CardTitle>
+        <CardDescription>
+          {retreatData 
+            ? "Update the retreat information below" 
+            : "Fill in the details to create a new retreat"}
+        </CardDescription>
       </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <CardContent className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Title</FormLabel>
+                    <FormLabel>Retreat Title</FormLabel>
                     <FormControl>
-                      <Input placeholder="Wellness Weekend Retreat" {...field} />
+                      <Input placeholder="Enter retreat title" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -171,14 +186,14 @@ const RetreatForm = ({ retreatData, onComplete }: RetreatFormProps) => {
                   <FormItem>
                     <FormLabel>Image URL</FormLabel>
                     <FormControl>
-                      <Input placeholder="https://example.com/image.jpg" {...field} />
+                      <Input placeholder="Enter image URL" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            
+
             <FormField
               control={form.control}
               name="description"
@@ -186,17 +201,17 @@ const RetreatForm = ({ retreatData, onComplete }: RetreatFormProps) => {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Describe your retreat in detail"
-                      rows={4}
-                      {...field}
+                    <Textarea 
+                      placeholder="Describe the retreat experience" 
+                      className="min-h-[120px]" 
+                      {...field} 
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
@@ -205,7 +220,7 @@ const RetreatForm = ({ retreatData, onComplete }: RetreatFormProps) => {
                   <FormItem>
                     <FormLabel>Location Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Sacred Grove Retreat Center" {...field} />
+                      <Input placeholder="e.g. Mountain Zen Center" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -217,16 +232,16 @@ const RetreatForm = ({ retreatData, onComplete }: RetreatFormProps) => {
                 name="location_address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Address</FormLabel>
+                    <FormLabel>Address (Optional)</FormLabel>
                     <FormControl>
-                      <Input placeholder="123 Mountain Way" {...field} />
+                      <Input placeholder="Street address" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
@@ -235,7 +250,7 @@ const RetreatForm = ({ retreatData, onComplete }: RetreatFormProps) => {
                   <FormItem>
                     <FormLabel>City</FormLabel>
                     <FormControl>
-                      <Input placeholder="Sedona" {...field} />
+                      <Input placeholder="City" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -249,14 +264,14 @@ const RetreatForm = ({ retreatData, onComplete }: RetreatFormProps) => {
                   <FormItem>
                     <FormLabel>State</FormLabel>
                     <FormControl>
-                      <Input placeholder="AZ" {...field} />
+                      <Input placeholder="State" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <FormField
                 control={form.control}
@@ -265,7 +280,7 @@ const RetreatForm = ({ retreatData, onComplete }: RetreatFormProps) => {
                   <FormItem>
                     <FormLabel>Date</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <Input placeholder="e.g. June 15, 2025" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -279,7 +294,7 @@ const RetreatForm = ({ retreatData, onComplete }: RetreatFormProps) => {
                   <FormItem>
                     <FormLabel>Time</FormLabel>
                     <FormControl>
-                      <Input placeholder="10:00 AM - 4:00 PM" {...field} />
+                      <Input placeholder="e.g. 2:00 PM" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -293,14 +308,14 @@ const RetreatForm = ({ retreatData, onComplete }: RetreatFormProps) => {
                   <FormItem>
                     <FormLabel>Duration</FormLabel>
                     <FormControl>
-                      <Input placeholder="3 days" {...field} />
+                      <Input placeholder="e.g. 3 days" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <FormField
                 control={form.control}
@@ -309,7 +324,12 @@ const RetreatForm = ({ retreatData, onComplete }: RetreatFormProps) => {
                   <FormItem>
                     <FormLabel>Price ($)</FormLabel>
                     <FormControl>
-                      <Input type="number" min="0" step="0.01" {...field} />
+                      <Input 
+                        type="number" 
+                        placeholder="0" 
+                        {...field} 
+                        onChange={e => field.onChange(parseFloat(e.target.value))}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -321,9 +341,14 @@ const RetreatForm = ({ retreatData, onComplete }: RetreatFormProps) => {
                 name="capacity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Total Capacity</FormLabel>
+                    <FormLabel>Capacity</FormLabel>
                     <FormControl>
-                      <Input type="number" min="1" {...field} />
+                      <Input 
+                        type="number" 
+                        placeholder="10" 
+                        {...field}
+                        onChange={e => field.onChange(parseInt(e.target.value, 10))}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -335,123 +360,85 @@ const RetreatForm = ({ retreatData, onComplete }: RetreatFormProps) => {
                 name="remaining"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Remaining Spots</FormLabel>
+                    <FormLabel>Spots Remaining</FormLabel>
                     <FormControl>
-                      <Input type="number" min="0" {...field} />
+                      <Input 
+                        type="number" 
+                        placeholder="10" 
+                        {...field}
+                        onChange={e => field.onChange(parseInt(e.target.value, 10))}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            
+
             <FormField
               control={form.control}
               name="category"
-              render={() => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Categories</FormLabel>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {RETREAT_CATEGORIES.map((category) => (
-                      <FormField
+                  <div className="flex flex-wrap gap-2">
+                    {categories.map((category) => (
+                      <Button
                         key={category}
-                        control={form.control}
-                        name="category"
-                        render={({ field }) => {
-                          return (
-                            <FormItem
-                              key={category}
-                              className="flex flex-row items-start space-x-3 space-y-0"
-                            >
-                              <FormControl>
-                                <Checkbox
-                                  checked={field.value?.includes(category)}
-                                  onCheckedChange={(checked) => {
-                                    return checked
-                                      ? field.onChange([...field.value, category])
-                                      : field.onChange(
-                                          field.value?.filter(
-                                            (value) => value !== category
-                                          )
-                                        )
-                                  }}
-                                />
-                              </FormControl>
-                              <FormLabel className="font-normal">
-                                {category}
-                              </FormLabel>
-                            </FormItem>
-                          )
+                        type="button"
+                        variant={field.value.includes(category) ? "default" : "outline"}
+                        onClick={() => {
+                          const newCategories = field.value.includes(category)
+                            ? field.value.filter(c => c !== category)
+                            : [...field.value, category];
+                          field.onChange(newCategories);
                         }}
-                      />
+                      >
+                        {category}
+                      </Button>
                     ))}
                   </div>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField
-                control={form.control}
-                name="featured"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel>Featured Retreat</FormLabel>
-                      <FormDescription>
-                        Featured retreats are highlighted on the homepage
-                      </FormDescription>
-                    </div>
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="is_sanghos"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel>Sanghos Organized</FormLabel>
-                      <FormDescription>
-                        Is this retreat organized by Sanghos?
-                      </FormDescription>
-                    </div>
-                  </FormItem>
-                )}
-              />
-            </div>
-            
-            <div className="flex justify-end space-x-4 pt-4">
-              <Button type="button" variant="outline" onClick={onComplete}>
-                Cancel
-              </Button>
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting
-                  ? isEditing
-                    ? "Saving..."
-                    : "Creating..."
-                  : isEditing
-                    ? "Save Retreat"
-                    : "Create Retreat"}
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </CardContent>
+
+            <FormField
+              control={form.control}
+              name="featured"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel>Featured Retreat</FormLabel>
+                    <p className="text-sm text-muted-foreground">
+                      Featured retreats will be highlighted on the homepage
+                    </p>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </CardContent>
+          
+          <CardFooter className="flex justify-between">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onComplete()}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Saving..." : retreatData ? "Update Retreat" : "Create Retreat"}
+            </Button>
+          </CardFooter>
+        </form>
+      </Form>
     </Card>
   );
 };

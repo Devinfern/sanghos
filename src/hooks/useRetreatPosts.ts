@@ -75,7 +75,7 @@ export function useRetreatPosts(retreatId: string | undefined, phase: RetreatPha
             .from('user_profiles')
             .select('username, avatar_url, is_wellness_practitioner')
             .eq('id', post.user_id)
-            .maybeSingle();
+            .single();
           
           if (profileError) {
             console.error('Error fetching profile:', profileError);
