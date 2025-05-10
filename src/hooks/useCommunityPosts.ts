@@ -49,19 +49,23 @@ export const useCommunityPosts = (searchQuery: string, categoryFilter: string) =
     checkUser();
     fetchPosts();
 
-    const postsSubscription = supabase
-      .channel('community_posts')
+    // Set up real-time subscription
+    const channel = supabase
+      .channel('public:community_posts')
       .on('postgres_changes', {
-        event: '*',
+        event: '*', // Listen to all events
         schema: 'public',
-        table: 'community_posts'
+        table: 'community_posts',
       }, () => {
+        // Refetch posts when any changes occur
+        // This approach ensures we get the related user_profiles data too
+        console.log('Real-time community post update detected, refetching...');
         fetchPosts();
       })
       .subscribe();
 
     return () => {
-      postsSubscription.unsubscribe();
+      supabase.removeChannel(channel);
     };
   }, [searchQuery, categoryFilter]);
 

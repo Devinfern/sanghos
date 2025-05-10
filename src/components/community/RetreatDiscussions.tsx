@@ -22,7 +22,7 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
   const [categoryFilter, setCategoryFilter] = useState("all");
   const { isAdmin } = useAdminStatus();
   
-  // Use our custom hook for fetching posts
+  // Use our custom hook for fetching posts with real-time updates
   const { posts, isLoading, error, refetch } = useRetreatPosts(retreatId || "");
 
   const createSpace = async () => {
@@ -43,7 +43,7 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
   const filteredPosts = posts.filter(post => {
     const matchesSearch = !searchQuery || 
       post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      post.content.toLowerCase().includes(searchQuery.toLowerCase());
+      (post.content && post.content.toLowerCase().includes(searchQuery.toLowerCase()));
     
     const matchesCategory = categoryFilter === 'all' || post.category === categoryFilter;
     

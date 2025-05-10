@@ -60,6 +60,42 @@ export const useRetreatPosts = (retreatId: string): RetreatPostsResult => {
 
   useEffect(() => {
     fetchPosts();
+
+    // Set up real-time subscription for this retreat's posts
+    const channel = supabase
+      .channel('public:forum_posts')
+      .on('postgres_changes', {
+        event: '*', // Listen to all events (INSERT, UPDATE, DELETE)
+        schema: 'public',
+        table: 'forum_posts',
+        filter: `posted_in=eq.retreat-${retreatId}` // Only listen to this retreat's posts
+      }, (payload) => {
+        console.log('Real-time update received:', payload);
+        
+        // Handle different types of changes
+        if (payload.eventType === 'INSERT') {
+          // Add the new post to the list
+          setPosts(currentPosts => [payload.new as Post, ...currentPosts]);
+        } else if (payload.eventType === 'UPDATE') {
+          // Update the existing post
+          setPosts(currentPosts => 
+            currentPosts.map(post => 
+              post.id === payload.new.id ? payload.new as Post : post
+            )
+          );
+        } else if (payload.eventType === 'DELETE') {
+          // Remove the deleted post
+          setPosts(currentPosts => 
+            currentPosts.filter(post => post.id !== payload.old.id)
+          );
+        }
+      })
+      .subscribe();
+
+    // Clean up subscription when component unmounts
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [retreatId]);
 
   return {

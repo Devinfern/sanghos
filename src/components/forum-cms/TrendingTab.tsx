@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
@@ -8,12 +7,43 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { TrendingPost, trendingPosts, updateTrendingPosts } from "@/lib/forumData";
+import { TrendingPost, trendingPosts, updateTrendingPosts, loadTrendingPosts } from "@/lib/forumData";
+import { supabase } from "@/integrations/supabase/client";
 
 export const TrendingTab = () => {
   const [trending, setTrending] = useState([...trendingPosts]);
   const [editingTrending, setEditingTrending] = useState<Partial<TrendingPost> | null>(null);
   const [trendingDialogOpen, setTrendingDialogOpen] = useState(false);
+
+  // Load initial trending posts and set up real-time subscription
+  useEffect(() => {
+    const loadInitialData = async () => {
+      await loadTrendingPosts();
+      setTrending([...trendingPosts]);
+    };
+    
+    loadInitialData();
+
+    // Set up real-time subscription
+    const channel = supabase
+      .channel('public:trending_posts')
+      .on('postgres_changes', {
+        event: '*', // Listen to all events
+        schema: 'public',
+        table: 'trending_posts'
+      }, () => {
+        // Reload trending posts when any changes occur
+        console.log('Real-time trending posts update detected, reloading...');
+        loadTrendingPosts().then(() => {
+          setTrending([...trendingPosts]);
+        });
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   const handleEditTrending = (post: TrendingPost) => {
     setEditingTrending({...post});
@@ -30,7 +60,7 @@ export const TrendingTab = () => {
     setTrendingDialogOpen(true);
   };
 
-  const handleSaveTrending = () => {
+  const handleSaveTrending = async () => {
     if (!editingTrending) return;
 
     if (!editingTrending.title || !editingTrending.author) {
@@ -38,27 +68,41 @@ export const TrendingTab = () => {
       return;
     }
 
-    const newTrending = [...trending];
-    const postIndex = newTrending.findIndex(p => String(p.id) === String(editingTrending.id));
-    
-    if (postIndex === -1) {
-      newTrending.push(editingTrending as TrendingPost);
-    } else {
-      newTrending[postIndex] = editingTrending as TrendingPost;
+    try {
+      const newTrending = [...trending];
+      const postIndex = newTrending.findIndex(p => String(p.id) === String(editingTrending.id));
+      
+      if (postIndex === -1) {
+        newTrending.push(editingTrending as TrendingPost);
+      } else {
+        newTrending[postIndex] = editingTrending as TrendingPost;
+      }
+      
+      // Update trending posts in Supabase
+      await updateTrendingPosts(newTrending);
+      
+      // Local state will update via real-time subscription
+      setTrendingDialogOpen(false);
+      toast.success(postIndex === -1 ? "Trending post added successfully" : "Trending post updated successfully");
+    } catch (error) {
+      console.error('Error saving trending post:', error);
+      toast.error("Failed to save trending post");
     }
-    
-    setTrending(newTrending);
-    updateTrendingPosts(newTrending);
-    setTrendingDialogOpen(false);
-    toast.success(postIndex === -1 ? "Trending post added successfully" : "Trending post updated successfully");
   };
 
-  const handleDeleteTrending = (postId: string | number) => {
-    const newTrending = trending.filter(p => String(p.id) !== String(postId));
-    
-    setTrending(newTrending);
-    updateTrendingPosts(newTrending);
-    toast.success("Trending post deleted successfully");
+  const handleDeleteTrending = async (postId: string | number) => {
+    try {
+      const newTrending = trending.filter(p => String(p.id) !== String(postId));
+      
+      // Update trending posts in Supabase
+      await updateTrendingPosts(newTrending);
+      
+      // Local state will update via real-time subscription
+      toast.success("Trending post deleted successfully");
+    } catch (error) {
+      console.error('Error deleting trending post:', error);
+      toast.error("Failed to delete trending post");
+    }
   };
 
   return (

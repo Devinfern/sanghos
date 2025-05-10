@@ -6,12 +6,14 @@ import CommunityContent from "@/components/community/CommunityContent";
 import CommunityManagement from "@/components/community/CommunityManagement";
 import { useAdminStatus } from "@/hooks/useAdminStatus";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const CommunityPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const { isAdmin, isLoading: isAdminLoading } = useAdminStatus();
   const [showCMS, setShowCMS] = useState<boolean>(false);
   const [currentEvents, setCurrentEvents] = useState(forumEvents);
+  const [currentTrendingPosts, setCurrentTrendingPosts] = useState(trendingPosts);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [activeSection, setActiveSection] = useState("discussions");
 
@@ -23,10 +25,42 @@ const CommunityPage = () => {
         loadTrendingPosts()
       ]);
       setCurrentEvents(forumEvents);
+      setCurrentTrendingPosts(trendingPosts);
       setIsLoading(false);
     };
     
     loadData();
+
+    // Set up real-time subscriptions
+    const eventsChannel = supabase
+      .channel('public:forum_events')
+      .on('postgres_changes', {
+        event: '*', // Listen to all events
+        schema: 'public',
+        table: 'forum_events'
+      }, () => {
+        // Reload events when any changes occur
+        console.log('Real-time events update detected, reloading...');
+        loadForumEvents().then(() => {
+          setCurrentEvents([...forumEvents]);
+        });
+      })
+      .subscribe();
+      
+    const trendingChannel = supabase
+      .channel('public:trending_posts')
+      .on('postgres_changes', {
+        event: '*', // Listen to all events
+        schema: 'public',
+        table: 'trending_posts'
+      }, () => {
+        // Reload trending posts when any changes occur
+        console.log('Real-time trending posts update detected, reloading...');
+        loadTrendingPosts().then(() => {
+          setCurrentTrendingPosts([...trendingPosts]);
+        });
+      })
+      .subscribe();
 
     // Check login status
     const checkLoginStatus = () => {
@@ -35,6 +69,11 @@ const CommunityPage = () => {
     };
     
     checkLoginStatus();
+    
+    return () => {
+      supabase.removeChannel(eventsChannel);
+      supabase.removeChannel(trendingChannel);
+    };
   }, []);
 
   const toggleCMS = () => {
@@ -79,7 +118,7 @@ const CommunityPage = () => {
         isLoggedIn={isLoggedIn}
         activeSection={activeSection}
         currentEvents={currentEvents}
-        trendingPosts={trendingPosts}
+        trendingPosts={currentTrendingPosts}
         onSectionChange={setActiveSection}
         onToggleCMS={toggleCMS}
       />

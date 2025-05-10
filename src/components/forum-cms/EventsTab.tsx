@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -7,12 +6,43 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { ForumEvent, forumEvents, updateForumEvents } from "@/lib/forumData";
+import { ForumEvent, forumEvents, updateForumEvents, loadForumEvents } from "@/lib/forumData";
+import { supabase } from "@/integrations/supabase/client";
 
 export const EventsTab = () => {
   const [events, setEvents] = useState([...forumEvents]);
   const [editingEvent, setEditingEvent] = useState<Partial<ForumEvent> | null>(null);
   const [eventDialogOpen, setEventDialogOpen] = useState(false);
+
+  // Load initial events and set up real-time subscription
+  useEffect(() => {
+    const loadInitialData = async () => {
+      await loadForumEvents();
+      setEvents([...forumEvents]);
+    };
+    
+    loadInitialData();
+
+    // Set up real-time subscription
+    const channel = supabase
+      .channel('public:forum_events')
+      .on('postgres_changes', {
+        event: '*', // Listen to all events
+        schema: 'public',
+        table: 'forum_events'
+      }, () => {
+        // Reload events when any changes occur
+        console.log('Real-time events update detected, reloading...');
+        loadForumEvents().then(() => {
+          setEvents([...forumEvents]);
+        });
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   const handleEditEvent = (event: ForumEvent) => {
     setEditingEvent({...event});
@@ -33,7 +63,7 @@ export const EventsTab = () => {
     setEventDialogOpen(true);
   };
 
-  const handleSaveEvent = () => {
+  const handleSaveEvent = async () => {
     if (!editingEvent) return;
 
     if (!editingEvent.title || !editingEvent.time) {
@@ -41,27 +71,41 @@ export const EventsTab = () => {
       return;
     }
 
-    const newEvents = [...events];
-    const eventIndex = newEvents.findIndex(e => String(e.id) === String(editingEvent.id));
-    
-    if (eventIndex === -1) {
-      newEvents.push(editingEvent as ForumEvent);
-    } else {
-      newEvents[eventIndex] = editingEvent as ForumEvent;
+    try {
+      const newEvents = [...events];
+      const eventIndex = newEvents.findIndex(e => String(e.id) === String(editingEvent.id));
+      
+      if (eventIndex === -1) {
+        newEvents.push(editingEvent as ForumEvent);
+      } else {
+        newEvents[eventIndex] = editingEvent as ForumEvent;
+      }
+      
+      // Update events in Supabase
+      await updateForumEvents(newEvents);
+      
+      // Local state will update via real-time subscription
+      setEventDialogOpen(false);
+      toast.success(eventIndex === -1 ? "Event added successfully" : "Event updated successfully");
+    } catch (error) {
+      console.error('Error saving event:', error);
+      toast.error("Failed to save event");
     }
-    
-    setEvents(newEvents);
-    updateForumEvents(newEvents);
-    setEventDialogOpen(false);
-    toast.success(eventIndex === -1 ? "Event added successfully" : "Event updated successfully");
   };
 
-  const handleDeleteEvent = (eventId: string | number) => {
-    const newEvents = events.filter(e => String(e.id) !== String(eventId));
-    
-    setEvents(newEvents);
-    updateForumEvents(newEvents);
-    toast.success("Event deleted successfully");
+  const handleDeleteEvent = async (eventId: string | number) => {
+    try {
+      const newEvents = events.filter(e => String(e.id) !== String(eventId));
+      
+      // Update events in Supabase
+      await updateForumEvents(newEvents);
+      
+      // Local state will update via real-time subscription
+      toast.success("Event deleted successfully");
+    } catch (error) {
+      console.error('Error deleting event:', error);
+      toast.error("Failed to delete event");
+    }
   };
 
   return (
