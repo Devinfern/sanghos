@@ -9,6 +9,8 @@ import Index from '@/pages/Index';
 import Pricing from '@/pages/Pricing';
 import Community from '@/pages/Community';
 import AboutUs from '@/pages/About';
+import AboutDesignOne from '@/pages/AboutDesignOne';
+import AboutDesignTwo from '@/pages/AboutDesignTwo';
 import ContactUs from '@/pages/Contact';
 import RetreatDetailsPage from '@/pages/RetreatDetails';
 import WellnessJournalPage from '@/pages/WellnessJournalPage';
@@ -78,6 +80,8 @@ function App() {
             <Route path="/about-us" element={<AboutUs />} />
             {/* Add route for /about that redirects to /about-us */}
             <Route path="/about" element={<Navigate to="/about-us" replace />} />
+            <Route path="/about-design-1" element={<AboutDesignOne />} />
+            <Route path="/about-design-2" element={<AboutDesignTwo />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/retreat/:retreatId" element={<RetreatDetailsPage />} />
             <Route path="/wellness-journal" element={<WellnessJournalPage />} />
