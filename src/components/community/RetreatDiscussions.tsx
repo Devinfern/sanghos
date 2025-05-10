@@ -8,7 +8,7 @@ import CreatePost from "./CreatePost";
 import PhaseTabs from "./PhaseTabs";
 import PostList from "./PostList";
 import EmptyDiscussionState from "./EmptyDiscussionState";
-import { useRetreatPosts, Post as RetreatPost } from "@/hooks/useRetreatPosts";
+import { useRetreatPosts } from "@/hooks/useRetreatPosts";
 
 interface RetreatDiscussionsProps {
   retreatId?: string;
@@ -81,7 +81,7 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
       </div>
 
       <PostList 
-        posts={filteredPosts as any[]} 
+        posts={filteredPosts} 
         isLoading={isLoading} 
         onPostUpdate={refetch} 
       />
