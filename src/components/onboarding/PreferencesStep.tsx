@@ -36,12 +36,6 @@ const PreferencesStep = ({
     { id: "workshops", label: "Workshops", icon: "🤝" }
   ];
 
-  // Handle toggling a preference safely without causing re-render loops
-  const handleToggle = (id: string) => {
-    const currentValue = preferences[id as keyof typeof preferences] || false;
-    handlePreferenceChange(id, !currentValue);
-  };
-
   return (
     <motion.div 
       className="space-y-4"
@@ -61,13 +55,13 @@ const PreferencesStep = ({
                 className={`flex items-center p-3 border rounded-lg cursor-pointer transition-all ${
                   isChecked ? "border-brand-primary bg-brand-primary/5" : "border-gray-200"
                 }`}
-                onClick={() => handleToggle(item.id)}
+                onClick={() => handlePreferenceChange(item.id, !isChecked)}
               >
                 <div className="mr-2">
                   <Checkbox 
                     id={`pref-${item.id}`}
                     checked={isChecked}
-                    // Remove onCheckedChange to prevent double state updates
+                    // Important: No onCheckedChange prop to avoid double updates
                   />
                 </div>
                 <div className="flex items-center">
