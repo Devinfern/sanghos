@@ -16,9 +16,6 @@ interface WelcomeStepProps {
 }
 
 const WelcomeStep = ({ userData, handleInputChange, handleExperienceChange }: WelcomeStepProps) => {
-  // For debugging - track local state to confirm changes
-  const [localExperience, setLocalExperience] = useState(userData.experience);
-  
   // Animation variants
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
@@ -31,17 +28,9 @@ const WelcomeStep = ({ userData, handleInputChange, handleExperienceChange }: We
     { value: "advanced", label: "Advanced", desc: "Experienced practitioner" }
   ];
 
-  const handleRadioChange = (newValue: string) => {
-    console.log("Radio changed to:", newValue);
-    setLocalExperience(newValue); // Update local state for immediate feedback
-    handleExperienceChange(newValue); // Update parent state
-  };
-  
-  // Debug log when userData changes
   useEffect(() => {
-    console.log("WelcomeStep userData:", userData);
-    console.log("Local experience state:", localExperience);
-  }, [userData, localExperience]);
+    console.log("WelcomeStep rendered with experience:", userData.experience);
+  }, [userData.experience]);
 
   return (
     <motion.div 
@@ -78,32 +67,31 @@ const WelcomeStep = ({ userData, handleInputChange, handleExperienceChange }: We
         <Label>Your Experience Level</Label>
         <RadioGroup 
           value={userData.experience || "beginner"} 
-          onValueChange={handleRadioChange}
+          onValueChange={handleExperienceChange}
           className="grid grid-cols-1 gap-2 pt-2"
         >
           {experienceLevels.map((level) => (
-            <div 
+            <Label 
               key={level.value}
+              htmlFor={level.value}
               className={`flex items-center p-3 border rounded-lg cursor-pointer transition-all ${
-                (userData.experience === level.value || localExperience === level.value)
+                userData.experience === level.value 
                   ? "border-brand-primary bg-brand-primary/5" 
                   : "border-gray-200 hover:bg-gray-50"
               }`}
-              onClick={() => handleRadioChange(level.value)}
             >
-              <RadioGroupItem 
-                value={level.value} 
-                id={level.value}
-                className="mr-3"
-                checked={userData.experience === level.value || localExperience === level.value}
-              />
-              <Label htmlFor={level.value} className="flex-1 cursor-pointer">
-                <div>
+              <div className="flex items-center w-full">
+                <RadioGroupItem 
+                  value={level.value} 
+                  id={level.value}
+                  className="mr-3"
+                />
+                <div className="flex-1">
                   <span className="font-medium">{level.label}</span>
                   <p className="text-xs text-muted-foreground">{level.desc}</p>
                 </div>
-              </Label>
-            </div>
+              </div>
+            </Label>
           ))}
         </RadioGroup>
       </div>

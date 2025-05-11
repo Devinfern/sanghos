@@ -70,7 +70,11 @@ const OnboardingFlow = ({
 
   const handleExperienceChange = (value: string) => {
     console.log("OnboardingFlow updating experience to:", value);
-    setUserData((prev: any) => ({ ...prev, experience: value }));
+    setUserData((prev: any) => {
+      const newData = { ...prev, experience: value };
+      console.log("New userData state:", newData);
+      return newData;
+    });
   };
 
   const handlePreferenceChange = (preference: string, checked: boolean) => {
