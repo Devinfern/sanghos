@@ -46,9 +46,7 @@ const OnboardingPage = () => {
           navigate("/signup");
         } else {
           // They have user data but no session - might be waiting for email verification
-          toast({
-            description: "Please complete your signup process first. Check your email or sign in directly."
-          });
+          toast("Please complete your signup process first. Check your email or sign in directly.");
           navigate("/login");
         }
       }

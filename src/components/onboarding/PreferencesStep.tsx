@@ -44,28 +44,31 @@ const PreferencesStep = ({
             { id: "nature", label: "Nature Retreats", icon: "🌲" },
             { id: "wellness", label: "Wellness & Spa", icon: "💆" },
             { id: "workshops", label: "Workshops", icon: "🤝" }
-          ].map((item) => (
-            <div 
-              key={item.id}
-              className={`flex items-center p-3 border rounded-lg cursor-pointer transition-all ${
-                preferences[item.id as keyof typeof preferences] ? "border-brand-primary bg-brand-primary/5" : "border-gray-200"
-              }`}
-              onClick={() => handlePreferenceChange(item.id, !preferences[item.id as keyof typeof preferences])}
-            >
-              <Checkbox 
-                id={item.id} 
-                checked={preferences[item.id as keyof typeof preferences] || false}
-                onCheckedChange={(checked) => 
-                  handlePreferenceChange(item.id, checked as boolean)
-                }
-                className="mr-2"
-              />
-              <div className="flex items-center">
-                <span className="mr-2 text-xl">{item.icon}</span>
-                <Label htmlFor={item.id} className="cursor-pointer">{item.label}</Label>
+          ].map((item) => {
+            const isChecked = preferences[item.id as keyof typeof preferences] || false;
+            
+            return (
+              <div 
+                key={item.id}
+                className={`flex items-center p-3 border rounded-lg cursor-pointer transition-all ${
+                  isChecked ? "border-brand-primary bg-brand-primary/5" : "border-gray-200"
+                }`}
+              >
+                <div className="flex items-center space-x-2 w-full" onClick={() => handlePreferenceChange(item.id, !isChecked)}>
+                  <Checkbox 
+                    id={`pref-${item.id}`}
+                    checked={isChecked}
+                    className="mr-2"
+                    onCheckedChange={() => {}}
+                  />
+                  <div className="flex items-center">
+                    <span className="mr-2 text-xl">{item.icon}</span>
+                    <Label htmlFor={`pref-${item.id}`} className="cursor-pointer">{item.label}</Label>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
       
