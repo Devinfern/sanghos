@@ -69,6 +69,7 @@ const OnboardingFlow = ({
   };
 
   const handleExperienceChange = (value: string) => {
+    console.log("OnboardingFlow updating experience to:", value);
     setUserData((prev: any) => ({ ...prev, experience: value }));
   };
 
