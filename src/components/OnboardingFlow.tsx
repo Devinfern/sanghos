@@ -73,7 +73,7 @@ const OnboardingFlow = ({
 
   const handleExperienceChange = (value: string) => {
     console.log("OnboardingFlow updating experience to:", value);
-    // Force a clean state update
+    // Force the update to trigger re-renders
     setUserData((prev: any) => {
       // Create new object to ensure React detects the change
       const newData = { 

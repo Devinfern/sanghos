@@ -33,12 +33,6 @@ const WelcomeStep = ({ userData, handleInputChange, handleExperienceChange }: We
     console.log("WelcomeStep rendered with experience:", userData.experience);
   }, [userData.experience]);
 
-  // Direct click handler for each option
-  const handleOptionClick = (value: string) => {
-    console.log("Option clicked:", value);
-    handleExperienceChange(value);
-  };
-
   return (
     <motion.div 
       className="space-y-4"
@@ -72,7 +66,12 @@ const WelcomeStep = ({ userData, handleInputChange, handleExperienceChange }: We
       
       <div className="space-y-2">
         <Label>Your Experience Level</Label>
-        <div className="grid grid-cols-1 gap-2 pt-2">
+        <RadioGroup 
+          defaultValue={userData.experience || "beginner"} 
+          value={userData.experience} 
+          onValueChange={handleExperienceChange}
+          className="grid grid-cols-1 gap-2 pt-2"
+        >
           {experienceLevels.map((level) => (
             <div 
               key={level.value}
@@ -81,28 +80,30 @@ const WelcomeStep = ({ userData, handleInputChange, handleExperienceChange }: We
                   ? "border-brand-primary bg-brand-primary/5" 
                   : "border-gray-200 hover:bg-gray-50"
               }`}
-              onClick={() => handleOptionClick(level.value)}
+              onClick={() => handleExperienceChange(level.value)}
             >
-              <div className="flex items-center w-full">
-                <input
-                  type="radio"
-                  id={`exp-${level.value}`}
-                  name="experience"
-                  value={level.value}
-                  checked={userData.experience === level.value}
-                  onChange={() => handleOptionClick(level.value)}
-                  className="mr-3"
-                />
-                <Label htmlFor={`exp-${level.value}`} className="flex-1 cursor-pointer">
-                  <div>
-                    <span className="font-medium">{level.label}</span>
-                    <p className="text-xs text-muted-foreground">{level.desc}</p>
-                  </div>
-                </Label>
-              </div>
+              <RadioGroupItem
+                value={level.value}
+                id={`exp-${level.value}`}
+                className="mr-3"
+              />
+              <Label 
+                htmlFor={`exp-${level.value}`} 
+                className="flex-1 cursor-pointer"
+                onClick={(e) => {
+                  // Prevent double-firing when clicking on label
+                  e.stopPropagation();
+                  handleExperienceChange(level.value);
+                }}
+              >
+                <div>
+                  <span className="font-medium">{level.label}</span>
+                  <p className="text-xs text-muted-foreground">{level.desc}</p>
+                </div>
+              </Label>
             </div>
           ))}
-        </div>
+        </RadioGroup>
       </div>
     </motion.div>
   );
