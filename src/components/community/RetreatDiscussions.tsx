@@ -1,6 +1,5 @@
 
 import { useState } from 'react';
-import { RetreatPhase } from "@/types/community";
 import { useAdminStatus } from "@/hooks/useAdminStatus";
 import { toast } from "sonner";
 import CommunitySearchFilter from "./CommunitySearchFilter";
@@ -17,7 +16,7 @@ interface RetreatDiscussionsProps {
 }
 
 const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscussionsProps) => {
-  const [activePhase, setActivePhase] = useState<RetreatPhase>("pre");
+  const [activePhase, setActivePhase] = useState<"pre" | "post">("pre");
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const { isAdmin } = useAdminStatus();
