@@ -52,19 +52,20 @@ const CreatePost = ({ onPostCreated, retreatId, onCancel }: CreatePostProps) => 
       
       const authorName = profileData?.full_name || user.email?.split('@')[0] || 'Anonymous';
       
-      // Create the post
+      // Create the post with all required fields for the forum_posts table
       const { error } = await supabase
         .from('forum_posts')
-        .insert([
-          {
-            title: postTitle.trim(),
-            content: postContent.trim(),
-            category: postCategory,
-            user_id: user.id,
-            author_name: authorName,
-            posted_in: retreatId ? `retreat-${retreatId}` : 'community'
-          }
-        ]);
+        .insert({
+          title: postTitle.trim(),
+          content: postContent.trim(),
+          category: postCategory,
+          author_id: user.id,
+          user_id: user.id, // Added for backward compatibility
+          author_name: authorName,
+          author_role: "member", // Default role
+          author_avatar: "", // Default empty avatar
+          posted_in: retreatId ? `retreat-${retreatId}` : 'community'
+        });
       
       if (error) throw error;
       

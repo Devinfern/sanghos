@@ -13,6 +13,7 @@ const OnboardingPage = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [initialUserData, setInitialUserData] = useState<any>(null);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   
   useEffect(() => {
     // Try to get existing user data from localStorage
@@ -32,11 +33,27 @@ const OnboardingPage = () => {
     
     // Check if user is authenticated
     const checkAuth = async () => {
+      setIsCheckingAuth(true);
       const { data } = await supabase.auth.getSession();
+      
       if (!data.session) {
-        toast.error("Please sign in to continue with onboarding");
-        navigate("/login");
+        // Check if they have signed up but just aren't authenticated yet
+        const storedUserData = localStorage.getItem("sanghos_user");
+        
+        if (!storedUserData) {
+          // No stored user data, redirect to signup
+          toast.error("Please sign up to continue");
+          navigate("/signup");
+        } else {
+          // They have user data but no session - might be waiting for email verification
+          toast({
+            description: "Please complete your signup process first. Check your email or sign in directly."
+          });
+          navigate("/login");
+        }
       }
+      
+      setIsCheckingAuth(false);
     };
     
     checkAuth();
@@ -48,46 +65,43 @@ const OnboardingPage = () => {
     try {
       // Get current user
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        toast.error("Your session has expired. Please log in again.");
-        navigate("/login");
-        return;
-      }
       
-      // Update the user's profile in Supabase
-      const { error } = await supabase
-        .from('user_profiles')
-        .update({
-          full_name: userData.fullName,
-          preferences: userData.preferences,
-          experience_level: userData.experience,
-          wellness_goals: userData.goals,
-          notifications_enabled: userData.notifications,
-          onboarded: true
-        })
-        .eq('id', session.user.id);
-      
-      if (error) {
-        console.error("Error updating user profile:", error);
-        toast.error("Failed to save your preferences");
+      if (session) {
+        // Update the user's profile in Supabase
+        const { error } = await supabase
+          .from('user_profiles')
+          .update({
+            full_name: userData.fullName,
+            preferences: userData.preferences,
+            experience_level: userData.experience,
+            wellness_goals: userData.goals,
+            notifications_enabled: userData.notifications,
+            onboarded: true
+          })
+          .eq('id', session.user.id);
+        
+        if (error) {
+          console.error("Error updating user profile:", error);
+          toast.error("Failed to save your preferences");
+        } else {
+          // Also update localStorage for compatibility with existing code
+          const existingUser = JSON.parse(localStorage.getItem("sanghos_user") || "{}");
+          localStorage.setItem("sanghos_user", JSON.stringify({
+            ...existingUser,
+            name: userData.fullName,
+            preferences: userData.preferences,
+            experience: userData.experience,
+            goals: userData.goals,
+            onboarded: true
+          }));
+          
+          toast.success("Profile updated successfully!");
+          navigate("/dashboard");
+        }
       } else {
-        // Also update localStorage for compatibility with existing code
-        const existingUser = JSON.parse(localStorage.getItem("sanghos_user") || "{}");
-        localStorage.setItem("sanghos_user", JSON.stringify({
-          ...existingUser,
-          name: userData.fullName,
-          preferences: userData.preferences,
-          experience: userData.experience,
-          goals: userData.goals,
-          onboarded: true
-        }));
-        
-        toast({
-          title: "Profile Updated",
-          description: "We've personalized your experience based on your preferences."
-        });
-        
-        navigate("/dashboard");
+        // Handle case where session is not available
+        toast.error("Please sign in to save your preferences");
+        navigate("/login");
       }
     } catch (err) {
       console.error("Error in onboarding:", err);
@@ -115,6 +129,21 @@ const OnboardingPage = () => {
     
     navigate("/dashboard");
   };
+
+  if (isCheckingAuth) {
+    return (
+      <>
+        <Header />
+        <main className="pt-24 pb-16 flex-1 flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-lg text-muted-foreground">Loading your profile...</p>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>

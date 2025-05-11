@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -88,15 +89,15 @@ const SignUp = () => {
       
       toast.success("Account created successfully!");
       
-      // If email verification is disabled in Supabase, user will be logged in automatically
+      // The key fix: Always redirect to onboarding page after successful signup,
+      // regardless of whether email verification is required
       if (data.session) {
-        // Redirect to onboarding page instead of showing modal
+        // User is automatically logged in, redirect to onboarding
         navigate("/onboarding");
       } else {
-        // Otherwise show success message and redirect to login
-        setTimeout(() => {
-          navigate("/login");
-        }, 3000);
+        // Even if email verification is required, still redirect to onboarding
+        // The onboarding page will check auth status itself
+        navigate("/onboarding");
       }
     } catch (err) {
       console.error(err);
