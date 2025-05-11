@@ -8,6 +8,7 @@ import PhaseTabs from "./PhaseTabs";
 import PostList from "./PostList";
 import EmptyDiscussionState from "./EmptyDiscussionState";
 import { useRetreatPosts } from "@/hooks/useRetreatPosts";
+import { Post } from "@/types/community";
 
 interface RetreatDiscussionsProps {
   retreatId?: string;
@@ -22,7 +23,7 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
   const { isAdmin } = useAdminStatus();
   
   // Use our custom hook for fetching posts with real-time updates
-  const { posts, isLoading, error, refetch } = useRetreatPosts(retreatId || "");
+  const { posts: retreatPosts, isLoading, error, refetch } = useRetreatPosts(retreatId || "");
 
   const createSpace = async () => {
     if (!isAdmin) {
@@ -37,6 +38,22 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
 
     toast.info("This feature will be available soon");
   };
+
+  // Convert posts to the correct type to match PostList component
+  const posts: Post[] = retreatPosts.map(post => ({
+    id: post.id,
+    title: post.title,
+    content: post.content,
+    user_id: post.user_id || "", // Ensure user_id is not undefined
+    author: post.author,
+    created_at: post.created_at,
+    category: post.category || "general",
+    likes: post.likes || 0,
+    replies: post.replies || 0,
+    tags: post.tags || [],
+    phase: post.phase || "pre",
+    retreat_id: post.retreat_id
+  }));
 
   // Filter posts based on search query and category
   const filteredPosts = posts.filter(post => {

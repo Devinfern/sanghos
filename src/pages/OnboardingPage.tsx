@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import Header from "@/components/Header";
@@ -7,10 +7,40 @@ import Footer from "@/components/Footer";
 import OnboardingFlow from "@/components/OnboardingFlow";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { motion } from "framer-motion";
 
 const OnboardingPage = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [initialUserData, setInitialUserData] = useState<any>(null);
+  
+  useEffect(() => {
+    // Try to get existing user data from localStorage
+    const storedUser = localStorage.getItem("sanghos_user");
+    if (storedUser) {
+      try {
+        const userData = JSON.parse(storedUser);
+        setInitialUserData({
+          fullName: userData.name || "",
+          preferences: userData.preferences || {},
+          experience: userData.experience || "beginner"
+        });
+      } catch (e) {
+        console.error("Error parsing user data:", e);
+      }
+    }
+    
+    // Check if user is authenticated
+    const checkAuth = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        toast.error("Please sign in to continue with onboarding");
+        navigate("/login");
+      }
+    };
+    
+    checkAuth();
+  }, [navigate]);
   
   const handleOnboardingComplete = async (userData: any) => {
     setIsSubmitting(true);
@@ -28,8 +58,12 @@ const OnboardingPage = () => {
       const { error } = await supabase
         .from('user_profiles')
         .update({
+          full_name: userData.fullName,
           preferences: userData.preferences,
-          years_experience: userData.experience 
+          experience_level: userData.experience,
+          wellness_goals: userData.goals,
+          notifications_enabled: userData.notifications,
+          onboarded: true
         })
         .eq('id', session.user.id);
       
@@ -41,12 +75,18 @@ const OnboardingPage = () => {
         const existingUser = JSON.parse(localStorage.getItem("sanghos_user") || "{}");
         localStorage.setItem("sanghos_user", JSON.stringify({
           ...existingUser,
+          name: userData.fullName,
           preferences: userData.preferences,
           experience: userData.experience,
+          goals: userData.goals,
           onboarded: true
         }));
         
-        toast.success("Your profile is all set up!");
+        toast({
+          title: "Profile setup complete!",
+          description: "We've personalized your experience based on your preferences.",
+        });
+        
         navigate("/dashboard");
       }
     } catch (err) {
@@ -85,20 +125,42 @@ const OnboardingPage = () => {
       
       <Header />
       
-      <main className="pt-24 pb-16 flex-1 flex flex-col items-center justify-center">
+      <motion.main 
+        className="pt-24 pb-16 flex-1 flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-brand-light/20"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="container px-4 md:px-6 max-w-4xl">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold mb-2">Welcome to Sanghos</h1>
-            <p className="text-muted-foreground">Let's personalize your experience</p>
-          </div>
+          <motion.div 
+            className="text-center mb-8"
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <h1 className="text-3xl font-bold mb-2 text-brand-dark">Welcome to Sanghos</h1>
+            <p className="text-muted-foreground">Let's personalize your experience to find retreats perfect for you</p>
+          </motion.div>
           
-          <OnboardingFlow 
-            onComplete={handleOnboardingComplete}
-            onCancel={handleCancel}
-            isSubmitting={isSubmitting}
-          />
+          {initialUserData && (
+            <OnboardingFlow 
+              onComplete={handleOnboardingComplete}
+              onCancel={handleCancel}
+              isSubmitting={isSubmitting}
+              userData={initialUserData}
+            />
+          )}
         </div>
-      </main>
+        
+        <motion.div 
+          className="mt-8 text-center text-sm text-muted-foreground"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
+          <p>You can always update your preferences later in your profile settings</p>
+        </motion.div>
+      </motion.main>
       
       <Footer />
     </>

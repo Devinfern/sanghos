@@ -21,9 +21,11 @@ import RetreatManagementCMS from '@/pages/RetreatManagementCMS';
 import NotFound from '@/pages/NotFound';
 import Retreats from '@/pages/Retreats';
 import Login from '@/pages/Login';
+import SignUp from '@/pages/SignUp';
 import CommunityTeaser from '@/pages/CommunityTeaser';
 import JoinNow from '@/pages/JoinNow';
 import UserDashboard from '@/pages/UserDashboard';
+import OnboardingPage from '@/pages/OnboardingPage';
 
 // Host pages
 import HostDashboard from '@/pages/host/HostDashboard';
@@ -38,6 +40,9 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { HostProvider } from '@/contexts/HostContext';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import AdminProtectedRoute from '@/components/AdminProtectedRoute';
+
+// Add global styles
+import './index.css';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -72,6 +77,19 @@ function App() {
       <AuthProvider>
         <HostProvider>
           <Toaster richColors />
+          <style jsx global>{`
+            .glass-morphism {
+              background: rgba(255, 255, 255, 0.7);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.18);
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            }
+
+            body {
+              background-color: #f8f9fa;
+            }
+          `}</style>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/pricing" element={<Pricing />} />
@@ -87,8 +105,10 @@ function App() {
             <Route path="/wellness-journal" element={<WellnessJournalPage />} />
             <Route path="/forum" element={<ForumPage />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
             <Route path="/join" element={<JoinNow />} />
             <Route path="/community-teaser" element={<CommunityTeaser />} />
+            <Route path="/onboarding" element={<OnboardingPage />} />
             
             {/* Dashboard route - protected */}
             <Route path="/dashboard" element={<ProtectedRoute><UserDashboard /></ProtectedRoute>} />
