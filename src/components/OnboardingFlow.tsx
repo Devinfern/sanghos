@@ -86,6 +86,7 @@ const OnboardingFlow = ({
   };
 
   const handlePreferenceChange = (preference: string, checked: boolean) => {
+    console.log(`Setting preference ${preference} to ${checked}`);
     setUserData((prev: any) => ({
       ...prev,
       preferences: {
