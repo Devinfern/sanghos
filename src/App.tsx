@@ -77,7 +77,7 @@ function App() {
       <AuthProvider>
         <HostProvider>
           <Toaster richColors />
-          <style jsx global>{`
+          <style>{`
             .glass-morphism {
               background: rgba(255, 255, 255, 0.7);
               backdrop-filter: blur(10px);

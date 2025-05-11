@@ -45,14 +45,14 @@ const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscu
     title: post.title,
     content: post.content,
     user_id: post.user_id || "", // Ensure user_id is not undefined
-    author: post.author,
+    author_name: post.author_name || "Anonymous",
     created_at: post.created_at,
     category: post.category || "general",
-    likes: post.likes || 0,
-    replies: post.replies || 0,
+    likes_count: post.likes_count || 0,
+    comments_count: post.comments_count || 0,
     tags: post.tags || [],
-    phase: post.phase || "pre",
-    retreat_id: post.retreat_id
+    phase_type: post.phase_type || "pre",
+    retreat_id: post.retreat_id || ""
   }));
 
   // Filter posts based on search query and category
