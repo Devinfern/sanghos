@@ -64,7 +64,7 @@ const WelcomeStep = ({ userData, handleInputChange, handleExperienceChange }: We
             { value: "intermediate", label: "Intermediate", desc: "Some prior experience" },
             { value: "advanced", label: "Advanced", desc: "Experienced practitioner" }
           ].map((level) => (
-            <div 
+            <label 
               key={level.value}
               className={`flex items-center p-3 border rounded-lg cursor-pointer transition-all ${
                 userData.experience === level.value 
@@ -78,10 +78,10 @@ const WelcomeStep = ({ userData, handleInputChange, handleExperienceChange }: We
                 className="mr-3"
               />
               <div>
-                <Label htmlFor={level.value} className="font-medium cursor-pointer">{level.label}</Label>
+                <span className="font-medium">{level.label}</span>
                 <p className="text-xs text-muted-foreground">{level.desc}</p>
               </div>
-            </div>
+            </label>
           ))}
         </RadioGroup>
       </div>
