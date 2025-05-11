@@ -28,9 +28,16 @@ const WelcomeStep = ({ userData, handleInputChange, handleExperienceChange }: We
     { value: "advanced", label: "Advanced", desc: "Experienced practitioner" }
   ];
 
+  // Debug logging when component receives updates
   useEffect(() => {
     console.log("WelcomeStep rendered with experience:", userData.experience);
   }, [userData.experience]);
+
+  // Direct click handler for each option
+  const handleOptionClick = (value: string) => {
+    console.log("Option clicked:", value);
+    handleExperienceChange(value);
+  };
 
   return (
     <motion.div 
@@ -65,35 +72,37 @@ const WelcomeStep = ({ userData, handleInputChange, handleExperienceChange }: We
       
       <div className="space-y-2">
         <Label>Your Experience Level</Label>
-        <RadioGroup 
-          value={userData.experience || "beginner"} 
-          onValueChange={handleExperienceChange}
-          className="grid grid-cols-1 gap-2 pt-2"
-        >
+        <div className="grid grid-cols-1 gap-2 pt-2">
           {experienceLevels.map((level) => (
-            <Label 
+            <div 
               key={level.value}
-              htmlFor={level.value}
               className={`flex items-center p-3 border rounded-lg cursor-pointer transition-all ${
                 userData.experience === level.value 
                   ? "border-brand-primary bg-brand-primary/5" 
                   : "border-gray-200 hover:bg-gray-50"
               }`}
+              onClick={() => handleOptionClick(level.value)}
             >
               <div className="flex items-center w-full">
-                <RadioGroupItem 
-                  value={level.value} 
-                  id={level.value}
+                <input
+                  type="radio"
+                  id={`exp-${level.value}`}
+                  name="experience"
+                  value={level.value}
+                  checked={userData.experience === level.value}
+                  onChange={() => handleOptionClick(level.value)}
                   className="mr-3"
                 />
-                <div className="flex-1">
-                  <span className="font-medium">{level.label}</span>
-                  <p className="text-xs text-muted-foreground">{level.desc}</p>
-                </div>
+                <Label htmlFor={`exp-${level.value}`} className="flex-1 cursor-pointer">
+                  <div>
+                    <span className="font-medium">{level.label}</span>
+                    <p className="text-xs text-muted-foreground">{level.desc}</p>
+                  </div>
+                </Label>
               </div>
-            </Label>
+            </div>
           ))}
-        </RadioGroup>
+        </div>
       </div>
     </motion.div>
   );

@@ -65,13 +65,21 @@ const OnboardingFlow = ({
   // Event handlers
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserData((prev: any) => ({ ...prev, [name]: value }));
+    setUserData((prev: any) => {
+      console.log(`Setting ${name} to ${value}`);
+      return { ...prev, [name]: value };
+    });
   };
 
   const handleExperienceChange = (value: string) => {
     console.log("OnboardingFlow updating experience to:", value);
+    // Force a clean state update
     setUserData((prev: any) => {
-      const newData = { ...prev, experience: value };
+      // Create new object to ensure React detects the change
+      const newData = { 
+        ...prev, 
+        experience: value 
+      };
       console.log("New userData state:", newData);
       return newData;
     });
@@ -119,6 +127,7 @@ const OnboardingFlow = ({
   const renderStepContent = () => {
     switch (step) {
       case 1:
+        console.log("Rendering WelcomeStep with userData:", userData);
         return (
           <WelcomeStep 
             userData={userData}
