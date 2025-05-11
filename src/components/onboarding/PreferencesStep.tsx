@@ -55,7 +55,6 @@ const PreferencesStep = ({
                 className={`flex items-center p-3 border rounded-lg cursor-pointer transition-all ${
                   isChecked ? "border-brand-primary bg-brand-primary/5" : "border-gray-200"
                 }`}
-                onClick={() => handlePreferenceChange(item.id, !isChecked)}
               >
                 <div className="mr-2">
                   <Checkbox 
