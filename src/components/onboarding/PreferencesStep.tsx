@@ -28,8 +28,16 @@ const PreferencesStep = ({
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
   };
 
-  // Function to handle preference changes safely
-  const togglePreference = (id: string) => {
+  const preferenceItems = [
+    { id: "yoga", label: "Yoga", icon: "🧘" },
+    { id: "meditation", label: "Meditation", icon: "🧠" },
+    { id: "nature", label: "Nature Retreats", icon: "🌲" },
+    { id: "wellness", label: "Wellness & Spa", icon: "💆" },
+    { id: "workshops", label: "Workshops", icon: "🤝" }
+  ];
+
+  // Handle toggling a preference safely without causing re-render loops
+  const handleToggle = (id: string) => {
     const currentValue = preferences[id as keyof typeof preferences] || false;
     handlePreferenceChange(id, !currentValue);
   };
@@ -44,36 +52,29 @@ const PreferencesStep = ({
       <div className="space-y-2">
         <Label>What are you interested in?</Label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
-          {[
-            { id: "yoga", label: "Yoga", icon: "🧘" },
-            { id: "meditation", label: "Meditation", icon: "🧠" },
-            { id: "nature", label: "Nature Retreats", icon: "🌲" },
-            { id: "wellness", label: "Wellness & Spa", icon: "💆" },
-            { id: "workshops", label: "Workshops", icon: "🤝" }
-          ].map((item) => {
+          {preferenceItems.map((item) => {
             const isChecked = preferences[item.id as keyof typeof preferences] || false;
             
             return (
-              <label 
+              <div 
                 key={item.id}
                 className={`flex items-center p-3 border rounded-lg cursor-pointer transition-all ${
                   isChecked ? "border-brand-primary bg-brand-primary/5" : "border-gray-200"
                 }`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  togglePreference(item.id);
-                }}
+                onClick={() => handleToggle(item.id)}
               >
-                <Checkbox 
-                  id={`pref-${item.id}`}
-                  checked={isChecked}
-                  className="mr-2"
-                />
+                <div className="mr-2">
+                  <Checkbox 
+                    id={`pref-${item.id}`}
+                    checked={isChecked}
+                    // Remove onCheckedChange to prevent double state updates
+                  />
+                </div>
                 <div className="flex items-center">
                   <span className="mr-2 text-xl">{item.icon}</span>
-                  <span className="cursor-pointer">{item.label}</span>
+                  <span>{item.label}</span>
                 </div>
-              </label>
+              </div>
             );
           })}
         </div>

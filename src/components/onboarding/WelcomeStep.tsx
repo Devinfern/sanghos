@@ -21,6 +21,12 @@ const WelcomeStep = ({ userData, handleInputChange, handleExperienceChange }: We
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
   };
 
+  const experienceLevels = [
+    { value: "beginner", label: "Beginner", desc: "New to wellness practices" },
+    { value: "intermediate", label: "Intermediate", desc: "Some prior experience" },
+    { value: "advanced", label: "Advanced", desc: "Experienced practitioner" }
+  ];
+
   return (
     <motion.div 
       className="space-y-4"
@@ -59,12 +65,8 @@ const WelcomeStep = ({ userData, handleInputChange, handleExperienceChange }: We
           onValueChange={handleExperienceChange}
           className="grid grid-cols-1 gap-2 pt-2"
         >
-          {[
-            { value: "beginner", label: "Beginner", desc: "New to wellness practices" },
-            { value: "intermediate", label: "Intermediate", desc: "Some prior experience" },
-            { value: "advanced", label: "Advanced", desc: "Experienced practitioner" }
-          ].map((level) => (
-            <label 
+          {experienceLevels.map((level) => (
+            <div 
               key={level.value}
               className={`flex items-center p-3 border rounded-lg cursor-pointer transition-all ${
                 userData.experience === level.value 
@@ -81,7 +83,7 @@ const WelcomeStep = ({ userData, handleInputChange, handleExperienceChange }: We
                 <span className="font-medium">{level.label}</span>
                 <p className="text-xs text-muted-foreground">{level.desc}</p>
               </div>
-            </label>
+            </div>
           ))}
         </RadioGroup>
       </div>
