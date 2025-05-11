@@ -28,6 +28,12 @@ const PreferencesStep = ({
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
   };
 
+  // Function to handle preference changes safely
+  const togglePreference = (id: string) => {
+    const currentValue = preferences[id as keyof typeof preferences] || false;
+    handlePreferenceChange(id, !currentValue);
+  };
+
   return (
     <motion.div 
       className="space-y-4"
@@ -50,21 +56,19 @@ const PreferencesStep = ({
             return (
               <div 
                 key={item.id}
+                onClick={() => togglePreference(item.id)}
                 className={`flex items-center p-3 border rounded-lg cursor-pointer transition-all ${
                   isChecked ? "border-brand-primary bg-brand-primary/5" : "border-gray-200"
                 }`}
               >
-                <div className="flex items-center space-x-2 w-full" onClick={() => handlePreferenceChange(item.id, !isChecked)}>
-                  <Checkbox 
-                    id={`pref-${item.id}`}
-                    checked={isChecked}
-                    className="mr-2"
-                    onCheckedChange={() => {}}
-                  />
-                  <div className="flex items-center">
-                    <span className="mr-2 text-xl">{item.icon}</span>
-                    <Label htmlFor={`pref-${item.id}`} className="cursor-pointer">{item.label}</Label>
-                  </div>
+                <Checkbox 
+                  id={`pref-${item.id}`}
+                  checked={isChecked}
+                  className="mr-2"
+                />
+                <div className="flex items-center">
+                  <span className="mr-2 text-xl">{item.icon}</span>
+                  <Label htmlFor={`pref-${item.id}`} className="cursor-pointer">{item.label}</Label>
                 </div>
               </div>
             );
