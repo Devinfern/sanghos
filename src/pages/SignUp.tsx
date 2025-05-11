@@ -9,7 +9,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -19,17 +18,15 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [showPreferences, setShowPreferences] = useState(false);
-  const [step, setStep] = useState(1);
   
-  // Initial preferences during signup
-  const [initialPreferences, setInitialPreferences] = useState({
+  // Initial preferences for localStorage
+  const initialPreferences = {
     mindfulness: false,
     yoga: false,
     fitness: false,
     spa: false,
     nutrition: false
-  });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,9 +70,6 @@ const SignUp = () => {
         preferences: initialPreferences
       }));
       
-      // Show preferences dialog
-      setShowPreferences(true);
-      
       // Send welcome email via Edge Function
       try {
         const { error: emailError } = await supabase.functions.invoke('send-welcome-email', {
@@ -96,7 +90,8 @@ const SignUp = () => {
       
       // If email verification is disabled in Supabase, user will be logged in automatically
       if (data.session) {
-        // Will redirect after preferences selection
+        // Redirect to onboarding page instead of showing modal
+        navigate("/onboarding");
       } else {
         // Otherwise show success message and redirect to login
         setTimeout(() => {
@@ -137,18 +132,6 @@ const SignUp = () => {
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
-  };
-  
-  const handlePreferenceChange = (key: string, value: boolean) => {
-    setInitialPreferences(prev => ({
-      ...prev,
-      [key]: value
-    }));
-  };
-  
-  const completeSignup = () => {
-    setShowPreferences(false);
-    navigate("/onboarding");
   };
 
   return (
@@ -280,55 +263,6 @@ const SignUp = () => {
       </main>
 
       <Footer />
-      
-      {/* Quick Preferences Dialog */}
-      <Dialog open={showPreferences} onOpenChange={setShowPreferences}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Welcome to Sanghos, {name}!</DialogTitle>
-          </DialogHeader>
-          
-          <div className="py-4">
-            <p className="text-muted-foreground mb-4">
-              What are you most interested in? This will help us personalize your experience.
-            </p>
-            
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { key: 'mindfulness', label: 'Mindfulness & Meditation' },
-                { key: 'yoga', label: 'Yoga & Movement' },
-                { key: 'fitness', label: 'Fitness & Adventure' },
-                { key: 'spa', label: 'Spa & Relaxation' },
-                { key: 'nutrition', label: 'Nutrition & Detox' }
-              ].map(preference => (
-                <div
-                  key={preference.key}
-                  className={`p-3 rounded-lg border cursor-pointer transition-colors ${
-                    initialPreferences[preference.key as keyof typeof initialPreferences]
-                      ? 'bg-brand-primary/10 border-brand-primary'
-                      : 'bg-white border-gray-200 hover:bg-gray-50'
-                  }`}
-                  onClick={() => handlePreferenceChange(
-                    preference.key,
-                    !initialPreferences[preference.key as keyof typeof initialPreferences]
-                  )}
-                >
-                  <p className="font-medium text-sm">{preference.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          <div className="flex justify-between">
-            <Button variant="outline" onClick={() => completeSignup()}>
-              Skip for now
-            </Button>
-            <Button onClick={() => completeSignup()}>
-              Continue
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </>
   );
 };

@@ -83,7 +83,6 @@ const OnboardingPage = () => {
         }));
         
         toast({
-          title: "Profile setup complete!",
           description: "We've personalized your experience based on your preferences.",
         });
         

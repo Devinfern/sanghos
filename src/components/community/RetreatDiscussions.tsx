@@ -1,113 +1,152 @@
 
-import { useState } from 'react';
-import { useAdminStatus } from "@/hooks/useAdminStatus";
-import { toast } from "sonner";
-import CommunitySearchFilter from "./CommunitySearchFilter";
-import CreatePost from "./CreatePost";
-import PhaseTabs from "./PhaseTabs";
-import PostList from "./PostList";
+import React, { useState, useEffect } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CommunityPost from "./CommunityPost";
+import { motion } from "framer-motion";
 import EmptyDiscussionState from "./EmptyDiscussionState";
+import CreatePost from "./CreatePost";
 import { useRetreatPosts } from "@/hooks/useRetreatPosts";
-import { Post } from "@/types/community";
 
-interface RetreatDiscussionsProps {
-  retreatId?: string;
-  retreatName?: string;
-  isLoggedIn: boolean;
+// Define the Post type to match what's expected
+interface Post {
+  id: string;
+  title: string;
+  content: string;
+  user_id: string;
+  author_name: string;
+  created_at: string;
+  category: string;
+  likes: any[]; // Add this field to match the expected Post type
+  likes_count: number;
+  comments_count: number;
+  tags: string[];
+  phase_type: string;
+  retreat_id: string;
 }
 
-const RetreatDiscussions = ({ retreatId, retreatName, isLoggedIn }: RetreatDiscussionsProps) => {
-  const [activePhase, setActivePhase] = useState<"pre" | "post">("pre");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
-  const { isAdmin } = useAdminStatus();
+const RetreatDiscussions = ({ retreatId }: { retreatId: string }) => {
+  const [activeTab, setActiveTab] = useState("all");
+  const [showCreatePost, setShowCreatePost] = useState(false);
+  const { posts, isLoading, error, refetchPosts } = useRetreatPosts(retreatId);
   
-  // Use our custom hook for fetching posts with real-time updates
-  const { posts: retreatPosts, isLoading, error, refetch } = useRetreatPosts(retreatId || "");
+  if (isLoading) {
+    return <div className="p-4 text-center">Loading discussions...</div>;
+  }
+  
+  if (error) {
+    return <div className="p-4 text-center text-red-500">Error loading discussions</div>;
+  }
 
-  const createSpace = async () => {
-    if (!isAdmin) {
-      toast.error("Only administrators can create spaces");
-      return;
-    }
-
-    if (!retreatId) {
-      toast.error("Retreat ID is required");
-      return;
-    }
-
-    toast.info("This feature will be available soon");
-  };
-
-  // Convert posts to the correct type to match PostList component
-  const posts: Post[] = retreatPosts.map(post => ({
+  // Map the posts to include the missing 'likes' field
+  const formattedPosts: Post[] = posts.map(post => ({
     id: post.id,
     title: post.title,
     content: post.content,
-    user_id: post.user_id || "", // Ensure user_id is not undefined
-    author_name: post.author_name || "Anonymous",
+    user_id: post.user_id,
+    author_name: post.author_name,
     created_at: post.created_at,
-    category: post.category || "general",
-    likes_count: post.likes_count || 0,
-    comments_count: post.comments_count || 0,
-    tags: post.tags || [],
-    phase_type: post.phase_type || "pre",
-    retreat_id: post.retreat_id || ""
+    category: post.category,
+    likes: [], // Add empty likes array to satisfy the Post type
+    likes_count: post.likes_count,
+    comments_count: post.comments_count,
+    tags: post.tags,
+    phase_type: post.phase_type,
+    retreat_id: post.retreat_id
   }));
 
-  // Filter posts based on search query and category
-  const filteredPosts = posts.filter(post => {
-    const matchesSearch = !searchQuery || 
-      post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      (post.content && post.content.toLowerCase().includes(searchQuery.toLowerCase()));
-    
-    const matchesCategory = categoryFilter === 'all' || post.category === categoryFilter;
-    
-    return matchesSearch && matchesCategory;
-  });
+  const handlePostCreated = () => {
+    setShowCreatePost(false);
+    refetchPosts();
+  };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col space-y-4">
-        <PhaseTabs 
-          activePhase={activePhase} 
-          onPhaseChange={setActivePhase} 
-          retreatName={retreatName} 
+    <div className="mt-6">
+      {showCreatePost ? (
+        <CreatePost 
+          onCancel={() => setShowCreatePost(false)}
+          onPostCreated={handlePostCreated}
+          retreatId={retreatId}
         />
-      </div>
-
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="flex-1">
-          <CommunitySearchFilter
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            categoryFilter={categoryFilter}
-            onCategoryChange={setCategoryFilter}
-          />
-        </div>
-        {isLoggedIn && (
-          <div className="w-full md:w-48">
-            <CreatePost 
-              onPostCreated={refetch} 
-              retreatId={retreatId || ""} 
-              retreatPhase={activePhase} 
-            />
+      ) : (
+        <>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">Discussions</h2>
+            <button
+              onClick={() => setShowCreatePost(true)}
+              className="px-4 py-2 bg-brand-primary text-white rounded-md text-sm"
+            >
+              New Post
+            </button>
           </div>
-        )}
-      </div>
-
-      <PostList 
-        posts={filteredPosts} 
-        isLoading={isLoading} 
-        onPostUpdate={refetch} 
-      />
-      
-      {!isLoading && filteredPosts.length === 0 && (
-        <EmptyDiscussionState 
-          isLoggedIn={isLoggedIn} 
-          isAdmin={isAdmin} 
-          onCreateSpace={createSpace} 
-        />
+          
+          <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="mb-4">
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="questions">Questions</TabsTrigger>
+              <TabsTrigger value="tips">Tips & Advice</TabsTrigger>
+              <TabsTrigger value="journal">Journal Entries</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="all">
+              {formattedPosts.length > 0 ? (
+                <motion.div 
+                  className="space-y-4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {formattedPosts.map((post) => (
+                    <CommunityPost key={post.id} post={post} />
+                  ))}
+                </motion.div>
+              ) : (
+                <EmptyDiscussionState onCreatePost={() => setShowCreatePost(true)} />
+              )}
+            </TabsContent>
+            
+            <TabsContent value="questions">
+              {formattedPosts.filter(post => post.category === 'question').length > 0 ? (
+                <div className="space-y-4">
+                  {formattedPosts
+                    .filter(post => post.category === 'question')
+                    .map((post) => (
+                      <CommunityPost key={post.id} post={post} />
+                    ))}
+                </div>
+              ) : (
+                <EmptyDiscussionState category="questions" onCreatePost={() => setShowCreatePost(true)} />
+              )}
+            </TabsContent>
+            
+            <TabsContent value="tips">
+              {formattedPosts.filter(post => post.category === 'tip').length > 0 ? (
+                <div className="space-y-4">
+                  {formattedPosts
+                    .filter(post => post.category === 'tip')
+                    .map((post) => (
+                      <CommunityPost key={post.id} post={post} />
+                    ))}
+                </div>
+              ) : (
+                <EmptyDiscussionState category="tips and advice" onCreatePost={() => setShowCreatePost(true)} />
+              )}
+            </TabsContent>
+            
+            <TabsContent value="journal">
+              {formattedPosts.filter(post => post.category === 'journal').length > 0 ? (
+                <div className="space-y-4">
+                  {formattedPosts
+                    .filter(post => post.category === 'journal')
+                    .map((post) => (
+                      <CommunityPost key={post.id} post={post} />
+                    ))}
+                </div>
+              ) : (
+                <EmptyDiscussionState category="journal entries" onCreatePost={() => setShowCreatePost(true)} />
+              )}
+            </TabsContent>
+          </Tabs>
+        </>
       )}
     </div>
   );

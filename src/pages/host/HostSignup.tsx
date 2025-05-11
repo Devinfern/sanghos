@@ -57,17 +57,19 @@ const HostSignup = () => {
       
       if (signUpError) throw signUpError;
       
-      // Create host profile
+      // Create host profile - using custom table instead
       if (data.user) {
         try {
+          // Create a custom table record - using user_profiles instead of host_profiles
           const { error: profileError } = await supabase
-            .from('host_profiles')
+            .from('user_profiles')
             .insert([
               { 
                 id: data.user.id,
                 full_name: fullName,
                 email: email.trim(),
-                status: 'pending'
+                is_host: true,
+                host_status: 'pending'
               }
             ]);
             
