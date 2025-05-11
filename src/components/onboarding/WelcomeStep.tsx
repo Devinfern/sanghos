@@ -27,6 +27,11 @@ const WelcomeStep = ({ userData, handleInputChange, handleExperienceChange }: We
     { value: "advanced", label: "Advanced", desc: "Experienced practitioner" }
   ];
 
+  const handleRadioChange = (newValue: string) => {
+    console.log("Radio changed to:", newValue);
+    handleExperienceChange(newValue);
+  };
+
   return (
     <motion.div 
       className="space-y-4"
@@ -62,12 +67,13 @@ const WelcomeStep = ({ userData, handleInputChange, handleExperienceChange }: We
         <Label>Your Experience Level</Label>
         <RadioGroup 
           value={userData.experience} 
-          onValueChange={handleExperienceChange}
+          onValueChange={handleRadioChange}
           className="grid grid-cols-1 gap-2 pt-2"
         >
           {experienceLevels.map((level) => (
-            <div 
+            <label 
               key={level.value}
+              htmlFor={level.value}
               className={`flex items-center p-3 border rounded-lg cursor-pointer transition-all ${
                 userData.experience === level.value 
                   ? "border-brand-primary bg-brand-primary/5" 
@@ -83,7 +89,7 @@ const WelcomeStep = ({ userData, handleInputChange, handleExperienceChange }: We
                 <span className="font-medium">{level.label}</span>
                 <p className="text-xs text-muted-foreground">{level.desc}</p>
               </div>
-            </div>
+            </label>
           ))}
         </RadioGroup>
       </div>
