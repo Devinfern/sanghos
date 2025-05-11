@@ -16,6 +16,9 @@ export type Post = {
   author_role?: string;
   category?: string;
   user_id?: string;
+  tags?: string[];
+  phase_type?: string;
+  retreat_id?: string;
 };
 
 export type RetreatPostsResult = {

@@ -1,28 +1,31 @@
 
-import { Card } from "@/components/ui/card";
+import { Frown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
 
 interface EmptyDiscussionStateProps {
-  isLoggedIn: boolean;
-  isAdmin: boolean;
-  onCreateSpace: () => void;
+  category?: string;
+  onCreatePost: () => void;
 }
 
-const EmptyDiscussionState = ({ isLoggedIn, isAdmin, onCreateSpace }: EmptyDiscussionStateProps) => {
+const EmptyDiscussionState = ({ category, onCreatePost }: EmptyDiscussionStateProps) => {
+  const categoryText = category ? `${category}` : "discussions";
+
   return (
-    <Card className="p-8 text-center">
-      <h3 className="text-lg font-medium mb-2">Discussion board coming soon</h3>
-      <p className="text-muted-foreground mb-4">
-        We're preparing a space for vibrant discussions about this retreat.
+    <div className="p-8 text-center border rounded-lg border-dashed bg-white/50">
+      <div className="mx-auto w-12 h-12 rounded-full bg-muted/30 flex items-center justify-center mb-4">
+        <Frown className="h-6 w-6 text-muted-foreground" />
+      </div>
+      
+      <h3 className="text-lg font-medium mb-2">No {categoryText} yet</h3>
+      
+      <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+        Be the first to start a conversation in this category!
       </p>
-      {isLoggedIn && isAdmin && (
-        <Button onClick={onCreateSpace} className="mt-2">
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Create Space
-        </Button>
-      )}
-    </Card>
+      
+      <Button onClick={onCreatePost}>
+        Start a Conversation
+      </Button>
+    </div>
   );
 };
 

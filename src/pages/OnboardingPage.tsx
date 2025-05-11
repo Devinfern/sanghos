@@ -83,7 +83,8 @@ const OnboardingPage = () => {
         }));
         
         toast({
-          description: "We've personalized your experience based on your preferences.",
+          title: "Profile Updated",
+          description: "We've personalized your experience based on your preferences."
         });
         
         navigate("/dashboard");

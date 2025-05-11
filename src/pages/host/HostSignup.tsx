@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -50,7 +49,8 @@ const HostSignup = () => {
         options: {
           data: {
             full_name: fullName,
-            is_host: true
+            is_host: true,
+            username: email.split('@')[0] // Generate a default username from email
           }
         }
       });
@@ -63,15 +63,13 @@ const HostSignup = () => {
           // Create a custom table record - using user_profiles instead of host_profiles
           const { error: profileError } = await supabase
             .from('user_profiles')
-            .insert([
-              { 
-                id: data.user.id,
-                full_name: fullName,
-                email: email.trim(),
-                is_host: true,
-                host_status: 'pending'
-              }
-            ]);
+            .upsert({
+              id: data.user.id,
+              full_name: fullName,
+              username: email.split('@')[0], // Required field
+              is_host: true,
+              host_status: 'pending'
+            });
             
           if (profileError) throw profileError;
         } catch (err) {

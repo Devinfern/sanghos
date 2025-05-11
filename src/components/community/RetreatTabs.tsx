@@ -27,11 +27,7 @@ const RetreatTabs = ({
       </TabsList>
       
       <TabsContent value="discussions" className="space-y-6">
-        <RetreatDiscussions 
-          retreatId={retreatId} 
-          retreatName={retreatName} 
-          isLoggedIn={isLoggedIn} 
-        />
+        {retreatId && <RetreatDiscussions retreatId={retreatId} />}
       </TabsContent>
       
       <TabsContent value="resources">

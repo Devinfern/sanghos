@@ -16,7 +16,7 @@ interface Post {
   author_name: string;
   created_at: string;
   category: string;
-  likes: any[]; // Add this field to match the expected Post type
+  likes: any[]; // Array for compatibility with CommunityPost component
   likes_count: number;
   comments_count: number;
   tags: string[];
@@ -24,10 +24,21 @@ interface Post {
   retreat_id: string;
 }
 
+interface CreatePostProps {
+  onPostCreated: () => void;
+  retreatId: string;
+  onCancel?: () => void; // Make onCancel optional
+}
+
+interface EmptyDiscussionStateProps {
+  category?: string;
+  onCreatePost: () => void;
+}
+
 const RetreatDiscussions = ({ retreatId }: { retreatId: string }) => {
   const [activeTab, setActiveTab] = useState("all");
   const [showCreatePost, setShowCreatePost] = useState(false);
-  const { posts, isLoading, error, refetchPosts } = useRetreatPosts(retreatId);
+  const { posts, isLoading, error, refetch: refetchPosts } = useRetreatPosts(retreatId);
   
   if (isLoading) {
     return <div className="p-4 text-center">Loading discussions...</div>;
@@ -45,13 +56,13 @@ const RetreatDiscussions = ({ retreatId }: { retreatId: string }) => {
     user_id: post.user_id,
     author_name: post.author_name,
     created_at: post.created_at,
-    category: post.category,
+    category: post.category || 'general',
     likes: [], // Add empty likes array to satisfy the Post type
-    likes_count: post.likes_count,
-    comments_count: post.comments_count,
-    tags: post.tags,
-    phase_type: post.phase_type,
-    retreat_id: post.retreat_id
+    likes_count: post.likes || 0,
+    comments_count: post.comments || 0,
+    tags: post.tags || [],
+    phase_type: post.phase_type || 'general',
+    retreat_id: post.retreat_id || retreatId
   }));
 
   const handlePostCreated = () => {
@@ -96,7 +107,7 @@ const RetreatDiscussions = ({ retreatId }: { retreatId: string }) => {
                   transition={{ duration: 0.5 }}
                 >
                   {formattedPosts.map((post) => (
-                    <CommunityPost key={post.id} post={post} />
+                    <CommunityPost key={post.id} post={post as any} />
                   ))}
                 </motion.div>
               ) : (
@@ -110,7 +121,7 @@ const RetreatDiscussions = ({ retreatId }: { retreatId: string }) => {
                   {formattedPosts
                     .filter(post => post.category === 'question')
                     .map((post) => (
-                      <CommunityPost key={post.id} post={post} />
+                      <CommunityPost key={post.id} post={post as any} />
                     ))}
                 </div>
               ) : (
@@ -124,7 +135,7 @@ const RetreatDiscussions = ({ retreatId }: { retreatId: string }) => {
                   {formattedPosts
                     .filter(post => post.category === 'tip')
                     .map((post) => (
-                      <CommunityPost key={post.id} post={post} />
+                      <CommunityPost key={post.id} post={post as any} />
                     ))}
                 </div>
               ) : (
@@ -138,7 +149,7 @@ const RetreatDiscussions = ({ retreatId }: { retreatId: string }) => {
                   {formattedPosts
                     .filter(post => post.category === 'journal')
                     .map((post) => (
-                      <CommunityPost key={post.id} post={post} />
+                      <CommunityPost key={post.id} post={post as any} />
                     ))}
                 </div>
               ) : (
