@@ -1,6 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { ForumPost } from "../types";
+import { ForumPost } from "./types";
 import { defaultForumPosts } from "../../data/defaultCommunityData";
 import { formatTimeAgo } from "../../utils/formatters";
 

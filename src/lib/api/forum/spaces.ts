@@ -1,6 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { ForumCategory, ForumSpace } from "../types";
+import { ForumCategory, ForumSpace } from "./types";
 import { defaultForumSpaces } from "../../data/defaultCommunityData";
 
 // State variable to store the current data

@@ -1,6 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { TrendingPost } from "../types";
+import { TrendingPost } from "./types";
 import { defaultTrendingPosts } from "../../data/defaultCommunityData";
 
 // State variable to store the current data

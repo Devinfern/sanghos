@@ -1,6 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { ForumEvent } from "../types";
+import { ForumEvent } from "./types";
 import { defaultForumEvents } from "../../data/defaultCommunityData";
 
 // State variable to store the current data
