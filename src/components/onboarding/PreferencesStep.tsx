@@ -65,7 +65,7 @@ const PreferencesStep = ({
                 </div>
                 <div className="flex items-center">
                   <span className="mr-2 text-xl">{item.icon}</span>
-                  <span>{item.label}</span>
+                  <Label htmlFor={`pref-${item.id}`} className="cursor-pointer">{item.label}</Label>
                 </div>
               </div>
             );
