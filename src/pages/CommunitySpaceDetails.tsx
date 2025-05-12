@@ -1,4 +1,3 @@
-
 import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { useState, useEffect } from "react";
@@ -22,12 +21,32 @@ import CommunityPostEditor from "@/components/CommunityPostEditor";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 
+// Helper function to render space icons
+const renderSpaceIcon = (iconName: string) => {
+  switch (iconName) {
+    case "MessageSquare":
+      return <MessageSquare className="h-6 w-6 text-brand-primary" />;
+    case "Calendar":
+      return <Calendar className="h-6 w-6 text-brand-primary" />;
+    case "Users":
+      return <Users className="h-6 w-6 text-brand-primary" />;
+    default:
+      return <MessageSquare className="h-6 w-6 text-brand-primary" />;
+  }
+};
+
 const CommunitySpaceDetails = () => {
   const { slug } = useParams<{ slug: string }>();
   const [spacePosts, setSpacePosts] = useState<ForumPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFollowing, setIsFollowing] = useState(false);
   const [activeTab, setActiveTab] = useState("discussions");
+  
+  // Toggle follow state function
+  const toggleFollow = () => {
+    setIsFollowing(!isFollowing);
+    toast.success(isFollowing ? "Unfollowed space" : "Following space");
+  };
   
   // Function to convert slug back to space name
   const getSpaceName = (slug: string) => {
