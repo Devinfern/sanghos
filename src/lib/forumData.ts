@@ -35,7 +35,7 @@ export type ForumSpace = ForumSpaceType & {
   isPostRetreat?: boolean;
 };
 
-// Import the data from communityData and the retreat data
+// Import the data from API modules
 import {
   forumSpaces,
   forumPosts,
@@ -49,7 +49,7 @@ import {
   loadForumPosts,
   loadForumEvents,
   loadTrendingPosts
-} from "./api/communityAPI";
+} from "./api/forum";
 import { retreats } from "./data";
 import { syncRetreatsToEvents } from "./eventUtils";
 
