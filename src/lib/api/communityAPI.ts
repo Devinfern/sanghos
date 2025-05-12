@@ -302,6 +302,71 @@ const seedTrendingPosts = async () => {
   }
 };
 
+// NEW FUNCTION: Create a single forum post and return the created post with permanent ID
+export const createForumPost = async (postData: Omit<ForumPost, 'id' | 'timeAgo' | 'created_at' | 'updated_at'>) => {
+  try {
+    // Transform the post data to match the database schema
+    const postToInsert = {
+      author_name: postData.author.name,
+      author_role: postData.author.role,
+      author_avatar: postData.author.avatar,
+      author_tag: postData.author.tag,
+      posted_in: postData.postedIn,
+      title: postData.title,
+      content: postData.content,
+      likes: postData.likes || 0,
+      comments: postData.comments || 0,
+      bookmarked: postData.bookmarked || false,
+      is_pinned: postData.isPinned || false
+    };
+    
+    // Insert the post into the database
+    const { data, error } = await supabase
+      .from('forum_posts')
+      .insert(postToInsert)
+      .select('*')
+      .single();
+      
+    if (error) {
+      console.error('Error creating forum post:', error);
+      throw error;
+    }
+    
+    if (!data) {
+      throw new Error('No data returned after creating post');
+    }
+    
+    // Transform the returned data to match our ForumPost format
+    const newPost: ForumPost = {
+      id: data.id,
+      title: data.title,
+      content: data.content,
+      author: {
+        name: data.author_name,
+        role: data.author_role,
+        avatar: data.author_avatar,
+        tag: data.author_tag,
+      },
+      postedIn: data.posted_in,
+      timeAgo: formatTimeAgo(data.created_at),
+      likes: data.likes || 0,
+      comments: data.comments || 0,
+      bookmarked: data.bookmarked || false,
+      isPinned: data.is_pinned || false,
+      created_at: data.created_at,
+      updated_at: data.updated_at
+    };
+    
+    // Update our local cache of posts
+    forumPosts = [newPost, ...forumPosts];
+    
+    return newPost;
+  } catch (error) {
+    console.error('Error in createForumPost:', error);
+    throw error;
+  }
+};
+
 // Update functions to modify the data in Supabase
 export const updateForumSpaces = async (newSpaces: typeof forumSpaces) => {
   try {
