@@ -9,9 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   forumSpaces, 
-  forumPosts, 
   loadForumSpaces, 
-  loadForumPosts, 
+  loadForumPostsBySpace,
   updateForumPosts,
   ForumPost 
 } from "@/lib/communityData";
@@ -28,32 +27,6 @@ const CommunitySpaceDetails = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFollowing, setIsFollowing] = useState(false);
   const [activeTab, setActiveTab] = useState("discussions");
-  
-  // Load data from Supabase
-  useEffect(() => {
-    const loadData = async () => {
-      setIsLoading(true);
-      
-      try {
-        await Promise.all([loadForumSpaces(), loadForumPosts()]);
-        
-        // Filter posts for this space
-        const spaceName = getSpaceName(slug || "").name;
-        const filteredPosts = forumPosts.filter(
-          post => post.postedIn.toLowerCase() === spaceName.toLowerCase()
-        );
-        
-        setSpacePosts(filteredPosts);
-      } catch (error) {
-        console.error('Error loading space data:', error);
-        toast.error('Failed to load space data');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    loadData();
-  }, [slug]);
   
   // Function to convert slug back to space name
   const getSpaceName = (slug: string) => {
@@ -77,6 +50,32 @@ const CommunitySpaceDetails = () => {
     };
   };
   
+  // Load data from Supabase
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      
+      try {
+        // Load spaces first to properly identify the space name
+        await loadForumSpaces();
+        
+        // Get proper space name from slug
+        const spaceName = getSpaceName(slug || "").name;
+        
+        // Fetch only posts for this specific space
+        const posts = await loadForumPostsBySpace(spaceName);
+        setSpacePosts(posts);
+      } catch (error) {
+        console.error('Error loading space data:', error);
+        toast.error('Failed to load space data');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    loadData();
+  }, [slug]);
+
   const space = getSpaceName(slug || "");
 
   const handleNewPostCreated = async (newPost: Partial<ForumPost>) => {
@@ -101,7 +100,9 @@ const CommunitySpaceDetails = () => {
     setSpacePosts(updatedPosts);
     
     // Update all forum posts with the new post
-    const allUpdatedPosts = [fullPost, ...forumPosts];
+    // We're still using updateForumPosts which expects the full list of posts
+    // In a real app, you'd have a dedicated API endpoint to add a single post
+    const allUpdatedPosts = [fullPost, ...await loadForumPostsBySpace(space.name)];
     await updateForumPosts(allUpdatedPosts);
     
     toast.success("Post created successfully!");

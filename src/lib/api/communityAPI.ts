@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { 
   ForumCategory, 
@@ -97,6 +96,44 @@ export const loadForumPosts = async () => {
     }));
   } catch (error) {
     console.error("Error in loadForumPosts:", error);
+    return [];
+  }
+};
+
+// Function to load forum posts for a specific space
+export const loadForumPostsBySpace = async (spaceName: string) => {
+  try {
+    const { data, error } = await supabase
+      .from('forum_posts')
+      .select('*')
+      .ilike('posted_in', spaceName);
+    
+    if (error) {
+      console.error("Error loading forum posts for space:", error);
+      return [];
+    }
+    
+    return data.map((post: any) => ({
+      id: post.id,
+      title: post.title,
+      content: post.content,
+      author: {
+        name: post.author_name,
+        role: post.author_role,
+        avatar: post.author_avatar,
+        tag: post.author_tag,
+      },
+      postedIn: post.posted_in,
+      timeAgo: formatTimeAgo(post.created_at),
+      likes: post.likes || 0,
+      comments: post.comments || 0,
+      bookmarked: post.bookmarked || false,
+      isPinned: post.is_pinned || false,
+      created_at: post.created_at,
+      updated_at: post.updated_at
+    }));
+  } catch (error) {
+    console.error("Error in loadForumPostsBySpace:", error);
     return [];
   }
 };
