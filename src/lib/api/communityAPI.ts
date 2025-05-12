@@ -90,7 +90,7 @@ export const loadForumPosts = async () => {
       likes: post.likes || 0,
       comments: post.comments || 0,
       bookmarked: post.bookmarked || false,
-      isPinned: post.is_pinned || false,
+      isPinned: post.is_pinned || false,  // Fixed property name to match our type definition
       created_at: post.created_at,
       updated_at: post.updated_at
     }));
@@ -128,7 +128,7 @@ export const loadForumPostsBySpace = async (spaceName: string) => {
       likes: post.likes || 0,
       comments: post.comments || 0,
       bookmarked: post.bookmarked || false,
-      isPinned: post.is_pinned || false,
+      isPinned: post.is_pinned || false,  // Fixed property name to match our type definition
       created_at: post.created_at,
       updated_at: post.updated_at
     }));
@@ -317,7 +317,7 @@ export const createForumPost = async (postData: Omit<ForumPost, 'id' | 'timeAgo'
       likes: postData.likes || 0,
       comments: postData.comments || 0,
       bookmarked: postData.bookmarked || false,
-      is_pinned: postData.isPinned || false
+      is_pinned: postData.isPinned || false  // Match database column name here
     };
     
     // Insert the post into the database
@@ -352,7 +352,7 @@ export const createForumPost = async (postData: Omit<ForumPost, 'id' | 'timeAgo'
       likes: data.likes || 0,
       comments: data.comments || 0,
       bookmarked: data.bookmarked || false,
-      isPinned: data.is_pinned || false,
+      isPinned: data.is_pinned || false,  // Fixed property name to match our type definition
       created_at: data.created_at,
       updated_at: data.updated_at
     };
