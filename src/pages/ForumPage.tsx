@@ -7,7 +7,7 @@ import { MessageSquare, Users, Loader2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { loadForumSpaces, loadForumPosts, loadTrendingPosts } from '@/lib/api/forum';
-import { ForumSpace, ForumPost, TrendingPost } from '@/lib/types/community';
+import { ForumSpace, ForumPost, TrendingPost, ForumCategory } from '@/lib/types/community';
 import { motion } from 'framer-motion';
 
 const ForumPage = () => {
@@ -29,7 +29,17 @@ const ForumPage = () => {
         
         // These would be populated from the imported state after loading
         import('@/lib/api/forum').then(({ forumSpaces, forumPosts, trendingPosts }) => {
-          setSpaces(forumSpaces || []);
+          // Convert ForumCategory[] to ForumSpace[] by flattening the structure
+          const allSpaces: ForumSpace[] = [];
+          if (Array.isArray(forumSpaces)) {
+            forumSpaces.forEach((category: ForumCategory) => {
+              if (category.spaces && Array.isArray(category.spaces)) {
+                allSpaces.push(...category.spaces);
+              }
+            });
+          }
+          
+          setSpaces(allSpaces || []);
           setPosts(forumPosts || []);
           setTrending(trendingPosts || []);
           setIsLoading(false);
