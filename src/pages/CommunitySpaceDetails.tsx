@@ -1,4 +1,3 @@
-
 import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { useState, useEffect } from "react";
@@ -11,7 +10,7 @@ import {
   loadForumPostsBySpace,
   createForumPost,
   ForumPost 
-} from "@/lib/communityData";
+} from "@/lib/api/forum";
 import { MessageSquare, Calendar, Users, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import SpaceHeader from "@/components/community/SpaceHeader";

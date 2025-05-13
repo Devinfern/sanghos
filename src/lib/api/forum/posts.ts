@@ -161,7 +161,7 @@ export const seedForumPosts = async () => {
       likes: post.likes,
       comments: post.comments,
       bookmarked: post.bookmarked,
-      is_pinned: post.isPinned || false, // Add is_pinned with null fallback
+      is_pinned: post.isPinned || false, // Map isPinned to is_pinned for the database
     }));
     
     const { error } = await supabase
@@ -202,7 +202,7 @@ export const updateForumPosts = async (newPosts: typeof forumPosts) => {
       likes: post.likes,
       comments: post.comments,
       bookmarked: post.bookmarked,
-      is_pinned: post.isPinned || false // Properly handle the isPinned field
+      is_pinned: post.isPinned || false // Map isPinned to is_pinned for the database
     }));
     
     const { error: insertError } = await supabase

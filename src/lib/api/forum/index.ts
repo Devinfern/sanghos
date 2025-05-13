@@ -4,12 +4,44 @@
 // Re-export types
 export * from "./types";
 
+// Import necessary functions for re-export
+import { 
+  forumSpaces,
+  loadForumSpaces,
+  updateForumSpaces
+} from "./spaces";
+
+import { 
+  forumPosts,
+  loadForumPosts,
+  loadForumPostsBySpace,
+  createForumPost,
+  updateForumPosts 
+} from "./posts";
+
+import { 
+  forumEvents,
+  loadForumEvents,
+  updateForumEvents 
+} from "./events";
+
+import { 
+  trendingPosts,
+  loadTrendingPosts,
+  updateTrendingPosts 
+} from "./trending";
+
+import { 
+  createDemoUser,
+  getDemoUser 
+} from "./users";
+
 // Re-export spaces functionality
 export { 
   forumSpaces,
   loadForumSpaces,
   updateForumSpaces
-} from "./spaces";
+};
 
 // Re-export posts functionality
 export { 
@@ -18,27 +50,27 @@ export {
   loadForumPostsBySpace,
   createForumPost,
   updateForumPosts 
-} from "./posts";
+};
 
 // Re-export events functionality
 export { 
   forumEvents,
   loadForumEvents,
   updateForumEvents 
-} from "./events";
+};
 
 // Re-export trending functionality
 export { 
   trendingPosts,
   loadTrendingPosts,
   updateTrendingPosts 
-} from "./trending";
+};
 
 // Re-export user functionality
 export { 
   createDemoUser,
   getDemoUser 
-} from "./users";
+};
 
 // Load all data function
 export const loadAllData = async () => {
