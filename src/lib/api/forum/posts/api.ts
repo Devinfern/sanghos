@@ -52,10 +52,28 @@ export const createForumPost = async (postData: Omit<ForumPost, 'id' | 'timeAgo'
     // Transform the post data to match the database schema
     const postToInsert = transformForumPostToDatabase(postData);
     
+    // Make sure we have all required fields
+    if (!postToInsert.author_name || !postToInsert.author_role || !postToInsert.author_avatar || 
+        !postToInsert.title || !postToInsert.content || !postToInsert.posted_in) {
+      throw new Error('Missing required fields for forum post');
+    }
+    
     // Insert the post into the database
     const { data, error } = await supabase
       .from('forum_posts')
-      .insert(postToInsert)
+      .insert({
+        author_name: postToInsert.author_name,
+        author_role: postToInsert.author_role,
+        author_avatar: postToInsert.author_avatar,
+        author_tag: postToInsert.author_tag,
+        posted_in: postToInsert.posted_in,
+        title: postToInsert.title,
+        content: postToInsert.content,
+        likes: postToInsert.likes || 0,
+        comments: postToInsert.comments || 0,
+        bookmarked: postToInsert.bookmarked || false,
+        is_pinned: postToInsert.is_pinned || false
+      })
       .select('*')
       .single();
       
@@ -95,8 +113,23 @@ export const updateForumPosts = async (newPosts: typeof forumPosts): Promise<voi
       return;
     }
     
-    // Then insert the new posts
-    const postsToInsert = newPosts.map(post => transformForumPostToDatabase(post));
+    // Then prepare posts for insertion, making sure all required fields are present
+    const postsToInsert = newPosts.map(post => {
+      const dbPost = transformForumPostToDatabase(post);
+      return {
+        author_name: dbPost.author_name || "Unknown Author",
+        author_role: dbPost.author_role || "Member",
+        author_avatar: dbPost.author_avatar || "/placeholder.svg",
+        author_tag: dbPost.author_tag,
+        posted_in: dbPost.posted_in || "General",
+        title: dbPost.title || "Untitled Post",
+        content: dbPost.content || "No content provided",
+        likes: dbPost.likes || 0,
+        comments: dbPost.comments || 0,
+        bookmarked: dbPost.bookmarked || false,
+        is_pinned: dbPost.is_pinned || false
+      };
+    });
     
     const { error: insertError } = await supabase
       .from('forum_posts')
@@ -123,8 +156,25 @@ export const updateForumPosts = async (newPosts: typeof forumPosts): Promise<voi
 export const seedForumPosts = async (): Promise<void> => {
   try {
     const { forumPosts } = await import("./state");
-    const postsToInsert = forumPosts.map(post => transformForumPostToDatabase(post));
     
+    // Prepare posts for insertion, making sure all required fields are present
+    const postsToInsert = forumPosts.map(post => {
+      const dbPost = transformForumPostToDatabase(post);
+      return {
+        author_name: dbPost.author_name || "Unknown Author",
+        author_role: dbPost.author_role || "Member",
+        author_avatar: dbPost.author_avatar || "/placeholder.svg",
+        author_tag: dbPost.author_tag,
+        posted_in: dbPost.posted_in || "General",
+        title: dbPost.title || "Untitled Post",
+        content: dbPost.content || "No content provided",
+        likes: dbPost.likes || 0,
+        comments: dbPost.comments || 0,
+        bookmarked: dbPost.bookmarked || false,
+        is_pinned: dbPost.is_pinned || false
+      };
+    });
+      
     const { error } = await supabase
       .from('forum_posts')
       .insert(postsToInsert);

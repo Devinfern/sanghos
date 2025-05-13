@@ -1,13 +1,12 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { TrendingPost } from "./types";
-import { defaultTrendingPosts } from "../../data/defaultCommunityData";
-
-// State variable to store the current data
-export let trendingPosts = [...defaultTrendingPosts];
+import { TrendingPost } from "../types";
+import { trendingPosts, updateTrendingPostsState } from "./state";
+import { transformDatabaseTrendingPost, transformTrendingPostToDatabase } from "./transformers";
+import { TrendingPostDatabaseSchema } from "./types";
 
 // Function to load trending posts from Supabase
-export const loadTrendingPosts = async () => {
+export const loadTrendingPosts = async (): Promise<TrendingPost[]> => {
   try {
     const { data, error } = await supabase
       .from('trending_posts')
@@ -16,36 +15,34 @@ export const loadTrendingPosts = async () => {
       
     if (error) {
       console.error('Error loading trending posts:', error);
-      return;
+      return trendingPosts;
     }
     
     if (data && data.length > 0) {
       // Transform data to match our format
-      const transformedPosts = data.map(post => ({
-        id: post.id,
-        title: post.title,
-        author: post.author,
-        avatar: post.avatar
-      }));
+      const transformedPosts = data.map(post => 
+        transformDatabaseTrendingPost(post as TrendingPostDatabaseSchema)
+      );
       
-      trendingPosts = transformedPosts;
+      updateTrendingPostsState(transformedPosts);
+      return transformedPosts;
     } else {
       // If no data, seed the database with our initial data
       await seedTrendingPosts();
+      return trendingPosts;
     }
   } catch (error) {
     console.error('Error in loadTrendingPosts:', error);
+    return trendingPosts;
   }
 };
 
 // Seed functions to populate the database with initial data
-export const seedTrendingPosts = async () => {
+export const seedTrendingPosts = async (): Promise<void> => {
   try {
-    const postsToInsert = defaultTrendingPosts.map(post => ({
-      title: post.title,
-      author: post.author,
-      avatar: post.avatar
-    }));
+    const postsToInsert = trendingPosts.map(post => 
+      transformTrendingPostToDatabase(post)
+    );
     
     const { error } = await supabase
       .from('trending_posts')
@@ -60,7 +57,7 @@ export const seedTrendingPosts = async () => {
 };
 
 // Update function to modify the data in Supabase
-export const updateTrendingPosts = async (newTrendingPosts: typeof trendingPosts) => {
+export const updateTrendingPosts = async (newTrendingPosts: TrendingPost[]): Promise<void> => {
   try {
     // First, delete all existing trending posts - fixed method that avoids using neq('id', 'dummy')
     const { error: deleteError } = await supabase
@@ -74,11 +71,9 @@ export const updateTrendingPosts = async (newTrendingPosts: typeof trendingPosts
     }
     
     // Then insert the new trending posts
-    const postsToInsert = newTrendingPosts.map(post => ({
-      title: post.title,
-      author: post.author,
-      avatar: post.avatar
-    }));
+    const postsToInsert = newTrendingPosts.map(post => 
+      transformTrendingPostToDatabase(post)
+    );
     
     const { error: insertError } = await supabase
       .from('trending_posts')
@@ -90,7 +85,7 @@ export const updateTrendingPosts = async (newTrendingPosts: typeof trendingPosts
     }
     
     // Update the local variable
-    trendingPosts = [...newTrendingPosts];
+    updateTrendingPostsState(newTrendingPosts);
     
     console.log('Trending posts updated successfully:', postsToInsert.length, 'posts inserted');
     

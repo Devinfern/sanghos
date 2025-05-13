@@ -1,13 +1,12 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { ForumEvent } from "./types";
-import { defaultForumEvents } from "../../data/defaultCommunityData";
-
-// State variable to store the current data
-export let forumEvents = [...defaultForumEvents];
+import { ForumEvent } from "../types";
+import { forumEvents, updateEventsState } from "./state";
+import { transformDatabaseEvent, transformEventToDatabase } from "./transformers";
+import { EventDatabaseSchema } from "./types";
 
 // Function to load forum events from Supabase
-export const loadForumEvents = async () => {
+export const loadForumEvents = async (): Promise<ForumEvent[]> => {
   try {
     const { data, error } = await supabase
       .from('forum_events')
@@ -16,40 +15,34 @@ export const loadForumEvents = async () => {
       
     if (error) {
       console.error('Error loading forum events:', error);
-      return;
+      return forumEvents;
     }
     
     if (data && data.length > 0) {
       // Transform data to match our format
-      const transformedEvents = data.map(event => ({
-        id: event.id,
-        date: {
-          day: event.date_day,
-          month: event.date_month
-        },
-        title: event.title,
-        time: event.time
-      }));
+      const transformedEvents = data.map(event => 
+        transformDatabaseEvent(event as EventDatabaseSchema)
+      );
       
-      forumEvents = transformedEvents;
+      updateEventsState(transformedEvents);
+      return transformedEvents;
     } else {
       // If no data, seed the database with our initial data
       await seedForumEvents();
+      return forumEvents;
     }
   } catch (error) {
     console.error('Error in loadForumEvents:', error);
+    return forumEvents;
   }
 };
 
 // Seed function to populate the database with initial data
-export const seedForumEvents = async () => {
+export const seedForumEvents = async (): Promise<void> => {
   try {
-    const eventsToInsert = defaultForumEvents.map(event => ({
-      title: event.title,
-      date_day: event.date.day,
-      date_month: event.date.month,
-      time: event.time
-    }));
+    const eventsToInsert = forumEvents.map(event => 
+      transformEventToDatabase(event)
+    );
     
     const { error } = await supabase
       .from('forum_events')
@@ -64,7 +57,7 @@ export const seedForumEvents = async () => {
 };
 
 // Update function to modify the data in Supabase
-export const updateForumEvents = async (newEvents: typeof forumEvents) => {
+export const updateForumEvents = async (newEvents: ForumEvent[]): Promise<void> => {
   try {
     // First, delete all existing events - fixed method that avoids using neq('id', 'dummy')
     const { error: deleteError } = await supabase
@@ -78,12 +71,9 @@ export const updateForumEvents = async (newEvents: typeof forumEvents) => {
     }
     
     // Then insert the new events
-    const eventsToInsert = newEvents.map(event => ({
-      title: event.title,
-      date_day: event.date.day,
-      date_month: event.date.month,
-      time: event.time
-    }));
+    const eventsToInsert = newEvents.map(event => 
+      transformEventToDatabase(event)
+    );
     
     const { error: insertError } = await supabase
       .from('forum_events')
@@ -95,7 +85,7 @@ export const updateForumEvents = async (newEvents: typeof forumEvents) => {
     }
     
     // Update the local variable
-    forumEvents = [...newEvents];
+    updateEventsState(newEvents);
     
     console.log('Forum events updated successfully:', eventsToInsert.length, 'events inserted');
     
