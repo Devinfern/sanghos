@@ -13,7 +13,7 @@ export const transformDatabaseTrendingPost = (post: TrendingPostDatabaseSchema):
 };
 
 // Transform TrendingPost to database schema
-export const transformTrendingPostToDatabase = (post: TrendingPost): Partial<TrendingPostDatabaseSchema> => {
+export const transformTrendingPostToDatabase = (post: TrendingPost): Omit<TrendingPostDatabaseSchema, 'id' | 'created_at' | 'updated_at'> => {
   return {
     title: post.title,
     author: post.author,

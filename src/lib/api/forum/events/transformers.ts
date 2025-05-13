@@ -23,7 +23,7 @@ export const transformDatabaseEvent = (event: EventDatabaseSchema): ForumEvent =
 };
 
 // Transform ForumEvent to database schema
-export const transformEventToDatabase = (event: ForumEvent): Partial<EventDatabaseSchema> => {
+export const transformEventToDatabase = (event: ForumEvent): Omit<EventDatabaseSchema, 'id' | 'created_at' | 'updated_at'> => {
   return {
     title: event.title,
     date_day: event.date.day,
