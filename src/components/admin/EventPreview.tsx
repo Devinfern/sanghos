@@ -4,29 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
-
-interface EventData {
-  title: string;
-  description: string;
-  date: string;
-  time: string;
-  location: {
-    name: string;
-    address: string;
-    city: string;
-    state: string;
-  };
-  price: number;
-  category: string[];
-  instructorName?: string;
-  image?: string;
-  capacity?: number;
-  remaining?: number;
-  sourceUrl?: string;
-}
+import { ExtractedEventData } from "@/lib/api/forum/events/types";
 
 interface EventPreviewProps {
-  eventData: EventData;
+  eventData: ExtractedEventData;
   onUseData: () => void;
   onEdit: (field: string, value: string) => void;
   isPublishing?: boolean;
