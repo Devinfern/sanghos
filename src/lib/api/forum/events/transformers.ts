@@ -1,6 +1,6 @@
 
 import { ForumEvent } from "../types";
-import { EventDatabaseSchema } from "./types";
+import { EventDatabaseSchema, ExtractedEventData, ForumEventData } from "./types";
 
 // Transform database event to ForumEvent
 export const transformDatabaseEvent = (event: EventDatabaseSchema): ForumEvent => {
@@ -36,5 +36,27 @@ export const transformEventToDatabase = (event: ForumEvent): Omit<EventDatabaseS
     price: event.price,
     capacity: event.capacity,
     remaining: event.remaining
+  };
+};
+
+// Transform extracted event data to ForumEvent
+export const transformExtractedToForumEvent = (extractedData: ExtractedEventData): ForumEventData => {
+  // Parse the date from string format (e.g., 2025-05-20) to day and month
+  const dateObj = extractedData.date ? new Date(extractedData.date) : new Date();
+  
+  return {
+    id: Date.now().toString(), // Temporary ID until saved to database
+    title: extractedData.title || "New Event",
+    date: {
+      day: dateObj.getDate(),
+      month: dateObj.toLocaleString('en-US', { month: 'short' }).toUpperCase(),
+    },
+    time: extractedData.time || "12:00 PM",
+    location: extractedData.location?.name || "",
+    description: extractedData.description || "",
+    instructor_name: extractedData.instructorName || "",
+    price: extractedData.price || 0,
+    capacity: extractedData.capacity || 20,
+    remaining: extractedData.remaining || extractedData.capacity || 20,
   };
 };

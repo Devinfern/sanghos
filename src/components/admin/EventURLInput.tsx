@@ -4,36 +4,17 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/com
 import { toast } from "sonner";
 import { EventURLForm } from "./EventURLForm";
 import { EventPreview } from "./EventPreview";
-
-interface EventData {
-  title: string;
-  description: string;
-  date: string;
-  time: string;
-  location: {
-    name: string;
-    address: string;
-    city: string;
-    state: string;
-  };
-  price: number;
-  category: string[];
-  instructorName?: string;
-  image?: string;
-  sourceUrl?: string;
-  capacity?: number;
-  remaining?: number;
-}
+import { ExtractedEventData } from "@/lib/api/forum/events/types";
 
 interface EventURLInputProps {
-  onEventDataExtracted: (eventData: EventData) => void;
+  onEventDataExtracted: (eventData: ExtractedEventData) => void;
 }
 
 const EventURLInput = ({ onEventDataExtracted }: EventURLInputProps) => {
-  const [extractedData, setExtractedData] = useState<EventData | null>(null);
+  const [extractedData, setExtractedData] = useState<ExtractedEventData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleEventDataExtracted = (data: EventData) => {
+  const handleEventDataExtracted = (data: ExtractedEventData) => {
     setError(null);
     setExtractedData(data);
   };

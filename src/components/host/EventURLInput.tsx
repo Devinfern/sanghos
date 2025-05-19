@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,33 +7,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-
-interface EventData {
-  title: string;
-  description: string;
-  date: string;
-  time: string;
-  location: {
-    name: string;
-    address: string;
-    city: string;
-    state: string;
-  };
-  price: number;
-  category: string[];
-  instructorName?: string;
-  image?: string;
-  sourceUrl?: string;
-}
+import { extractEventDataFromUrl } from "@/lib/api/forum/events";
+import { ExtractedEventData } from "@/lib/api/forum/events/types";
 
 interface EventURLInputProps {
-  onEventDataExtracted: (eventData: EventData) => void;
+  onEventDataExtracted: (eventData: ExtractedEventData) => void;
 }
 
 const EventURLInput = ({ onEventDataExtracted }: EventURLInputProps) => {
   const [url, setUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [extractedData, setExtractedData] = useState<EventData | null>(null);
+  const [extractedData, setExtractedData] = useState<ExtractedEventData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -41,20 +26,7 @@ const EventURLInput = ({ onEventDataExtracted }: EventURLInputProps) => {
     setError(null);
 
     try {
-      const response = await fetch("/api/functions/v1/extract-event-data", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ url }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to extract event data");
-      }
-
-      const data = await response.json();
+      const data = await extractEventDataFromUrl(url);
       setExtractedData(data);
       toast.success("Event data extracted successfully!");
     } catch (error) {
@@ -199,7 +171,7 @@ const EventURLInput = ({ onEventDataExtracted }: EventURLInputProps) => {
                     <Label htmlFor="location-city">City</Label>
                     <Input
                       id="location-city"
-                      value={extractedData.location.city}
+                      value={extractedData.location.city || ''}
                       onChange={(e) => handleEdit('location.city', e.target.value)}
                     />
                   </div>
@@ -208,7 +180,7 @@ const EventURLInput = ({ onEventDataExtracted }: EventURLInputProps) => {
                     <Label htmlFor="location-state">State</Label>
                     <Input
                       id="location-state"
-                      value={extractedData.location.state}
+                      value={extractedData.location.state || ''}
                       onChange={(e) => handleEdit('location.state', e.target.value)}
                     />
                   </div>
@@ -219,7 +191,7 @@ const EventURLInput = ({ onEventDataExtracted }: EventURLInputProps) => {
                   <Input
                     id="price"
                     type="number"
-                    value={extractedData.price}
+                    value={extractedData.price || 0}
                     onChange={(e) => handleEdit('price', e.target.value)}
                   />
                 </div>

@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LinkIcon, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { extractEventDataFromUrl } from "@/lib/api/forum/events";
+import { ExtractedEventData } from "@/lib/api/forum/events/types";
 
 interface EventURLFormProps {
-  onEventDataExtracted: (data: any) => void;
+  onEventDataExtracted: (data: ExtractedEventData) => void;
 }
 
 export const EventURLForm = ({ onEventDataExtracted }: EventURLFormProps) => {
@@ -28,28 +29,7 @@ export const EventURLForm = ({ onEventDataExtracted }: EventURLFormProps) => {
     console.log("Submitting URL for extraction:", url);
 
     try {
-      // Check if user is authenticated (needed for Supabase function calls)
-      const { data: session } = await supabase.auth.getSession();
-      if (!session?.session) {
-        console.warn("User not authenticated, function call may fail");
-      }
-      
-      console.log("Calling Supabase function: extract-event-data");
-      const { data, error: functionError } = await supabase.functions.invoke('extract-event-data', {
-        body: { url },
-      });
-      
-      if (functionError) {
-        console.error("Function error:", functionError);
-        throw new Error(functionError.message || "Failed to extract event data");
-      }
-      
-      console.log("Extracted data:", data);
-      
-      if (!data) {
-        throw new Error("No data returned from extraction");
-      }
-
+      const data = await extractEventDataFromUrl(url);
       onEventDataExtracted(data);
       toast.success("Event data extracted successfully!");
     } catch (error) {
