@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { Info, X } from "lucide-react";
@@ -13,9 +12,20 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { partnerEvents, eventToRetreatFormat } from "@/data/mockEvents";
+import { ensureValidCategory } from "@/mockEvents";
+
+// Ensure partner events have proper type conversions before transforming to retreat format
+const typeSafePartnerEvents = partnerEvents.map(event => ({
+  ...event,
+  category: ensureValidCategory(event.category),
+  location: {
+    ...event.location,
+    locationType: event.location.locationType === "venue" ? "venue" : "online"
+  }
+}));
 
 // Convert partner events to retreat format for consistent display
-const partnerRetreats = partnerEvents.map(event => eventToRetreatFormat(event));
+const partnerRetreats = typeSafePartnerEvents.map(event => eventToRetreatFormat(event));
 
 // Combine the original retreats with partner retreats
 const allRetreats = [...retreats, ...partnerRetreats];

@@ -35,16 +35,21 @@ export function useEvents(location: string = "San Francisco, CA") {
           const typeSafeDefaultEvents = defaultEvents.map(event => ({
             ...event,
             category: ensureValidCategory(event.category)
-          }));
+          })) as Event[];
           
           // Ensure partner events have proper category typing
           const typeSafePartnerEvents = partnerEvents.map(event => ({
             ...event,
-            category: ensureValidCategory(event.category)
-          }));
+            category: ensureValidCategory(event.category),
+            location: {
+              ...event.location,
+              // Ensure locationType is narrowed to the union type
+              locationType: (event.location.locationType === "venue" ? "venue" : "online") as "venue" | "online"
+            }
+          })) as Event[];
           
           // Combine default events with partner events
-          const combinedFallbackEvents = [...typeSafeDefaultEvents, ...typeSafePartnerEvents] as Event[];
+          const combinedFallbackEvents = [...typeSafeDefaultEvents, ...typeSafePartnerEvents];
           setEvents(combinedFallbackEvents);
           
           // Don't show error toast - just load fallback data silently
@@ -87,7 +92,8 @@ export function useEvents(location: string = "San Francisco, CA") {
               startDate,
               endDate,
               location: {
-                locationType: rec.url ? "online" : "venue",
+                // Ensure locationType is narrowed to the union type
+                locationType: rec.url ? "online" : "venue" as "venue" | "online",
                 name: rec.location || "Venue to be announced",
                 address: rec.location || "",
                 city: rec.location?.split(",")?.[0] || "",
@@ -109,11 +115,16 @@ export function useEvents(location: string = "San Francisco, CA") {
           // Ensure partner events have proper category typing
           const typeSafePartnerEvents = partnerEvents.map(event => ({
             ...event,
-            category: ensureValidCategory(event.category)
-          }));
+            category: ensureValidCategory(event.category),
+            location: {
+              ...event.location,
+              // Ensure locationType is narrowed to the union type
+              locationType: (event.location.locationType === "venue" ? "venue" : "online") as "venue" | "online"
+            }
+          })) as Event[];
           
           // Combine API events with partner events
-          const combinedEvents = [...transformedEvents, ...typeSafePartnerEvents] as Event[];
+          const combinedEvents = [...transformedEvents, ...typeSafePartnerEvents];
           
           // Only log success, don't show toast
           if (combinedEvents.length > 0) {
@@ -128,16 +139,21 @@ export function useEvents(location: string = "San Francisco, CA") {
           const typeSafeDefaultEvents = defaultEvents.map(event => ({
             ...event,
             category: ensureValidCategory(event.category)
-          }));
+          })) as Event[];
           
           // Ensure partner events have proper category typing
           const typeSafePartnerEvents = partnerEvents.map(event => ({
             ...event,
-            category: ensureValidCategory(event.category)
-          }));
+            category: ensureValidCategory(event.category),
+            location: {
+              ...event.location,
+              // Ensure locationType is narrowed to the union type
+              locationType: (event.location.locationType === "venue" ? "venue" : "online") as "venue" | "online"
+            }
+          })) as Event[];
           
           // Combine default events with partner events
-          const combinedFallbackEvents = [...typeSafeDefaultEvents, ...typeSafePartnerEvents] as Event[];
+          const combinedFallbackEvents = [...typeSafeDefaultEvents, ...typeSafePartnerEvents];
           setEvents(combinedFallbackEvents);
           
           // Don't show error toast - just load fallback data silently
@@ -151,16 +167,21 @@ export function useEvents(location: string = "San Francisco, CA") {
         const typeSafeDefaultEvents = defaultEvents.map(event => ({
           ...event,
           category: ensureValidCategory(event.category)
-        }));
+        })) as Event[];
         
         // Ensure partner events have proper category typing
         const typeSafePartnerEvents = partnerEvents.map(event => ({
           ...event,
-          category: ensureValidCategory(event.category)
-        }));
+          category: ensureValidCategory(event.category),
+          location: {
+            ...event.location,
+            // Ensure locationType is narrowed to the union type
+            locationType: (event.location.locationType === "venue" ? "venue" : "online") as "venue" | "online"
+          }
+        })) as Event[];
         
         // Combine default events with partner events
-        const combinedFallbackEvents = [...typeSafeDefaultEvents, ...typeSafePartnerEvents] as Event[];
+        const combinedFallbackEvents = [...typeSafeDefaultEvents, ...typeSafePartnerEvents];
         setEvents(combinedFallbackEvents);
         
         // Don't show error toast - just load fallback data silently

@@ -12,7 +12,7 @@ export const defaultEvents: Event[] = [
     startDate: new Date("2025-04-18T07:00:00"),
     endDate: new Date("2025-04-18T08:00:00"),
     location: {
-      locationType: "venue",
+      locationType: "venue" as "venue" | "online",
       name: "Lakeside Park",
       address: "123 Lakeview Ave",
       city: "Springfield",
@@ -37,7 +37,7 @@ export const defaultEvents: Event[] = [
     startDate: new Date("2025-04-19T18:00:00"),
     endDate: new Date("2025-04-19T18:45:00"),
     location: {
-      locationType: "online",
+      locationType: "online" as "venue" | "online",
       name: "Online"
     },
     bookingUrl: "https://www.mindfulcommunity.com/meditate",
@@ -58,7 +58,7 @@ export const defaultEvents: Event[] = [
     startDate: new Date("2025-04-22T17:30:00"),
     endDate: new Date("2025-04-22T19:15:00"),
     location: {
-      locationType: "venue",
+      locationType: "venue" as "venue" | "online",
       name: "Healthy Eats Kitchen",
       address: "789 Wellness Lane",
       city: "Hillcrest",

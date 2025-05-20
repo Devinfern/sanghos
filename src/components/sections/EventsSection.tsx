@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import { Event, EventCategory } from "@/types/event";
@@ -21,15 +20,20 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events, isLoading }) => {
   const combinedEvents = [...events];
   
   // Add partner events if they don't already exist in the events array
-  // Make sure to properly type the category
+  // Make sure to properly type the category and location.locationType
   const typeSafeAllEvents = allEvents.map(event => ({
     ...event,
-    category: ensureValidCategory(event.category)
+    category: ensureValidCategory(event.category),
+    location: {
+      ...event.location,
+      // Ensure locationType is narrowed to the union type "venue" | "online"
+      locationType: (event.location.locationType === "venue" ? "venue" : "online") as "venue" | "online"
+    }
   }));
   
   typeSafeAllEvents.forEach(partnerEvent => {
     if (!combinedEvents.some(event => event.id === partnerEvent.id)) {
-      combinedEvents.push(partnerEvent);
+      combinedEvents.push(partnerEvent as Event);
     }
   });
 

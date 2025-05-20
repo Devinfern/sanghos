@@ -57,7 +57,7 @@ export const partnerEvents = [
     startDate: new Date("2025-05-22T14:00:00"),
     endDate: new Date("2025-05-22T16:00:00"),
     location: {
-      locationType: "venue",
+      locationType: "venue" as "venue" | "online", // Fix type narrowing here
       name: "InsightLA East Hollywood",
       address: "4300 Melrose Ave",
       city: "Los Angeles",
@@ -117,6 +117,7 @@ export const eventToRetreatFormat = (event) => {
     capacity: event.capacity || 20,
     remaining: event.remaining || 10,
     category: [getCategoryLabel(event.category)],
+    amenities: [], // Add missing amenities property with default empty array
     featured: true,
     isSanghos: false // Mark as non-Sanghos to appear in partner tab
   };

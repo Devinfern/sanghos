@@ -13,9 +13,14 @@ const FeaturedRetreatsGrid: React.FC = () => {
   // Ensure events have correctly typed categories first
   const typeSafeEvents = allEvents.map(event => ({
     ...event,
-    category: ensureValidCategory(event.category)
+    category: ensureValidCategory(event.category),
+    location: {
+      ...event.location,
+      locationType: event.location.locationType === "venue" ? "venue" : "online"
+    }
   }));
   
+  // Convert all events to proper retreat format with all required properties
   const partnerRetreats = typeSafeEvents.map(event => eventToRetreatFormat(event));
   
   // Combine both sources of retreats
