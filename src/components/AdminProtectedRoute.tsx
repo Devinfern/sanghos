@@ -1,42 +1,64 @@
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAdminStatus } from "@/hooks/useAdminStatus";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { Shield } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAdmin, isLoading, error } = useAdminStatus();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!user) {
-      console.log("No user, redirecting to login");
-      toast.error("You must be logged in to access this page");
-      navigate("/login");
-      return;
-    }
+    const checkAdminStatus = async () => {
+      if (!user?.email) {
+        console.log("No user, redirecting to login");
+        toast.error("You must be logged in to access this page");
+        navigate("/login");
+        return;
+      }
 
-    console.log("Admin route check:", { 
-      email: user?.email, 
-      isAdmin, 
-      isLoading 
-    });
+      try {
+        setIsLoading(true);
+        console.log("Direct admin check for:", user.email);
+        
+        // Direct database query - most reliable method
+        const { data: adminUser, error: queryError } = await supabase
+          .from('admin_users')
+          .select('email')
+          .eq('email', user.email)
+          .maybeSingle();
+        
+        if (queryError) {
+          console.error("Admin query error:", queryError);
+          throw queryError;
+        }
+        
+        const adminStatus = !!adminUser;
+        console.log("Admin status result:", adminStatus, adminUser);
+        setIsAdmin(adminStatus);
+        
+        if (!adminStatus) {
+          console.log("User is not an admin, redirecting");
+          toast.error("You don't have permission to access the admin area");
+          navigate("/dashboard");
+        }
+      } catch (err) {
+        console.error("Admin check error:", err);
+        setError(err instanceof Error ? err : new Error("Admin check failed"));
+        toast.error("Error verifying admin status. Please try again.");
+        navigate("/dashboard");
+      } finally {
+        setIsLoading(false);
+      }
+    };
     
-    // Only redirect if admin check is complete and user is not an admin
-    if (!isLoading && !isAdmin) {
-      console.log("User is not an admin, redirecting");
-      toast.error("You don't have permission to access the admin area");
-      navigate("/dashboard");
-    }
-    
-    if (error) {
-      console.error("Admin check error:", error);
-      toast.error("Error verifying admin status. Please try again.");
-    }
-  }, [isAdmin, isLoading, error, navigate, user]);
+    checkAdminStatus();
+  }, [user, navigate]);
 
   // Show loading state while checking
   if (isLoading) {

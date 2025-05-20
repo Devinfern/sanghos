@@ -3,15 +3,72 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Settings, PlusCircle, LayoutGrid } from "lucide-react";
+import { Settings, PlusCircle, LayoutGrid, Check, AlertTriangle } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const DashboardAdmin = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const [isChecking, setIsChecking] = useState(false);
+
+  useEffect(() => {
+    const verifyAdminAccess = async () => {
+      if (!user?.email) return;
+      
+      setIsChecking(true);
+      try {
+        // Direct check for admin status
+        const { data, error } = await supabase
+          .from('admin_users')
+          .select('email')
+          .eq('email', user.email)
+          .maybeSingle();
+          
+        if (error) {
+          console.error("Admin verification error:", error);
+          toast.error("Error verifying admin status");
+        }
+        
+        setIsAdmin(!!data);
+        console.log("Admin dashboard verification:", !!data, data);
+      } catch (err) {
+        console.error("Admin verification exception:", err);
+      } finally {
+        setIsChecking(false);
+      }
+    };
+    
+    verifyAdminAccess();
+  }, [user]);
+
+  const handleNavigate = (path: string) => {
+    if (isAdmin === false) {
+      toast.error("You don't have admin permission");
+      return;
+    }
+    navigate(path);
+  };
 
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle>Admin Tools</CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle>Admin Tools</CardTitle>
+          {isChecking ? (
+            <div className="animate-pulse text-xs text-muted-foreground">Verifying access...</div>
+          ) : isAdmin === true ? (
+            <div className="flex items-center text-xs text-green-600">
+              <Check className="h-3 w-3 mr-1" /> Verified
+            </div>
+          ) : isAdmin === false ? (
+            <div className="flex items-center text-xs text-amber-600">
+              <AlertTriangle className="h-3 w-3 mr-1" /> No access
+            </div>
+          ) : null}
+        </div>
         <CardDescription>
           Access administrative tools and content management
         </CardDescription>
@@ -32,7 +89,8 @@ const DashboardAdmin = () => {
                 </div>
                 <Button 
                   className="w-full" 
-                  onClick={() => navigate("/admin/cms")}
+                  onClick={() => handleNavigate("/admin/cms")}
+                  disabled={isChecking || isAdmin === false}
                 >
                   Open Admin CMS
                 </Button>
@@ -54,7 +112,8 @@ const DashboardAdmin = () => {
                 </div>
                 <Button 
                   className="w-full" 
-                  onClick={() => navigate("/retreat-management")}
+                  onClick={() => handleNavigate("/retreat-management")}
+                  disabled={isChecking || isAdmin === false}
                 >
                   Manage Retreats
                 </Button>
@@ -67,7 +126,8 @@ const DashboardAdmin = () => {
           <Button 
             variant="outline" 
             className="w-full"
-            onClick={() => navigate("/retreat-management")}
+            onClick={() => handleNavigate("/retreat-management")}
+            disabled={isChecking || isAdmin === false}
           >
             <PlusCircle className="h-4 w-4 mr-2" />
             Create New Retreat
