@@ -40,16 +40,20 @@ export const loadForumEvents = async (): Promise<ForumEvent[]> => {
 // Seed function to populate the database with initial data
 export const seedForumEvents = async (): Promise<void> => {
   try {
+    // Transform events one by one and create an array of individual event objects
     const eventsToInsert = forumEvents.map(event => 
       transformEventToDatabase(event)
     );
     
-    const { error } = await supabase
-      .from('forum_events')
-      .insert(eventsToInsert);
-      
-    if (error) {
-      console.error('Error seeding forum events:', error);
+    // Insert each event individually
+    for (const eventData of eventsToInsert) {
+      const { error } = await supabase
+        .from('forum_events')
+        .insert(eventData);
+        
+      if (error) {
+        console.error('Error seeding forum event:', error, eventData);
+      }
     }
   } catch (error) {
     console.error('Error in seedForumEvents:', error);
@@ -70,18 +74,20 @@ export const updateForumEvents = async (newEvents: ForumEvent[]): Promise<void> 
       return;
     }
     
-    // Then insert the new events
+    // Transform events and create an array of individual event objects
     const eventsToInsert = newEvents.map(event => 
       transformEventToDatabase(event)
     );
     
-    const { error: insertError } = await supabase
-      .from('forum_events')
-      .insert(eventsToInsert);
-      
-    if (insertError) {
-      console.error('Error updating forum events:', insertError);
-      return;
+    // Insert events one by one
+    for (const eventData of eventsToInsert) {
+      const { error: insertError } = await supabase
+        .from('forum_events')
+        .insert(eventData);
+        
+      if (insertError) {
+        console.error('Error inserting forum event:', insertError, eventData);
+      }
     }
     
     // Update the local variable

@@ -54,7 +54,7 @@ export const transformExtractedToForumEvent = (extractedData: ExtractedEventData
     time: extractedData.time || "12:00 PM",
     location: extractedData.location?.name || "",
     description: extractedData.description || "",
-    instructor_name: extractedData.instructorName || "",
+    instructor_name: extractedData.instructor || "", // Fixed: Changed from instructorName to instructor
     price: extractedData.price || 0,
     capacity: extractedData.capacity || 20,
     remaining: extractedData.remaining || extractedData.capacity || 20,
