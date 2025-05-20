@@ -1,12 +1,10 @@
+
 import { useState, useEffect } from "react";
 import { Event } from "@/types/event";
 import { supabase } from "@/integrations/supabase/client";
 import { loadForumEvents } from "@/lib/api/forum/events";
 import { startOfDay } from "date-fns";
-import { partnerEvents } from "@/data/mockEvents"; 
-import { ensureValidCategory } from "@/mockEvents";
 import { retreats } from "@/lib/data";
-import { eventToRetreatFormat } from "@/data/mockEvents";
 
 export function useEvents(location: string = "San Francisco, CA") {
   const [events, setEvents] = useState<Event[]>([]);
@@ -136,22 +134,7 @@ export function useEvents(location: string = "San Francisco, CA") {
           allEvents = [...allEvents, ...transformedEvents];
         }
         
-        // 3. Add partner events - these should eventually come from a real data source
-        // For now, we keep using the partner events from the mock data
-        if (partnerEvents && partnerEvents.length > 0) {
-          // Type-safe conversion for partner events
-          const typeSafePartnerEvents = partnerEvents.map(event => ({
-            ...event,
-            category: ensureValidCategory(event.category),
-            location: {
-              ...event.location,
-              locationType: (event.location.locationType === "venue" ? "venue" : "online") as "venue" | "online"
-            }
-          }));
-          
-          console.log(`Loaded ${typeSafePartnerEvents.length} partner events`);
-          allEvents = [...allEvents, ...typeSafePartnerEvents];
-        }
+        // Note: Removed all mock partner events in favor of real events
         
         console.log(`Total events loaded: ${allEvents.length}`);
         setEvents(allEvents);
