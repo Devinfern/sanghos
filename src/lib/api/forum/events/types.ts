@@ -3,16 +3,21 @@ export interface ExtractedEventData {
   title: string;
   description: string;
   image: string;
-  date: string;
+  date: {
+    display: string;
+    iso: string;
+  };
   time: string;
   location: {
     name: string;
     address: string;
     city: string;
     state: string;
+    type: "online" | "venue";
   };
   instructor: string;
   price: number;
+  priceDisplay?: string;
   capacity: number;
   remaining: number;
   category: string[];

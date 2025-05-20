@@ -1,4 +1,3 @@
-
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.38/deno-dom-wasm.ts";
 
@@ -46,29 +45,62 @@ serve(async (req) => {
       );
     }
 
-    // Extract event data
+    // Enhanced extraction of event data
     const title = doc.querySelector(".event-block-detail__title")?.textContent?.trim() || "";
     
     // Extract description
     const descriptionEl = doc.querySelector(".event-block-detail__description");
     const description = descriptionEl ? descriptionEl.textContent?.trim() || "" : "";
     
-    // Extract image
-    const imageEl = doc.querySelector(".event-block-detail__image img");
-    const image = imageEl?.getAttribute("src") || "https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?q=80&w=2070&auto=format&fit=crop";
+    // Enhanced image extraction - look for specific meta tag first, fallback to page image
+    let image = "";
+    const metaImage = doc.querySelector('meta[property="og:image"]');
+    if (metaImage && metaImage.getAttribute("content")) {
+      image = metaImage.getAttribute("content") || "";
+    } else {
+      const imageEl = doc.querySelector(".event-block-detail__image img");
+      image = imageEl?.getAttribute("src") || "";
+    }
     
-    // Extract date and time
+    // Fallback image if none found
+    if (!image) {
+      image = "https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?q=80&w=2070&auto=format&fit=crop";
+    }
+    
+    // Enhanced date and time extraction
     const dateTimeEl = doc.querySelector(".event-block-detail__date-time");
     let date = "";
     let time = "";
+    let fullDateTime = "";
     
     if (dateTimeEl) {
-      const dateTimeText = dateTimeEl.textContent?.trim() || "";
+      fullDateTime = dateTimeEl.textContent?.trim() || "";
       // Example format: "Monday, June 2, 2025 | 2:00pm-4:00pm PST"
-      const dateTimeParts = dateTimeText.split("|");
+      const dateTimeParts = fullDateTime.split("|");
       
       if (dateTimeParts.length >= 1) {
         date = dateTimeParts[0].trim();
+        
+        // Try to convert date to ISO format for better storage (YYYY-MM-DD)
+        try {
+          if (date) {
+            // Parse date like "Monday, June 2, 2025"
+            const dateObj = new Date(date);
+            if (!isNaN(dateObj.getTime())) {
+              // Format as ISO date string (YYYY-MM-DD)
+              const isoDate = dateObj.toISOString().split('T')[0];
+              // Keep both formats
+              date = {
+                display: date,
+                iso: isoDate
+              };
+            }
+          }
+        } catch (error) {
+          console.error("Error parsing date:", error);
+          // Keep original date format if parsing fails
+          date = { display: date, iso: "" };
+        }
       }
       
       if (dateTimeParts.length >= 2) {
@@ -76,28 +108,64 @@ serve(async (req) => {
       }
     }
     
-    // Extract location
+    // Enhanced location extraction
     const locationEl = doc.querySelector(".event-block-detail__location");
+    let locationName = locationEl?.querySelector(".name")?.textContent?.trim() || "InsightLA";
+    let locationAddress = locationEl?.querySelector(".address")?.textContent?.trim() || "";
+    let city = "Los Angeles";
+    let state = "CA";
+    
+    // Try to parse city and state from address if available
+    if (locationAddress) {
+      // Common address format: "Street, City, State ZIP"
+      const addressParts = locationAddress.split(',');
+      if (addressParts.length >= 2) {
+        // Last part might contain "State ZIP"
+        const lastPart = addressParts[addressParts.length - 1].trim();
+        const stateZipMatch = lastPart.match(/([A-Z]{2})\s+\d+/);
+        if (stateZipMatch) {
+          state = stateZipMatch[1];
+        }
+        
+        // Second-to-last part might be the city
+        if (addressParts.length >= 2) {
+          city = addressParts[addressParts.length - 2].trim();
+        }
+      }
+    }
+    
     const location = {
-      name: locationEl?.querySelector(".name")?.textContent?.trim() || "InsightLA",
-      address: locationEl?.querySelector(".address")?.textContent?.trim() || "",
-      city: "Los Angeles",
-      state: "CA"
+      name: locationName,
+      address: locationAddress,
+      city: city,
+      state: state,
+      type: locationAddress.toLowerCase().includes("online") || locationName.toLowerCase().includes("online") 
+        ? "online" 
+        : "venue"
     };
     
-    // Extract teacher/instructor
+    // Enhanced teacher/instructor extraction
     const teacherEl = doc.querySelector(".event-block-detail__teacher");
     const instructor = teacherEl?.textContent?.trim() || "InsightLA";
     
-    // Extract pricing
+    // Enhanced price extraction
     const pricingEl = doc.querySelector(".event-block-detail__pricing .price");
     let price = 0;
+    let priceDisplay = "";
+    
     if (pricingEl) {
-      const priceText = pricingEl.textContent?.trim() || "";
-      // Extract numbers from string like "$180.00"
-      const priceMatch = priceText.match(/\d+(\.\d+)?/);
-      if (priceMatch) {
-        price = parseFloat(priceMatch[0]);
+      priceDisplay = pricingEl.textContent?.trim() || "";
+      
+      // Handle different price formats
+      if (priceDisplay.toLowerCase().includes("free")) {
+        price = 0;
+      } else {
+        // Extract numbers from string like "$180.00" or "Sliding Scale $50-$150"
+        const priceMatches = priceDisplay.match(/\d+(\.\d+)?/g);
+        if (priceMatches && priceMatches.length > 0) {
+          // If there are multiple numbers (like in a range), use the first one
+          price = parseFloat(priceMatches[0]);
+        }
       }
     }
     
@@ -115,16 +183,17 @@ serve(async (req) => {
     const bookingLinkEl = doc.querySelector(".event-block-detail__register a");
     const bookingLink = bookingLinkEl?.getAttribute("href") || url;
 
-    // Compose the extracted data
+    // Compose the enhanced extracted data
     const eventData = {
       title,
       description,
       image,
-      date,
+      date: typeof date === 'object' ? date : { display: date, iso: "" },
       time,
       location,
       instructor,
       price,
+      priceDisplay,
       capacity,
       remaining,
       category,

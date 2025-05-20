@@ -41,8 +41,26 @@ export const transformEventToDatabase = (event: ForumEvent): Omit<EventDatabaseS
 
 // Transform extracted event data to ForumEvent
 export const transformExtractedToForumEvent = (extractedData: ExtractedEventData): ForumEventData => {
-  // Parse the date from string format (e.g., 2025-05-20) to day and month
-  const dateObj = extractedData.date ? new Date(extractedData.date) : new Date();
+  // Parse the date from enhanced format
+  let dateObj: Date;
+  
+  // Try to use the ISO date if available
+  if (extractedData.date && extractedData.date.iso) {
+    dateObj = new Date(extractedData.date.iso);
+  } 
+  // Fallback to display date if iso date is not available or invalid
+  else if (extractedData.date && extractedData.date.display) {
+    dateObj = new Date(extractedData.date.display);
+  } 
+  // Final fallback to current date
+  else {
+    dateObj = new Date();
+  }
+  
+  // If date parsing failed, use current date
+  if (isNaN(dateObj.getTime())) {
+    dateObj = new Date();
+  }
   
   return {
     id: Date.now().toString(), // Temporary ID until saved to database
@@ -54,7 +72,7 @@ export const transformExtractedToForumEvent = (extractedData: ExtractedEventData
     time: extractedData.time || "12:00 PM",
     location: extractedData.location?.name || "",
     description: extractedData.description || "",
-    instructor_name: extractedData.instructor || "", // Fixed: Changed from instructorName to instructor
+    instructor_name: extractedData.instructor || "",
     price: extractedData.price || 0,
     capacity: extractedData.capacity || 20,
     remaining: extractedData.remaining || extractedData.capacity || 20,
