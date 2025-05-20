@@ -1,10 +1,9 @@
 
 import { useState, useEffect } from "react";
-import { Event, EventCategory } from "@/types/event";
+import { Event } from "@/types/event";
 import { supabase } from "@/integrations/supabase/client";
-import { defaultEvents } from "@/data/mockFeaturedEvents";
-import { partnerEvents } from "@/data/mockEvents";
-import { ensureValidCategory } from "@/mockEvents";
+import { loadForumEvents } from "@/lib/api/forum/events";
+import { startOfDay } from "date-fns";
 
 export function useEvents(location: string = "San Francisco, CA") {
   const [events, setEvents] = useState<Event[]>([]);
@@ -17,175 +16,94 @@ export function useEvents(location: string = "San Francisco, CA") {
       setError(null);
       
       try {
-        console.log(`Fetching events for location: ${location}`);
+        console.log(`Fetching real events for location: ${location}`);
         
-        const { data, error } = await supabase.functions.invoke("fetch-local-events", {
-          body: {
-            location,
-            interests: ["yoga", "meditation", "wellness", "mindfulness"],
-            startDatetime: new Date().toISOString(),
-          },
-        });
+        // Load events from the forum_events table through our API wrapper
+        const forumEvents = await loadForumEvents();
         
-        if (error) {
-          console.error("Error fetching events:", error);
-          setError(`Failed to fetch events: ${error.message}`);
-          
-          // Ensure the categories in default events are properly typed
-          const typeSafeDefaultEvents = defaultEvents.map(event => ({
-            ...event,
-            category: ensureValidCategory(event.category)
-          })) as Event[];
-          
-          // Ensure partner events have proper category typing
-          const typeSafePartnerEvents = partnerEvents.map(event => ({
-            ...event,
-            category: ensureValidCategory(event.category),
-            location: {
-              ...event.location,
-              // Ensure locationType is narrowed to the union type
-              locationType: (event.location.locationType === "venue" ? "venue" : "online") as "venue" | "online"
-            }
-          })) as Event[];
-          
-          // Combine default events with partner events
-          const combinedFallbackEvents = [...typeSafeDefaultEvents, ...typeSafePartnerEvents];
-          setEvents(combinedFallbackEvents);
-          
-          // Don't show error toast - just load fallback data silently
-          console.log("Using fallback events data due to API error");
-        } else if (data?.recommendations && data.recommendations.length > 0) {
-          console.log(`Successfully fetched ${data.recommendations.length} events`);
-          
-          const transformedEvents: Event[] = data.recommendations.map((rec: any, index: number) => {
-            // Parse dates properly
-            let startDate = new Date();
-            let endDate = new Date();
-            endDate.setHours(endDate.getHours() + 2);
-            
-            if (rec.date && rec.time) {
-              try {
-                const dateTimeStr = `${rec.date} ${rec.time}`;
-                const parsedDate = new Date(dateTimeStr);
+        if (forumEvents && forumEvents.length > 0) {
+          // Transform forum events to match the Event type
+          const transformedEvents: Event[] = forumEvents.map(event => {
+            // Create Date objects for start and end dates
+            const startDate = new Date();
+            // Parse the day number and month string (e.g., "MAY")
+            if (event.date && event.date.day && event.date.month) {
+              const month = getMonthNumberFromAbbr(event.date.month);
+              // Set the date to the event day/month in the current year
+              startDate.setDate(event.date.day);
+              startDate.setMonth(month);
+              
+              // If time is available, parse it (format like "7:00 PM - 9:00 PM")
+              if (event.time && event.time.includes('-')) {
+                const [startTime] = event.time.split('-').map(t => t.trim());
+                const [hourStr, minuteStr] = startTime.split(':');
+                let hour = parseInt(hourStr);
+                const minute = parseInt(minuteStr);
                 
-                if (!isNaN(parsedDate.getTime())) {
-                  startDate = new Date(parsedDate.getTime());
-                  endDate = new Date(parsedDate.getTime() + (2 * 60 * 60 * 1000));
+                // Handle PM times
+                if (startTime.toLowerCase().includes('pm') && hour < 12) {
+                  hour += 12;
                 }
-              } catch (e) {
-                console.warn("Error parsing event date/time:", e);
+                
+                startDate.setHours(hour, minute, 0, 0);
+              } else {
+                // Default to noon if no specific time
+                startDate.setHours(12, 0, 0, 0);
               }
             }
             
-            // Ensure we have a valid category type
-            const eventCategory = Array.isArray(rec.category) 
-              ? ensureValidCategory(rec.category[0])
-              : ensureValidCategory(rec.category || "workshop");
+            // Create end date (default: 2 hours after start time)
+            const endDate = new Date(startDate.getTime() + (2 * 60 * 60 * 1000));
+            
+            // Set location details
+            const locationDetails = {
+              locationType: event.location && 
+                event.location.toLowerCase().includes('online') ? 
+                "online" as const : 
+                "venue" as const,
+              name: event.location || "Venue to be announced",
+              address: event.location || "",
+              city: event.location?.split(",")[0] || "",
+              state: event.location?.split(",")[1]?.trim() || "CA",
+              zip: ""
+            };
+            
+            // Determine the event category based on title or description
+            const category = determineCategory(event.title, event.description);
             
             return {
-              id: rec.retreatId || `ev-api-${index}`,
-              title: rec.title,
-              shortDescription: rec.reason || "A wellness event near you",
-              description: rec.description || "Join this event to improve your wellness journey.",
-              imageUrl: rec.image || "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-              category: eventCategory,
+              id: event.id.toString(),
+              title: event.title,
+              shortDescription: event.description || "Join this wellness event",
+              description: event.description || "Details for this event will be provided soon.",
+              imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb", // Default image
+              category,
               startDate,
               endDate,
-              location: {
-                // Ensure locationType is narrowed to the union type
-                locationType: rec.url ? "online" : "venue" as "venue" | "online",
-                name: rec.location || "Venue to be announced",
-                address: rec.location || "",
-                city: rec.location?.split(",")?.[0] || "",
-                state: rec.location?.split(",")?.[1]?.trim() || "CA",
-                zip: ""
-              },
-              bookingUrl: rec.url || "https://www.example.com",
-              price: rec.price || "Free",
-              source: rec.source || "Eventbrite",
+              location: locationDetails,
+              bookingUrl: "https://insightla.org", // Default booking URL
+              price: event.price ? event.price.toString() : "Free",
+              source: "InsightLA",
               organizer: {
-                name: rec.organizer || "Event Organizer",
-                website: rec.url
+                name: event.instructor_name || "Event Organizer",
+                website: "https://insightla.org"
               },
-              // Add retreatId for linking to retreat details
-              retreatId: rec.retreatId || `ev-api-${index}`
+              capacity: event.capacity || undefined,
+              remaining: event.remaining || undefined
             };
           });
           
-          // Ensure partner events have proper category typing
-          const typeSafePartnerEvents = partnerEvents.map(event => ({
-            ...event,
-            category: ensureValidCategory(event.category),
-            location: {
-              ...event.location,
-              // Ensure locationType is narrowed to the union type
-              locationType: (event.location.locationType === "venue" ? "venue" : "online") as "venue" | "online"
-            }
-          })) as Event[];
-          
-          // Combine API events with partner events
-          const combinedEvents = [...transformedEvents, ...typeSafePartnerEvents];
-          
-          // Only log success, don't show toast
-          if (combinedEvents.length > 0) {
-            console.log(`Found ${combinedEvents.length} wellness events`);
-          }
-          
-          setEvents(combinedEvents);
+          console.log(`Successfully transformed ${transformedEvents.length} events`);
+          setEvents(transformedEvents);
         } else {
-          console.log("No events returned, using default events");
-          
-          // Ensure the categories in default events are properly typed
-          const typeSafeDefaultEvents = defaultEvents.map(event => ({
-            ...event,
-            category: ensureValidCategory(event.category)
-          })) as Event[];
-          
-          // Ensure partner events have proper category typing
-          const typeSafePartnerEvents = partnerEvents.map(event => ({
-            ...event,
-            category: ensureValidCategory(event.category),
-            location: {
-              ...event.location,
-              // Ensure locationType is narrowed to the union type
-              locationType: (event.location.locationType === "venue" ? "venue" : "online") as "venue" | "online"
-            }
-          })) as Event[];
-          
-          // Combine default events with partner events
-          const combinedFallbackEvents = [...typeSafeDefaultEvents, ...typeSafePartnerEvents];
-          setEvents(combinedFallbackEvents);
-          
-          // Don't show error toast - just load fallback data silently
-          console.log("Using fallback events data due to no results");
+          console.log("No forum events found");
+          // Empty array if no events
+          setEvents([]);
         }
       } catch (err: any) {
-        console.error("Error in fetchEvents:", err);
-        setError(`Unexpected error: ${err.message}`);
-        
-        // Ensure the categories in default events are properly typed
-        const typeSafeDefaultEvents = defaultEvents.map(event => ({
-          ...event,
-          category: ensureValidCategory(event.category)
-        })) as Event[];
-        
-        // Ensure partner events have proper category typing
-        const typeSafePartnerEvents = partnerEvents.map(event => ({
-          ...event,
-          category: ensureValidCategory(event.category),
-          location: {
-            ...event.location,
-            // Ensure locationType is narrowed to the union type
-            locationType: (event.location.locationType === "venue" ? "venue" : "online") as "venue" | "online"
-          }
-        })) as Event[];
-        
-        // Combine default events with partner events
-        const combinedFallbackEvents = [...typeSafeDefaultEvents, ...typeSafePartnerEvents];
-        setEvents(combinedFallbackEvents);
-        
-        // Don't show error toast - just load fallback data silently
-        console.log("Using fallback events data due to exception");
+        console.error("Error fetching real events:", err);
+        setError(`Failed to fetch events: ${err.message}`);
+        setEvents([]);
       } finally {
         setIsLoading(false);
       }
@@ -195,4 +113,35 @@ export function useEvents(location: string = "San Francisco, CA") {
   }, [location]);
 
   return { events, isLoading, error };
+}
+
+// Helper function to convert month abbreviation to number (0-11)
+function getMonthNumberFromAbbr(monthAbbr: string): number {
+  const months = {
+    'JAN': 0, 'FEB': 1, 'MAR': 2, 'APR': 3, 'MAY': 4, 'JUN': 5,
+    'JUL': 6, 'AUG': 7, 'SEP': 8, 'OCT': 9, 'NOV': 10, 'DEC': 11
+  };
+  
+  return months[monthAbbr.toUpperCase() as keyof typeof months] || 0;
+}
+
+// Helper function to determine category based on event title and description
+function determineCategory(title: string, description?: string): Event['category'] {
+  const text = `${title} ${description || ''}`.toLowerCase();
+  
+  if (text.includes('yoga') || text.includes('asana')) {
+    return 'yoga';
+  } else if (text.includes('meditation') || text.includes('mindfulness')) {
+    return 'meditation';
+  } else if (text.includes('fitness') || text.includes('exercise')) {
+    return 'fitness';
+  } else if (text.includes('nutrition') || text.includes('food')) {
+    return 'nutrition';
+  } else if (text.includes('retreat')) {
+    return 'retreat';
+  } else if (text.includes('online') || text.includes('virtual')) {
+    return 'online';
+  } else {
+    return 'workshop'; // Default category
+  }
 }
