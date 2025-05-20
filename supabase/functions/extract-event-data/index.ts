@@ -1,3 +1,4 @@
+
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.38/deno-dom-wasm.ts";
 
@@ -46,11 +47,21 @@ serve(async (req) => {
     }
 
     // Enhanced extraction of event data
-    const title = doc.querySelector(".event-block-detail__title")?.textContent?.trim() || "";
+    const titleEl = doc.querySelector(".event-block-detail__title");
+    const title = titleEl ? titleEl.textContent?.trim() || "" : "";
     
-    // Extract description
+    // Extract description - look for full content, not just the first paragraph
     const descriptionEl = doc.querySelector(".event-block-detail__description");
-    const description = descriptionEl ? descriptionEl.textContent?.trim() || "" : "";
+    let description = "";
+    if (descriptionEl) {
+      // Get all text content from paragraphs in description
+      const paragraphs = Array.from(descriptionEl.querySelectorAll("p"));
+      if (paragraphs.length > 0) {
+        description = paragraphs.map(p => p.textContent?.trim()).join("\n\n");
+      } else {
+        description = descriptionEl.textContent?.trim() || "";
+      }
+    }
     
     // Enhanced image extraction - look for specific meta tag first, fallback to page image
     let image = "";
