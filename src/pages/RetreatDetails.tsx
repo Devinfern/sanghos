@@ -9,16 +9,36 @@ import { Badge } from "@/components/ui/badge";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { cn } from "@/lib/utils";
+import { partnerEvents, eventToRetreatFormat } from "@/data/mockEvents";
+import { ensureValidCategory } from "@/mockEvents";
 
 const RetreatDetails = () => {
   const { id } = useParams<{ id: string }>();
-  const [retreat, setRetreat] = useState(retreats.find((r) => r.id === id));
+  
+  // Convert partner events to retreat format for consistent display
+  // Ensure partner events have proper type conversions before transforming to retreat format
+  const typeSafePartnerEvents = partnerEvents.map(event => ({
+    ...event,
+    category: ensureValidCategory(event.category),
+    location: {
+      ...event.location,
+      locationType: event.location.locationType === "venue" ? "venue" : "online"
+    }
+  }));
+  
+  // Convert partner events to retreat format for consistent display
+  const partnerRetreats = typeSafePartnerEvents.map(event => eventToRetreatFormat(event));
+  
+  // Combine the original retreats with partner retreats
+  const allRetreats = [...retreats, ...partnerRetreats];
+  
+  const [retreat, setRetreat] = useState(allRetreats.find((r) => r.id === id));
   const [activeImage, setActiveImage] = useState(retreat?.image || "");
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Find the retreat data based on ID
-    const retreatData = retreats.find((r) => r.id === id);
+    // Find the retreat data based on ID from the combined retreats
+    const retreatData = allRetreats.find((r) => r.id === id);
     setRetreat(retreatData);
     if (retreatData) {
       setActiveImage(retreatData.image);

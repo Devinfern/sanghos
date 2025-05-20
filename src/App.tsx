@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { Toaster } from "sonner";
@@ -102,7 +101,11 @@ function App() {
             <Route path="/about-design-1" element={<AboutDesignOne />} />
             <Route path="/about-design-2" element={<AboutDesignTwo />} />
             <Route path="/contact-us" element={<ContactUs />} />
-            <Route path="/retreat/:retreatId" element={<RetreatDetailsPage />} />
+            
+            {/* Important: Update both routes for retreats for backward compatibility */}
+            <Route path="/retreat/:id" element={<RetreatDetailsPage />} />
+            <Route path="/retreats/:id" element={<RetreatDetailsPage />} />
+            
             <Route path="/wellness-journal" element={<WellnessJournalPage />} />
             <Route path="/forum" element={<ForumPage />} />
             <Route path="/login" element={<Login />} />
