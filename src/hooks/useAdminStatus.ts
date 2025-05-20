@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 export function useAdminStatus() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -19,21 +20,22 @@ export function useAdminStatus() {
           setIsLoading(false);
           return;
         }
-        
+
         // Use the is_admin function to check admin status
         const { data, error } = await supabase.rpc('is_admin', {
           user_email: sessionData.session.user.email
         });
-        
+
         if (error) {
           console.error('Error checking admin status:', error);
           throw error;
         }
         
-        // Set admin status based on the response
+        console.log('Admin check response:', data);
         setIsAdmin(!!data);
       } catch (error) {
         console.error('Error checking admin status:', error);
+        setError(error instanceof Error ? error : new Error('Unknown error checking admin status'));
         setIsAdmin(false);
       } finally {
         setIsLoading(false);
@@ -43,5 +45,5 @@ export function useAdminStatus() {
     checkAdminStatus();
   }, []);
 
-  return { isAdmin, isLoading };
+  return { isAdmin, isLoading, error };
 }

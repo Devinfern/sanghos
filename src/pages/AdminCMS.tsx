@@ -7,18 +7,24 @@ import Footer from "@/components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EventManager from "@/components/admin/EventManager";
 import { useAdminStatus } from "@/hooks/useAdminStatus";
+import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 
 const AdminCMS = () => {
-  const { isAdmin, isLoading } = useAdminStatus();
+  const { isAdmin, isLoading, error } = useAdminStatus();
+  const { user } = useAuth();
   const navigate = useNavigate();
   
   useEffect(() => {
+    // Debug logging
+    console.log("AdminCMS - Current user:", user?.email);
+    console.log("AdminCMS - Admin status:", { isAdmin, isLoading, error });
+    
     if (!isLoading && !isAdmin) {
       toast.error("You don't have permission to access this page");
       navigate("/");
     }
-  }, [isAdmin, isLoading, navigate]);
+  }, [isAdmin, isLoading, error, navigate, user]);
   
   if (isLoading) {
     return (

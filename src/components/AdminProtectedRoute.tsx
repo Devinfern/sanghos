@@ -2,20 +2,35 @@
 import React, { useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAdminStatus } from "@/hooks/useAdminStatus";
+import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { Shield } from "lucide-react";
 
 const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAdmin, isLoading } = useAdminStatus();
+  const { isAdmin, isLoading, error } = useAdminStatus();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Only show toast and redirect when admin status is definitively determined as false
+    if (!user) {
+      toast.error("You must be logged in to access this page");
+      navigate("/login");
+      return;
+    }
+
+    console.log("Admin status:", { isAdmin, isLoading, email: user?.email });
+    
+    // Only redirect if admin check is complete and user is not an admin
     if (!isLoading && !isAdmin) {
       toast.error("You don't have permission to access the admin area");
       navigate("/dashboard");
     }
-  }, [isAdmin, isLoading, navigate]);
+    
+    if (error) {
+      console.error("Admin check error:", error);
+      toast.error("Error verifying admin status");
+    }
+  }, [isAdmin, isLoading, error, navigate, user]);
 
   // Show loading state while checking
   if (isLoading) {

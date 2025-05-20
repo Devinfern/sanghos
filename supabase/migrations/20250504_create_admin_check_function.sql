@@ -1,6 +1,6 @@
 
 -- Create a secure function to check if a user is an admin
-CREATE OR REPLACE FUNCTION public.is_user_admin(user_email TEXT)
+CREATE OR REPLACE FUNCTION public.is_admin(user_email TEXT)
 RETURNS BOOLEAN
 LANGUAGE plpgsql
 SECURITY DEFINER
