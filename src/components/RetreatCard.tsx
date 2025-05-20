@@ -150,21 +150,18 @@ const RetreatCard = ({
         <Card
           className={cn(
             "h-full overflow-hidden flex flex-col md:flex-row border shadow-sm transition-all duration-300 relative",
-            "opacity-0 animate-fade-up hover:shadow-md",
-            isHovered && "border-sage-300"
+            "opacity-0 animate-fade-up",
+            isHovered && "border-sage-300 shadow-md translate-y-[-4px]"
           )}
           style={{ animationDelay: getAnimationDelay() }}
         >
           {comingSoon && (
             <div 
-              className={cn(
-                "absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm transition-opacity duration-300",
-                isHovered ? "opacity-90" : "opacity-95"
-              )}
+              className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm"
             >
               <motion.div
-                initial={{ scale: 0.9 }}
-                animate={{ scale: isHovered ? 1.1 : 1 }}
+                initial={{ scale: 1 }}
+                animate={{ scale: isHovered ? 1.05 : 1 }}
                 transition={{ duration: 0.3 }}
                 className="bg-primary/90 text-white px-4 py-2 rounded-full flex items-center mb-3"
               >
@@ -181,10 +178,10 @@ const RetreatCard = ({
             <OptimizedImage
               src={retreat.image}
               alt={retreat.title}
-              className={cn(
-                "h-full w-full object-cover transition-all duration-500", 
-                isHovered && "scale-105"
-              )}
+              className="h-full w-full object-cover transition-transform duration-500 ease-out"
+              style={{
+                transform: isHovered ? "scale(1.05)" : "scale(1)"
+              }}
               onLoad={() => setImageLoaded(true)}
             />
             
@@ -220,7 +217,7 @@ const RetreatCard = ({
           </div>
           
           <div className="flex-1 p-5 flex flex-col">
-            <h3 className="text-xl font-semibold mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+            <h3 className="text-xl font-semibold mb-2 line-clamp-2 transition-colors duration-300">
               {retreat.title}
             </h3>
 
@@ -275,7 +272,7 @@ const RetreatCard = ({
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="h-8 w-8 rounded-full"
+                        className="h-8 w-8 rounded-full transition-all duration-300"
                         onClick={handleLike}
                       >
                         <Heart className={cn("h-4 w-4", liked && "fill-rose-500 text-rose-500")} />
@@ -293,7 +290,7 @@ const RetreatCard = ({
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="h-8 w-8 rounded-full"
+                        className="h-8 w-8 rounded-full transition-all duration-300"
                         onClick={handleSave}
                       >
                         <BookmarkPlus className={cn("h-4 w-4", isSaved && "fill-sage-500 text-sage-500")} />
@@ -311,7 +308,7 @@ const RetreatCard = ({
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="h-8 w-8 rounded-full"
+                        className="h-8 w-8 rounded-full transition-all duration-300"
                         onClick={handleShare}
                       >
                         <Share2 className="h-4 w-4" />
@@ -327,7 +324,7 @@ const RetreatCard = ({
               <Button 
                 variant="outline" 
                 size="sm"
-                className="border-primary text-primary hover:bg-primary hover:text-white"
+                className="border-primary text-primary hover:bg-primary hover:text-white transition-colors duration-300"
               >
                 View Details <ExternalLink className="ml-1 h-3 w-3" />
               </Button>
@@ -343,22 +340,19 @@ const RetreatCard = ({
     <CardWrapper>
       <Card
         className={cn(
-          "h-full overflow-hidden group border shadow-sm transition-all duration-300 relative",
+          "h-full overflow-hidden border shadow-sm transition-all duration-300 relative",
           "opacity-0 animate-fade-up",
-          isHovered && "shadow-md border-sage-300"
+          isHovered && "border-sage-300 shadow-md translate-y-[-4px]"
         )}
         style={{ animationDelay: getAnimationDelay() }}
       >
         {comingSoon && (
           <div 
-            className={cn(
-              "absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm transition-opacity duration-300",
-              isHovered ? "opacity-90" : "opacity-95"
-            )}
+            className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm"
           >
             <motion.div
-              initial={{ scale: 0.9 }}
-              animate={{ scale: isHovered ? 1.1 : 1 }}
+              initial={{ scale: 1 }}
+              animate={{ scale: isHovered ? 1.05 : 1 }}
               transition={{ duration: 0.3 }}
               className="bg-primary/90 text-white px-4 py-2 rounded-full flex items-center mb-3"
             >
@@ -375,11 +369,10 @@ const RetreatCard = ({
           <OptimizedImage
             src={retreat.image}
             alt={retreat.title}
-            className={cn(
-              "object-cover w-full h-full transition-all duration-500", 
-              isHovered ? "scale-110" : "scale-100",
-              comingSoon && "filter brightness-90"
-            )}
+            className="object-cover w-full h-full transition-transform duration-500 ease-out"
+            style={{
+              transform: isHovered ? "scale(1.05)" : "scale(1)"
+            }}
             onLoad={() => setImageLoaded(true)}
           />
           
@@ -427,13 +420,12 @@ const RetreatCard = ({
               variant="ghost"
               className={cn(
                 "h-8 w-8 rounded-full transition-all duration-300",
-                liked ? "bg-rose-500/20" : "bg-white/80 hover:bg-white",
-                isHovered && !liked && "scale-110"
+                liked ? "bg-rose-500/20" : "bg-white/80 hover:bg-white"
               )}
               onClick={handleLike}
             >
               <motion.div 
-                animate={liked ? { scale: [1, 1.3, 1] } : {}} 
+                animate={liked ? { scale: [1, 1.2, 1] } : {}} 
                 transition={{ duration: 0.3 }}
               >
                 <Heart className={cn("h-4 w-4", liked && "fill-rose-500 text-rose-500")} />
@@ -445,13 +437,12 @@ const RetreatCard = ({
               variant="ghost"
               className={cn(
                 "h-8 w-8 rounded-full transition-all duration-300",
-                isSaved ? "bg-sage-500/20" : "bg-white/80 hover:bg-white",
-                isHovered && !isSaved && "scale-110"
+                isSaved ? "bg-sage-500/20" : "bg-white/80 hover:bg-white"
               )}
               onClick={handleSave}
             >
               <motion.div 
-                animate={isSaved ? { scale: [1, 1.3, 1] } : {}} 
+                animate={isSaved ? { scale: [1, 1.2, 1] } : {}} 
                 transition={{ duration: 0.3 }}
               >
                 <BookmarkPlus className={cn("h-4 w-4", isSaved && "fill-sage-500 text-sage-500")} />
@@ -461,10 +452,7 @@ const RetreatCard = ({
             <Button
               size="icon"
               variant="ghost"
-              className={cn(
-                "h-8 w-8 rounded-full transition-all duration-300 bg-white/80 hover:bg-white",
-                isHovered && "scale-110"
-              )}
+              className="h-8 w-8 rounded-full transition-all duration-300 bg-white/80 hover:bg-white"
               onClick={handleShare}
             >
               <Share2 className="h-4 w-4" />
@@ -473,7 +461,7 @@ const RetreatCard = ({
         </div>
 
         <CardContent className="p-5">
-          <h3 className="text-xl font-semibold mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+          <h3 className="text-xl font-semibold mb-2 line-clamp-2 transition-colors duration-300">
             {retreat.title}
           </h3>
 
@@ -512,19 +500,20 @@ const RetreatCard = ({
             <p className="font-semibold text-primary">{formatCurrency(retreat.price)}</p>
           </div>
           
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={isHovered ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-            transition={{ duration: 0.2 }}
-            className="mt-4 pt-3 border-t border-sage-100"
+          <div 
+            className="mt-4 pt-3 border-t border-sage-100 opacity-0 transform translate-y-2 transition-all duration-300"
+            style={{
+              opacity: isHovered ? 1 : 0,
+              transform: isHovered ? 'translateY(0)' : 'translateY(8px)'
+            }}
           >
             <Button 
               variant="outline" 
-              className="w-full border-primary text-primary hover:bg-primary hover:text-white"
+              className="w-full border-primary text-primary hover:bg-primary hover:text-white transition-colors duration-300"
             >
               View Details <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
             </Button>
-          </motion.div>
+          </div>
         </CardContent>
       </Card>
     </CardWrapper>
