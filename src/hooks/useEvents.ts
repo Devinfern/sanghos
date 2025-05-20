@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Event } from "@/types/event";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,11 +19,46 @@ export function useEvents(location: string = "San Francisco, CA") {
       setError(null);
       
       try {
-        console.log(`Fetching real events for location: ${location}`);
-        
-        // Load events from the forum_events table through our API wrapper
-        const forumEvents = await loadForumEvents();
+        console.log(`Fetching events for location: ${location}`);
         let allEvents: Event[] = [];
+        
+        // 1. Load featured retreats - these are the same ones shown on the Retreats page
+        const featuredRetreats = retreats.filter(r => r.featured).map(retreat => {
+          // Convert retreat to event format
+          return {
+            id: retreat.id,
+            title: retreat.title,
+            shortDescription: retreat.description.substring(0, 120) + (retreat.description.length > 120 ? '...' : ''),
+            description: retreat.description,
+            imageUrl: retreat.image,
+            category: determineRetreatCategory(retreat.category),
+            startDate: new Date(retreat.date),
+            endDate: new Date(new Date(retreat.date).getTime() + (2 * 60 * 60 * 1000)), // 2 hours after start
+            location: {
+              locationType: "venue" as const,
+              name: retreat.location.name,
+              address: retreat.location.address || "",
+              city: retreat.location.city || "",
+              state: retreat.location.state || "",
+              zip: ""
+            },
+            bookingUrl: `/retreat/${retreat.id}`,
+            price: retreat.price.toString(),
+            source: "Sanghos",
+            organizer: {
+              name: retreat.instructor?.name || "Sanghos",
+              website: "/"
+            },
+            capacity: retreat.capacity,
+            remaining: retreat.remaining
+          } as Event;
+        });
+        
+        console.log(`Loaded ${featuredRetreats.length} featured retreats`);
+        allEvents = [...allEvents, ...featuredRetreats];
+        
+        // 2. Load events from the forum_events table through our API wrapper
+        const forumEvents = await loadForumEvents();
         
         if (forumEvents && forumEvents.length > 0) {
           // Transform forum events to match the Event type
@@ -98,13 +132,12 @@ export function useEvents(location: string = "San Francisco, CA") {
             };
           });
           
-          console.log(`Successfully transformed ${transformedEvents.length} events`);
-          allEvents = transformedEvents;
-        } else {
-          console.log("No forum events found");
+          console.log(`Loaded ${transformedEvents.length} forum events`);
+          allEvents = [...allEvents, ...transformedEvents];
         }
         
-        // Add partner events from the same source used on retreats page
+        // 3. Add partner events - these should eventually come from a real data source
+        // For now, we keep using the partner events from the mock data
         if (partnerEvents && partnerEvents.length > 0) {
           // Type-safe conversion for partner events
           const typeSafePartnerEvents = partnerEvents.map(event => ({
@@ -116,55 +149,15 @@ export function useEvents(location: string = "San Francisco, CA") {
             }
           }));
           
-          // Combine with forum events
+          console.log(`Loaded ${typeSafePartnerEvents.length} partner events`);
           allEvents = [...allEvents, ...typeSafePartnerEvents];
-          console.log(`Added ${typeSafePartnerEvents.length} partner events`);
         }
         
-        // Add featured retreats by converting them to event format
-        // This ensures we're using the same data source as the retreats page
-        const featuredRetreats = retreats.filter(r => r.featured).map(retreat => {
-          // Convert retreat to event format
-          return {
-            id: retreat.id,
-            title: retreat.title,
-            shortDescription: retreat.description.substring(0, 120) + (retreat.description.length > 120 ? '...' : ''),
-            description: retreat.description,
-            imageUrl: retreat.image,
-            category: determineRetreatCategory(retreat.category),
-            startDate: new Date(retreat.date),
-            endDate: new Date(new Date(retreat.date).getTime() + (2 * 60 * 60 * 1000)), // 2 hours after start
-            location: {
-              locationType: "venue" as const,
-              name: retreat.location.name,
-              address: retreat.location.address || "",
-              city: retreat.location.city || "",
-              state: retreat.location.state || "",
-              zip: ""
-            },
-            bookingUrl: `/retreat/${retreat.id}`,
-            price: retreat.price.toString(),
-            source: "Sanghos",
-            organizer: {
-              name: retreat.instructor?.name || "Sanghos",
-              website: "/"
-            },
-            capacity: retreat.capacity,
-            remaining: retreat.remaining
-          } as Event;
-        });
-        
-        // Add featured retreats to events list if they exist
-        if (featuredRetreats.length > 0) {
-          console.log(`Added ${featuredRetreats.length} featured retreats as events`);
-          allEvents = [...allEvents, ...featuredRetreats];
-        }
-        
-        // Set combined events
+        console.log(`Total events loaded: ${allEvents.length}`);
         setEvents(allEvents);
         
       } catch (err: any) {
-        console.error("Error fetching real events:", err);
+        console.error("Error fetching events:", err);
         setError(`Failed to fetch events: ${err.message}`);
         setEvents([]);
       } finally {
