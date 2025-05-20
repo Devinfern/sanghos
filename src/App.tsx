@@ -1,7 +1,9 @@
+
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { Toaster } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import InsightLAEventLoader from '@/components/InsightLAEventLoader';
 
 // Pages
 import Index from '@/pages/Index';
@@ -76,6 +78,8 @@ function App() {
       <AuthProvider>
         <HostProvider>
           <Toaster richColors />
+          {/* Add the InsightLA Event Loader */}
+          <InsightLAEventLoader />
           <style>{`
             .glass-morphism {
               background: rgba(255, 255, 255, 0.7);

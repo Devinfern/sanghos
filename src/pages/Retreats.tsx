@@ -1,6 +1,7 @@
+
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Info, X } from "lucide-react";
+import { Info, X, Loader2 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import RetreatCard from "@/components/RetreatCard";
@@ -14,46 +15,31 @@ import { Badge } from "@/components/ui/badge";
 import { partnerEvents, eventToRetreatFormat } from "@/data/mockEvents";
 import { ensureValidCategory } from "@/mockEvents";
 
-// Ensure partner events have proper type conversions before transforming to retreat format
-const typeSafePartnerEvents = partnerEvents.map(event => ({
-  ...event,
-  category: ensureValidCategory(event.category),
-  location: {
-    ...event.location,
-    locationType: event.location.locationType === "venue" ? "venue" : "online"
-  }
-}));
-
-// Convert partner events to retreat format for consistent display
-const partnerRetreats = typeSafePartnerEvents.map(event => eventToRetreatFormat(event));
-
-// Combine the original retreats with partner retreats
-const allRetreats = [...retreats, ...partnerRetreats];
-
-const allCategories = Array.from(
-  new Set(allRetreats.flatMap((retreat) => retreat.category))
-).sort();
-
-// Previously we were using this to identify the most recent retreat
-// Now all retreats will have the coming soon overlay
-const getMostRecentRetreatId = () => {
-  const sortedRetreats = [...allRetreats].sort((a, b) => 
-    new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
-  return sortedRetreats[0]?.id;
-};
-
-const mostRecentRetreatId = getMostRecentRetreatId();
-
 const Retreats = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
+  const [isLoadingEvents, setIsLoadingEvents] = useState(true);
 
   useEffect(() => {
+    // Check if real retreats have been loaded (more than just the placeholder)
+    const checkRetreatLoaded = () => {
+      if (retreats.length > 1 || (retreats.length === 1 && retreats[0].id !== "insight-la-1")) {
+        setIsLoadingEvents(false);
+      } else {
+        setTimeout(checkRetreatLoaded, 500);
+      }
+    };
+    
+    checkRetreatLoaded();
+    
     const timer = setTimeout(() => {
       setIsLoaded(true);
+      // Fallback timeout to stop loading state after 5 seconds
+      setTimeout(() => {
+        setIsLoadingEvents(false);
+      }, 5000);
     }, 100);
 
     return () => clearTimeout(timer);
@@ -76,6 +62,26 @@ const Retreats = () => {
     setSearchQuery("");
     setSelectedCategory(null);
   };
+
+  // Ensure partner events have proper type conversions before transforming to retreat format
+  const typeSafePartnerEvents = partnerEvents.map(event => ({
+    ...event,
+    category: ensureValidCategory(event.category),
+    location: {
+      ...event.location,
+      locationType: event.location.locationType === "venue" ? "venue" : "online"
+    }
+  }));
+
+  // Convert partner events to retreat format for consistent display
+  const partnerRetreats = typeSafePartnerEvents.map(event => eventToRetreatFormat(event));
+
+  // Combine the original retreats with partner retreats
+  const allRetreats = [...retreats, ...partnerRetreats];
+
+  const allCategories = Array.from(
+    new Set(allRetreats.flatMap((retreat) => retreat.category))
+  ).sort();
 
   const filteredRetreats = allRetreats.filter(retreat => {
     const matchesSearch = searchQuery === "" || 
@@ -183,7 +189,9 @@ const Retreats = () => {
                 Results
               </p>
               <Badge variant="outline" className="bg-white text-muted-foreground">
-                {filteredRetreats.length} {filteredRetreats.length === 1 ? 'retreat' : 'retreats'}
+                {isLoadingEvents ? '...' : 
+                  `${filteredRetreats.length} ${filteredRetreats.length === 1 ? 'retreat' : 'retreats'}`
+                }
               </Badge>
             </div>
             
@@ -200,7 +208,12 @@ const Retreats = () => {
             )}
           </div>
 
-          {filteredRetreats.length > 0 ? (
+          {isLoadingEvents ? (
+            <div className="flex flex-col items-center justify-center py-20">
+              <Loader2 className="h-10 w-10 text-sage-600 animate-spin mb-4" />
+              <p className="text-lg text-sage-600">Loading retreats from InsightLA...</p>
+            </div>
+          ) : filteredRetreats.length > 0 ? (
             <div 
               className={cn(
                 "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 transition-opacity duration-700",

@@ -1,11 +1,28 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { retreats } from "@/lib/data";
 import { allEvents, eventToRetreatFormat } from "@/data/mockEvents"; 
 import RetreatCard from "./RetreatCard";
 import { ensureValidCategory } from "@/mockEvents";
+import { Spinner } from "@/components/ui/spinner";
 
 const FeaturedRetreatsGrid: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Use effect to show a loading state while retreats are being loaded
+  useEffect(() => {
+    // If retreats has more than just the placeholder, we're done loading
+    if (retreats.length > 1 || (retreats.length === 1 && retreats[0].id !== "insight-la-1")) {
+      setIsLoading(false);
+    } else {
+      // Check again after a short delay
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+  
   // Only show retreats marked as featured
   const featuredSanghosRetreats = retreats.filter(r => r.featured);
   
@@ -25,6 +42,17 @@ const FeaturedRetreatsGrid: React.FC = () => {
   
   // Combine both sources of retreats
   const allFeaturedRetreats = [...featuredSanghosRetreats, ...partnerRetreats];
+
+  if (isLoading) {
+    return (
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4 text-center">
+          <Spinner className="mx-auto mb-4" />
+          <h3 className="text-xl font-medium mb-2">Loading retreats...</h3>
+        </div>
+      </section>
+    );
+  }
 
   if (allFeaturedRetreats.length === 0) {
     return (

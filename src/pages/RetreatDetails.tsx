@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { ArrowLeft, Calendar, MapPin, Users, Clock, Tag } from "lucide-react";
+import { ArrowLeft, Calendar, MapPin, Users, Clock, Tag, Loader2 } from "lucide-react";
 import { retreats, formatDate, formatCurrency, getRemainingText } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,54 +14,104 @@ import { ensureValidCategory } from "@/mockEvents";
 
 const RetreatDetails = () => {
   const { id } = useParams<{ id: string }>();
-  
-  // Convert partner events to retreat format for consistent display
-  // Ensure partner events have proper type conversions before transforming to retreat format
-  const typeSafePartnerEvents = partnerEvents.map(event => ({
-    ...event,
-    category: ensureValidCategory(event.category),
-    location: {
-      ...event.location,
-      locationType: event.location.locationType === "venue" ? "venue" : "online"
-    }
-  }));
-  
-  // Convert partner events to retreat format for consistent display
-  const partnerRetreats = typeSafePartnerEvents.map(event => eventToRetreatFormat(event));
-  
-  // Combine the original retreats with partner retreats
-  const allRetreats = [...retreats, ...partnerRetreats];
-  
-  const [retreat, setRetreat] = useState(allRetreats.find((r) => r.id === id));
-  const [activeImage, setActiveImage] = useState(retreat?.image || "");
+  const [retreat, setRetreat] = useState<any>(null);
+  const [activeImage, setActiveImage] = useState("");
   const [isVisible, setIsVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Find the retreat data based on ID from the combined retreats
-    const retreatData = allRetreats.find((r) => r.id === id);
-    setRetreat(retreatData);
-    if (retreatData) {
-      setActiveImage(retreatData.image);
+    const checkRetreatExists = () => {
+      // Convert partner events to retreat format for consistent display
+      // Ensure partner events have proper type conversions before transforming to retreat format
+      const typeSafePartnerEvents = partnerEvents.map(event => ({
+        ...event,
+        category: ensureValidCategory(event.category),
+        location: {
+          ...event.location,
+          locationType: event.location.locationType === "venue" ? "venue" : "online"
+        }
+      }));
+      
+      // Convert partner events to retreat format for consistent display
+      const partnerRetreats = typeSafePartnerEvents.map(event => eventToRetreatFormat(event));
+      
+      // Combine the original retreats with partner retreats
+      const allRetreats = [...retreats, ...partnerRetreats];
+      
+      // Find retreat with matching id
+      const foundRetreat = allRetreats.find(r => r.id === id);
+      
+      if (foundRetreat) {
+        setRetreat(foundRetreat);
+        setActiveImage(foundRetreat.image);
+        setIsLoading(false);
+        
+        // Trigger animation after retreat is loaded
+        setTimeout(() => {
+          setIsVisible(true);
+        }, 100);
+        
+        return true;
+      }
+      
+      // If no retreat was found and retreats array has non-placeholder items, stop loading
+      if (retreats.length > 1 || (retreats.length === 1 && retreats[0].id !== "insight-la-1")) {
+        setIsLoading(false);
+        return true;
+      }
+      
+      return false;
+    };
+    
+    // Try to find the retreat immediately
+    if (!checkRetreatExists()) {
+      // If not found, check periodically until retreats are loaded
+      const intervalId = setInterval(() => {
+        if (checkRetreatExists()) {
+          clearInterval(intervalId);
+        }
+      }, 500);
+      
+      // Timeout after 10 seconds to prevent infinite checking
+      setTimeout(() => {
+        clearInterval(intervalId);
+        setIsLoading(false);
+      }, 10000);
+      
+      return () => clearInterval(intervalId);
     }
-
-    // Trigger animation
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 100);
-
-    return () => clearTimeout(timer);
   }, [id]);
+
+  if (isLoading) {
+    return (
+      <>
+        <Header />
+        <div className="min-h-screen pt-24 flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="h-12 w-12 animate-spin text-sage-600 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold mb-2">Loading Retreat Details</h2>
+            <p className="text-muted-foreground">Please wait while we fetch the retreat information...</p>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
   if (!retreat) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Retreat Not Found</h2>
-          <Button asChild>
-            <Link to="/retreats">View All Retreats</Link>
-          </Button>
+      <>
+        <Header />
+        <div className="min-h-screen pt-24 flex items-center justify-center">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold mb-4">Retreat Not Found</h2>
+            <Button asChild>
+              <Link to="/retreats">View All Retreats</Link>
+            </Button>
+          </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
@@ -197,17 +247,32 @@ const RetreatDetails = () => {
               </div>
 
               {/* Amenities */}
-              <div className="bg-white p-6 rounded-xl shadow-sm">
-                <h2 className="text-xl font-semibold mb-4">What's Included</h2>
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {retreat.amenities.map((amenity, i) => (
-                    <li key={i} className="flex items-center space-x-2">
-                      <Tag className="h-4 w-4 text-sage-500" />
-                      <span>{amenity}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {retreat.amenities && retreat.amenities.length > 0 && (
+                <div className="bg-white p-6 rounded-xl shadow-sm">
+                  <h2 className="text-xl font-semibold mb-4">What's Included</h2>
+                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {retreat.amenities.map((amenity, i) => (
+                      <li key={i} className="flex items-center space-x-2">
+                        <Tag className="h-4 w-4 text-sage-500" />
+                        <span>{amenity}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
+              {/* Source Link */}
+              {retreat.sourceUrl && (
+                <div className="bg-white p-6 rounded-xl shadow-sm">
+                  <h2 className="text-xl font-semibold mb-4">Original Event Information</h2>
+                  <p className="mb-4">For more details and the latest information, visit the official event page:</p>
+                  <Button asChild variant="outline" className="w-full">
+                    <a href={retreat.sourceUrl} target="_blank" rel="noopener noreferrer">
+                      View on InsightLA Website
+                    </a>
+                  </Button>
+                </div>
+              )}
             </div>
 
             {/* Right Column - Booking Info */}
@@ -234,11 +299,20 @@ const RetreatDetails = () => {
 
                 {/* Action Buttons */}
                 <div className="space-y-3">
-                  <Button disabled={retreat.remaining <= 0} asChild className="w-full">
-                    <Link to={`/booking/${retreat.id}`}>
-                      {retreat.remaining > 0 ? "Book Now" : "Sold Out"}
-                    </Link>
-                  </Button>
+                  {retreat.sourceUrl ? (
+                    <Button asChild className="w-full">
+                      <a href={retreat.sourceUrl} target="_blank" rel="noopener noreferrer">
+                        Book on InsightLA
+                      </a>
+                    </Button>
+                  ) : (
+                    <Button disabled={retreat.remaining <= 0} asChild className="w-full">
+                      <Link to={`/booking/${retreat.id}`}>
+                        {retreat.remaining > 0 ? "Book Now" : "Sold Out"}
+                      </Link>
+                    </Button>
+                  )}
+                  
                   <Button variant="outline" asChild className="w-full">
                     <Link to={`/instructor/${retreat.instructor.id}`}>
                       View Instructor Profile
