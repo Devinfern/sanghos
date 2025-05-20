@@ -62,6 +62,9 @@ const Header = () => {
             <Link to="/events" className="text-sage-700 hover:text-sage-900 transition-colors">
               Events
             </Link>
+            <Link to="/about-us" className="text-sage-700 hover:text-sage-900 transition-colors">
+              About Us
+            </Link>
             <Link to="/community" className="text-sage-700 hover:text-sage-900 transition-colors">
               Community
             </Link>
@@ -79,8 +82,8 @@ const Header = () => {
                 <Link to="/sign-in" className="text-sage-700 hover:text-sage-900 transition-colors">
                   Sign In
                 </Link>
-                <Link to="/sign-up" className="text-sage-700 hover:text-sage-900 transition-colors">
-                  Sign Up
+                <Link to="/sign-up">
+                  <Button size="sm">Join Sanghos</Button>
                 </Link>
               </>
             )}
@@ -106,6 +109,9 @@ const Header = () => {
                 </Link>
                 <Link to="/events" className="text-xl text-sage-800" onClick={closeMobileMenu}>
                   Events
+                </Link>
+                <Link to="/about-us" className="text-xl text-sage-800" onClick={closeMobileMenu}>
+                  About Us
                 </Link>
                 <Link to="/community" className="text-xl text-sage-800" onClick={closeMobileMenu}>
                   Community
