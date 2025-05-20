@@ -25,8 +25,9 @@ const AdminCMS = () => {
       <>
         <Header />
         <div className="container mx-auto px-4 min-h-screen pt-28 pb-16">
-          <div className="text-center">
-            <p>Loading...</p>
+          <div className="flex flex-col items-center justify-center gap-4">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            <div className="text-lg font-medium">Verifying admin access...</div>
           </div>
         </div>
         <Footer />

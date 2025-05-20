@@ -91,6 +91,7 @@ function App() {
             }
           `}</style>
           <Routes>
+            {/* Public routes */}
             <Route path="/" element={<Index />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/retreats" element={<Retreats />} />
@@ -122,11 +123,32 @@ function App() {
             <Route path="/host/retreats/edit/:retreatId" element={<HostRetreatEdit />} />
 
             {/* Admin Routes */}
-            <Route path="/admin/cms" element={<AdminProtectedRoute><AdminCMS /></AdminProtectedRoute>} />
-            <Route path="/retreat-management" element={<AdminProtectedRoute><RetreatManagementCMS /></AdminProtectedRoute>} />
+            <Route 
+              path="/admin/cms" 
+              element={
+                <AdminProtectedRoute>
+                  <AdminCMS />
+                </AdminProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/retreat-management" 
+              element={
+                <AdminProtectedRoute>
+                  <RetreatManagementCMS />
+                </AdminProtectedRoute>
+              } 
+            />
 
-            {/* Community CMS Route */}
-            <Route path="/community/cms" element={<CommunityCMS />} />
+            {/* Community CMS Route - this should also be admin protected */}
+            <Route 
+              path="/community/cms" 
+              element={
+                <AdminProtectedRoute>
+                  <CommunityCMS />
+                </AdminProtectedRoute>
+              }
+            />
 
             {/* Catch all for unknown routes */}
             <Route path="*" element={<NotFound />} />

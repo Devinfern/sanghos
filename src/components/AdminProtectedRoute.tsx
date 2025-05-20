@@ -10,7 +10,7 @@ const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // When admin status is definitively determined as false, show toast and redirect
+    // Only show toast and redirect when admin status is definitively determined as false
     if (!isLoading && !isAdmin) {
       toast.error("You don't have permission to access the admin area");
       navigate("/dashboard");
@@ -28,13 +28,13 @@ const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  // If not admin, don't render anything (redirect is handled in useEffect)
-  if (!isAdmin) {
-    return null;
+  // If user is admin, render the children (admin content)
+  if (isAdmin) {
+    return <>{children}</>;
   }
-
-  // If admin, render the children
-  return <>{children}</>;
+  
+  // Return null during the redirect handled by useEffect
+  return null;
 };
 
 export default AdminProtectedRoute;

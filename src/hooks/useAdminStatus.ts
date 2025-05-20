@@ -9,6 +9,8 @@ export function useAdminStatus() {
   useEffect(() => {
     const checkAdminStatus = async () => {
       try {
+        setIsLoading(true);
+        
         // Get current session
         const { data: sessionData } = await supabase.auth.getSession();
         
@@ -23,8 +25,12 @@ export function useAdminStatus() {
           user_email: sessionData.session.user.email
         });
         
-        if (error) throw error;
+        if (error) {
+          console.error('Error checking admin status:', error);
+          throw error;
+        }
         
+        // Set admin status based on the response
         setIsAdmin(!!data);
       } catch (error) {
         console.error('Error checking admin status:', error);
