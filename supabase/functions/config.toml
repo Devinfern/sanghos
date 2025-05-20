@@ -1,2 +1,4 @@
 
-project_id = "ordomvdrqjthpzfyrrzp"
+[functions]
+  [functions.extract-event-data]
+    verify_jwt = true

@@ -1,9 +1,9 @@
 
 import { Button } from "@/components/ui/button";
+import { ExtractedEventData } from "@/lib/api/forum/events/types";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { ExtractedEventData } from "@/lib/api/forum/events/types";
+import { useState } from "react";
 
 interface EventDataPreviewProps {
   extractedData: ExtractedEventData;
@@ -12,121 +12,129 @@ interface EventDataPreviewProps {
 }
 
 const EventDataPreview = ({ extractedData, onEdit, onUseData }: EventDataPreviewProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+
   return (
-    <div className="mt-6 space-y-6 bg-sage-50 p-4 rounded-md border border-sage-100">
-      <div className="text-center mb-4">
-        <h3 className="font-semibold text-lg">Extracted Event Data</h3>
-        <p className="text-sm text-muted-foreground">
-          Review and edit the extracted information before using it
-        </p>
+    <div className="border rounded-md p-4">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-lg font-medium">Extracted Event Data</h3>
+        <div className="space-x-2">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => setIsEditing(!isEditing)}
+          >
+            {isEditing ? "View Data" : "Edit Data"}
+          </Button>
+          <Button 
+            size="sm"
+            onClick={onUseData}
+          >
+            Use This Data
+          </Button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-3">
+      {isEditing ? (
+        <div className="space-y-4">
           <div>
-            <Label htmlFor="title">Event Title</Label>
-            <Input
-              id="title"
-              value={extractedData.title}
+            <label className="block text-sm font-medium mb-1">Title</label>
+            <Input 
+              value={extractedData.title} 
               onChange={(e) => onEdit('title', e.target.value)}
             />
           </div>
           
           <div>
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              value={extractedData.description}
+            <label className="block text-sm font-medium mb-1">Description</label>
+            <Textarea 
+              value={extractedData.description} 
               onChange={(e) => onEdit('description', e.target.value)}
-              rows={4}
+              rows={3}
             />
           </div>
-
-          <div className="grid grid-cols-2 gap-3">
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="date">Date</Label>
-              <Input
-                id="date"
-                type="date"
-                value={extractedData.date}
+              <label className="block text-sm font-medium mb-1">Date</label>
+              <Input 
+                value={extractedData.date} 
                 onChange={(e) => onEdit('date', e.target.value)}
               />
             </div>
             
             <div>
-              <Label htmlFor="time">Time</Label>
-              <Input
-                id="time"
-                value={extractedData.time}
+              <label className="block text-sm font-medium mb-1">Time</label>
+              <Input 
+                value={extractedData.time} 
                 onChange={(e) => onEdit('time', e.target.value)}
               />
             </div>
           </div>
-        </div>
-
-        <div className="space-y-3">
-          <div>
-            <Label htmlFor="location-name">Location Name</Label>
-            <Input
-              id="location-name"
-              value={extractedData.location.name}
-              onChange={(e) => onEdit('location.name', e.target.value)}
-            />
-          </div>
           
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="location-city">City</Label>
-              <Input
-                id="location-city"
-                value={extractedData.location.city || ''}
-                onChange={(e) => onEdit('location.city', e.target.value)}
+              <label className="block text-sm font-medium mb-1">Location Name</label>
+              <Input 
+                value={extractedData.location.name} 
+                onChange={(e) => onEdit('location.name', e.target.value)}
               />
             </div>
             
             <div>
-              <Label htmlFor="location-state">State</Label>
-              <Input
-                id="location-state"
-                value={extractedData.location.state || ''}
-                onChange={(e) => onEdit('location.state', e.target.value)}
+              <label className="block text-sm font-medium mb-1">Address</label>
+              <Input 
+                value={extractedData.location.address} 
+                onChange={(e) => onEdit('location.address', e.target.value)}
               />
             </div>
           </div>
           
-          <div>
-            <Label htmlFor="price">Price ($)</Label>
-            <Input
-              id="price"
-              type="number"
-              value={extractedData.price || 0}
-              onChange={(e) => onEdit('price', e.target.value)}
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Price</label>
+              <Input 
+                type="number"
+                value={extractedData.price.toString()} 
+                onChange={(e) => onEdit('price', e.target.value)}
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-1">Instructor</label>
+              <Input 
+                value={extractedData.instructor} 
+                onChange={(e) => onEdit('instructor', e.target.value)}
+              />
+            </div>
           </div>
-
-          {extractedData.image && (
-            <div className="mt-3">
-              <Label>Event Image</Label>
-              <div className="h-24 rounded-md overflow-hidden bg-gray-100 mt-1">
-                <img 
-                  src={extractedData.image} 
-                  alt="Event" 
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
+        </div>
+      ) : (
+        <div className="space-y-4">
+          <div className="grid grid-cols-3 gap-4">
+            <div className="col-span-1">
+              <img 
+                src={extractedData.image} 
+                alt={extractedData.title}
+                className="w-full h-32 object-cover rounded-md" 
+              />
+            </div>
+            
+            <div className="col-span-2">
+              <h4 className="font-medium text-lg mb-1">{extractedData.title}</h4>
+              <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
+                {extractedData.description}
+              </p>
+              <div className="text-sm">
+                <p><span className="font-medium">Date:</span> {extractedData.date}</p>
+                <p><span className="font-medium">Time:</span> {extractedData.time}</p>
+                <p><span className="font-medium">Location:</span> {extractedData.location.name}</p>
+                <p><span className="font-medium">Price:</span> ${extractedData.price}</p>
               </div>
             </div>
-          )}
+          </div>
         </div>
-      </div>
-
-      <div className="pt-3 flex justify-end">
-        <Button onClick={onUseData} className="w-full md:w-auto">
-          Use This Data
-        </Button>
-      </div>
+      )}
     </div>
   );
 };

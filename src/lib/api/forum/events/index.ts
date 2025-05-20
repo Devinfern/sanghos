@@ -1,7 +1,7 @@
 
-// Export all functionality from the events module
-export * from './types';
+// Export all functions from the events API
+export * from './api';
 export * from './state';
 export * from './transformers';
-export * from './api';
+export * from './types';
 export * from './extractApi';
