@@ -35,24 +35,31 @@ export function useEventBooking() {
       // Calculate total amount based on attendees
       const totalAmount = typeof event.price === 'number' 
         ? event.price * formData.attendees
-        : parseFloat(event.price) * formData.attendees;
+        : parseFloat(event.price as string) * formData.attendees;
 
       console.log("Creating booking for event:", event.id, "Total amount:", totalAmount);
 
-      // Store booking details in a local variable for now since we don't have the table yet
-      // We'll use this data when redirecting to checkout
-      const bookingDetails = {
-        event_id: event.id,
-        user_id: user?.id || null,
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        email: formData.email,
-        phone: formData.phone,
-        attendees: formData.attendees,
-        special_requests: formData.specialRequests || null,
-        status: 'pending',
-        total_amount: totalAmount
-      };
+      // Create a booking record in the Supabase table
+      const { data: bookingData, error: bookingError } = await supabase
+        .from("event_bookings")
+        .insert({
+          event_id: event.id,
+          user_id: user?.id || null,
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          attendees: formData.attendees,
+          special_requests: formData.specialRequests || null,
+          status: 'pending',
+          total_amount: totalAmount
+        })
+        .select('id')
+        .single();
+
+      if (bookingError) {
+        throw new Error(`Error creating booking: ${bookingError.message}`);
+      }
 
       // Create checkout session with Stripe
       const { data, error } = await supabase.functions.invoke('create-checkout', {
@@ -63,7 +70,7 @@ export function useEventBooking() {
           amount: totalAmount,
           description: `Booking for ${event.title}`,
           attendees: formData.attendees,
-          bookingDetails: bookingDetails
+          bookingId: bookingData.id
         },
       });
 

@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -75,7 +76,7 @@ export default function BookingForm({ event, onSuccess }: BookingFormProps) {
 
   const getMaxAttendees = () => {
     if (typeof event.capacity === 'number' && typeof event.remaining === 'number') {
-      return event.remaining;
+      return Math.min(event.remaining, 5); // Limit to 5 or remaining capacity
     }
     return 5; // Default max if capacity/remaining not specified
   };

@@ -122,6 +122,60 @@ export type Database = {
         }
         Relationships: []
       }
+      event_bookings: {
+        Row: {
+          attendees: number
+          created_at: string
+          email: string
+          event_id: string
+          first_name: string
+          id: string
+          last_name: string
+          payment_intent_id: string | null
+          phone: string
+          special_requests: string | null
+          status: string
+          stripe_session_id: string | null
+          total_amount: number
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          attendees?: number
+          created_at?: string
+          email: string
+          event_id: string
+          first_name: string
+          id?: string
+          last_name: string
+          payment_intent_id?: string | null
+          phone: string
+          special_requests?: string | null
+          status?: string
+          stripe_session_id?: string | null
+          total_amount: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          attendees?: number
+          created_at?: string
+          email?: string
+          event_id?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          payment_intent_id?: string | null
+          phone?: string
+          special_requests?: string | null
+          status?: string
+          stripe_session_id?: string | null
+          total_amount?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       forum_events: {
         Row: {
           capacity: number | null

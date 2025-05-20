@@ -52,7 +52,7 @@ export default function EventBookingModal({
               {new Date(event.startDate).toLocaleDateString()} at {new Date(event.startDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
             </p>
             <p className="text-sm text-muted-foreground">
-              {event.location.name}, {event.location.city}
+              {event.location.name}{event.location.city ? `, ${event.location.city}` : ''}
             </p>
             <div className="mt-2">
               <span className="font-medium">Price: </span>

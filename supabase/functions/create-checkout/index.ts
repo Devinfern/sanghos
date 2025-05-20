@@ -49,7 +49,7 @@ serve(async (req) => {
     }
 
     // Parse the request body
-    const { eventId, customerEmail, customerName, amount, description, attendees, bookingDetails } = await req.json();
+    const { eventId, customerEmail, customerName, amount, description, attendees, bookingId } = await req.json();
 
     if (!eventId || !customerEmail || !amount) {
       throw new Error("Missing required booking information");
@@ -95,31 +95,6 @@ serve(async (req) => {
     // Calculate price in cents
     const priceInCents = Math.round(amount * 100);
 
-    // Create a booking record in the database
-    const { data: bookingData, error: bookingError } = await supabaseAdmin
-      .from("event_bookings")
-      .insert({
-        event_id: eventId,
-        user_id: userId,
-        first_name: bookingDetails.first_name,
-        last_name: bookingDetails.last_name,
-        email: bookingDetails.email,
-        phone: bookingDetails.phone,
-        attendees: bookingDetails.attendees,
-        special_requests: bookingDetails.special_requests,
-        status: 'pending',
-        total_amount: bookingDetails.total_amount
-      })
-      .select('id')
-      .single();
-
-    if (bookingError) {
-      console.error("Error creating booking:", bookingError);
-      throw new Error(`Error creating booking: ${bookingError.message}`);
-    }
-
-    const bookingId = bookingData.id;
-
     // Create a checkout session
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
@@ -150,13 +125,15 @@ serve(async (req) => {
     });
 
     // Update the booking with the Stripe session ID
-    await supabaseAdmin
-      .from("event_bookings")
-      .update({
-        stripe_session_id: session.id,
-        updated_at: new Date().toISOString()
-      })
-      .eq("id", bookingId);
+    if (bookingId) {
+      await supabaseAdmin
+        .from("event_bookings")
+        .update({
+          stripe_session_id: session.id,
+          updated_at: new Date().toISOString()
+        })
+        .eq("id", bookingId);
+    }
 
     return new Response(JSON.stringify({ url: session.url }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
