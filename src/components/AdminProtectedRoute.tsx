@@ -6,6 +6,10 @@ import { toast } from "sonner";
 import { Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
+// URL and key constants for Supabase from the project's configuration
+const SUPABASE_URL = "https://ordomvdrqjthpzfyrrzp.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZG9tdmRycWp0aHB6ZnlycnpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyMzM3NDgsImV4cCI6MjA1NjgwOTc0OH0.fQqjrsQC--wNITiVq15SIwuY2sp3t5hxpbg0DVVeoLw";
+
 const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -26,12 +30,12 @@ const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
         setIsLoading(true);
         console.log("Admin check for:", user.email);
         
-        // Use Edge Function for more reliable admin check
-        const response = await fetch(`${supabase.supabaseUrl}/functions/v1/is_user_admin`, {
+        // Use Edge Function for more reliable admin check with direct URL and key
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/is_user_admin`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${supabase.supabaseKey}`
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
           },
           body: JSON.stringify({ email: user.email })
         });

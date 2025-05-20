@@ -8,6 +8,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+// URL and key constants for Supabase from the project's configuration
+const SUPABASE_URL = "https://ordomvdrqjthpzfyrrzp.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZG9tdmRycWp0aHB6ZnlycnpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyMzM3NDgsImV4cCI6MjA1NjgwOTc0OH0.fQqjrsQC--wNITiVq15SIwuY2sp3t5hxpbg0DVVeoLw";
+
 const DashboardAdmin = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -22,12 +26,12 @@ const DashboardAdmin = () => {
       try {
         console.log(`Verifying admin access via edge function for: ${user.email}`);
         
-        // Use edge function for admin verification
-        const response = await fetch(`${supabase.supabaseUrl}/functions/v1/is_user_admin`, {
+        // Use edge function for admin verification with direct URL and key
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/is_user_admin`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${supabase.supabaseKey}`
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
           },
           body: JSON.stringify({ email: user.email })
         });
