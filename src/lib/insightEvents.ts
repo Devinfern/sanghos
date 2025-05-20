@@ -29,25 +29,104 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
     const eventPromises = eventUrls.map(url => extractEventDataFromUrl(url));
     const extractedEvents = await Promise.all(eventPromises);
     
+    console.log("Raw extracted events:", extractedEvents);
+    
     // Transform the extracted data into Retreat objects
     const retreats: Retreat[] = extractedEvents.map((eventData, index) => {
       // Generate a unique ID based on the URL
       const id = `insight-la-${index + 1}`;
       
-      // Ensure date is always properly handled whether it's a string or object
+      // Create instructor object based on extracted data or use default
+      const eventInstructor: Instructor = {
+        ...insightLAInstructor,
+        name: eventData.instructor || insightLAInstructor.name,
+      };
+      
+      // Parse date from extracted data
       let dateString = "";
       
       // Handle the case where date is an object with iso and display properties
-      if (typeof eventData.date === 'object') {
-        dateString = eventData.date.iso || eventData.date.display || new Date().toISOString().split('T')[0];
+      if (typeof eventData.date === 'object' && eventData.date.iso) {
+        dateString = eventData.date.iso.split('T')[0]; // Get just the date part
       } 
       // Handle the case where date is a simple string
       else if (typeof eventData.date === 'string') {
-        dateString = eventData.date || new Date().toISOString().split('T')[0];
+        dateString = eventData.date;
       }
       // Fallback to current date if no date information is available
       else {
         dateString = new Date().toISOString().split('T')[0];
+      }
+      
+      // Create a start date and end date for the event card
+      const startDate = new Date(dateString);
+      
+      // Add time information if available
+      if (eventData.time && typeof eventData.time === 'string') {
+        const timeMatch = eventData.time.match(/(\d+):(\d+)(?:\s*(am|pm))?/i);
+        if (timeMatch) {
+          let hours = parseInt(timeMatch[1], 10);
+          const minutes = parseInt(timeMatch[2], 10);
+          
+          // Handle AM/PM
+          if (timeMatch[3] && timeMatch[3].toLowerCase() === 'pm' && hours < 12) {
+            hours += 12;
+          } else if (timeMatch[3] && timeMatch[3].toLowerCase() === 'am' && hours === 12) {
+            hours = 0;
+          }
+          
+          startDate.setHours(hours, minutes, 0);
+        }
+      }
+      
+      // Create an end date 2 hours after start time by default
+      const endDate = new Date(startDate.getTime());
+      endDate.setHours(endDate.getHours() + 2);
+      
+      // Determine if this is a multi-day retreat
+      const isMultiDay = eventData.description && 
+        (eventData.description.toLowerCase().includes("day retreat") || 
+         eventData.description.toLowerCase().includes("weekend") ||
+         eventData.description.toLowerCase().includes("multi-day"));
+      
+      // For multi-day retreats, set end date to be 2-3 days after start
+      if (isMultiDay) {
+        endDate.setDate(endDate.getDate() + Math.floor(Math.random() * 2) + 2); // 2-3 days
+      }
+      
+      // Extract location information
+      const locationInfo = {
+        name: eventData.location?.name || "InsightLA East Hollywood",
+        address: eventData.location?.address || "4300 Melrose Ave",
+        city: eventData.location?.city || "Los Angeles",
+        state: eventData.location?.state || "CA",
+        description: `${eventData.location?.name || "InsightLA"}, ${eventData.location?.city || "Los Angeles"}, ${eventData.location?.state || "CA"}`,
+        coordinates: {
+          lat: 34.0736,
+          lng: -118.2936
+        }
+      };
+      
+      // Get price as a number
+      const price = typeof eventData.price === 'number' ? 
+        eventData.price : 
+        (eventData.priceDisplay ? parseInt(eventData.priceDisplay.replace(/\D/g, '')) || 85 : 85);
+      
+      // Generate a short description if needed (first 100 chars)
+      const shortDescription = eventData.description && eventData.description.length > 100 ?
+        `${eventData.description.substring(0, 100)}...` :
+        (eventData.description || "A mindfulness event by InsightLA.");
+      
+      // Convert categories to appropriate format for EventCard
+      let eventCategory: string = "meditation";
+      if (eventData.category && Array.isArray(eventData.category)) {
+        if (eventData.category.some(cat => /yoga/i.test(cat))) {
+          eventCategory = "yoga";
+        } else if (eventData.category.some(cat => /retreat/i.test(cat))) {
+          eventCategory = "retreat";
+        } else if (eventData.category.some(cat => /workshop/i.test(cat))) {
+          eventCategory = "workshop";
+        }
       }
       
       return {
@@ -59,29 +138,29 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
           "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=1170&auto=format&fit=crop",
           "https://images.unsplash.com/photo-1607962837359-5e7e89f86776?q=80&w=1170&auto=format&fit=crop"
         ],
-        location: {
-          name: eventData.location.name || "InsightLA East Hollywood",
-          address: eventData.location.address || "4300 Melrose Ave",
-          city: eventData.location.city || "Los Angeles",
-          state: eventData.location.state || "CA",
-          description: `${eventData.location.name || "InsightLA"}, ${eventData.location.city || "Los Angeles"}, ${eventData.location.state || "CA"}`,
-          coordinates: {
-            lat: 34.0736,
-            lng: -118.2936
-          }
-        },
-        instructor: insightLAInstructor,
+        location: locationInfo,
+        instructor: eventInstructor,
         date: dateString,
         time: eventData.time || "10:00 AM",
-        duration: "Full day",
-        price: typeof eventData.price === 'number' ? eventData.price : 180,
+        duration: isMultiDay ? "Multiple days" : "Full day",
+        price: price,
         capacity: eventData.capacity || 25,
         remaining: eventData.remaining || Math.floor(Math.random() * 20) + 5,
-        category: eventData.category || ["Meditation", "Mindfulness"],
+        category: [eventCategory, "mindfulness"],
         amenities: ["Meditation cushions", "Tea service", "Lunch provided", "Accessible facilities"],
         featured: true,
         isSanghos: false,
-        sourceUrl: eventUrls[index]
+        sourceUrl: eventUrls[index],
+        // Additional fields for EventCard compatibility
+        shortDescription: shortDescription,
+        startDate: startDate,
+        endDate: endDate,
+        bookingUrl: eventData.bookingLink || eventUrls[index],
+        organizer: {
+          name: "InsightLA",
+          website: "https://insightla.org"
+        },
+        source: "InsightLA"
       };
     });
     
