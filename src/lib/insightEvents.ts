@@ -34,6 +34,11 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
       // Generate a unique ID based on the URL
       const id = `insight-la-${index + 1}`;
       
+      // Ensure date is always a string (use ISO date if available, or display date as a fallback)
+      const dateString = typeof eventData.date === 'object' 
+        ? eventData.date.iso || eventData.date.display 
+        : eventData.date || new Date().toISOString().split('T')[0];
+      
       return {
         id,
         title: eventData.title || `InsightLA Event ${index + 1}`,
@@ -55,7 +60,7 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
           }
         },
         instructor: insightLAInstructor,
-        date: eventData.date || new Date().toISOString().split('T')[0],
+        date: dateString,
         time: eventData.time || "10:00 AM",
         duration: "Full day",
         price: typeof eventData.price === 'number' ? eventData.price : 180,
@@ -76,4 +81,3 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
     return [];
   }
 };
-

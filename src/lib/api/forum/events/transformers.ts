@@ -45,13 +45,17 @@ export const transformExtractedToForumEvent = (extractedData: ExtractedEventData
   let dateObj: Date;
   
   // Try to use the ISO date if available
-  if (extractedData.date && extractedData.date.iso) {
+  if (typeof extractedData.date === 'object' && extractedData.date.iso) {
     dateObj = new Date(extractedData.date.iso);
   } 
   // Fallback to display date if iso date is not available or invalid
-  else if (extractedData.date && extractedData.date.display) {
+  else if (typeof extractedData.date === 'object' && extractedData.date.display) {
     dateObj = new Date(extractedData.date.display);
-  } 
+  }
+  // Handle if date is a simple string
+  else if (typeof extractedData.date === 'string') {
+    dateObj = new Date(extractedData.date);
+  }
   // Final fallback to current date
   else {
     dateObj = new Date();

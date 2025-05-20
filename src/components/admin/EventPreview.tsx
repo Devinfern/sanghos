@@ -50,8 +50,8 @@ export const EventPreview = ({ eventData, onUseData, onEdit, isPublishing = fals
               <Input
                 id="date"
                 type="date"
-                value={eventData.date || ''}
-                onChange={(e) => onEdit('date', e.target.value)}
+                value={typeof eventData.date === 'object' ? eventData.date.iso : eventData.date || ''}
+                onChange={(e) => onEdit('date.iso', e.target.value)}
               />
             </div>
             

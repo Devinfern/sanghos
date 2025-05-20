@@ -13,6 +13,14 @@ interface EventDataPreviewProps {
 }
 
 const EventDataPreview = ({ extractedData, onEdit, onUseData }: EventDataPreviewProps) => {
+  // Helper function to get date display value
+  const getDateDisplayValue = () => {
+    if (typeof extractedData.date === 'object') {
+      return extractedData.date.display || '';
+    }
+    return extractedData.date || '';
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -46,7 +54,7 @@ const EventDataPreview = ({ extractedData, onEdit, onUseData }: EventDataPreview
               <Label htmlFor="date">Date</Label>
               <Input
                 id="date"
-                value={extractedData.date.display}
+                value={getDateDisplayValue()}
                 onChange={(e) => onEdit('date.display', e.target.value)}
               />
             </div>
