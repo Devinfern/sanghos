@@ -46,12 +46,17 @@ serve(async (req) => {
       );
     }
 
-    // Enhanced extraction of event data
-    const titleEl = doc.querySelector(".event-block-detail__title");
+    // Improved extraction of event data with extended targeting
+    // Try multiple potential title elements with fallbacks
+    const titleEl = doc.querySelector(".event-block-detail__title") || 
+                   doc.querySelector("h1.entry-title") ||
+                   doc.querySelector(".post-title");
     const title = titleEl ? titleEl.textContent?.trim() || "" : "";
     
-    // Extract description - look for full content, not just the first paragraph
-    const descriptionEl = doc.querySelector(".event-block-detail__description");
+    // Extract description - look for full content with multiple approaches
+    const descriptionEl = doc.querySelector(".event-block-detail__description") || 
+                         doc.querySelector(".entry-content") || 
+                         doc.querySelector(".event-description");
     let description = "";
     if (descriptionEl) {
       // Get all text content from paragraphs in description
@@ -63,14 +68,28 @@ serve(async (req) => {
       }
     }
     
-    // Enhanced image extraction - look for specific meta tag first, fallback to page image
+    // Enhanced image extraction with multiple fallbacks
     let image = "";
+    // First check for OpenGraph image which is often the hero image
     const metaImage = doc.querySelector('meta[property="og:image"]');
     if (metaImage && metaImage.getAttribute("content")) {
       image = metaImage.getAttribute("content") || "";
     } else {
-      const imageEl = doc.querySelector(".event-block-detail__image img");
-      image = imageEl?.getAttribute("src") || "";
+      // Try multiple image selectors
+      const imageSelectors = [
+        ".event-block-detail__image img",
+        ".entry-content img",
+        ".post-thumbnail img",
+        "article img"
+      ];
+      
+      for (const selector of imageSelectors) {
+        const imageEl = doc.querySelector(selector);
+        if (imageEl && imageEl.getAttribute("src")) {
+          image = imageEl.getAttribute("src") || "";
+          break;
+        }
+      }
     }
     
     // Fallback image if none found
@@ -78,9 +97,15 @@ serve(async (req) => {
       image = "https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?q=80&w=2070&auto=format&fit=crop";
     }
     
-    // Enhanced date and time extraction
-    const dateTimeEl = doc.querySelector(".event-block-detail__date-time");
-    let date = "";
+    // Enhanced date and time extraction with multiple strategies
+    const dateTimeEl = doc.querySelector(".event-block-detail__date-time") || 
+                       doc.querySelector(".event-date-time") || 
+                       doc.querySelector(".event-meta");
+
+    let date = {
+      display: "",
+      iso: ""
+    };
     let time = "";
     let fullDateTime = "";
     
@@ -90,21 +115,16 @@ serve(async (req) => {
       const dateTimeParts = fullDateTime.split("|");
       
       if (dateTimeParts.length >= 1) {
-        date = dateTimeParts[0].trim();
+        date.display = dateTimeParts[0].trim();
         
-        // Try to convert date to ISO format for better storage (YYYY-MM-DD)
+        // Try to convert date to ISO format for better storage
         try {
-          if (date) {
+          if (date.display) {
             // Parse date like "Monday, June 2, 2025"
-            const dateObj = new Date(date);
+            const dateObj = new Date(date.display);
             if (!isNaN(dateObj.getTime())) {
-              // Format as ISO date string (YYYY-MM-DD)
-              const isoDate = dateObj.toISOString().split('T')[0];
-              // Keep both formats
-              date = {
-                display: date,
-                iso: isoDate
-              };
+              // Format as ISO date string
+              date.iso = dateObj.toISOString();
             }
           }
         } catch (error) {
@@ -119,9 +139,64 @@ serve(async (req) => {
       }
     }
     
-    // Enhanced location extraction
-    const locationEl = doc.querySelector(".event-block-detail__location");
-    let locationName = locationEl?.querySelector(".name")?.textContent?.trim() || "InsightLA";
+    // Alternative date-time extraction if the previous method fails
+    if (!date.display || !time) {
+      // Try structured data (schema.org)
+      const schemaScript = Array.from(doc.querySelectorAll('script[type="application/ld+json"]'))
+        .find(script => script.textContent?.includes('"@type":"Event"'));
+      
+      if (schemaScript) {
+        try {
+          const schemaData = JSON.parse(schemaScript.textContent || "{}");
+          
+          if (schemaData.startDate && !date.iso) {
+            const startDateObj = new Date(schemaData.startDate);
+            if (!isNaN(startDateObj.getTime())) {
+              date.iso = startDateObj.toISOString();
+              date.display = startDateObj.toLocaleString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              });
+            }
+          }
+          
+          if (schemaData.startDate && !time) {
+            const startTimeObj = new Date(schemaData.startDate);
+            if (!isNaN(startTimeObj.getTime())) {
+              time = startTimeObj.toLocaleString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+              });
+              
+              // Add end time if available
+              if (schemaData.endDate) {
+                const endTimeObj = new Date(schemaData.endDate);
+                if (!isNaN(endTimeObj.getTime())) {
+                  time += " - " + endTimeObj.toLocaleString('en-US', {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true
+                  });
+                }
+              }
+            }
+          }
+        } catch (error) {
+          console.error("Error parsing structured data:", error);
+        }
+      }
+    }
+    
+    // Enhanced location extraction with multiple approaches
+    const locationEl = doc.querySelector(".event-block-detail__location") || 
+                      doc.querySelector(".event-location") || 
+                      doc.querySelector(".event-meta .location");
+    
+    let locationName = locationEl?.querySelector(".name")?.textContent?.trim() || 
+                      locationEl?.textContent?.trim() || "InsightLA";
     let locationAddress = locationEl?.querySelector(".address")?.textContent?.trim() || "";
     let city = "Los Angeles";
     let state = "CA";
@@ -150,17 +225,23 @@ serve(async (req) => {
       address: locationAddress,
       city: city,
       state: state,
-      type: locationAddress.toLowerCase().includes("online") || locationName.toLowerCase().includes("online") 
-        ? "online" 
-        : "venue"
+      type: locationAddress.toLowerCase().includes("online") || 
+            locationName.toLowerCase().includes("online") ||
+            fullDateTime.toLowerCase().includes("zoom") ||
+            title.toLowerCase().includes("online") ? "online" : "venue"
     };
     
-    // Enhanced teacher/instructor extraction
-    const teacherEl = doc.querySelector(".event-block-detail__teacher");
+    // Enhanced teacher/instructor extraction with multiple selectors
+    const teacherEl = doc.querySelector(".event-block-detail__teacher") || 
+                     doc.querySelector(".event-teacher") || 
+                     doc.querySelector(".teacher");
     const instructor = teacherEl?.textContent?.trim() || "InsightLA";
     
-    // Enhanced price extraction
-    const pricingEl = doc.querySelector(".event-block-detail__pricing .price");
+    // Enhanced price extraction with multiple approaches
+    const pricingEl = doc.querySelector(".event-block-detail__pricing .price") || 
+                     doc.querySelector(".event-price") || 
+                     doc.querySelector(".price");
+                     
     let price = 0;
     let priceDisplay = "";
     
@@ -170,6 +251,7 @@ serve(async (req) => {
       // Handle different price formats
       if (priceDisplay.toLowerCase().includes("free")) {
         price = 0;
+        priceDisplay = "Free";
       } else {
         // Extract numbers from string like "$180.00" or "Sliding Scale $50-$150"
         const priceMatches = priceDisplay.match(/\d+(\.\d+)?/g);
@@ -180,18 +262,21 @@ serve(async (req) => {
       }
     }
     
-    // Extract capacity and remaining spots
-    // This is often not directly available, so we'll set default values
+    // Extract capacity and remaining spots (often not directly available)
+    // This is often not directly available, so we set reasonable defaults
     const capacity = 30;
     const remaining = Math.floor(Math.random() * 20) + 5; // Random number between 5-25
     
-    // Extract category
-    const categoryEl = doc.querySelector(".event-block-detail__category");
+    // Extract category with multiple approaches
+    const categoryEl = doc.querySelector(".event-block-detail__category") || 
+                      doc.querySelector(".event-categories") || 
+                      doc.querySelector(".categories");
     const categoryText = categoryEl?.textContent?.trim() || "Meditation";
     const category = [categoryText, "Mindfulness"];
     
-    // Extract booking link
-    const bookingLinkEl = doc.querySelector(".event-block-detail__register a");
+    // Extract booking link with fallbacks
+    const bookingLinkEl = doc.querySelector(".event-block-detail__register a") || 
+                         doc.querySelector(".event-registration a");
     const bookingLink = bookingLinkEl?.getAttribute("href") || url;
 
     // Compose the enhanced extracted data
@@ -199,7 +284,7 @@ serve(async (req) => {
       title,
       description,
       image,
-      date: typeof date === 'object' ? date : { display: date, iso: "" },
+      date,
       time,
       location,
       instructor,

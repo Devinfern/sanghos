@@ -34,10 +34,21 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
       // Generate a unique ID based on the URL
       const id = `insight-la-${index + 1}`;
       
-      // Ensure date is always a string (use ISO date if available, or display date as a fallback)
-      const dateString = typeof eventData.date === 'object' 
-        ? eventData.date.iso || eventData.date.display 
-        : eventData.date || new Date().toISOString().split('T')[0];
+      // Ensure date is always properly handled whether it's a string or object
+      let dateString = "";
+      
+      // Handle the case where date is an object with iso and display properties
+      if (typeof eventData.date === 'object') {
+        dateString = eventData.date.iso || eventData.date.display || new Date().toISOString().split('T')[0];
+      } 
+      // Handle the case where date is a simple string
+      else if (typeof eventData.date === 'string') {
+        dateString = eventData.date || new Date().toISOString().split('T')[0];
+      }
+      // Fallback to current date if no date information is available
+      else {
+        dateString = new Date().toISOString().split('T')[0];
+      }
       
       return {
         id,
@@ -74,6 +85,7 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
       };
     });
     
+    console.log("Transformed InsightLA events:", retreats);
     return retreats;
   } catch (error) {
     console.error("Error fetching InsightLA events:", error);

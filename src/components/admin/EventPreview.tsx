@@ -14,6 +14,23 @@ interface EventPreviewProps {
 }
 
 export const EventPreview = ({ eventData, onUseData, onEdit, isPublishing = false }: EventPreviewProps) => {
+  // Function to safely get ISO date value
+  const getIsoDateValue = () => {
+    if (typeof eventData.date === 'object' && eventData.date.iso) {
+      // Extract just the date part from the ISO string (YYYY-MM-DD)
+      return eventData.date.iso.split('T')[0];
+    }
+    return '';
+  };
+
+  // Function to safely get display date
+  const getDisplayDate = () => {
+    if (typeof eventData.date === 'object') {
+      return eventData.date.display || eventData.date.iso || '';
+    }
+    return typeof eventData.date === 'string' ? eventData.date : '';
+  };
+
   return (
     <div className="mt-6 space-y-6 bg-sage-50 p-4 rounded-md border border-sage-100">
       <div className="text-center mb-4">
@@ -50,9 +67,26 @@ export const EventPreview = ({ eventData, onUseData, onEdit, isPublishing = fals
               <Input
                 id="date"
                 type="date"
-                value={typeof eventData.date === 'object' ? eventData.date.iso : eventData.date || ''}
-                onChange={(e) => onEdit('date.iso', e.target.value)}
+                value={getIsoDateValue()}
+                onChange={(e) => {
+                  // Update both the ISO date and display date
+                  const dateObj = new Date(e.target.value);
+                  const displayDate = dateObj.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  });
+                  
+                  onEdit('date', JSON.stringify({
+                    iso: e.target.value ? new Date(e.target.value).toISOString() : '',
+                    display: e.target.value ? displayDate : ''
+                  }));
+                }}
               />
+              {getDisplayDate() && (
+                <p className="text-xs text-muted-foreground mt-1">{getDisplayDate()}</p>
+              )}
             </div>
             
             <div>
@@ -105,6 +139,9 @@ export const EventPreview = ({ eventData, onUseData, onEdit, isPublishing = fals
                 value={eventData.price || 0}
                 onChange={(e) => onEdit('price', e.target.value)}
               />
+              {eventData.priceDisplay && (
+                <p className="text-xs text-muted-foreground mt-1">{eventData.priceDisplay}</p>
+              )}
             </div>
             
             <div>
