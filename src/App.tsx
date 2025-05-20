@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { Toaster } from "sonner";
@@ -26,6 +25,7 @@ import CommunityTeaser from '@/pages/CommunityTeaser';
 import JoinNow from '@/pages/JoinNow';
 import UserDashboard from '@/pages/UserDashboard';
 import OnboardingPage from '@/pages/OnboardingPage';
+import Events from "./pages/Events";
 
 // Host pages
 import HostDashboard from '@/pages/host/HostDashboard';
@@ -110,6 +110,7 @@ function App() {
             <Route path="/join" element={<JoinNow />} />
             <Route path="/community-teaser" element={<CommunityTeaser />} />
             <Route path="/onboarding" element={<OnboardingPage />} />
+            <Route path="/events" element={<Events />} />
             
             {/* Dashboard route - protected */}
             <Route path="/dashboard" element={<ProtectedRoute><UserDashboard /></ProtectedRoute>} />
