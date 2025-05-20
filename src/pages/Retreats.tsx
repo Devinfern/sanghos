@@ -12,15 +12,52 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { partnerEvents } from "@/data/mockEvents";
+
+// Map partner events to retreat format for consistent display
+const partnerRetreats = partnerEvents.map(event => ({
+  id: event.id,
+  title: event.title,
+  description: event.description,
+  image: event.imageUrl,
+  additionalImages: [],
+  location: {
+    name: event.location.name,
+    address: event.location.address || "",
+    city: event.location.city || "",
+    state: event.location.state || "",
+    description: `${event.location.address}, ${event.location.city}, ${event.location.state} ${event.location.zip}`,
+  },
+  instructor: {
+    id: "partner-instructor",
+    name: event.organizer.name,
+    image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&h=80",
+    bio: "",
+    expertise: [],
+  },
+  date: event.startDate.toISOString(),
+  time: event.startDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+  duration: "2 hours",
+  price: event.price,
+  capacity: event.capacity || 20,
+  remaining: event.remaining || 10,
+  category: ["Workshop", "Wellness"],
+  amenities: [],
+  featured: false,
+  isSanghos: false, // Mark as non-Sanghos to appear in partner tab
+}));
+
+// Combine the original retreats with partner retreats
+const allRetreats = [...retreats, ...partnerRetreats];
 
 const allCategories = Array.from(
-  new Set(retreats.flatMap((retreat) => retreat.category))
+  new Set(allRetreats.flatMap((retreat) => retreat.category))
 ).sort();
 
 // Previously we were using this to identify the most recent retreat
 // Now all retreats will have the coming soon overlay
 const getMostRecentRetreatId = () => {
-  const sortedRetreats = [...retreats].sort((a, b) => 
+  const sortedRetreats = [...allRetreats].sort((a, b) => 
     new Date(b.date).getTime() - new Date(a.date).getTime()
   );
   return sortedRetreats[0]?.id;
@@ -60,7 +97,7 @@ const Retreats = () => {
     setSelectedCategory(null);
   };
 
-  const filteredRetreats = retreats.filter(retreat => {
+  const filteredRetreats = allRetreats.filter(retreat => {
     const matchesSearch = searchQuery === "" || 
       retreat.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       retreat.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -77,11 +114,11 @@ const Retreats = () => {
     return matchesSearch && matchesCategory && matchesTab;
   });
 
-  const sanghoRetreats = retreats.filter(retreat => retreat.isSanghos);
-  const thirdPartyRetreats = retreats.filter(retreat => !retreat.isSanghos);
+  const sanghoRetreats = allRetreats.filter(retreat => retreat.isSanghos);
+  const thirdPartyRetreats = allRetreats.filter(retreat => !retreat.isSanghos);
 
   const retreatCounts = {
-    all: retreats.length,
+    all: allRetreats.length,
     sanghos: sanghoRetreats.length,
     thirdparty: thirdPartyRetreats.length
   };
@@ -195,7 +232,7 @@ const Retreats = () => {
                   key={retreat.id} 
                   retreat={retreat} 
                   index={index}
-                  comingSoon={true} // Set all retreats to coming soon
+                  comingSoon={retreat.isSanghos} // Only Sanghos retreats should show coming soon
                 />
               ))}
             </div>

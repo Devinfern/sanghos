@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "@/components/ui/button";
 import { Event } from "@/types/event";
 import BookingForm from "./BookingForm";
+import { ExternalLink } from "lucide-react";
 
 interface EventBookingModalProps {
   event: Event;
@@ -28,6 +29,23 @@ export default function EventBookingModal({
 
   // Check if event is sold out - safely access remaining property
   const isSoldOut = typeof event.remaining === 'number' && event.remaining <= 0;
+  
+  // Check if this is a partner event with an external booking URL
+  const isPartnerEvent = event.bookingUrl && event.source !== "sanghos";
+
+  if (isPartnerEvent) {
+    return (
+      <Button
+        variant={buttonVariant}
+        size={buttonSize}
+        className={className}
+        disabled={isSoldOut}
+        onClick={() => window.open(event.bookingUrl, '_blank')}
+      >
+        {isSoldOut ? "Sold Out" : buttonLabel} <ExternalLink className="ml-1 h-3 w-3" />
+      </Button>
+    );
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
