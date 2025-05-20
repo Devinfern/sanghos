@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Calendar, Users, Clock, Heart, Share2, BookmarkPlus, ExternalLink } from "lucide-react";
@@ -149,7 +148,7 @@ const RetreatCard = ({
       <CardWrapper>
         <Card
           className={cn(
-            "h-full overflow-hidden flex flex-col md:flex-row border shadow-sm transition-all duration-300 relative",
+            "h-full overflow-hidden flex flex-col md:flex-row border shadow-sm transition-all duration-300 ease-out relative",
             "opacity-0 animate-fade-up",
             isHovered && "border-sage-300 shadow-md translate-y-[-4px]"
           )}
@@ -178,10 +177,10 @@ const RetreatCard = ({
             <OptimizedImage
               src={retreat.image}
               alt={retreat.title}
-              className="h-full w-full object-cover transition-transform duration-500 ease-out"
-              style={{
-                transform: isHovered ? "scale(1.05)" : "scale(1)"
-              }}
+              className={cn(
+                "h-full w-full object-cover transition-transform duration-500 ease-out",
+                isHovered ? "scale-105" : "scale-100"
+              )}
               onLoad={() => setImageLoaded(true)}
             />
             
@@ -340,7 +339,7 @@ const RetreatCard = ({
     <CardWrapper>
       <Card
         className={cn(
-          "h-full overflow-hidden border shadow-sm transition-all duration-300 relative",
+          "h-full overflow-hidden border shadow-sm transition-all duration-300 ease-out relative",
           "opacity-0 animate-fade-up",
           isHovered && "border-sage-300 shadow-md translate-y-[-4px]"
         )}
@@ -369,10 +368,10 @@ const RetreatCard = ({
           <OptimizedImage
             src={retreat.image}
             alt={retreat.title}
-            className="object-cover w-full h-full transition-transform duration-500 ease-out"
-            style={{
-              transform: isHovered ? "scale(1.05)" : "scale(1)"
-            }}
+            className={cn(
+              "object-cover w-full h-full transition-transform duration-500 ease-out",
+              isHovered ? "scale-105" : "scale-100" 
+            )}
             onLoad={() => setImageLoaded(true)}
           />
           
@@ -501,11 +500,10 @@ const RetreatCard = ({
           </div>
           
           <div 
-            className="mt-4 pt-3 border-t border-sage-100 opacity-0 transform translate-y-2 transition-all duration-300"
-            style={{
-              opacity: isHovered ? 1 : 0,
-              transform: isHovered ? 'translateY(0)' : 'translateY(8px)'
-            }}
+            className={cn(
+              "mt-4 pt-3 border-t border-sage-100 transition-all duration-300",
+              isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+            )}
           >
             <Button 
               variant="outline" 

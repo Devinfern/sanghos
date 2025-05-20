@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 
 interface OptimizedImageProps {
@@ -10,6 +10,7 @@ interface OptimizedImageProps {
   aspectRatio?: "square" | "video" | "portrait" | "custom";
   priority?: boolean;
   objectFit?: "cover" | "contain" | "fill" | "none" | "scale-down";
+  style?: CSSProperties;
   onLoad?: () => void;
 }
 
@@ -28,6 +29,7 @@ const OptimizedImage = ({
   aspectRatio = "square",
   priority = false,
   objectFit = "cover",
+  style,
   onLoad
 }: OptimizedImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -63,6 +65,7 @@ const OptimizedImage = ({
       <img
         src={src}
         alt={alt}
+        style={style}
         className={cn(
           "w-full h-full transition-all duration-500", // Smoother transition
           objectFit === "cover" && "object-cover",
