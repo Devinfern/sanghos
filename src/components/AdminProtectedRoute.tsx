@@ -24,9 +24,9 @@ const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
       try {
         setIsLoading(true);
-        console.log("Direct admin check for:", user.email);
+        console.log("Admin check for:", user.email);
         
-        // Direct database query - most reliable method
+        // Direct database query with fixed RLS policy
         const { data: adminUser, error: queryError } = await supabase
           .from('admin_users')
           .select('email')
@@ -39,7 +39,7 @@ const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
         }
         
         const adminStatus = !!adminUser;
-        console.log("Admin status result:", adminStatus, adminUser);
+        console.log("Admin status:", adminStatus, adminUser);
         setIsAdmin(adminStatus);
         
         if (!adminStatus) {

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,7 +19,7 @@ const DashboardAdmin = () => {
       
       setIsChecking(true);
       try {
-        // Direct check for admin status
+        // Direct check for admin status with fixed RLS policy
         const { data, error } = await supabase
           .from('admin_users')
           .select('email')
