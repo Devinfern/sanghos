@@ -4,6 +4,8 @@ import { Event } from "@/types/event";
 import { supabase } from "@/integrations/supabase/client";
 import { loadForumEvents } from "@/lib/api/forum/events";
 import { startOfDay } from "date-fns";
+import { partnerEvents } from "@/data/mockEvents"; 
+import { ensureValidCategory } from "@/mockEvents";
 
 export function useEvents(location: string = "San Francisco, CA") {
   const [events, setEvents] = useState<Event[]>([]);
@@ -20,6 +22,7 @@ export function useEvents(location: string = "San Francisco, CA") {
         
         // Load events from the forum_events table through our API wrapper
         const forumEvents = await loadForumEvents();
+        let allEvents: Event[] = [];
         
         if (forumEvents && forumEvents.length > 0) {
           // Transform forum events to match the Event type
@@ -94,12 +97,31 @@ export function useEvents(location: string = "San Francisco, CA") {
           });
           
           console.log(`Successfully transformed ${transformedEvents.length} events`);
-          setEvents(transformedEvents);
+          allEvents = transformedEvents;
         } else {
           console.log("No forum events found");
-          // Empty array if no events
-          setEvents([]);
         }
+        
+        // Add partner events from the same source used on retreats page
+        if (partnerEvents && partnerEvents.length > 0) {
+          // Type-safe conversion for partner events
+          const typeSafePartnerEvents = partnerEvents.map(event => ({
+            ...event,
+            category: ensureValidCategory(event.category),
+            location: {
+              ...event.location,
+              locationType: (event.location.locationType === "venue" ? "venue" : "online") as "venue" | "online"
+            }
+          }));
+          
+          // Combine with forum events
+          allEvents = [...allEvents, ...typeSafePartnerEvents];
+          console.log(`Added ${typeSafePartnerEvents.length} partner events`);
+        }
+        
+        // Set combined events
+        setEvents(allEvents);
+        
       } catch (err: any) {
         console.error("Error fetching real events:", err);
         setError(`Failed to fetch events: ${err.message}`);
