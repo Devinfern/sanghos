@@ -5,6 +5,7 @@ import { Event } from "@/types/event";
 import EventList from "@/components/EventList";
 import DateFilter, { DateFilterOption } from "@/components/DateFilter";
 import { startOfDay, getDay, isSameDay, isThisWeek } from "date-fns";
+import { allEvents } from "@/data/mockEvents";
 
 interface EventsSectionProps {
   events: Event[];
@@ -15,44 +16,54 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events, isLoading }) => {
   const [selectedDateFilter, setSelectedDateFilter] = useState<DateFilterOption>('all');
   const [customDate, setCustomDate] = useState<Date | undefined>(undefined);
 
+  // Use the combined events (API events + partner events)
+  const combinedEvents = [...events];
+  
+  // Add partner events if they don't already exist in the events array
+  allEvents.forEach(partnerEvent => {
+    if (!combinedEvents.some(event => event.id === partnerEvent.id)) {
+      combinedEvents.push(partnerEvent);
+    }
+  });
+
   function isDateInThisWeekend(date: Date) {
     const day = getDay(date);
     return day === 0 || day === 6;
   }
 
   const filteredEvents = useMemo(() => {
-    if (selectedDateFilter === "all") return events;
+    if (selectedDateFilter === "all") return combinedEvents;
 
     const today = startOfDay(new Date());
     switch (selectedDateFilter) {
       case "today":
-        return events.filter(event =>
+        return combinedEvents.filter(event =>
           isSameDay(event.startDate, today)
         );
       case "tomorrow":
         const tomorrow = startOfDay(new Date(today.getTime() + 24 * 60 * 60 * 1000));
-        return events.filter(event =>
+        return combinedEvents.filter(event =>
           isSameDay(event.startDate, tomorrow)
         );
       case "this-week":
-        return events.filter(event =>
+        return combinedEvents.filter(event =>
           isThisWeek(event.startDate, { weekStartsOn: 1 })
         );
       case "this-weekend":
-        return events.filter(event =>
+        return combinedEvents.filter(event =>
           isDateInThisWeekend(event.startDate)
         );
       case "custom":
         if (customDate) {
-          return events.filter(event =>
+          return combinedEvents.filter(event =>
             isSameDay(event.startDate, startOfDay(customDate))
           );
         }
-        return events;
+        return combinedEvents;
       default:
-        return events;
+        return combinedEvents;
     }
-  }, [selectedDateFilter, customDate, events]);
+  }, [selectedDateFilter, customDate, combinedEvents]);
 
   return (
     <section className="py-16 bg-sage-50">

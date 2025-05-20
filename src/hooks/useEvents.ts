@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Event } from "@/types/event";
 import { supabase } from "@/integrations/supabase/client";
 import { defaultEvents } from "@/data/mockFeaturedEvents";
+import { partnerEvents } from "@/data/mockEvents";
 
 export function useEvents(location: string = "San Francisco, CA") {
   const [events, setEvents] = useState<Event[]>([]);
@@ -28,7 +29,10 @@ export function useEvents(location: string = "San Francisco, CA") {
         if (error) {
           console.error("Error fetching events:", error);
           setError(`Failed to fetch events: ${error.message}`);
-          setEvents(defaultEvents);
+          
+          // Combine default events with partner events
+          const combinedFallbackEvents = [...defaultEvents, ...partnerEvents];
+          setEvents(combinedFallbackEvents);
           
           // Don't show error toast - just load fallback data silently
           console.log("Using fallback events data due to API error");
@@ -78,19 +82,27 @@ export function useEvents(location: string = "San Francisco, CA") {
               organizer: {
                 name: rec.organizer || "Event Organizer",
                 website: rec.url
-              }
+              },
+              // Add retreatId for linking to retreat details
+              retreatId: rec.retreatId || `ev-api-${index}`
             };
           });
           
+          // Combine API events with partner events
+          const combinedEvents = [...transformedEvents, ...partnerEvents];
+          
           // Only log success, don't show toast
-          if (transformedEvents.length > 0) {
-            console.log(`Found ${transformedEvents.length} wellness events`);
+          if (combinedEvents.length > 0) {
+            console.log(`Found ${combinedEvents.length} wellness events`);
           }
           
-          setEvents(transformedEvents);
+          setEvents(combinedEvents);
         } else {
           console.log("No events returned, using default events");
-          setEvents(defaultEvents);
+          
+          // Combine default events with partner events
+          const combinedFallbackEvents = [...defaultEvents, ...partnerEvents];
+          setEvents(combinedFallbackEvents);
           
           // Don't show error toast - just load fallback data silently
           console.log("Using fallback events data due to no results");
@@ -98,7 +110,10 @@ export function useEvents(location: string = "San Francisco, CA") {
       } catch (err: any) {
         console.error("Error in fetchEvents:", err);
         setError(`Unexpected error: ${err.message}`);
-        setEvents(defaultEvents);
+        
+        // Combine default events with partner events
+        const combinedFallbackEvents = [...defaultEvents, ...partnerEvents];
+        setEvents(combinedFallbackEvents);
         
         // Don't show error toast - just load fallback data silently
         console.log("Using fallback events data due to exception");

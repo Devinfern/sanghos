@@ -17,7 +17,7 @@ const CommunityEvents = ({ events }: CommunityEventsProps) => {
         {events.map((event) => (
           <Link
             key={event.id}
-            to={event.retreat_id ? `/retreat/${event.retreat_id}` : '#'}
+            to={event.retreat_id ? `/retreat/${event.retreat_id}` : `/retreats?search=${encodeURIComponent(event.title)}`}
             className="block"
           >
             <div className="p-4 flex gap-3 hover:bg-brand-subtle/5 transition-colors">

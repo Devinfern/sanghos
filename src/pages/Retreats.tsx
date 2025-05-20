@@ -12,46 +12,10 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { partnerEvents } from "@/data/mockEvents";
+import { partnerEvents, eventToRetreatFormat } from "@/data/mockEvents";
 
-// Map partner events to retreat format for consistent display
-const partnerRetreats = partnerEvents.map(event => ({
-  id: event.id,
-  title: event.title,
-  description: event.description,
-  image: event.imageUrl,
-  additionalImages: [],
-  location: {
-    name: event.location.name,
-    address: event.location.address || "",
-    city: event.location.city || "",
-    state: event.location.state || "",
-    description: `${event.location.address}, ${event.location.city}, ${event.location.state} ${event.location.zip}`,
-    coordinates: {
-      lat: 34.0736, // Default coordinates for Los Angeles
-      lng: -118.2936
-    }
-  },
-  instructor: {
-    id: "partner-instructor",
-    name: event.organizer.name,
-    image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&h=80",
-    bio: `${event.organizer.name} is a leading provider of mindfulness and meditation programs.`,
-    title: "Partner Organization",
-    specialties: ["Workshop", "Wellness", "Mindfulness"],
-    yearsExperience: 10
-  },
-  date: event.startDate.toISOString(),
-  time: event.startDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
-  duration: "2 hours",
-  price: event.price,
-  capacity: event.capacity || 20,
-  remaining: event.remaining || 10,
-  category: ["Workshop", "Wellness"],
-  amenities: [],
-  featured: false,
-  isSanghos: false // Mark as non-Sanghos to appear in partner tab
-}));
+// Convert partner events to retreat format for consistent display
+const partnerRetreats = partnerEvents.map(event => eventToRetreatFormat(event));
 
 // Combine the original retreats with partner retreats
 const allRetreats = [...retreats, ...partnerRetreats];

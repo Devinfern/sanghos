@@ -1,13 +1,20 @@
 
 import React from "react";
 import { retreats } from "@/lib/data";
+import { allEvents, eventToRetreatFormat } from "@/data/mockEvents"; 
 import RetreatCard from "./RetreatCard";
 
 const FeaturedRetreatsGrid: React.FC = () => {
   // Only show retreats marked as featured
-  const featuredRetreats = retreats.filter(r => r.featured);
+  const featuredSanghosRetreats = retreats.filter(r => r.featured);
+  
+  // Convert partner events to retreat format and add to featured retreats
+  const partnerRetreats = allEvents.map(event => eventToRetreatFormat(event));
+  
+  // Combine both sources of retreats
+  const allFeaturedRetreats = [...featuredSanghosRetreats, ...partnerRetreats];
 
-  if (featuredRetreats.length === 0) {
+  if (allFeaturedRetreats.length === 0) {
     return (
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4 text-center">
@@ -30,7 +37,7 @@ const FeaturedRetreatsGrid: React.FC = () => {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-          {featuredRetreats.map((retreat, idx) => (
+          {allFeaturedRetreats.map((retreat, idx) => (
             <RetreatCard key={retreat.id} retreat={retreat} index={idx} />
           ))}
         </div>
