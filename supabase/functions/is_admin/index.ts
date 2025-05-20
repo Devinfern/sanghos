@@ -17,6 +17,7 @@ serve(async (req) => {
     const { email } = await req.json();
     
     if (!email) {
+      console.error('Email is required but was not provided');
       return new Response(JSON.stringify({ error: 'Email is required' }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 400,
@@ -46,7 +47,7 @@ serve(async (req) => {
     }
 
     const isAdmin = !!data;
-    console.log(`Admin status result for ${email}: ${isAdmin}`);
+    console.log(`Admin status result for ${email}: ${isAdmin}`, data);
     
     return new Response(JSON.stringify({ isAdmin }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

@@ -7,10 +7,14 @@ SECURITY DEFINER
 SET search_path = public
 AS $$
 DECLARE
-  is_admin BOOLEAN;
+  is_admin_user BOOLEAN;
 BEGIN
   -- Direct query against admin_users table
-  SELECT EXISTS(SELECT 1 FROM public.admin_users WHERE email = user_email) INTO is_admin;
-  RETURN is_admin;
+  SELECT EXISTS(
+    SELECT 1 FROM public.admin_users 
+    WHERE email = user_email
+  ) INTO is_admin_user;
+  
+  RETURN is_admin_user;
 END;
 $$;

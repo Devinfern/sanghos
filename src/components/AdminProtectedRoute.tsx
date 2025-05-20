@@ -1,6 +1,6 @@
 
 import React, { useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAdminStatus } from "@/hooks/useAdminStatus";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -13,22 +13,28 @@ const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (!user) {
+      console.log("No user, redirecting to login");
       toast.error("You must be logged in to access this page");
       navigate("/login");
       return;
     }
 
-    console.log("Admin status:", { isAdmin, isLoading, email: user?.email });
+    console.log("Admin route check:", { 
+      email: user?.email, 
+      isAdmin, 
+      isLoading 
+    });
     
     // Only redirect if admin check is complete and user is not an admin
     if (!isLoading && !isAdmin) {
+      console.log("User is not an admin, redirecting");
       toast.error("You don't have permission to access the admin area");
       navigate("/dashboard");
     }
     
     if (error) {
       console.error("Admin check error:", error);
-      toast.error("Error verifying admin status");
+      toast.error("Error verifying admin status. Please try again.");
     }
   }, [isAdmin, isLoading, error, navigate, user]);
 
@@ -45,6 +51,7 @@ const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
   // If user is admin, render the children (admin content)
   if (isAdmin) {
+    console.log("Admin access granted, rendering admin content");
     return <>{children}</>;
   }
   
