@@ -1,11 +1,10 @@
+
 import React, { useState, useMemo } from "react";
 import { Spinner } from "@/components/ui/spinner";
-import { Event, EventCategory } from "@/types/event";
+import { Event } from "@/types/event";
 import EventList from "@/components/EventList";
 import DateFilter, { DateFilterOption } from "@/components/DateFilter";
 import { startOfDay, getDay, isSameDay, isThisWeek } from "date-fns";
-import { allEvents } from "@/data/mockEvents";
-import { ensureValidCategory } from "@/mockEvents";
 
 interface EventsSectionProps {
   events: Event[];
@@ -16,65 +15,44 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events, isLoading }) => {
   const [selectedDateFilter, setSelectedDateFilter] = useState<DateFilterOption>('all');
   const [customDate, setCustomDate] = useState<Date | undefined>(undefined);
 
-  // Use the combined events (API events + partner events)
-  const combinedEvents = [...events];
-  
-  // Add partner events if they don't already exist in the events array
-  // Make sure to properly type the category and location.locationType
-  const typeSafeAllEvents = allEvents.map(event => ({
-    ...event,
-    category: ensureValidCategory(event.category),
-    location: {
-      ...event.location,
-      // Ensure locationType is narrowed to the union type "venue" | "online"
-      locationType: (event.location.locationType === "venue" ? "venue" : "online") as "venue" | "online"
-    }
-  }));
-  
-  typeSafeAllEvents.forEach(partnerEvent => {
-    if (!combinedEvents.some(event => event.id === partnerEvent.id)) {
-      combinedEvents.push(partnerEvent as Event);
-    }
-  });
-
   function isDateInThisWeekend(date: Date) {
     const day = getDay(date);
     return day === 0 || day === 6;
   }
 
   const filteredEvents = useMemo(() => {
-    if (selectedDateFilter === "all") return combinedEvents;
+    if (selectedDateFilter === "all") return events;
 
     const today = startOfDay(new Date());
     switch (selectedDateFilter) {
       case "today":
-        return combinedEvents.filter(event =>
+        return events.filter(event =>
           isSameDay(event.startDate, today)
         );
       case "tomorrow":
         const tomorrow = startOfDay(new Date(today.getTime() + 24 * 60 * 60 * 1000));
-        return combinedEvents.filter(event =>
+        return events.filter(event =>
           isSameDay(event.startDate, tomorrow)
         );
       case "this-week":
-        return combinedEvents.filter(event =>
+        return events.filter(event =>
           isThisWeek(event.startDate, { weekStartsOn: 1 })
         );
       case "this-weekend":
-        return combinedEvents.filter(event =>
+        return events.filter(event =>
           isDateInThisWeekend(event.startDate)
         );
       case "custom":
         if (customDate) {
-          return combinedEvents.filter(event =>
+          return events.filter(event =>
             isSameDay(event.startDate, startOfDay(customDate))
           );
         }
-        return combinedEvents;
+        return events;
       default:
-        return combinedEvents;
+        return events;
     }
-  }, [selectedDateFilter, customDate, combinedEvents]);
+  }, [selectedDateFilter, customDate, events]);
 
   return (
     <section className="py-16 bg-sage-50">
