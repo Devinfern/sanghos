@@ -33,7 +33,11 @@ const partnerRetreats = partnerEvents.map(event => ({
     name: event.organizer.name,
     image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&h=80",
     bio: "",
-    expertise: [],
+    // Add the missing properties required by the Instructor type
+    title: "Partner Organization",
+    specialties: ["Workshop", "Wellness"],
+    expertise: [], // Keep this for backward compatibility if needed
+    yearsExperience: 0
   },
   date: event.startDate.toISOString(),
   time: event.startDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
