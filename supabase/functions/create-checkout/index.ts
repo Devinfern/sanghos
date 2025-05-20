@@ -32,28 +32,33 @@ serve(async (req) => {
 
     // Get the authorization header
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
-      throw new Error("No authorization header provided");
-    }
-
-    // Verify the user's session
-    const token = authHeader.replace("Bearer ", "");
-    const { data: { user }, error: userError } = await supabaseAdmin.auth.getUser(token);
-    if (userError) {
-      throw new Error(`Authentication error: ${userError.message}`);
+    let userId = null;
+    
+    if (authHeader) {
+      try {
+        // Verify the user's session
+        const token = authHeader.replace("Bearer ", "");
+        const { data: { user }, error: userError } = await supabaseAdmin.auth.getUser(token);
+        if (!userError && user) {
+          userId = user.id;
+        }
+      } catch (e) {
+        console.log("Auth error:", e);
+        // Continue as guest if auth fails
+      }
     }
 
     // Parse the request body
-    const { eventId, bookingId, customerEmail, customerName, amount, description, attendees } = await req.json();
+    const { eventId, customerEmail, customerName, amount, description, attendees, bookingDetails } = await req.json();
 
-    if (!eventId || !bookingId || !customerEmail || !amount) {
+    if (!eventId || !customerEmail || !amount) {
       throw new Error("Missing required booking information");
     }
 
     // Fetch the event details
     const { data: eventData, error: eventError } = await supabaseAdmin
-      .from("events")
-      .select("title, location, image_url, start_date")
+      .from("forum_events")
+      .select("title, location, start_date")
       .eq("id", eventId)
       .single();
 
@@ -81,7 +86,7 @@ serve(async (req) => {
         email: customerEmail,
         name: customerName,
         metadata: {
-          user_id: user?.id || "guest"
+          user_id: userId || "guest"
         }
       });
       customerId = newCustomer.id;
@@ -89,6 +94,31 @@ serve(async (req) => {
 
     // Calculate price in cents
     const priceInCents = Math.round(amount * 100);
+
+    // Create a booking record in the database
+    const { data: bookingData, error: bookingError } = await supabaseAdmin
+      .from("event_bookings")
+      .insert({
+        event_id: eventId,
+        user_id: userId,
+        first_name: bookingDetails.first_name,
+        last_name: bookingDetails.last_name,
+        email: bookingDetails.email,
+        phone: bookingDetails.phone,
+        attendees: bookingDetails.attendees,
+        special_requests: bookingDetails.special_requests,
+        status: 'pending',
+        total_amount: bookingDetails.total_amount
+      })
+      .select('id')
+      .single();
+
+    if (bookingError) {
+      console.error("Error creating booking:", bookingError);
+      throw new Error(`Error creating booking: ${bookingError.message}`);
+    }
+
+    const bookingId = bookingData.id;
 
     // Create a checkout session
     const session = await stripe.checkout.sessions.create({

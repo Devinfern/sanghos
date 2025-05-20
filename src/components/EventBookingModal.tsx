@@ -26,7 +26,7 @@ export default function EventBookingModal({
     setIsOpen(false);
   };
 
-  // Check if event is sold out
+  // Check if event is sold out - safely access remaining property
   const isSoldOut = typeof event.remaining === 'number' && event.remaining <= 0;
 
   return (

@@ -36,4 +36,6 @@ export interface Event {
   price: string | number;
   source: string;
   organizer: Organizer;
+  capacity?: number;
+  remaining?: number;
 }

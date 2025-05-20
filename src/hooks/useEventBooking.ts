@@ -39,38 +39,31 @@ export function useEventBooking() {
 
       console.log("Creating booking for event:", event.id, "Total amount:", totalAmount);
 
-      // Create booking record in database first
-      const { data: bookingData, error: bookingError } = await supabase
-        .from('event_bookings')
-        .insert({
-          event_id: event.id,
-          user_id: user?.id || null,
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          email: formData.email,
-          phone: formData.phone,
-          attendees: formData.attendees,
-          special_requests: formData.specialRequests || null,
-          status: 'pending',
-          total_amount: totalAmount
-        })
-        .select('id')
-        .single();
+      // Store booking details in a local variable for now since we don't have the table yet
+      // We'll use this data when redirecting to checkout
+      const bookingDetails = {
+        event_id: event.id,
+        user_id: user?.id || null,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        attendees: formData.attendees,
+        special_requests: formData.specialRequests || null,
+        status: 'pending',
+        total_amount: totalAmount
+      };
 
-      if (bookingError) {
-        throw new Error(`Error creating booking: ${bookingError.message}`);
-      }
-
-      // Now create checkout session with Stripe
+      // Create checkout session with Stripe
       const { data, error } = await supabase.functions.invoke('create-checkout', {
         body: {
           eventId: event.id,
-          bookingId: bookingData.id,
           customerEmail: formData.email,
           customerName: `${formData.firstName} ${formData.lastName}`,
           amount: totalAmount,
           description: `Booking for ${event.title}`,
-          attendees: formData.attendees
+          attendees: formData.attendees,
+          bookingDetails: bookingDetails
         },
       });
 
