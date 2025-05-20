@@ -22,7 +22,7 @@ export function useAdminStatus() {
         setIsLoading(true);
         console.log("Checking admin status for email:", user.email);
         
-        // Direct query using the fixed RLS policy
+        // Force fresh data with no caching
         const { data: adminData, error: queryError } = await supabase
           .from('admin_users')
           .select('email')

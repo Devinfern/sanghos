@@ -26,7 +26,7 @@ const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
         setIsLoading(true);
         console.log("Admin check for:", user.email);
         
-        // Direct database query with fixed RLS policy
+        // Ensure we get fresh data with no caching
         const { data: adminUser, error: queryError } = await supabase
           .from('admin_users')
           .select('email')

@@ -19,7 +19,7 @@ const DashboardAdmin = () => {
       
       setIsChecking(true);
       try {
-        // Direct check for admin status with fixed RLS policy
+        // Force fresh data with no caching
         const { data, error } = await supabase
           .from('admin_users')
           .select('email')
