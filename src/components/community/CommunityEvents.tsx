@@ -7,6 +7,7 @@ interface CommunityEventsProps {
   events: ForumEvent[];
 }
 
+// Add default props to ensure events is always available
 const CommunityEvents = ({ events }: CommunityEventsProps) => {
   return (
     <Card className="overflow-hidden border border-brand-subtle/30 shadow-sm">

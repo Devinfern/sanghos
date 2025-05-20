@@ -1,9 +1,10 @@
 
 import { useState, useEffect } from "react";
-import { Event } from "@/types/event";
+import { Event, EventCategory } from "@/types/event";
 import { supabase } from "@/integrations/supabase/client";
 import { defaultEvents } from "@/data/mockFeaturedEvents";
 import { partnerEvents } from "@/data/mockEvents";
+import { ensureValidCategory } from "@/mockEvents";
 
 export function useEvents(location: string = "San Francisco, CA") {
   const [events, setEvents] = useState<Event[]>([]);
@@ -30,8 +31,20 @@ export function useEvents(location: string = "San Francisco, CA") {
           console.error("Error fetching events:", error);
           setError(`Failed to fetch events: ${error.message}`);
           
+          // Ensure the categories in default events are properly typed
+          const typeSafeDefaultEvents = defaultEvents.map(event => ({
+            ...event,
+            category: ensureValidCategory(event.category)
+          }));
+          
+          // Ensure partner events have proper category typing
+          const typeSafePartnerEvents = partnerEvents.map(event => ({
+            ...event,
+            category: ensureValidCategory(event.category)
+          }));
+          
           // Combine default events with partner events
-          const combinedFallbackEvents = [...defaultEvents, ...partnerEvents];
+          const combinedFallbackEvents = [...typeSafeDefaultEvents, ...typeSafePartnerEvents] as Event[];
           setEvents(combinedFallbackEvents);
           
           // Don't show error toast - just load fallback data silently
@@ -59,13 +72,18 @@ export function useEvents(location: string = "San Francisco, CA") {
               }
             }
             
+            // Ensure we have a valid category type
+            const eventCategory = Array.isArray(rec.category) 
+              ? ensureValidCategory(rec.category[0])
+              : ensureValidCategory(rec.category || "workshop");
+            
             return {
               id: rec.retreatId || `ev-api-${index}`,
               title: rec.title,
               shortDescription: rec.reason || "A wellness event near you",
               description: rec.description || "Join this event to improve your wellness journey.",
               imageUrl: rec.image || "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-              category: Array.isArray(rec.category) ? rec.category[0] : "wellness",
+              category: eventCategory,
               startDate,
               endDate,
               location: {
@@ -88,8 +106,14 @@ export function useEvents(location: string = "San Francisco, CA") {
             };
           });
           
+          // Ensure partner events have proper category typing
+          const typeSafePartnerEvents = partnerEvents.map(event => ({
+            ...event,
+            category: ensureValidCategory(event.category)
+          }));
+          
           // Combine API events with partner events
-          const combinedEvents = [...transformedEvents, ...partnerEvents];
+          const combinedEvents = [...transformedEvents, ...typeSafePartnerEvents] as Event[];
           
           // Only log success, don't show toast
           if (combinedEvents.length > 0) {
@@ -100,8 +124,20 @@ export function useEvents(location: string = "San Francisco, CA") {
         } else {
           console.log("No events returned, using default events");
           
+          // Ensure the categories in default events are properly typed
+          const typeSafeDefaultEvents = defaultEvents.map(event => ({
+            ...event,
+            category: ensureValidCategory(event.category)
+          }));
+          
+          // Ensure partner events have proper category typing
+          const typeSafePartnerEvents = partnerEvents.map(event => ({
+            ...event,
+            category: ensureValidCategory(event.category)
+          }));
+          
           // Combine default events with partner events
-          const combinedFallbackEvents = [...defaultEvents, ...partnerEvents];
+          const combinedFallbackEvents = [...typeSafeDefaultEvents, ...typeSafePartnerEvents] as Event[];
           setEvents(combinedFallbackEvents);
           
           // Don't show error toast - just load fallback data silently
@@ -111,8 +147,20 @@ export function useEvents(location: string = "San Francisco, CA") {
         console.error("Error in fetchEvents:", err);
         setError(`Unexpected error: ${err.message}`);
         
+        // Ensure the categories in default events are properly typed
+        const typeSafeDefaultEvents = defaultEvents.map(event => ({
+          ...event,
+          category: ensureValidCategory(event.category)
+        }));
+        
+        // Ensure partner events have proper category typing
+        const typeSafePartnerEvents = partnerEvents.map(event => ({
+          ...event,
+          category: ensureValidCategory(event.category)
+        }));
+        
         // Combine default events with partner events
-        const combinedFallbackEvents = [...defaultEvents, ...partnerEvents];
+        const combinedFallbackEvents = [...typeSafeDefaultEvents, ...typeSafePartnerEvents] as Event[];
         setEvents(combinedFallbackEvents);
         
         // Don't show error toast - just load fallback data silently

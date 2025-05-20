@@ -3,13 +3,20 @@ import React from "react";
 import { retreats } from "@/lib/data";
 import { allEvents, eventToRetreatFormat } from "@/data/mockEvents"; 
 import RetreatCard from "./RetreatCard";
+import { ensureValidCategory } from "@/mockEvents";
 
 const FeaturedRetreatsGrid: React.FC = () => {
   // Only show retreats marked as featured
   const featuredSanghosRetreats = retreats.filter(r => r.featured);
   
   // Convert partner events to retreat format and add to featured retreats
-  const partnerRetreats = allEvents.map(event => eventToRetreatFormat(event));
+  // Ensure events have correctly typed categories first
+  const typeSafeEvents = allEvents.map(event => ({
+    ...event,
+    category: ensureValidCategory(event.category)
+  }));
+  
+  const partnerRetreats = typeSafeEvents.map(event => eventToRetreatFormat(event));
   
   // Combine both sources of retreats
   const allFeaturedRetreats = [...featuredSanghosRetreats, ...partnerRetreats];

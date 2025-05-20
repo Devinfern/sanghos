@@ -1,5 +1,6 @@
 
 import { EventCategory } from "@/types/event";
+import { ensureValidCategory } from "@/mockEvents";
 
 export const getCategoryLabel = (category: EventCategory): string => {
   switch (category) {
@@ -52,7 +53,7 @@ export const partnerEvents = [
     shortDescription: "A 6-week educational course that provides support for those on recovery paths during these unsettling times",
     description: "A 6-week educational course that provides support for those on recovery paths during these unsettling times. Many of us in recovery are finding ourselves experiencing heightened anxiety, irritability, and other difficult emotions, with an increased urge to use or engage in behaviors we have found harm us. In this class, we'll work with ways our mindfulness practice supports recovery and wellbeing. All are welcome. No prior experience with mindfulness or meditation necessary.",
     imageUrl: "https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?q=80&w=2070&auto=format&fit=crop",
-    category: "workshop",
+    category: "workshop" as EventCategory,
     startDate: new Date("2025-05-22T14:00:00"),
     endDate: new Date("2025-05-22T16:00:00"),
     location: {
@@ -116,7 +117,6 @@ export const eventToRetreatFormat = (event) => {
     capacity: event.capacity || 20,
     remaining: event.remaining || 10,
     category: [getCategoryLabel(event.category)],
-    amenities: [],
     featured: true,
     isSanghos: false // Mark as non-Sanghos to appear in partner tab
   };

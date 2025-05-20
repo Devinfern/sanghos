@@ -1,11 +1,12 @@
 
 import React, { useState, useMemo } from "react";
 import { Spinner } from "@/components/ui/spinner";
-import { Event } from "@/types/event";
+import { Event, EventCategory } from "@/types/event";
 import EventList from "@/components/EventList";
 import DateFilter, { DateFilterOption } from "@/components/DateFilter";
 import { startOfDay, getDay, isSameDay, isThisWeek } from "date-fns";
 import { allEvents } from "@/data/mockEvents";
+import { ensureValidCategory } from "@/mockEvents";
 
 interface EventsSectionProps {
   events: Event[];
@@ -20,7 +21,13 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events, isLoading }) => {
   const combinedEvents = [...events];
   
   // Add partner events if they don't already exist in the events array
-  allEvents.forEach(partnerEvent => {
+  // Make sure to properly type the category
+  const typeSafeAllEvents = allEvents.map(event => ({
+    ...event,
+    category: ensureValidCategory(event.category)
+  }));
+  
+  typeSafeAllEvents.forEach(partnerEvent => {
     if (!combinedEvents.some(event => event.id === partnerEvent.id)) {
       combinedEvents.push(partnerEvent);
     }
