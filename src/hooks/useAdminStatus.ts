@@ -22,26 +22,50 @@ export function useAdminStatus() {
         setIsLoading(true);
         console.log("Checking admin status for email:", user.email);
         
-        // Force fresh data with no caching
-        const { data: adminData, error: queryError } = await supabase
-          .from('admin_users')
-          .select('email')
-          .eq('email', user.email)
-          .maybeSingle();
+        // Use the Edge Function for admin verification
+        const response = await fetch(`${supabase.supabaseUrl}/functions/v1/is_user_admin`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${supabase.supabaseKey}`
+          },
+          body: JSON.stringify({ email: user.email })
+        });
         
-        if (queryError) {
-          console.error("Error querying admin table:", queryError);
-          throw queryError;
+        if (!response.ok) {
+          throw new Error(`Admin check failed with status: ${response.status}`);
         }
         
-        const isAdminUser = !!adminData;
-        console.log("Admin check result:", isAdminUser, adminData);
-        setIsAdmin(isAdminUser);
+        const result = await response.json();
+        console.log("Admin check response:", result);
+        
+        setIsAdmin(result.isAdmin);
       } catch (err) {
         console.error("Error checking admin status:", err);
         setError(err instanceof Error ? err : new Error('Unknown error checking admin status'));
-        // Default to not admin on error
-        setIsAdmin(false);
+        
+        // Fallback to direct query if Edge Function fails
+        try {
+          console.log("Trying fallback admin check for:", user.email);
+          const { data: adminData, error: queryError } = await supabase
+            .from('admin_users')
+            .select('email')
+            .eq('email', user.email)
+            .maybeSingle();
+          
+          if (queryError) {
+            console.error("Fallback admin check failed:", queryError);
+            throw queryError;
+          }
+          
+          const isAdminUser = !!adminData;
+          console.log("Fallback admin check result:", isAdminUser, adminData);
+          setIsAdmin(isAdminUser);
+        } catch (fallbackErr) {
+          console.error("Fallback admin check also failed:", fallbackErr);
+          // Default to not admin on all errors
+          setIsAdmin(false);
+        }
       } finally {
         setIsLoading(false);
       }

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,22 +20,50 @@ const DashboardAdmin = () => {
       
       setIsChecking(true);
       try {
-        // Force fresh data with no caching
-        const { data, error } = await supabase
-          .from('admin_users')
-          .select('email')
-          .eq('email', user.email)
-          .maybeSingle();
-          
-        if (error) {
-          console.error("Admin verification error:", error);
-          toast.error("Error verifying admin status");
+        console.log(`Verifying admin access via edge function for: ${user.email}`);
+        
+        // Use edge function for admin verification
+        const response = await fetch(`${supabase.supabaseUrl}/functions/v1/is_user_admin`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${supabase.supabaseKey}`
+          },
+          body: JSON.stringify({ email: user.email })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Edge function returned status: ${response.status}`);
         }
         
-        setIsAdmin(!!data);
-        console.log("Admin dashboard verification:", !!data, data);
+        const result = await response.json();
+        console.log("Admin dashboard verification via edge function:", result);
+        
+        setIsAdmin(result.isAdmin);
       } catch (err) {
-        console.error("Admin verification exception:", err);
+        console.error("Edge function admin verification error:", err);
+        
+        // Fallback to direct query
+        try {
+          console.log("Falling back to direct query for admin check");
+          const { data, error } = await supabase
+            .from('admin_users')
+            .select('email')
+            .eq('email', user.email)
+            .maybeSingle();
+            
+          if (error) {
+            console.error("Fallback admin verification error:", error);
+            throw error;
+          }
+          
+          setIsAdmin(!!data);
+          console.log("Fallback admin dashboard verification:", !!data, data);
+        } catch (fallbackErr) {
+          console.error("Admin verification failed completely:", fallbackErr);
+          setIsAdmin(false);
+          toast.error("Error verifying admin status");
+        }
       } finally {
         setIsChecking(false);
       }

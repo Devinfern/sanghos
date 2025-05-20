@@ -26,20 +26,24 @@ const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
         setIsLoading(true);
         console.log("Admin check for:", user.email);
         
-        // Ensure we get fresh data with no caching
-        const { data: adminUser, error: queryError } = await supabase
-          .from('admin_users')
-          .select('email')
-          .eq('email', user.email)
-          .maybeSingle();
+        // Use Edge Function for more reliable admin check
+        const response = await fetch(`${supabase.supabaseUrl}/functions/v1/is_user_admin`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${supabase.supabaseKey}`
+          },
+          body: JSON.stringify({ email: user.email })
+        });
         
-        if (queryError) {
-          console.error("Admin query error:", queryError);
-          throw queryError;
+        if (!response.ok) {
+          throw new Error(`Edge function call failed with status: ${response.status}`);
         }
         
-        const adminStatus = !!adminUser;
-        console.log("Admin status:", adminStatus, adminUser);
+        const result = await response.json();
+        console.log("Edge function admin check result:", result);
+        
+        const adminStatus = result.isAdmin;
         setIsAdmin(adminStatus);
         
         if (!adminStatus) {
@@ -48,10 +52,37 @@ const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
           navigate("/dashboard");
         }
       } catch (err) {
-        console.error("Admin check error:", err);
-        setError(err instanceof Error ? err : new Error("Admin check failed"));
-        toast.error("Error verifying admin status. Please try again.");
-        navigate("/dashboard");
+        console.error("Edge function admin check error:", err);
+        
+        // Fallback to direct query if edge function fails
+        try {
+          console.log("Trying fallback admin check for:", user.email);
+          const { data: adminUser, error: queryError } = await supabase
+            .from('admin_users')
+            .select('email')
+            .eq('email', user.email)
+            .maybeSingle();
+          
+          if (queryError) {
+            console.error("Fallback admin query error:", queryError);
+            throw queryError;
+          }
+          
+          const adminStatus = !!adminUser;
+          console.log("Fallback admin status:", adminStatus, adminUser);
+          setIsAdmin(adminStatus);
+          
+          if (!adminStatus) {
+            console.log("User is not an admin (fallback check), redirecting");
+            toast.error("You don't have permission to access the admin area");
+            navigate("/dashboard");
+          }
+        } catch (fallbackErr) {
+          console.error("Admin check failed completely:", fallbackErr);
+          setError(fallbackErr instanceof Error ? fallbackErr : new Error("Admin check failed"));
+          toast.error("Error verifying admin status. Please try again.");
+          navigate("/dashboard");
+        }
       } finally {
         setIsLoading(false);
       }
