@@ -6,6 +6,8 @@ import { loadForumEvents } from "@/lib/api/forum/events";
 import { startOfDay } from "date-fns";
 import { partnerEvents } from "@/data/mockEvents"; 
 import { ensureValidCategory } from "@/mockEvents";
+import { retreats } from "@/lib/data";
+import { eventToRetreatFormat } from "@/data/mockEvents";
 
 export function useEvents(location: string = "San Francisco, CA") {
   const [events, setEvents] = useState<Event[]>([]);
@@ -119,6 +121,45 @@ export function useEvents(location: string = "San Francisco, CA") {
           console.log(`Added ${typeSafePartnerEvents.length} partner events`);
         }
         
+        // Add featured retreats by converting them to event format
+        // This ensures we're using the same data source as the retreats page
+        const featuredRetreats = retreats.filter(r => r.featured).map(retreat => {
+          // Convert retreat to event format
+          return {
+            id: retreat.id,
+            title: retreat.title,
+            shortDescription: retreat.description.substring(0, 120) + (retreat.description.length > 120 ? '...' : ''),
+            description: retreat.description,
+            imageUrl: retreat.image,
+            category: determineRetreatCategory(retreat.category),
+            startDate: new Date(retreat.date),
+            endDate: new Date(new Date(retreat.date).getTime() + (2 * 60 * 60 * 1000)), // 2 hours after start
+            location: {
+              locationType: "venue" as const,
+              name: retreat.location.name,
+              address: retreat.location.address || "",
+              city: retreat.location.city || "",
+              state: retreat.location.state || "",
+              zip: ""
+            },
+            bookingUrl: `/retreat/${retreat.id}`,
+            price: retreat.price.toString(),
+            source: "Sanghos",
+            organizer: {
+              name: retreat.instructor?.name || "Sanghos",
+              website: "/"
+            },
+            capacity: retreat.capacity,
+            remaining: retreat.remaining
+          } as Event;
+        });
+        
+        // Add featured retreats to events list if they exist
+        if (featuredRetreats.length > 0) {
+          console.log(`Added ${featuredRetreats.length} featured retreats as events`);
+          allEvents = [...allEvents, ...featuredRetreats];
+        }
+        
         // Set combined events
         setEvents(allEvents);
         
@@ -166,4 +207,26 @@ function determineCategory(title: string, description?: string): Event['category
   } else {
     return 'workshop'; // Default category
   }
+}
+
+// Helper function to convert retreat categories to event category
+function determineRetreatCategory(categories: string[]): Event['category'] {
+  const categoryMapping: Record<string, Event['category']> = {
+    'Yoga': 'yoga',
+    'Meditation': 'meditation',
+    'Fitness': 'fitness',
+    'Nutrition': 'nutrition',
+    'Workshop': 'workshop',
+    'Retreat': 'retreat',
+    'Online': 'online'
+  };
+  
+  // Find the first matching category, or default to workshop
+  for (const category of categories) {
+    if (categoryMapping[category]) {
+      return categoryMapping[category];
+    }
+  }
+  
+  return 'workshop';
 }
