@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -36,6 +37,12 @@ const Header = () => {
     setIsMobileMenuOpen(false);
   };
 
+  // Check if the user has the wellness practitioner flag in metadata
+  // Since User type doesn't have is_wellness_practitioner by default
+  const isWellnessPractitioner = user && 
+    ((user as any).is_wellness_practitioner === true || 
+     (user.user_metadata && (user.user_metadata as any).is_wellness_practitioner === true));
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}>
       <div className="container mx-auto px-4">
@@ -60,7 +67,7 @@ const Header = () => {
             </Link>
             {user ? (
               <>
-                {user.is_wellness_practitioner && (
+                {isWellnessPractitioner && (
                   <Link to="/host" className="text-sage-700 hover:text-sage-900 transition-colors">
                     Host
                   </Link>
@@ -105,7 +112,7 @@ const Header = () => {
                 </Link>
                 {user ? (
                   <>
-                    {user.is_wellness_practitioner && (
+                    {isWellnessPractitioner && (
                       <Link to="/host" className="text-xl text-sage-800" onClick={closeMobileMenu}>
                         Host
                       </Link>

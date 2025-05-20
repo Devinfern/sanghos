@@ -5,11 +5,11 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import EventList from "@/components/EventList";
 import { events } from "@/data/mockEvents";
-import DateFilter from "@/components/DateFilter";
+import DateFilter, { DateFilterOption } from "@/components/DateFilter";
 
 const Events = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedDateFilter, setSelectedDateFilter] = useState("all");
+  const [selectedDateFilter, setSelectedDateFilter] = useState<DateFilterOption>('all');
   const [customDate, setCustomDate] = useState<Date | undefined>(undefined);
 
   useEffect(() => {
