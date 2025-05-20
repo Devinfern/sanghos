@@ -27,17 +27,19 @@ const partnerRetreats = partnerEvents.map(event => ({
     city: event.location.city || "",
     state: event.location.state || "",
     description: `${event.location.address}, ${event.location.city}, ${event.location.state} ${event.location.zip}`,
+    coordinates: {
+      lat: 34.0736, // Default coordinates for Los Angeles
+      lng: -118.2936
+    }
   },
   instructor: {
     id: "partner-instructor",
     name: event.organizer.name,
     image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&h=80",
-    bio: "",
-    // Add the missing properties required by the Instructor type
+    bio: `${event.organizer.name} is a leading provider of mindfulness and meditation programs.`,
     title: "Partner Organization",
-    specialties: ["Workshop", "Wellness"],
-    expertise: [], // Keep this for backward compatibility if needed
-    yearsExperience: 0
+    specialties: ["Workshop", "Wellness", "Mindfulness"],
+    yearsExperience: 10
   },
   date: event.startDate.toISOString(),
   time: event.startDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
@@ -48,7 +50,7 @@ const partnerRetreats = partnerEvents.map(event => ({
   category: ["Workshop", "Wellness"],
   amenities: [],
   featured: false,
-  isSanghos: false, // Mark as non-Sanghos to appear in partner tab
+  isSanghos: false // Mark as non-Sanghos to appear in partner tab
 }));
 
 // Combine the original retreats with partner retreats

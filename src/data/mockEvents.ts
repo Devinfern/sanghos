@@ -51,7 +51,7 @@ export const partnerEvents = [
     title: "Living Recovery in Unsettling Times",
     shortDescription: "A 6-week educational course that provides support for those on recovery paths during these unsettling times",
     description: "A 6-week educational course that provides support for those on recovery paths during these unsettling times. Many of us in recovery are finding ourselves experiencing heightened anxiety, irritability, and other difficult emotions, with an increased urge to use or engage in behaviors we have found harm us. In this class, we'll work with ways our mindfulness practice supports recovery and wellbeing. All are welcome. No prior experience with mindfulness or meditation necessary.",
-    imageUrl: "https://insightla.org/img/meditation-course.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05",
     category: "workshop",
     startDate: new Date("2025-05-22T14:00:00"),
     endDate: new Date("2025-05-22T16:00:00"),

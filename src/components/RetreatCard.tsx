@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Calendar, Users, Clock, Heart, Share2, BookmarkPlus, ExternalLink } from "lucide-react";
@@ -109,11 +110,7 @@ const RetreatCard = ({
       return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <div 
-              className="cursor-pointer h-full" 
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-            >
+            <div className="cursor-pointer h-full">
               {children}
             </div>
           </DialogTrigger>
@@ -134,8 +131,6 @@ const RetreatCard = ({
       <Link 
         to={`/retreat/${retreat.id}`} 
         className="h-full block"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
       >
         {children}
       </Link>
@@ -147,26 +142,15 @@ const RetreatCard = ({
     return (
       <CardWrapper>
         <Card
-          className={cn(
-            "h-full overflow-hidden flex flex-col md:flex-row border shadow-sm transition-all duration-300 ease-out relative",
-            "opacity-0 animate-fade-up",
-            isHovered && "border-sage-300 shadow-md translate-y-[-4px]"
-          )}
+          className="h-full overflow-hidden flex flex-col md:flex-row border shadow-sm"
           style={{ animationDelay: getAnimationDelay() }}
         >
           {comingSoon && (
-            <div 
-              className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm"
-            >
-              <motion.div
-                initial={{ scale: 1 }}
-                animate={{ scale: isHovered ? 1.05 : 1 }}
-                transition={{ duration: 0.3 }}
-                className="bg-primary/90 text-white px-4 py-2 rounded-full flex items-center mb-3"
-              >
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm">
+              <div className="bg-primary/90 text-white px-4 py-2 rounded-full flex items-center mb-3">
                 <Clock className="h-4 w-4 mr-2" />
                 <span className="font-medium">Coming Soon</span>
-              </motion.div>
+              </div>
               <p className="text-sm text-center px-4">
                 Sign up to be notified when this event becomes available
               </p>
@@ -177,10 +161,7 @@ const RetreatCard = ({
             <OptimizedImage
               src={retreat.image}
               alt={retreat.title}
-              className={cn(
-                "h-full w-full object-cover transition-transform duration-500 ease-out",
-                isHovered ? "scale-105" : "scale-100"
-              )}
+              className="h-full w-full object-cover"
               onLoad={() => setImageLoaded(true)}
             />
             
@@ -216,7 +197,7 @@ const RetreatCard = ({
           </div>
           
           <div className="flex-1 p-5 flex flex-col">
-            <h3 className="text-xl font-semibold mb-2 line-clamp-2 transition-colors duration-300">
+            <h3 className="text-xl font-semibold mb-2 line-clamp-2">
               {retreat.title}
             </h3>
 
@@ -271,7 +252,7 @@ const RetreatCard = ({
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="h-8 w-8 rounded-full transition-all duration-300"
+                        className="h-8 w-8 rounded-full"
                         onClick={handleLike}
                       >
                         <Heart className={cn("h-4 w-4", liked && "fill-rose-500 text-rose-500")} />
@@ -289,7 +270,7 @@ const RetreatCard = ({
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="h-8 w-8 rounded-full transition-all duration-300"
+                        className="h-8 w-8 rounded-full"
                         onClick={handleSave}
                       >
                         <BookmarkPlus className={cn("h-4 w-4", isSaved && "fill-sage-500 text-sage-500")} />
@@ -307,7 +288,7 @@ const RetreatCard = ({
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="h-8 w-8 rounded-full transition-all duration-300"
+                        className="h-8 w-8 rounded-full"
                         onClick={handleShare}
                       >
                         <Share2 className="h-4 w-4" />
@@ -323,7 +304,7 @@ const RetreatCard = ({
               <Button 
                 variant="outline" 
                 size="sm"
-                className="border-primary text-primary hover:bg-primary hover:text-white transition-colors duration-300"
+                className="border-primary text-primary hover:bg-primary hover:text-white"
               >
                 View Details <ExternalLink className="ml-1 h-3 w-3" />
               </Button>
@@ -338,26 +319,15 @@ const RetreatCard = ({
   return (
     <CardWrapper>
       <Card
-        className={cn(
-          "h-full overflow-hidden border shadow-sm transition-all duration-300 ease-out relative",
-          "opacity-0 animate-fade-up",
-          isHovered && "border-sage-300 shadow-md translate-y-[-4px]"
-        )}
+        className="h-full overflow-hidden border shadow-sm"
         style={{ animationDelay: getAnimationDelay() }}
       >
         {comingSoon && (
-          <div 
-            className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm"
-          >
-            <motion.div
-              initial={{ scale: 1 }}
-              animate={{ scale: isHovered ? 1.05 : 1 }}
-              transition={{ duration: 0.3 }}
-              className="bg-primary/90 text-white px-4 py-2 rounded-full flex items-center mb-3"
-            >
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm">
+            <div className="bg-primary/90 text-white px-4 py-2 rounded-full flex items-center mb-3">
               <Clock className="h-4 w-4 mr-2" />
               <span className="font-medium">Coming Soon</span>
-            </motion.div>
+            </div>
             <p className="text-sm text-center px-4">
               We're launching soon! Sign up to be notified when bookings open
             </p>
@@ -368,10 +338,7 @@ const RetreatCard = ({
           <OptimizedImage
             src={retreat.image}
             alt={retreat.title}
-            className={cn(
-              "object-cover w-full h-full transition-transform duration-500 ease-out",
-              isHovered ? "scale-105" : "scale-100" 
-            )}
+            className="object-cover w-full h-full"
             onLoad={() => setImageLoaded(true)}
           />
           
@@ -417,41 +384,25 @@ const RetreatCard = ({
             <Button
               size="icon"
               variant="ghost"
-              className={cn(
-                "h-8 w-8 rounded-full transition-all duration-300",
-                liked ? "bg-rose-500/20" : "bg-white/80 hover:bg-white"
-              )}
+              className="h-8 w-8 rounded-full bg-white/80 hover:bg-white"
               onClick={handleLike}
             >
-              <motion.div 
-                animate={liked ? { scale: [1, 1.2, 1] } : {}} 
-                transition={{ duration: 0.3 }}
-              >
-                <Heart className={cn("h-4 w-4", liked && "fill-rose-500 text-rose-500")} />
-              </motion.div>
+              <Heart className={cn("h-4 w-4", liked && "fill-rose-500 text-rose-500")} />
             </Button>
             
             <Button
               size="icon"
               variant="ghost"
-              className={cn(
-                "h-8 w-8 rounded-full transition-all duration-300",
-                isSaved ? "bg-sage-500/20" : "bg-white/80 hover:bg-white"
-              )}
+              className="h-8 w-8 rounded-full bg-white/80 hover:bg-white"
               onClick={handleSave}
             >
-              <motion.div 
-                animate={isSaved ? { scale: [1, 1.2, 1] } : {}} 
-                transition={{ duration: 0.3 }}
-              >
-                <BookmarkPlus className={cn("h-4 w-4", isSaved && "fill-sage-500 text-sage-500")} />
-              </motion.div>
+              <BookmarkPlus className={cn("h-4 w-4", isSaved && "fill-sage-500 text-sage-500")} />
             </Button>
             
             <Button
               size="icon"
               variant="ghost"
-              className="h-8 w-8 rounded-full transition-all duration-300 bg-white/80 hover:bg-white"
+              className="h-8 w-8 rounded-full bg-white/80 hover:bg-white"
               onClick={handleShare}
             >
               <Share2 className="h-4 w-4" />
@@ -460,7 +411,7 @@ const RetreatCard = ({
         </div>
 
         <CardContent className="p-5">
-          <h3 className="text-xl font-semibold mb-2 line-clamp-2 transition-colors duration-300">
+          <h3 className="text-xl font-semibold mb-2 line-clamp-2">
             {retreat.title}
           </h3>
 
@@ -499,15 +450,10 @@ const RetreatCard = ({
             <p className="font-semibold text-primary">{formatCurrency(retreat.price)}</p>
           </div>
           
-          <div 
-            className={cn(
-              "mt-4 pt-3 border-t border-sage-100 transition-all duration-300",
-              isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-            )}
-          >
+          <div className="mt-4 pt-3 border-t border-sage-100">
             <Button 
               variant="outline" 
-              className="w-full border-primary text-primary hover:bg-primary hover:text-white transition-colors duration-300"
+              className="w-full border-primary text-primary hover:bg-primary hover:text-white"
             >
               View Details <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
             </Button>
