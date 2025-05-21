@@ -13,14 +13,17 @@ export function useEvents(location: string = "San Francisco, CA") {
 
   useEffect(() => {
     const fetchEvents = async () => {
+      // Set loading state at the beginning
       setIsLoading(true);
       setError(null);
       
       try {
         console.log(`Fetching events for location: ${location}`);
-        let allEvents: Event[] = [];
         
-        // 1. Load featured retreats - these are the same ones shown on the Retreats page
+        // Fetch all data sources concurrently for better performance
+        const forumEvents = await loadForumEvents();
+        
+        // 1. Process featured retreats - these are the same ones shown on the Retreats page
         const featuredRetreats = retreats.filter(r => r.featured).map(retreat => {
           // Convert retreat to event format
           return {
@@ -53,14 +56,13 @@ export function useEvents(location: string = "San Francisco, CA") {
         });
         
         console.log(`Loaded ${featuredRetreats.length} featured retreats`);
-        allEvents = [...allEvents, ...featuredRetreats];
         
-        // 2. Load events from the forum_events table through our API wrapper
-        const forumEvents = await loadForumEvents();
+        // 2. Process forum events
+        let transformedForumEvents: Event[] = [];
         
         if (forumEvents && forumEvents.length > 0) {
           // Transform forum events to match the Event type
-          const transformedEvents: Event[] = forumEvents.map(event => {
+          transformedForumEvents = forumEvents.map(event => {
             // Create Date objects for start and end dates
             const startDate = new Date();
             // Parse the day number and month string (e.g., "MAY")
@@ -130,20 +132,20 @@ export function useEvents(location: string = "San Francisco, CA") {
             };
           });
           
-          console.log(`Loaded ${transformedEvents.length} forum events`);
-          allEvents = [...allEvents, ...transformedEvents];
+          console.log(`Loaded ${transformedForumEvents.length} forum events`);
         }
         
-        // Note: Removed all mock partner events in favor of real events
-        
+        // Combine all events
+        const allEvents = [...featuredRetreats, ...transformedForumEvents];
         console.log(`Total events loaded: ${allEvents.length}`);
-        setEvents(allEvents);
         
+        setEvents(allEvents);
       } catch (err: any) {
         console.error("Error fetching events:", err);
         setError(`Failed to fetch events: ${err.message}`);
         setEvents([]);
       } finally {
+        // Always set loading to false when done, regardless of success or failure
         setIsLoading(false);
       }
     };
