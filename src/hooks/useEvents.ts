@@ -4,7 +4,7 @@ import { Event } from "@/types/event";
 import { supabase } from "@/integrations/supabase/client";
 import { loadForumEvents } from "@/lib/api/forum/events";
 import { startOfDay } from "date-fns";
-import { retreats } from "@/lib/data";
+import { fetchSanghosRetreats } from "@/lib/data"; // Changed to import the function, not the static variable
 import { fetchInsightLAEvents } from "@/lib/insightEvents";
 
 export function useEvents(location: string = "San Francisco, CA") {
@@ -33,38 +33,46 @@ export function useEvents(location: string = "San Francisco, CA") {
         
         // Use Promise.allSettled to prevent one failure from blocking others
         const results = await Promise.allSettled([
+          fetchSanghosRetreats(), // Changed to actively fetch retreats
           loadForumEvents(),
           fetchInsightLAEvents()
         ]);
         
         console.log('useEvents: All data sources fetched, processing results');
         
-        // Get featured retreats directly from the imported data
-        console.log('useEvents: Processing featured retreats from imported data');
-        const featuredRetreats = retreats.filter(r => r.featured);
-        console.log(`useEvents: Found ${featuredRetreats.length} featured retreats`);
-        
         // Process results from Promise.allSettled
+        let sanghoRetreats = [];
         let forumEvents = [];
         let insightLARetreats = [];
         
-        // Extract forum events (first promise result)
+        // Extract Sanghos retreats (first promise result)
         if (results[0].status === 'fulfilled') {
-          forumEvents = results[0].value || [];
+          sanghoRetreats = results[0].value || [];
+          console.log(`useEvents: Received ${sanghoRetreats?.length || 0} Sanghos retreats`);
+        } else {
+          console.error('useEvents: Failed to fetch Sanghos retreats:', results[0].reason);
+        }
+        
+        // Extract forum events (second promise result)
+        if (results[1].status === 'fulfilled') {
+          forumEvents = results[1].value || [];
           console.log(`useEvents: Received ${forumEvents?.length || 0} forum events`);
         } else {
-          console.error('useEvents: Failed to fetch forum events:', results[0].reason);
+          console.error('useEvents: Failed to fetch forum events:', results[1].reason);
         }
         
-        // Extract InsightLA events (second promise result)
-        if (results[1].status === 'fulfilled') {
-          insightLARetreats = results[1].value || [];
+        // Extract InsightLA events (third promise result)
+        if (results[2].status === 'fulfilled') {
+          insightLARetreats = results[2].value || [];
           console.log(`useEvents: Received ${insightLARetreats?.length || 0} InsightLA events`);
         } else {
-          console.error('useEvents: Failed to fetch InsightLA events:', results[1].reason);
+          console.error('useEvents: Failed to fetch InsightLA events:', results[2].reason);
         }
         
-        // 1. Process featured retreats - these are the same ones shown on the Retreats page
+        // 1. Process featured retreats - explicitly filter the actual loaded data
+        const featuredRetreats = sanghoRetreats.filter(retreat => retreat.featured);
+        console.log(`useEvents: Found ${featuredRetreats.length} featured retreats after filtering`);
+        
         const transformedRetreats = featuredRetreats.map(retreat => {
           // Convert retreat to event format
           return {

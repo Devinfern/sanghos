@@ -34,6 +34,10 @@ const InsightLAEventLoader: React.FC = () => {
           }
         } catch (error) {
           console.error("InsightLAEventLoader: Failed to fetch InsightLA events", error);
+          toast.error("Failed to load InsightLA events", {
+            description: "Please check network connection or try again later",
+            duration: 5000,
+          });
         }
       };
       

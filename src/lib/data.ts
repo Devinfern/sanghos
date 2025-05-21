@@ -1,3 +1,4 @@
+
 export type Instructor = {
   id: string;
   name: string;
@@ -51,40 +52,71 @@ export const instructors: Instructor[] = [
   }
 ];
 
-// This will be populated dynamically from InsightLA events
-export let retreats: Retreat[] = [];
-
-// Placeholder retreats until the real ones are loaded
-const placeholderRetreats: Retreat[] = [
-  {
-    id: "insight-la-1",
-    title: "Loading InsightLA Events...",
-    description: "Please wait while we load the latest mindfulness retreats from InsightLA.",
-    image: "https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?q=80&w=2070&auto=format&fit=crop",
-    additionalImages: [],
-    location: {
-      name: "InsightLA",
-      address: "4300 Melrose Ave",
-      city: "Los Angeles",
-      state: "CA",
-      description: "InsightLA East Hollywood Center",
-    },
-    instructor: instructors[0],
-    date: new Date().toISOString().split('T')[0],
-    time: "10:00 AM",
-    duration: "Full day",
-    price: 180,
-    capacity: 25,
-    remaining: 15,
-    category: ["Meditation", "Mindfulness"],
-    amenities: ["Meditation cushions", "Tea service"],
-    featured: true,
-    isSanghos: false
+// Create a new async function to fetch retreats from Supabase
+export const fetchSanghosRetreats = async (): Promise<Retreat[]> => {
+  try {
+    // Since we're not actually fetching from the database in this demo,
+    // we'll just return placeholder retreats for now
+    return [
+      {
+        id: "sanghos-retreat-1",
+        title: "Forest Meditation Weekend",
+        description: "Immerse yourself in the serene beauty of nature with our forest meditation weekend. Practice mindfulness among ancient trees and gentle streams.",
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070&auto=format&fit=crop",
+        additionalImages: [],
+        location: {
+          name: "Redwood Sanctuary",
+          address: "123 Forest Path",
+          city: "Mill Valley",
+          state: "CA",
+          description: "A secluded meditation center nestled in redwood groves",
+        },
+        instructor: instructors[0],
+        date: new Date().toISOString().split('T')[0],
+        time: "9:00 AM",
+        duration: "Weekend",
+        price: 299,
+        capacity: 20,
+        remaining: 8,
+        category: ["Meditation", "Nature", "Wellness"],
+        amenities: ["Meals included", "Accommodation", "Guided hikes"],
+        featured: true,
+        isSanghos: true
+      },
+      {
+        id: "sanghos-retreat-2",
+        title: "Urban Mindfulness Day",
+        description: "Find peace in the midst of city life. This one-day retreat offers tools for bringing mindfulness into your everyday urban environment.",
+        image: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=2064&auto=format&fit=crop",
+        additionalImages: [],
+        location: {
+          name: "Downtown Zen Center",
+          address: "456 Calm Street",
+          city: "San Francisco",
+          state: "CA",
+          description: "A peaceful oasis in the heart of the city",
+        },
+        instructor: instructors[0],
+        date: new Date(Date.now() + 14*24*60*60*1000).toISOString().split('T')[0], // 2 weeks from now
+        time: "10:00 AM",
+        duration: "Full day",
+        price: 150,
+        capacity: 30,
+        remaining: 15,
+        category: ["Mindfulness", "Workshop"],
+        amenities: ["Lunch included", "Journal materials"],
+        featured: true,
+        isSanghos: true
+      }
+    ];
+  } catch (error) {
+    console.error("Error fetching Sanghos retreats:", error);
+    return [];
   }
-];
+};
 
-// Initialize with placeholder retreats
-retreats = [...placeholderRetreats];
+// This will now be populated dynamically from InsightLA events and won't be used as a static import
+export let retreats: Retreat[] = [];
 
 export const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat('en-US', {
