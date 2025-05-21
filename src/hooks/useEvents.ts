@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { loadForumEvents } from "@/lib/api/forum/events";
 import { startOfDay } from "date-fns";
 import { retreats } from "@/lib/data";
+import { fetchInsightLAEvents } from "@/lib/insightEvents";
 
 export function useEvents(location: string = "San Francisco, CA") {
   const [events, setEvents] = useState<Event[]>([]);
@@ -30,16 +31,38 @@ export function useEvents(location: string = "San Francisco, CA") {
         // Fetch all data sources concurrently for better performance
         console.log('useEvents: Starting concurrent data fetching');
         
-        const fetchForumEvents = loadForumEvents();
+        // Use Promise.allSettled to prevent one failure from blocking others
+        const results = await Promise.allSettled([
+          loadForumEvents(),
+          fetchInsightLAEvents()
+        ]);
+        
+        console.log('useEvents: All data sources fetched, processing results');
         
         // Get featured retreats directly from the imported data
         console.log('useEvents: Processing featured retreats from imported data');
         const featuredRetreats = retreats.filter(r => r.featured);
         console.log(`useEvents: Found ${featuredRetreats.length} featured retreats`);
         
-        // Wait for forum events to complete loading
-        const forumEvents = await fetchForumEvents;
-        console.log(`useEvents: Received ${forumEvents?.length || 0} forum events`);
+        // Process results from Promise.allSettled
+        let forumEvents = [];
+        let insightLARetreats = [];
+        
+        // Extract forum events (first promise result)
+        if (results[0].status === 'fulfilled') {
+          forumEvents = results[0].value || [];
+          console.log(`useEvents: Received ${forumEvents?.length || 0} forum events`);
+        } else {
+          console.error('useEvents: Failed to fetch forum events:', results[0].reason);
+        }
+        
+        // Extract InsightLA events (second promise result)
+        if (results[1].status === 'fulfilled') {
+          insightLARetreats = results[1].value || [];
+          console.log(`useEvents: Received ${insightLARetreats?.length || 0} InsightLA events`);
+        } else {
+          console.error('useEvents: Failed to fetch InsightLA events:', results[1].reason);
+        }
         
         // 1. Process featured retreats - these are the same ones shown on the Retreats page
         const transformedRetreats = featuredRetreats.map(retreat => {
@@ -153,8 +176,50 @@ export function useEvents(location: string = "San Francisco, CA") {
           console.log(`useEvents: Transformed ${transformedForumEvents.length} forum events`);
         }
         
+        // 3. Process InsightLA events
+        let transformedInsightLAEvents: Event[] = [];
+        
+        if (insightLARetreats && insightLARetreats.length > 0) {
+          console.log('useEvents: Processing InsightLA events data', insightLARetreats);
+          
+          // Transform InsightLA events to match the Event type
+          transformedInsightLAEvents = insightLARetreats.map(retreat => {
+            return {
+              id: retreat.id,
+              title: retreat.title,
+              shortDescription: retreat.shortDescription || retreat.description.substring(0, 120),
+              description: retreat.description,
+              imageUrl: retreat.image,
+              category: determineRetreatCategory(retreat.category),
+              startDate: retreat.startDate || new Date(retreat.date),
+              endDate: retreat.endDate || new Date(new Date(retreat.date).getTime() + (2 * 60 * 60 * 1000)),
+              location: {
+                locationType: "venue" as const,
+                name: retreat.location.name,
+                address: retreat.location.address || "",
+                city: retreat.location.city || "",
+                state: retreat.location.state || "",
+                zip: ""
+              },
+              bookingUrl: retreat.bookingUrl || retreat.sourceUrl,
+              price: retreat.price.toString(),
+              source: "InsightLA",
+              organizer: {
+                name: retreat.instructor?.name || "InsightLA",
+                website: "https://insightla.org"
+              },
+              capacity: retreat.capacity,
+              remaining: retreat.remaining
+            } as Event;
+          });
+          
+          console.log(`useEvents: Transformed ${transformedInsightLAEvents.length} InsightLA events`);
+        } else {
+          console.warn('useEvents: No InsightLA events were loaded');
+        }
+        
         // Combine all events
-        const allEvents = [...transformedRetreats, ...transformedForumEvents];
+        const allEvents = [...transformedRetreats, ...transformedForumEvents, ...transformedInsightLAEvents];
         console.log(`useEvents: Total events loaded: ${allEvents.length}`);
         
         if (allEvents.length === 0) {
