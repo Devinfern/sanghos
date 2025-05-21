@@ -1,34 +1,25 @@
 
 import React, { useEffect, useState } from 'react';
-import { fetchInsightLAEvents } from '@/lib/insightEvents';
-import { retreats } from '@/lib/data';
+import { toast } from "sonner";
+import { useLocation } from 'react-router-dom';
 
+/**
+ * This component helps debug the event loading issue
+ * It monitors route changes and logs relevant information
+ */
 const InsightLAEventLoader: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
-
+  const location = useLocation();
+  const [previousPath, setPreviousPath] = useState<string | null>(null);
+  
   useEffect(() => {
-    const loadEvents = async () => {
-      try {
-        const insightEvents = await fetchInsightLAEvents();
-        
-        // Replace the placeholder retreats with the fetched events
-        if (insightEvents.length > 0) {
-          // This works because we're modifying the array reference that's exported from data.ts
-          retreats.length = 0; // Clear the array
-          retreats.push(...insightEvents); // Add the new events
-        }
-      } catch (error) {
-        console.error('Failed to load InsightLA events:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    console.log(`Navigation detected: ${previousPath || 'initial'} → ${location.pathname}`);
+    
+    // Track the previous path for navigation debugging
+    setPreviousPath(location.pathname);
+    
+  }, [location.pathname]);
 
-    loadEvents();
-  }, []);
-
-  // This component doesn't render anything
-  return null;
+  return null; // This is a non-visual component
 };
 
 export default InsightLAEventLoader;

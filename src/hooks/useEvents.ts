@@ -10,21 +10,39 @@ export function useEvents(location: string = "San Francisco, CA") {
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Add a mount tracking ref to help with debugging
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // Track that the component has mounted
+    setMounted(true);
+    console.log('useEvents: useEffect triggered - Initial mount');
+    
     const fetchEvents = async () => {
       // Set loading state at the beginning
       setIsLoading(true);
       setError(null);
       
       try {
-        console.log(`Fetching events for location: ${location}`);
+        console.log(`useEvents: Fetching events for location: ${location}`);
         
         // Fetch all data sources concurrently for better performance
-        const forumEvents = await loadForumEvents();
+        console.log('useEvents: Starting concurrent data fetching');
+        
+        const fetchForumEvents = loadForumEvents();
+        
+        // Get featured retreats directly from the imported data
+        console.log('useEvents: Processing featured retreats from imported data');
+        const featuredRetreats = retreats.filter(r => r.featured);
+        console.log(`useEvents: Found ${featuredRetreats.length} featured retreats`);
+        
+        // Wait for forum events to complete loading
+        const forumEvents = await fetchForumEvents;
+        console.log(`useEvents: Received ${forumEvents?.length || 0} forum events`);
         
         // 1. Process featured retreats - these are the same ones shown on the Retreats page
-        const featuredRetreats = retreats.filter(r => r.featured).map(retreat => {
+        const transformedRetreats = featuredRetreats.map(retreat => {
           // Convert retreat to event format
           return {
             id: retreat.id,
@@ -55,7 +73,7 @@ export function useEvents(location: string = "San Francisco, CA") {
           } as Event;
         });
         
-        console.log(`Loaded ${featuredRetreats.length} featured retreats`);
+        console.log(`useEvents: Transformed ${transformedRetreats.length} featured retreats`);
         
         // 2. Process forum events
         let transformedForumEvents: Event[] = [];
@@ -132,26 +150,36 @@ export function useEvents(location: string = "San Francisco, CA") {
             };
           });
           
-          console.log(`Loaded ${transformedForumEvents.length} forum events`);
+          console.log(`useEvents: Transformed ${transformedForumEvents.length} forum events`);
         }
         
         // Combine all events
-        const allEvents = [...featuredRetreats, ...transformedForumEvents];
-        console.log(`Total events loaded: ${allEvents.length}`);
+        const allEvents = [...transformedRetreats, ...transformedForumEvents];
+        console.log(`useEvents: Total events loaded: ${allEvents.length}`);
+        
+        if (allEvents.length === 0) {
+          console.warn('useEvents: No events were loaded from any source');
+        }
         
         setEvents(allEvents);
       } catch (err: any) {
-        console.error("Error fetching events:", err);
+        console.error("useEvents: Error fetching events:", err);
         setError(`Failed to fetch events: ${err.message}`);
         setEvents([]);
       } finally {
         // Always set loading to false when done, regardless of success or failure
         setIsLoading(false);
+        console.log('useEvents: Fetching complete, isLoading set to false');
       }
     };
     
     fetchEvents();
-  }, [location]);
+    
+    // Cleanup function
+    return () => {
+      console.log('useEvents: Component unmounting');
+    };
+  }, [location]); // Only re-run if location changes
 
   return { events, isLoading, error };
 }
