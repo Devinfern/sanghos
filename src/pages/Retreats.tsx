@@ -1,17 +1,16 @@
 
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Info, X, Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import RetreatCard from "@/components/RetreatCard";
-import SanghosIcon from "@/components/SanghosIcon";
 import RetreatHero from "@/components/retreats/RetreatHero";
+import RetreatFilters from "@/components/retreats/RetreatFilters";
+import RetreatResultsHeader from "@/components/retreats/RetreatResults";
+import RetreatLoadingState from "@/components/retreats/RetreatLoadingState";
+import NoRetreatsFound from "@/components/retreats/NoRetreatsFound";
 import { retreats } from "@/lib/data";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { partnerEvents, eventToRetreatFormat } from "@/data/mockEvents";
 import { ensureValidCategory } from "@/mockEvents";
 
@@ -133,86 +132,25 @@ const Retreats = () => {
         />
         
         <div className="container px-4 md:px-6 py-10 flex-grow">
-          {hasFilters && (
-            <Card className="mb-6 overflow-hidden shadow-md">
-              <CardContent className="p-4">
-                <div className="flex items-center">
-                  <div className="flex items-center flex-wrap gap-2">
-                    <span className="text-sm text-muted-foreground mr-2">Active filters:</span>
-                    
-                    {searchQuery && (
-                      <Badge variant="secondary" className="gap-1 pl-2 pr-1 py-1">
-                        Search: {searchQuery.length > 15 ? `${searchQuery.substring(0, 15)}...` : searchQuery}
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="h-5 w-5 p-0 ml-1 text-muted-foreground hover:text-foreground"
-                          onClick={() => setSearchQuery("")}
-                        >
-                          <X className="h-3 w-3" />
-                        </Button>
-                      </Badge>
-                    )}
-                    
-                    {selectedCategory && (
-                      <Badge variant="secondary" className="gap-1 pl-2 pr-1 py-1">
-                        Category: {selectedCategory}
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="h-5 w-5 p-0 ml-1 text-muted-foreground hover:text-foreground"
-                          onClick={() => setSelectedCategory(null)}
-                        >
-                          <X className="h-3 w-3" />
-                        </Button>
-                      </Badge>
-                    )}
-                    
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="text-sm text-muted-foreground hover:text-primary ml-auto"
-                      onClick={resetFilters}
-                    >
-                      <X className="h-3.5 w-3.5 mr-1" />
-                      Clear all filters
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
+          {/* Filters section */}
+          <RetreatFilters 
+            searchQuery={searchQuery}
+            selectedCategory={selectedCategory}
+            setSearchQuery={setSearchQuery}
+            setSelectedCategory={setSelectedCategory}
+            resetFilters={resetFilters}
+          />
 
-          <div className="mb-4 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <p className="font-medium">
-                Results
-              </p>
-              <Badge variant="outline" className="bg-white text-muted-foreground">
-                {isLoadingEvents ? '...' : 
-                  `${filteredRetreats.length} ${filteredRetreats.length === 1 ? 'retreat' : 'retreats'}`
-                }
-              </Badge>
-            </div>
-            
-            {activeTab === "sanghos" && (
-              <div className="flex items-center text-sm text-muted-foreground">
-                <SanghosIcon className="h-4 w-4 mr-1 text-sage-600" />
-                <span>Sanghos organized retreats</span>
-              </div>
-            )}
-            {activeTab === "thirdparty" && (
-              <div className="flex items-center text-sm text-muted-foreground">
-                <span>Partner retreats</span>
-              </div>
-            )}
-          </div>
+          {/* Results header */}
+          <RetreatResultsHeader 
+            filteredCount={filteredRetreats.length} 
+            activeTab={activeTab}
+            isLoadingEvents={isLoadingEvents}
+          />
 
+          {/* Content section */}
           {isLoadingEvents ? (
-            <div className="flex flex-col items-center justify-center py-20">
-              <Loader2 className="h-10 w-10 text-sage-600 animate-spin mb-4" />
-              <p className="text-lg text-sage-600">Loading retreats from InsightLA...</p>
-            </div>
+            <RetreatLoadingState />
           ) : filteredRetreats.length > 0 ? (
             <div 
               className={cn(
@@ -230,25 +168,7 @@ const Retreats = () => {
               ))}
             </div>
           ) : (
-            <Card className="text-center py-12 my-8 bg-white shadow-sm">
-              <CardContent className="pt-0">
-                <div className="flex flex-col items-center">
-                  <div className="rounded-full bg-sage-100 p-4 mb-4">
-                    <Info className="h-6 w-6 text-sage-600" />
-                  </div>
-                  <h3 className="text-xl font-medium mb-2">No retreats found</h3>
-                  <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-                    We couldn't find any retreats matching your search criteria. Try adjusting your filters or search query.
-                  </p>
-                  <Button 
-                    variant="default" 
-                    onClick={resetFilters}
-                  >
-                    Reset filters
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <NoRetreatsFound resetFilters={resetFilters} />
           )}
         </div>
       </main>
