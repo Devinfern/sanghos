@@ -115,11 +115,9 @@ const Header = () => {
     if (!mobileMenuOpen) return null;
     
     return createPortal(
-      // Removed transform from the main container to avoid stacking context issues
-      // Using static positioning and full-screen absolute dimensions
+      // Fixed position container covering the entire viewport
       <div 
         className="fixed inset-0 bg-white z-[1000] flex flex-col pt-20 pb-6 px-6 md:hidden"
-        style={{ isolation: 'isolate' }} // Ensures this creates its own stacking context
       >
         <div className="flex flex-col space-y-6 mt-4">
           {/* Navigation links */}
@@ -383,7 +381,6 @@ const Header = () => {
             onClick={toggleMobileMenu}
             className="md:hidden flex items-center justify-center z-[1003] bg-white rounded-full w-10 h-10 shadow-sm relative"
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-            style={{ isolation: 'isolate' }} // Creates its own stacking context
           >
             {mobileMenuOpen ? (
               <X size={24} className="text-slate-800" />
