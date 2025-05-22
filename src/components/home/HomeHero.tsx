@@ -33,7 +33,7 @@ const HomeHero = () => {
       {/* Background subtle shapes */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <div className="absolute h-96 w-96 rounded-full bg-brand-primary/5 -top-20 -left-20 blur-3xl"></div>
-        <div className="absolute h-96 w-96 rounded-full bg-brand-peach/5 -bottom-20 -right-20 blur-3xl"></div>
+        <div className="absolute h-100vh w-96 rounded-full bg-brand-peach/5 -bottom-20 -right-20 blur-3xl"></div>
       </div>
 
       <div className="container relative z-10 mx-auto px-4 md:px-6">
