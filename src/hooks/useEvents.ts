@@ -10,6 +10,7 @@ import {
   transformForumEvent,
   transformInsightLARetreatToEvent
 } from "@/lib/transformers/eventTransformers";
+import { isPast, startOfDay, isValid, isSameDay } from "date-fns";
 
 /**
  * Hook to fetch events from multiple sources
@@ -101,11 +102,28 @@ export function useEvents(location: string = "San Francisco, CA") {
         const allEvents = [...transformedRetreats, ...transformedForumEvents, ...transformedInsightLAEvents];
         console.log(`useEvents: Total events loaded: ${allEvents.length}`);
         
-        if (allEvents.length === 0) {
-          console.warn('useEvents: No events were loaded from any source');
+        // Filter out past events
+        const today = startOfDay(new Date());
+        console.log('useEvents: Filtering events. Today is:', today.toISOString());
+        
+        const futureEvents = allEvents.filter(event => {
+          // Ensure event.startDate is a valid Date object before comparison
+          if (!event.startDate || !isValid(event.startDate)) {
+            console.warn('useEvents: Invalid startDate found for event:', event.id, event.startDate);
+            return false; // Exclude events with invalid dates
+          }
+          
+          // Include events where startDate is today or in the future
+          return isSameDay(event.startDate, today) || !isPast(event.startDate);
+        });
+        
+        console.log(`useEvents: Total future events after filtering: ${futureEvents.length} (filtered out ${allEvents.length - futureEvents.length} past events)`);
+        
+        if (futureEvents.length === 0) {
+          console.warn('useEvents: No future events were found after filtering');
         }
         
-        setEvents(allEvents);
+        setEvents(futureEvents);
       } catch (err: any) {
         console.error("useEvents: Error fetching events:", err);
         setError(`Failed to fetch events: ${err.message}`);
