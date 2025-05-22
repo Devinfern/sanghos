@@ -72,7 +72,7 @@ const HomeCommunitySection = () => {
                 <p className="text-white/80 mb-6">
                   Share your space and join our community of hosts offering transformative retreat venues.
                 </p>
-                <Button variant="outline" className="border-white text-white hover:bg-white/10 font-medium group">
+                <Button variant="outline" className="border-white font-medium group text-[#4b4b4b] bg-slate-50">
                   Apply Now
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
@@ -96,7 +96,7 @@ const HomeCommunitySection = () => {
                 <p className="text-white/80 mb-6">
                   Are you a wellness practitioner? Join our instructor community and share your expertise.
                 </p>
-                <Button variant="outline" className="border-white text-white hover:bg-white/10 font-medium group">
+                <Button variant="outline" className="border-white text-white font-medium group bg-slate-50">
                   Apply Now
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
