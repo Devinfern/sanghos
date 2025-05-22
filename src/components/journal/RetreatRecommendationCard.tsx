@@ -63,37 +63,36 @@ const RetreatRecommendationCard = ({ recommendation, index, onNavigate }: Retrea
           
           <div className={cn("p-5 space-y-4", image ? "md:w-3/4" : "w-full")}>
             <div className="flex justify-between items-start gap-3">
-              <h3 className="font-semibold text-xl text-sage-900 leading-tight">{title}</h3>
+              <div>
+                <div className="text-sm font-medium text-sage-600 mb-2">
+                  {date}
+                </div>
+                <h3 className="font-semibold text-xl text-gray-800 leading-tight">{title}</h3>
+              </div>
               <div className={`px-3 py-1 rounded-full bg-gradient-to-r ${getScoreGradient(matchScore)} text-white font-medium text-sm shrink-0`}>
                 {Math.round(matchScore * 100)}% match
               </div>
             </div>
             
             <div className="space-y-1">
-              <p className="text-sage-700">{reason}</p>
+              <p className="text-gray-700">{reason}</p>
               
               {description && (
-                <p className="text-sage-600 text-sm line-clamp-2 mt-1">{description}</p>
+                <p className="text-gray-600 text-sm line-clamp-2 mt-1">{description}</p>
               )}
             </div>
             
-            {(location || date || time) && (
+            {(location || time) && (
               <div className="flex flex-wrap gap-4 bg-sage-50/70 p-3 rounded-lg">
                 {location && (
-                  <div className="flex items-center text-sage-700">
-                    <MapPin className="h-4 w-4 mr-1.5 flex-shrink-0 text-sage-500" />
+                  <div className="flex items-center text-gray-600">
+                    <MapPin className="h-3.5 w-3.5 mr-1.5 flex-shrink-0 text-gray-400" />
                     <span className="text-sm">{location}</span>
                   </div>
                 )}
-                {date && (
-                  <div className="flex items-center text-sage-700">
-                    <Calendar className="h-4 w-4 mr-1.5 flex-shrink-0 text-sage-500" />
-                    <span className="text-sm">{date}</span>
-                  </div>
-                )}
                 {time && (
-                  <div className="flex items-center text-sage-700">
-                    <Clock className="h-4 w-4 mr-1.5 flex-shrink-0 text-sage-500" />
+                  <div className="flex items-center text-gray-600">
+                    <Clock className="h-3.5 w-3.5 mr-1.5 flex-shrink-0 text-gray-400" />
                     <span className="text-sm">{time}</span>
                   </div>
                 )}
@@ -104,7 +103,7 @@ const RetreatRecommendationCard = ({ recommendation, index, onNavigate }: Retrea
               <Button
                 variant="outline"
                 onClick={() => onNavigate(retreatId)}
-                className="border-sage-300 text-sage-700 hover:bg-sage-50 hover:text-sage-900 group"
+                className="border-sage-200 text-sage-700 hover:bg-sage-50 hover:text-sage-900 group"
               >
                 <span className="flex items-center gap-2">
                   {url ? (

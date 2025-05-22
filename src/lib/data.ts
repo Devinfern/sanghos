@@ -1,3 +1,4 @@
+
 export type Instructor = {
   id: string;
   name: string;
@@ -7,6 +8,18 @@ export type Instructor = {
   image: string;
   yearsExperience: number;
 };
+
+export interface Location {
+  name: string;
+  address: string;
+  city: string;
+  state: string;
+  description: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
+}
 
 export interface Retreat {
   id: string;
@@ -34,18 +47,6 @@ export interface Retreat {
   };
   source?: string;
 }
-
-export const instructors: Instructor[] = [
-  {
-    id: "insight-la",
-    name: "InsightLA",
-    title: "Mindfulness Organization",
-    bio: "InsightLA is a non-profit mindfulness meditation center teaching the art of mindfulness and compassion. They offer classes, groups, workshops and retreats for developing greater awareness, compassion, resilience, and well-being.",
-    specialties: ["Meditation", "Mindfulness", "Buddhist Practice", "Wellness"],
-    image: "https://images.squarespace-cdn.com/content/v1/5c7feb97797f744d5f1c68a7/1553558094608-3P4IDOETDRUGBVPU5QQR/InsightLA_Logo_FullColor.jpg",
-    yearsExperience: 15
-  }
-];
 
 // Create a new async function to fetch retreats from Supabase
 export const fetchSanghosRetreats = async (): Promise<Retreat[]> => {

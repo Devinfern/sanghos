@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, Users } from "lucide-react";
 import { Retreat } from "@/lib/data";
 import SanghosIcon from "./SanghosIcon";
+import { motion } from "framer-motion";
 
 // Location interface for the userLocation prop
 interface UserLocation {
@@ -30,73 +31,102 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
   viewMode = "grid", // Default to grid
   userLocation = null // Default to null
 }) => {
-  const isEven = index % 2 === 0;
-
   // Determine if this is a list view or grid view
   const isList = viewMode === "list";
 
+  const formatShortDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('en-US', { 
+      month: 'short', 
+      day: 'numeric', 
+      year: 'numeric' 
+    }).format(date);
+  };
+
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: index * 0.1 }}
       className={cn(
-        "bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105",
-        isEven && !isList ? "transform translate-y-2" : "",
-        comingSoon ? "opacity-90" : "",
+        "h-full",
         isList ? "flex flex-col md:flex-row" : ""
       )}
     >
       <div className={cn(
-        "relative overflow-hidden",
-        isList ? "md:w-1/3 h-60 md:h-auto" : "h-60"
+        "bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300",
+        isList ? "flex flex-col md:flex-row w-full" : "flex flex-col h-full"
       )}>
-        <img
-          src={retreat.image}
-          alt={retreat.title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-        />
-        {comingSoon && (
-          <div className="absolute top-3 left-3">
-            <Badge className="bg-blue-500 text-white">Coming Soon</Badge>
-          </div>
-        )}
-        {retreat.isSanghos && (
-          <div className="absolute bottom-3 right-3 flex items-center bg-white text-sage-500 rounded-full px-3 py-1 text-sm font-medium">
-            <SanghosIcon className="h-4 w-4 mr-1" />
-            <span>Sanghos</span>
-          </div>
-        )}
-      </div>
-      <div className={cn(
-        "p-5",
-        isList ? "md:w-2/3" : ""
-      )}>
-        <h3 className="text-xl font-semibold text-gray-800 mb-2 line-clamp-1">{retreat.title}</h3>
-        <p className="text-gray-600 text-sm line-clamp-2">{retreat.description}</p>
-
-        <div className="flex items-center mt-4 text-gray-500">
-          <Calendar className="h-4 w-4 mr-2" />
-          <span className="text-sm">{retreat.date}</span>
-        </div>
-
-        <div className="flex items-center mt-2 text-gray-500">
-          <MapPin className="h-4 w-4 mr-2" />
-          <span className="text-sm line-clamp-1">{retreat.location.city}, {retreat.location.state}</span>
-        </div>
-
-        <div className="flex items-center mt-2 text-gray-500">
-          <Users className="h-4 w-4 mr-2" />
-          <span className="text-sm">{retreat.remaining} spots left</span>
+        <div className={cn(
+          "relative overflow-hidden",
+          isList ? "md:w-2/5 h-60 md:h-auto" : "h-52"
+        )}>
+          <img
+            src={retreat.image}
+            alt={retreat.title}
+            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+          />
+          
+          {comingSoon && (
+            <div className="absolute top-3 left-3">
+              <Badge className="bg-blue-500 text-white font-medium">Coming Soon</Badge>
+            </div>
+          )}
+          
+          {retreat.isSanghos && (
+            <div className="absolute bottom-3 right-3">
+              <div className="flex items-center bg-white/90 backdrop-blur-sm text-sage-600 rounded-full px-3 py-1 text-xs font-medium">
+                <SanghosIcon className="h-3.5 w-3.5 mr-1" />
+                <span>Sanghos</span>
+              </div>
+            </div>
+          )}
         </div>
         
-        {/* Update the Link to use /retreat/ prefix for all retreats */}
-        <Link to={`/retreat/${retreat.id}`}>
-          <Button
-            className="w-full mt-6 relative overflow-hidden bg-sage-600 hover:bg-sage-700 text-white"
-          >
-            {comingSoon ? "View Details" : "Book Now"}
-          </Button>
-        </Link>
+        <div className={cn(
+          "flex flex-col p-5",
+          isList ? "md:w-3/5" : "",
+          "flex-grow justify-between"
+        )}>
+          <div className="space-y-3 mb-auto">
+            <div className="text-sm font-medium text-sage-600">
+              {formatShortDate(retreat.date)}
+            </div>
+            
+            <h3 className="text-lg font-semibold text-gray-800 line-clamp-2">
+              {retreat.title}
+            </h3>
+            
+            <p className="text-sm text-gray-600 line-clamp-2">
+              {retreat.description}
+            </p>
+          </div>
+          
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <div className="flex flex-wrap text-sm text-gray-500 gap-y-2">
+              <div className="flex items-center w-full sm:w-auto sm:mr-4">
+                <MapPin className="h-3.5 w-3.5 mr-1.5 flex-shrink-0" />
+                <span className="truncate">{retreat.location.city}, {retreat.location.state}</span>
+              </div>
+              
+              <div className="flex items-center w-full sm:w-auto">
+                <Users className="h-3.5 w-3.5 mr-1.5 flex-shrink-0" />
+                <span>{retreat.remaining} spots left</span>
+              </div>
+            </div>
+            
+            <Link to={`/retreat/${retreat.id}`} className="block mt-4">
+              <Button 
+                variant="outline" 
+                className="w-full bg-white hover:bg-sage-50 border-sage-200 text-sage-700 hover:text-sage-800 transition-colors"
+              >
+                View Details
+              </Button>
+            </Link>
+          </div>
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
