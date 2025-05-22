@@ -389,7 +389,7 @@ const About = () => {
                   </a>
                 </Button>
                 <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/10 group rounded-full" asChild>
-                  <a href="/host/register" className="bg-brand-sand text-white hover:bg-brand-sand/0 hover:-sm hover:translate-y-[-1px] active:translate-y-0 [&_svg]:transition-transform hover:[&_svg]:translate-x-0.5\",\n">
+                  <a href="/host/register" className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium rounded-full">
                     Become a Host
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </a>
