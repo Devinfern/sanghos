@@ -1,4 +1,8 @@
+
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
 const HomeRetreatTypes = () => {
   // Animation variants for container
   const containerVariants = {
@@ -45,7 +49,7 @@ const HomeRetreatTypes = () => {
               Our Approach
             </motion.span>
             
-            <motion.h2 className="text-4xl md:text-5xl font-bold text-brand-dark mb-6 leading-tight" variants={itemVariants}>We want to make wellness retreats more approachable and accessible. </motion.h2>
+            <motion.h2 className="text-4xl md:text-5xl font-bold text-brand-dark mb-6 leading-tight" variants={itemVariants}>We want to make wellness retreats more approachable and accessible. </motion.h2>
             
             <motion.p className="text-xl text-brand-slate mb-8" variants={itemVariants}>
               Through innovative wellness practices, building community connections, and creating accessible retreat 
@@ -54,9 +58,16 @@ const HomeRetreatTypes = () => {
             </motion.p>
             
             <motion.div variants={itemVariants}>
-              <a href="/retreats" className="inline-block bg-[#D2EF9A] hover:bg-[#C2E280] text-brand-dark font-medium px-8 py-4 rounded-full transition-colors">
-                Learn More
-              </a>
+              <Button 
+                size="lg" 
+                className="bg-brand-primary hover:bg-brand-primary/90 text-white group rounded-full"
+                asChild
+              >
+                <a href="/retreats">
+                  Learn More
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </a>
+              </Button>
             </motion.div>
           </motion.div>
           
