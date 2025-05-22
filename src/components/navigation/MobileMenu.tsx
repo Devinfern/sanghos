@@ -35,6 +35,13 @@ export const MobileMenu = ({
   };
 
   return createPortal(
+    /* 
+      IMPORTANT Z-INDEX FIX:
+      The mobile menu has z-[1000], which is lower than the header's new z-[2000].
+      Since the mobile menu is rendered directly to the document body via Portal,
+      it exists outside the header's stacking context hierarchy.
+      The header (z-[2000]) and its children appear above this menu overlay.
+    */
     <div 
       className="fixed inset-0 bg-white z-[1000] flex flex-col pt-20 pb-6 px-6 md:hidden"
     >

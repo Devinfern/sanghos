@@ -54,9 +54,15 @@ const Header = () => {
 
   return (
     <>
+      {/* 
+        IMPORTANT Z-INDEX FIX:
+        Increased the header's z-index from z-50 to z-[2000] to create a higher stacking context.
+        This ensures the header and its children (logo and menu toggle) appear above the mobile menu
+        which is rendered at the document body level with z-[1000].
+      */}
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300",
+          "fixed top-0 left-0 right-0 z-[2000] w-full transition-all duration-300",
           isScrolled 
             ? "bg-white/95 backdrop-blur-md shadow-sm py-3"
             : "bg-white/95 backdrop-blur-md shadow-sm py-4"
@@ -78,6 +84,10 @@ const Header = () => {
         </div>
       </header>
 
+      {/* 
+        MobileMenu is rendered via Portal directly to document.body
+        It needs to have a lower z-index than the header
+      */}
       <MobileMenu 
         isOpen={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
