@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -186,60 +185,45 @@ const RetreatDetails = () => {
 
                   <p className="text-gray-600 mb-8 leading-relaxed">{retreat.description}</p>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-sage-50/50 p-5 rounded-xl">
+                  {/* REDESIGNED SECTION - START */}
+                  <div className="space-y-6 bg-white rounded-xl border border-gray-100">
                     {/* Date & Time Details */}
-                    <div className="space-y-4">
-                      <div className="flex items-start space-x-3">
-                        <div className="bg-white p-2 rounded-full shadow-sm">
-                          <Calendar className="h-5 w-5 text-sage-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-medium text-gray-800">Date</h3>
-                          <p className="text-gray-600">{formatDate(retreat.date)}</p>
-                        </div>
+                    <div className="p-6 border-b border-gray-100">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <Calendar className="h-5 w-5 text-sage-600" />
+                        <h3 className="font-medium text-gray-900">{formatDate(retreat.date)}</h3>
                       </div>
-
-                      <div className="flex items-start space-x-3">
-                        <div className="bg-white p-2 rounded-full shadow-sm">
-                          <Clock className="h-5 w-5 text-sage-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-medium text-gray-800">Time & Duration</h3>
-                          <p className="text-gray-600">{retreat.time} ({retreat.duration})</p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-start space-x-3">
-                        <div className="bg-white p-2 rounded-full shadow-sm">
-                          <Users className="h-5 w-5 text-sage-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-medium text-gray-800">Group Size</h3>
-                          <p className="text-gray-600">{getRemainingText(retreat.remaining)} of {retreat.capacity} total spots</p>
-                        </div>
+                      <div className="flex items-center space-x-3">
+                        <Clock className="h-5 w-5 text-sage-600" />
+                        <p className="text-gray-600">{retreat.time} · {retreat.duration}</p>
                       </div>
                     </div>
 
                     {/* Location Details */}
-                    <div className="space-y-4">
-                      <div className="flex items-start space-x-3">
-                        <div className="bg-white p-2 rounded-full shadow-sm">
-                          <MapPin className="h-5 w-5 text-sage-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-medium text-gray-800">Location</h3>
-                          <p className="text-gray-600">{retreat.location.name}</p>
-                          <p className="text-sm text-gray-500">
-                            {retreat.location.city}, {retreat.location.state}
-                          </p>
-                        </div>
+                    <div className="p-6 border-b border-gray-100">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <MapPin className="h-5 w-5 text-sage-600" />
+                        <h3 className="font-medium text-gray-900">{retreat.location.name}</h3>
                       </div>
+                      <p className="text-gray-600 ml-8">
+                        {retreat.location.city}, {retreat.location.state}
+                      </p>
+                      <p className="text-sm text-gray-500 italic mt-2 ml-8">{retreat.location.description}</p>
+                    </div>
 
-                      <div className="pl-12">
-                        <p className="text-sm text-gray-600 italic">{retreat.location.description}</p>
+                    {/* Group Size */}
+                    <div className="p-6">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <Users className="h-5 w-5 text-sage-600" />
+                        <h3 className="font-medium text-gray-900">Group Size</h3>
                       </div>
+                      <p className="text-gray-600 ml-8">
+                        {getRemainingText(retreat.remaining)} of {retreat.capacity} total spots
+                      </p>
                     </div>
                   </div>
+                  {/* REDESIGNED SECTION - END */}
+
                 </CardContent>
               </Card>
 
