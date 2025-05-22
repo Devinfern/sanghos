@@ -4,11 +4,10 @@ import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Users, ArrowRight } from "lucide-react";
+import { Calendar, MapPin, Users } from "lucide-react";
 import { Retreat } from "@/lib/data";
 import SanghosIcon from "./SanghosIcon";
 import { motion } from "framer-motion";
-import OptimizedImage from "./OptimizedImage";
 
 // Location interface for the userLocation prop
 interface UserLocation {
@@ -55,20 +54,17 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
       )}
     >
       <div className={cn(
-        "bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100",
+        "bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300",
         isList ? "flex flex-col md:flex-row w-full" : "flex flex-col h-full"
       )}>
         <div className={cn(
           "relative overflow-hidden",
           isList ? "md:w-2/5 h-60 md:h-auto" : "h-52"
         )}>
-          <OptimizedImage
+          <img
             src={retreat.image}
             alt={retreat.title}
-            className="w-full h-full"
-            aspectRatio="custom"
-            objectFit="cover"
-            loadingClassName="bg-gray-100 animate-pulse"
+            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           />
           
           {comingSoon && (
@@ -93,12 +89,11 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
           "flex-grow justify-between"
         )}>
           <div className="space-y-3 mb-auto">
-            <div className="flex items-center text-sm font-medium text-sage-600">
-              <Calendar className="h-3.5 w-3.5 mr-1.5" />
+            <div className="text-sm font-medium text-sage-600">
               {formatShortDate(retreat.date)}
             </div>
             
-            <h3 className="text-lg font-semibold text-gray-800 line-clamp-2 leading-tight">
+            <h3 className="text-lg font-semibold text-gray-800 line-clamp-2">
               {retreat.title}
             </h3>
             
@@ -110,12 +105,12 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
           <div className="mt-4 pt-4 border-t border-gray-100">
             <div className="flex flex-wrap text-sm text-gray-500 gap-y-2">
               <div className="flex items-center w-full sm:w-auto sm:mr-4">
-                <MapPin className="h-3.5 w-3.5 mr-1.5 flex-shrink-0 text-gray-400" />
+                <MapPin className="h-3.5 w-3.5 mr-1.5 flex-shrink-0" />
                 <span className="truncate">{retreat.location.city}, {retreat.location.state}</span>
               </div>
               
               <div className="flex items-center w-full sm:w-auto">
-                <Users className="h-3.5 w-3.5 mr-1.5 flex-shrink-0 text-gray-400" />
+                <Users className="h-3.5 w-3.5 mr-1.5 flex-shrink-0" />
                 <span>{retreat.remaining} spots left</span>
               </div>
             </div>
@@ -123,10 +118,9 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
             <Link to={`/retreat/${retreat.id}`} className="block mt-4">
               <Button 
                 variant="outline" 
-                className="w-full group bg-white hover:bg-sage-50 border-sage-200 text-sage-700 hover:text-sage-800 transition-colors"
+                className="w-full bg-white hover:bg-sage-50 border-sage-200 text-sage-700 hover:text-sage-800 transition-colors"
               >
                 View Details
-                <ArrowRight className="h-3.5 w-3.5 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
               </Button>
             </Link>
           </div>
