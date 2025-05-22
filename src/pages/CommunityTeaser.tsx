@@ -1,14 +1,43 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import { motion } from 'framer-motion';
+import { ArrowRight, Users, MessageCircle, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { motion } from 'framer-motion';
+import WellnessCommunityTeaser from '@/components/WellnessCommunityTeaser';
+import OptimizedImage from '@/components/OptimizedImage';
 
 const CommunityTeaser = () => {
-  const container = {
-    hidden: { opacity: 0 },
+  const [isLoaded, setIsLoaded] = useState(false);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const fadeIn = {
+    hidden: {
+      opacity: 0,
+      y: 20
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6
+      }
+    }
+  };
+
+  const staggerChildren = {
+    hidden: {
+      opacity: 0
+    },
     visible: {
       opacity: 1,
       transition: {
@@ -16,112 +45,226 @@ const CommunityTeaser = () => {
       }
     }
   };
-  
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
-  };
+
+  const benefits = [
+    {
+      icon: <Users className="h-10 w-10 text-brand-primary" />,
+      title: "Connect",
+      description: "Access to exclusive community discussions and connect with retreat participants before and after events"
+    },
+    {
+      icon: <MessageCircle className="h-10 w-10 text-brand-primary" />,
+      title: "Share",
+      description: "Share your wellness journey with supportive members and learn from others' experiences"
+    },
+    {
+      icon: <Calendar className="h-10 w-10 text-brand-primary" />,
+      title: "Access",
+      description: "Early access to new retreats and special discounts on upcoming wellness events"
+    }
+  ];
+
+  const testimonials = [
+    {
+      quote: "Joining the Sanghos community changed my wellness journey. I've connected with amazing people who share my passion for mindfulness.",
+      name: "Sarah K.",
+      role: "Yoga Enthusiast"
+    },
+    {
+      quote: "The discussions and support in this community have been invaluable. I've discovered retreats I never would have found otherwise.",
+      name: "Michael T.",
+      role: "Meditation Practitioner" 
+    }
+  ];
 
   return (
     <>
+      <Helmet>
+        <title>Join Our Community | Sanghos</title>
+        <meta name="description" content="Connect with like-minded individuals on their wellness journey, share experiences, and learn from our community of practitioners." />
+      </Helmet>
+
       <Header />
-      <main className="container mx-auto px-4 py-16 flex-1 bg-gradient-to-b from-white to-brand-light/20">
-        <motion.section 
-          className="max-w-4xl mx-auto text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <motion.h1 
-            className="text-4xl md:text-5xl font-bold mb-6 text-brand-dark"
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6 }}
-          >
-            Join Our Wellness Community
-          </motion.h1>
-          <motion.p 
-            className="text-xl mb-8 text-brand-dark/80"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            Connect with like-minded individuals on their wellness journey, share experiences,
-            and learn from our community of practitioners and retreat participants.
-          </motion.p>
-          
-          <motion.div 
-            className="glass-morphism p-8 rounded-xl mb-12 shadow-sm"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <h2 className="text-2xl font-semibold mb-6 text-brand-dark">Member Benefits</h2>
-            
-            <motion.ul 
-              className="space-y-5 text-left max-w-md mx-auto mb-8"
-              variants={container}
+
+      <main className="bg-white overflow-x-hidden">
+        {/* Hero Section */}
+        <section className="py-24 md:py-32 bg-brand-subtle/10 relative">
+          <div className="container mx-auto max-w-7xl px-4 md:px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <motion.div 
+                initial="hidden"
+                animate={isLoaded ? "visible" : "hidden"}
+                variants={fadeIn}
+                className="max-w-3xl"
+              >
+                <h1 className="text-6xl md:text-7xl font-bold mb-8 text-brand-dark leading-tight">Join Our Wellness Community</h1>
+                
+                <p className="text-xl mb-8 text-brand-slate">
+                  Connect with like-minded individuals on their wellness journey, share experiences,
+                  and learn from our community of practitioners and retreat participants.
+                </p>
+                
+                <div className="flex flex-wrap gap-4">
+                  <Button 
+                    size="lg" 
+                    className="bg-brand-primary hover:bg-brand-primary/90 text-white rounded-full group"
+                    asChild
+                  >
+                    <Link to="/login">
+                      Sign In
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Link>
+                  </Button>
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="border-2 border-brand-primary/50 text-brand-primary hover:bg-brand-primary/5 rounded-full"
+                    asChild
+                  >
+                    <Link to="/signup">Join Sanghos</Link>
+                  </Button>
+                </div>
+              </motion.div>
+              
+              <motion.div 
+                initial="hidden"
+                animate={isLoaded ? "visible" : "hidden"}
+                variants={fadeIn}
+                className="relative rounded-3xl overflow-hidden"
+              >
+                <OptimizedImage 
+                  src="/lovable-uploads/60c5a966-4e10-4c09-af70-bfafe90c0630.png"
+                  alt="Community meditation session"
+                  className="w-full h-full object-cover"
+                />
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Benefits Section */}
+        <section className="py-24 bg-white">
+          <div className="container mx-auto max-w-6xl px-4 md:px-6">
+            <motion.div
               initial="hidden"
-              animate="visible"
+              animate={isLoaded ? "visible" : "hidden"}
+              variants={fadeIn}
+              className="text-center mb-16"
             >
-              {[
-                "Access to exclusive community discussions",
-                "Connect with retreat participants before and after events",
-                "Share your wellness journey with supportive members",
-                "Early access to new retreats and special discounts"
-              ].map((benefit, index) => (
-                <motion.li key={index} className="flex items-start" variants={item}>
-                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-brand-primary text-white mr-3 flex-shrink-0 text-sm">✓</span>
-                  <span className="text-lg">{benefit}</span>
-                </motion.li>
-              ))}
-            </motion.ul>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="bg-brand-primary hover:bg-brand-primary/90 text-white px-8 py-6 text-lg">
-                <Link to="/login">Sign In</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 px-8 py-6 text-lg">
-                <Link to="/signup">Join Sanghos</Link>
-              </Button>
-            </div>
-          </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            <p className="text-muted-foreground">
-              Already a member? <Link to="/login" className="text-brand-primary hover:underline font-medium">Sign in here</Link>
-            </p>
-            
-            <div className="mt-16 p-8 rounded-xl bg-white/50 border border-brand-sand/20">
-              <h3 className="text-xl font-semibold mb-4 text-brand-dark">What Our Community Members Say</h3>
-              <div className="grid md:grid-cols-2 gap-6">
-                {[
-                  {
-                    quote: "Joining the Sanghos community changed my wellness journey. I've connected with amazing people who share my passion for mindfulness.",
-                    name: "Sarah K.",
-                    role: "Yoga Enthusiast"
-                  },
-                  {
-                    quote: "The discussions and support in this community have been invaluable. I've discovered retreats I never would have found otherwise.",
-                    name: "Michael T.",
-                    role: "Meditation Practitioner" 
-                  }
-                ].map((testimonial, i) => (
-                  <div key={i} className="glass-morphism p-5 rounded-lg">
-                    <p className="italic mb-4">"{testimonial.quote}"</p>
-                    <div className="font-medium">{testimonial.name}</div>
-                    <div className="text-sm text-muted-foreground">{testimonial.role}</div>
+              <span className="text-sm uppercase tracking-wider text-brand-primary font-semibold">Member Benefits</span>
+              <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-8 text-brand-dark">
+                Why Join Our Community?
+              </h2>
+              <p className="text-xl text-brand-slate max-w-3xl mx-auto">
+                Experience the power of connection and growth in our supportive wellness space
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {benefits.map((benefit, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }}
+                  className="bg-brand-subtle/10 p-8 rounded-3xl text-center"
+                >
+                  <div className="mx-auto mb-6 bg-white w-20 h-20 rounded-full flex items-center justify-center shadow-sm">
+                    {benefit.icon}
                   </div>
-                ))}
-              </div>
+                  <h3 className="text-2xl font-bold mb-4 text-brand-dark">{benefit.title}</h3>
+                  <p className="text-brand-slate text-lg">{benefit.description}</p>
+                </motion.div>
+              ))}
             </div>
-          </motion.div>
-        </motion.section>
+          </div>
+        </section>
+
+        {/* Testimonials Section */}
+        <section className="py-24 bg-brand-subtle/10">
+          <div className="container mx-auto max-w-6xl px-4 md:px-6">
+            <motion.div
+              initial="hidden"
+              animate={isLoaded ? "visible" : "hidden"}
+              variants={fadeIn}
+              className="text-center mb-16"
+            >
+              <span className="text-sm uppercase tracking-wider text-brand-primary font-semibold">Testimonials</span>
+              <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-8 text-brand-dark">
+                What Our Community Members Say
+              </h2>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {testimonials.map((testimonial, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }}
+                  className="bg-white p-8 rounded-3xl shadow-sm"
+                >
+                  <div className="mb-6">
+                    <svg width="45" height="36" viewBox="0 0 45 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-brand-primary/20">
+                      <path d="M13.44 36C9.6 36 6.4 34.56 3.84 31.68C1.28 28.8 0 25.2 0 20.88C0 15.68 1.76 11.04 5.28 6.96C8.8 2.88 13.28 0.24 18.72 0L20.16 4.8C16.8 5.44 13.92 7.12 11.52 9.84C9.12 12.56 8 15.52 8.16 18.72C9.12 17.6 10.56 17.04 12.48 17.04C14.56 17.04 16.4 17.84 18 19.44C19.6 21.04 20.4 23.04 20.4 25.44C20.4 28 19.52 30.16 17.76 31.92C16 33.68 13.92 36 13.44 36ZM37.44 36C33.6 36 30.4 34.56 27.84 31.68C25.28 28.8 24 25.2 24 20.88C24 15.68 25.76 11.04 29.28 6.96C32.8 2.88 37.28 0.24 42.72 0L44.16 4.8C40.8 5.44 37.92 7.12 35.52 9.84C33.12 12.56 32 15.52 32.16 18.72C33.12 17.6 34.56 17.04 36.48 17.04C38.56 17.04 40.4 17.84 42 19.44C43.6 21.04 44.4 23.04 44.4 25.44C44.4 28 43.52 30.16 41.76 31.92C40 33.68 37.92 36 37.44 36Z" fill="currentColor"/>
+                    </svg>
+                  </div>
+                  <p className="text-xl italic mb-6 text-brand-slate">{testimonial.quote}</p>
+                  <div className="flex items-center">
+                    <div className="ml-4">
+                      <h4 className="font-bold text-brand-dark">{testimonial.name}</h4>
+                      <p className="text-brand-slate">{testimonial.role}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+        
+        {/* Include the existing WellnessCommunityTeaser component */}
+        <WellnessCommunityTeaser />
+        
+        {/* Join CTA Section */}
+        <section className="py-24 bg-brand-subtle/20 relative overflow-hidden">
+          <div className="container relative z-10 mx-auto max-w-6xl px-4 md:px-6">
+            <motion.div 
+              initial="hidden" 
+              animate={isLoaded ? "visible" : "hidden"} 
+              variants={fadeIn} 
+              className="max-w-3xl mx-auto text-center"
+            >
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-brand-dark">Ready to Join Us?</h2>
+              <p className="text-xl mb-10 text-brand-slate">
+                Become part of our growing wellness community and transform your journey with like-minded individuals.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button 
+                  size="lg" 
+                  className="bg-brand-primary hover:bg-brand-primary/90 rounded-full group"
+                  asChild
+                >
+                  <Link to="/signup">
+                    Join Now
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-brand-primary/50 text-brand-primary hover:bg-brand-primary/5 rounded-full"
+                  asChild
+                >
+                  <Link to="/login">
+                    Already a member? Sign in
+                  </Link>
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        </section>
       </main>
+
       <Footer />
     </>
   );
