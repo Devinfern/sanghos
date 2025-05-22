@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { MapPin, Calendar, Clock, ArrowRight, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import OptimizedImage from "@/components/OptimizedImage";
 
 interface RetreatRecommendation {
   retreatId: string;
@@ -37,6 +38,10 @@ const RetreatRecommendationCard = ({ recommendation, index, onNavigate }: Retrea
     return "from-orange-500 to-amber-400";
   };
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86";
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -48,15 +53,16 @@ const RetreatRecommendationCard = ({ recommendation, index, onNavigate }: Retrea
           {image && (
             <div className="md:w-1/4 h-48 md:h-auto overflow-hidden">
               <div className="w-full h-full overflow-hidden">
-                <img
-                  src={image}
-                  alt={title}
-                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src =
-                      "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86";
-                  }}
-                />
+                {image && (
+                  <OptimizedImage
+                    src={image}
+                    alt={title}
+                    className="w-full h-full"
+                    aspectRatio="custom" 
+                    objectFit="cover"
+                    loadingClassName="bg-muted animate-pulse"
+                  />
+                )}
               </div>
             </div>
           )}
@@ -64,9 +70,12 @@ const RetreatRecommendationCard = ({ recommendation, index, onNavigate }: Retrea
           <div className={cn("p-5 space-y-4", image ? "md:w-3/4" : "w-full")}>
             <div className="flex justify-between items-start gap-3">
               <div>
-                <div className="text-sm font-medium text-sage-600 mb-2">
-                  {date}
-                </div>
+                {date && (
+                  <div className="flex items-center text-sm font-medium text-sage-600 mb-2">
+                    <Calendar className="h-3.5 w-3.5 mr-1.5 text-sage-500" />
+                    {date}
+                  </div>
+                )}
                 <h3 className="font-semibold text-xl text-gray-800 leading-tight">{title}</h3>
               </div>
               <div className={`px-3 py-1 rounded-full bg-gradient-to-r ${getScoreGradient(matchScore)} text-white font-medium text-sm shrink-0`}>

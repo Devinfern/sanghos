@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -9,6 +10,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { cn } from "@/lib/utils";
 import { fetchInsightLAEvents } from "@/lib/insightEvents";
+import { Card, CardContent } from "@/components/ui/card";
+import { motion } from "framer-motion";
+import OptimizedImage from "@/components/OptimizedImage";
 
 const RetreatDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -96,206 +100,258 @@ const RetreatDetails = () => {
 
       <Header />
 
-      <main className="pt-24 pb-16">
-        <div className="container px-4 md:px-6">
+      <main className="pt-24 pb-16 bg-gray-50">
+        <div className="container px-4 md:px-6 max-w-7xl mx-auto">
           {/* Back Button */}
-          <div className="mb-6">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-6"
+          >
             <Button asChild variant="ghost" size="sm" className="group">
               <Link to="/retreats">
                 <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
                 Back to All Retreats
               </Link>
             </Button>
-          </div>
+          </motion.div>
 
           <div className={cn(
             "grid grid-cols-1 lg:grid-cols-3 gap-8 transition-opacity duration-500",
             isVisible ? "opacity-100" : "opacity-0"
           )}>
             {/* Left Column - Images */}
-            <div className="lg:col-span-2 space-y-4">
+            <div className="lg:col-span-2 space-y-6">
               {/* Main Image */}
-              <div className="aspect-video rounded-xl overflow-hidden bg-muted">
-                <img
-                  src={activeImage}
-                  alt={retreat.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {/* Image Gallery */}
-              <div className="grid grid-cols-4 gap-2">
-                <button
-                  onClick={() => setActiveImage(retreat.image)}
-                  className={cn(
-                    "aspect-square rounded-md overflow-hidden",
-                    activeImage === retreat.image ? "ring-2 ring-primary" : ""
-                  )}
-                >
-                  <img
-                    src={retreat.image}
-                    alt={`${retreat.title} preview`}
+              <Card className="overflow-hidden border-sage-200/30">
+                <div className="aspect-video overflow-hidden bg-muted">
+                  <OptimizedImage
+                    src={activeImage}
+                    alt={retreat.title}
                     className="w-full h-full object-cover"
+                    aspectRatio="custom"
+                    priority={true}
                   />
-                </button>
-                {retreat.additionalImages.map((img, i) => (
+                </div>
+
+                {/* Image Gallery */}
+                <div className="grid grid-cols-4 gap-2 p-3 bg-white">
                   <button
-                    key={i}
-                    onClick={() => setActiveImage(img)}
+                    onClick={() => setActiveImage(retreat.image)}
                     className={cn(
-                      "aspect-square rounded-md overflow-hidden",
-                      activeImage === img ? "ring-2 ring-primary" : ""
+                      "aspect-square rounded-md overflow-hidden transition-all",
+                      activeImage === retreat.image ? "ring-2 ring-sage-500 scale-[0.95] opacity-100" : "opacity-70 hover:opacity-100"
                     )}
                   >
-                    <img
-                      src={img}
-                      alt={`${retreat.title} additional view ${i + 1}`}
+                    <OptimizedImage
+                      src={retreat.image}
+                      alt={`${retreat.title} preview`}
                       className="w-full h-full object-cover"
+                      aspectRatio="square"
                     />
                   </button>
-                ))}
-              </div>
-
-              {/* Retreat Details */}
-              <div className="bg-white p-6 rounded-xl shadow-sm mt-6">
-                <h1 className="text-2xl md:text-3xl font-bold mb-4">{retreat.title}</h1>
-                
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {retreat.category.map((cat) => (
-                    <Badge key={cat} variant="secondary">
-                      {cat}
-                    </Badge>
+                  {retreat.additionalImages.map((img: string, i: number) => (
+                    <button
+                      key={i}
+                      onClick={() => setActiveImage(img)}
+                      className={cn(
+                        "aspect-square rounded-md overflow-hidden transition-all",
+                        activeImage === img ? "ring-2 ring-sage-500 scale-[0.95] opacity-100" : "opacity-70 hover:opacity-100"
+                      )}
+                    >
+                      <OptimizedImage
+                        src={img}
+                        alt={`${retreat.title} additional view ${i + 1}`}
+                        className="w-full h-full object-cover"
+                        aspectRatio="square"
+                      />
+                    </button>
                   ))}
                 </div>
+              </Card>
 
-                <p className="text-muted-foreground mb-6">{retreat.description}</p>
+              {/* Retreat Details */}
+              <Card className="border-sage-200/30">
+                <CardContent className="p-6">
+                  <h1 className="text-2xl md:text-3xl font-bold mb-4 text-gray-800">{retreat.title}</h1>
+                  
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    {retreat.category.map((cat: string) => (
+                      <Badge key={cat} variant="secondary" className="bg-sage-100 text-sage-700 hover:bg-sage-200">
+                        {cat}
+                      </Badge>
+                    ))}
+                  </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Date & Time Details */}
-                  <div className="space-y-3">
-                    <div className="flex items-start space-x-3">
-                      <Calendar className="h-5 w-5 text-sage-500" />
-                      <div>
-                        <h3 className="font-medium">Date</h3>
-                        <p>{formatDate(retreat.date)}</p>
+                  <p className="text-gray-600 mb-8 leading-relaxed">{retreat.description}</p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-sage-50/50 p-5 rounded-xl">
+                    {/* Date & Time Details */}
+                    <div className="space-y-4">
+                      <div className="flex items-start space-x-3">
+                        <div className="bg-white p-2 rounded-full shadow-sm">
+                          <Calendar className="h-5 w-5 text-sage-600" />
+                        </div>
+                        <div>
+                          <h3 className="font-medium text-gray-800">Date</h3>
+                          <p className="text-gray-600">{formatDate(retreat.date)}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start space-x-3">
+                        <div className="bg-white p-2 rounded-full shadow-sm">
+                          <Clock className="h-5 w-5 text-sage-600" />
+                        </div>
+                        <div>
+                          <h3 className="font-medium text-gray-800">Time & Duration</h3>
+                          <p className="text-gray-600">{retreat.time} ({retreat.duration})</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start space-x-3">
+                        <div className="bg-white p-2 rounded-full shadow-sm">
+                          <Users className="h-5 w-5 text-sage-600" />
+                        </div>
+                        <div>
+                          <h3 className="font-medium text-gray-800">Group Size</h3>
+                          <p className="text-gray-600">{getRemainingText(retreat.remaining)} of {retreat.capacity} total spots</p>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex items-start space-x-3">
-                      <Clock className="h-5 w-5 text-sage-500" />
-                      <div>
-                        <h3 className="font-medium">Time & Duration</h3>
-                        <p>{retreat.time} ({retreat.duration})</p>
+                    {/* Location Details */}
+                    <div className="space-y-4">
+                      <div className="flex items-start space-x-3">
+                        <div className="bg-white p-2 rounded-full shadow-sm">
+                          <MapPin className="h-5 w-5 text-sage-600" />
+                        </div>
+                        <div>
+                          <h3 className="font-medium text-gray-800">Location</h3>
+                          <p className="text-gray-600">{retreat.location.name}</p>
+                          <p className="text-sm text-gray-500">
+                            {retreat.location.city}, {retreat.location.state}
+                          </p>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="flex items-start space-x-3">
-                      <Users className="h-5 w-5 text-sage-500" />
-                      <div>
-                        <h3 className="font-medium">Group Size</h3>
-                        <p>{getRemainingText(retreat.remaining)} of {retreat.capacity} total spots</p>
+                      <div className="pl-12">
+                        <p className="text-sm text-gray-600 italic">{retreat.location.description}</p>
                       </div>
                     </div>
                   </div>
-
-                  {/* Location Details */}
-                  <div className="space-y-3">
-                    <div className="flex items-start space-x-3">
-                      <MapPin className="h-5 w-5 text-sage-500" />
-                      <div>
-                        <h3 className="font-medium">Location</h3>
-                        <p>{retreat.location.name}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {retreat.location.city}, {retreat.location.state}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="text-sm">
-                      <p className="text-muted-foreground">{retreat.location.description}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
 
               {/* Amenities */}
               {retreat.amenities && retreat.amenities.length > 0 && (
-                <div className="bg-white p-6 rounded-xl shadow-sm">
-                  <h2 className="text-xl font-semibold mb-4">What's Included</h2>
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {retreat.amenities.map((amenity, i) => (
-                      <li key={i} className="flex items-center space-x-2">
-                        <Tag className="h-4 w-4 text-sage-500" />
-                        <span>{amenity}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <Card className="border-sage-200/30">
+                  <CardContent className="p-6">
+                    <h2 className="text-xl font-semibold mb-4 text-gray-800">What's Included</h2>
+                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {retreat.amenities.map((amenity: string, i: number) => (
+                        <li key={i} className="flex items-center space-x-2 text-gray-700">
+                          <Tag className="h-4 w-4 text-sage-500" />
+                          <span>{amenity}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
               )}
               
               {/* Source Link */}
               {retreat.sourceUrl && (
-                <div className="bg-white p-6 rounded-xl shadow-sm">
-                  <h2 className="text-xl font-semibold mb-4">Original Event Information</h2>
-                  <p className="mb-4">For more details and the latest information, visit the official event page:</p>
-                  <Button asChild variant="outline" className="w-full">
-                    <a href={retreat.sourceUrl} target="_blank" rel="noopener noreferrer">
-                      View on InsightLA Website
-                    </a>
-                  </Button>
-                </div>
+                <Card className="border-sage-200/30">
+                  <CardContent className="p-6">
+                    <h2 className="text-xl font-semibold mb-4 text-gray-800">Original Event Information</h2>
+                    <p className="mb-4 text-gray-600">For more details and the latest information, visit the official event page:</p>
+                    <Button asChild variant="outline" className="w-full">
+                      <a href={retreat.sourceUrl} target="_blank" rel="noopener noreferrer">
+                        View on InsightLA Website
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
               )}
             </div>
 
             {/* Right Column - Booking Info */}
-            <div className="space-y-6">
+            <div className="lg:col-span-1 space-y-6">
               {/* Price Card */}
-              <div className="bg-white p-6 rounded-xl shadow-sm sticky top-24">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-2xl font-bold">{formatCurrency(retreat.price)}</h2>
-                  <Badge variant="outline">{getRemainingText(retreat.remaining)}</Badge>
-                </div>
-
-                {/* Instructor Info */}
-                <div className="flex items-center space-x-4 py-4 border-t border-b mb-6">
-                  <img
-                    src={retreat.instructor.image}
-                    alt={retreat.instructor.name}
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div>
-                    <h3 className="font-medium">{retreat.instructor.name}</h3>
-                    <p className="text-sm text-muted-foreground">{retreat.instructor.title}</p>
+              <Card className="border-sage-200/30 overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="bg-sage-50 px-6 py-4 border-b border-sage-100">
+                    <h2 className="text-xl font-semibold text-gray-800">Booking Information</h2>
                   </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="space-y-3">
-                  {retreat.sourceUrl ? (
-                    <Button asChild className="w-full">
-                      <a href={retreat.sourceUrl} target="_blank" rel="noopener noreferrer">
-                        Book on InsightLA
-                      </a>
-                    </Button>
-                  ) : (
-                    <Button disabled={retreat.remaining <= 0} asChild className="w-full">
-                      <Link to={`/booking/${retreat.id}`}>
-                        {retreat.remaining > 0 ? "Book Now" : "Sold Out"}
-                      </Link>
-                    </Button>
-                  )}
                   
-                  <Button variant="outline" asChild className="w-full">
-                    <Link to={`/instructor/${retreat.instructor.id}`}>
-                      View Instructor Profile
-                    </Link>
-                  </Button>
-                </div>
+                  <div className="p-6 space-y-6">
+                    <div className="flex justify-between items-center">
+                      <h2 className="text-2xl font-bold text-gray-800">{formatCurrency(retreat.price)}</h2>
+                      <Badge variant={retreat.remaining < 5 ? "secondary" : "outline"} 
+                        className={retreat.remaining < 5 ? "bg-amber-100 text-amber-700" : ""}>
+                        {getRemainingText(retreat.remaining)}
+                      </Badge>
+                    </div>
 
-                <p className="mt-4 text-sm text-muted-foreground text-center">
-                  Secure your spot now. Limited spaces available.
-                </p>
-              </div>
+                    {/* Instructor Info */}
+                    <div className="flex items-center space-x-4 py-4 border-t border-b border-sage-100">
+                      <div className="h-12 w-12 rounded-full overflow-hidden">
+                        <OptimizedImage
+                          src={retreat.instructor.image}
+                          alt={retreat.instructor.name}
+                          className="w-full h-full object-cover"
+                          aspectRatio="square"
+                        />
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-gray-800">{retreat.instructor.name}</h3>
+                        <p className="text-sm text-gray-500">{retreat.instructor.title}</p>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="space-y-3">
+                      {retreat.sourceUrl ? (
+                        <Button asChild className="w-full">
+                          <a href={retreat.sourceUrl} target="_blank" rel="noopener noreferrer">
+                            Book on InsightLA
+                          </a>
+                        </Button>
+                      ) : (
+                        <Button disabled={retreat.remaining <= 0} asChild className="w-full">
+                          <Link to={`/booking/${retreat.id}`}>
+                            {retreat.remaining > 0 ? "Book Now" : "Sold Out"}
+                          </Link>
+                        </Button>
+                      )}
+                      
+                      <Button variant="outline" asChild className="w-full">
+                        <Link to={`/instructor/${retreat.instructor.id}`}>
+                          View Instructor Profile
+                        </Link>
+                      </Button>
+                    </div>
+
+                    <p className="mt-4 text-sm text-gray-500 text-center">
+                      Secure your spot now. Limited spaces available.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              {/* Additional information card */}
+              <Card className="border-sage-200/30">
+                <CardContent className="p-6">
+                  <h3 className="font-semibold mb-2 text-gray-800">Need assistance?</h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    If you have questions about this retreat or need help with your booking, our team is here to help.
+                  </p>
+                  <Button variant="secondary" className="w-full">
+                    Contact Support
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>

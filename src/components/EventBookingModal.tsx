@@ -4,7 +4,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "@/components/ui/button";
 import { Event } from "@/types/event";
 import BookingForm from "./BookingForm";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Calendar, MapPin } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface EventBookingModalProps {
   event: Event;
@@ -38,7 +39,7 @@ export default function EventBookingModal({
       <Button
         variant={buttonVariant}
         size={buttonSize}
-        className={className}
+        className={cn("transition-all duration-300", className)}
         disabled={isSoldOut}
         onClick={() => window.open(event.bookingUrl, '_blank')}
       >
@@ -53,37 +54,44 @@ export default function EventBookingModal({
         <Button
           variant={buttonVariant}
           size={buttonSize}
-          className={className}
+          className={cn("transition-all duration-300", className)}
           disabled={isSoldOut}
         >
           {isSoldOut ? "Sold Out" : buttonLabel}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md rounded-xl border-sage-200/30 shadow-lg">
         <DialogHeader>
-          <DialogTitle>Book Event</DialogTitle>
+          <DialogTitle className="text-xl font-semibold text-gray-800">Book Event</DialogTitle>
         </DialogHeader>
         <div className="py-4">
-          <div className="mb-4">
-            <h2 className="text-lg font-semibold">{event.title}</h2>
-            <p className="text-sm text-muted-foreground">
-              {new Date(event.startDate).toLocaleDateString()} at {new Date(event.startDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {event.location.name}{event.location.city ? `, ${event.location.city}` : ''}
-            </p>
-            <div className="mt-2">
-              <span className="font-medium">Price: </span>
-              <span className="text-lg">${typeof event.price === 'number' ? event.price.toFixed(2) : event.price}</span>
-              <span className="text-sm text-muted-foreground"> per person</span>
-            </div>
-            {typeof event.remaining === 'number' && (
-              <p className="text-sm mt-1">
-                <span className={event.remaining < 5 ? "text-amber-600 font-medium" : ""}>
-                  {event.remaining} {event.remaining === 1 ? "spot" : "spots"} remaining
-                </span>
+          <div className="mb-6 space-y-3">
+            <h2 className="text-xl font-semibold text-gray-800">{event.title}</h2>
+            <div className="flex items-center text-sage-700">
+              <Calendar className="h-4 w-4 mr-2 text-sage-500" />
+              <p className="text-sm">
+                {new Date(event.startDate).toLocaleDateString()} at {new Date(event.startDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
               </p>
-            )}
+            </div>
+            <div className="flex items-center text-sage-700">
+              <MapPin className="h-4 w-4 mr-2 text-sage-500" />
+              <p className="text-sm">
+                {event.location.name}{event.location.city ? `, ${event.location.city}` : ''}
+              </p>
+            </div>
+            <div className="mt-3 p-3 bg-sage-50/70 rounded-lg">
+              <span className="font-medium text-gray-800">Price: </span>
+              <span className="text-lg font-semibold text-sage-700">${typeof event.price === 'number' ? event.price.toFixed(2) : event.price}</span>
+              <span className="text-sm text-muted-foreground"> per person</span>
+              
+              {typeof event.remaining === 'number' && (
+                <p className="text-sm mt-1">
+                  <span className={event.remaining < 5 ? "text-amber-600 font-medium" : "text-sage-600"}>
+                    {event.remaining} {event.remaining === 1 ? "spot" : "spots"} remaining
+                  </span>
+                </p>
+              )}
+            </div>
           </div>
           <BookingForm event={event} onSuccess={handleSuccessfulBooking} />
         </div>
