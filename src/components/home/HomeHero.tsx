@@ -49,7 +49,7 @@ const HomeHero = () => {
             <ul className="space-y-4 mb-8 text-lg">
               <li className="flex items-start">
                 <span className="mr-2 text-brand-primary">•</span>
-                <span>Day long wellness retreats</span>
+                <span>Day-long retreats & more</span>
               </li>
               <li className="flex items-start">
                 <span className="mr-2 text-brand-primary">•</span>
