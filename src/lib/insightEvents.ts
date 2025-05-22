@@ -1,4 +1,3 @@
-
 import { Retreat, Instructor } from "@/lib/data";
 import { extractEventDataFromUrl } from "@/lib/api/forum/events/extractApi";
 import { toast } from "sonner";
@@ -169,9 +168,6 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
         featured: true,
         isSanghos: false,
         sourceUrl: eventUrls[index],
-        // Removed shortDescription field as it's not in the Retreat type
-        startDate: startDate,
-        endDate: endDate,
         bookingUrl: eventData.bookingLink || eventUrls[index],
         organizer: {
           name: "InsightLA",

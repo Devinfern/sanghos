@@ -1,4 +1,3 @@
-
 export type Instructor = {
   id: string;
   name: string;
@@ -9,23 +8,13 @@ export type Instructor = {
   yearsExperience: number;
 };
 
-export type Retreat = {
+export interface Retreat {
   id: string;
   title: string;
   description: string;
   image: string;
-  additionalImages: string[];
-  location: {
-    name: string;
-    address: string;
-    city: string;
-    state: string;
-    description: string;
-    coordinates?: {
-      lat: number;
-      lng: number;
-    };
-  };
+  additionalImages?: string[];
+  location: Location;
   instructor: Instructor;
   date: string;
   time: string;
@@ -34,11 +23,17 @@ export type Retreat = {
   capacity: number;
   remaining: number;
   category: string[];
-  amenities: string[];
-  featured: boolean;
-  isSanghos: boolean;
-  sourceUrl?: string; // Add sourceUrl for tracking the original source
-};
+  amenities?: string[];
+  featured?: boolean;
+  isSanghos?: boolean;
+  sourceUrl?: string;
+  bookingUrl?: string;
+  organizer?: {
+    name: string;
+    website?: string;
+  };
+  source?: string;
+}
 
 export const instructors: Instructor[] = [
   {

@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { Event } from "@/types/event";
-import { getCategoryLabel, getCategoryColor } from "@/data/mockEvents";
+import { getCategoryLabel, getCategoryColor } from "@/utils/categoryUtils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Calendar, MapPin, Clock, Heart, Share, ExternalLink } from "lucide-react";

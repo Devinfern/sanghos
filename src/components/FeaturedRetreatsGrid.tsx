@@ -1,47 +1,45 @@
 
 import React, { useState, useEffect } from "react";
 import { retreats } from "@/lib/data";
-import { allEvents, eventToRetreatFormat } from "@/data/mockEvents"; 
+import { fetchInsightLAEvents } from "@/lib/insightEvents";
 import RetreatCard from "./RetreatCard";
-import { ensureValidCategory } from "@/mockEvents";
+import { ensureValidCategory } from "@/utils/categoryUtils";
 import { Spinner } from "@/components/ui/spinner";
 
 const FeaturedRetreatsGrid: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [featuredRetreats, setFeaturedRetreats] = useState([]);
   
-  // Use effect to show a loading state while retreats are being loaded
+  // Use effect to load retreats
   useEffect(() => {
-    // If retreats has more than just the placeholder, we're done loading
-    if (retreats.length > 1 || (retreats.length === 1 && retreats[0].id !== "insight-la-1")) {
-      setIsLoading(false);
-    } else {
-      // Check again after a short delay
-      const timer = setTimeout(() => {
+    const loadRetreats = async () => {
+      try {
+        // Load retreats from Sanghos
+        const sanghosRetreats = await retreats;
+        
+        // Load InsightLA events
+        const insightLARetreats = await fetchInsightLAEvents().catch(err => {
+          console.error("Failed to load InsightLA retreats:", err);
+          return [];
+        });
+        
+        // Filter for featured retreats from both sources
+        const featuredSanghosRetreats = sanghosRetreats.filter(r => r.featured);
+        const featuredInsightLARetreats = insightLARetreats.filter(r => r.featured);
+        
+        // Combine both sources
+        const allFeaturedRetreats = [...featuredSanghosRetreats, ...featuredInsightLARetreats];
+        
+        setFeaturedRetreats(allFeaturedRetreats);
         setIsLoading(false);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
+      } catch (error) {
+        console.error("Error loading featured retreats:", error);
+        setIsLoading(false);
+      }
+    };
+    
+    loadRetreats();
   }, []);
-  
-  // Only show retreats marked as featured
-  const featuredSanghosRetreats = retreats.filter(r => r.featured);
-  
-  // Convert partner events to retreat format and add to featured retreats
-  // Ensure events have correctly typed categories first
-  const typeSafeEvents = allEvents.map(event => ({
-    ...event,
-    category: ensureValidCategory(event.category),
-    location: {
-      ...event.location,
-      locationType: event.location.locationType === "venue" ? "venue" : "online"
-    }
-  }));
-  
-  // Convert all events to proper retreat format with all required properties
-  const partnerRetreats = typeSafeEvents.map(event => eventToRetreatFormat(event));
-  
-  // Combine both sources of retreats
-  const allFeaturedRetreats = [...featuredSanghosRetreats, ...partnerRetreats];
 
   if (isLoading) {
     return (
@@ -54,7 +52,7 @@ const FeaturedRetreatsGrid: React.FC = () => {
     );
   }
 
-  if (allFeaturedRetreats.length === 0) {
+  if (featuredRetreats.length === 0) {
     return (
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4 text-center">
@@ -77,7 +75,7 @@ const FeaturedRetreatsGrid: React.FC = () => {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-          {allFeaturedRetreats.map((retreat, idx) => (
+          {featuredRetreats.map((retreat, idx) => (
             <RetreatCard key={retreat.id} retreat={retreat} index={idx} />
           ))}
         </div>
