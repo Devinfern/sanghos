@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import OptimizedImage from "@/components/OptimizedImage";
+
 const About = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
@@ -307,7 +308,7 @@ const About = () => {
                   <p className="text-brand-slate mb-6">
                     Want to help shape the future of wellness? Partner with us to create meaningful experiences.
                   </p>
-                  <Button variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium group">
+                  <Button variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium group rounded-full">
                     Learn More
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
@@ -332,7 +333,7 @@ const About = () => {
                   <p className="text-brand-slate mb-6">
                     Share your space and join our community of hosts offering transformative retreat venues.
                   </p>
-                  <Button variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium group">
+                  <Button variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium group rounded-full">
                     Apply Now
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
@@ -357,7 +358,7 @@ const About = () => {
                   <p className="text-brand-slate mb-6">
                     Are you a wellness practitioner? Join our instructor community and share your expertise.
                   </p>
-                  <Button variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium group">
+                  <Button variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium group rounded-full">
                     Apply Now
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
