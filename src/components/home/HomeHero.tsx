@@ -44,7 +44,7 @@ const HomeHero = () => {
         }} variants={fadeUp}>
             <span className="text-sm font-medium text-brand-primary uppercase tracking-wider mb-3 block">DISCOVER YOUR NEXT RETREAT</span>
             
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-brand-dark leading-[1.1] mb-6">Curated Wellness Experiences, Tailored to Your Needs.</h1>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-brand-dark leading-[1.1] mb-6">Curated Wellness Experiences, Tailored to You.</h1>
             
             <ul className="space-y-4 mb-8 text-lg">
               <li className="flex items-start">
