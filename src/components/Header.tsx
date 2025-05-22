@@ -226,9 +226,10 @@ const Header = () => {
           </div>
         </div>
 
+        {/* Hamburger menu button - increased z-index to keep it above the mobile menu */}
         <button 
           onClick={toggleMobileMenu} 
-          className="md:hidden flex items-center justify-center z-[60] bg-white rounded-full w-10 h-10 shadow-sm"
+          className="md:hidden flex items-center justify-center z-[1001] bg-white rounded-full w-10 h-10 shadow-sm"
           aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
         >
           {mobileMenuOpen ? (
@@ -239,9 +240,10 @@ const Header = () => {
         </button>
       </div>
 
+      {/* Mobile menu with significantly higher z-index to ensure it appears above all other content */}
       <div 
         className={cn(
-          "fixed inset-0 bg-white z-[55] flex flex-col pt-20 pb-6 px-6 transition-transform duration-300 ease-in-out md:hidden",
+          "fixed inset-0 bg-white z-[1000] flex flex-col pt-20 pb-6 px-6 transition-transform duration-300 ease-in-out md:hidden",
           mobileMenuOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
