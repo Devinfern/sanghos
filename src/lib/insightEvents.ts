@@ -25,11 +25,34 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
   ];
 
   try {
+    console.log("fetchInsightLAEvents: Starting to fetch events from InsightLA");
+    console.log(`fetchInsightLAEvents: Will try to fetch ${eventUrls.length} events`);
+    
     // Create an array of promises to fetch all events in parallel
     const eventPromises = eventUrls.map(url => extractEventDataFromUrl(url));
-    const extractedEvents = await Promise.all(eventPromises);
     
-    console.log("Raw extracted events:", extractedEvents);
+    // Wait for all promises to settle, even if some fail
+    const eventResults = await Promise.allSettled(eventPromises);
+    
+    // Process results, filtering out rejected promises
+    const extractedEvents = eventResults
+      .filter((result): result is PromiseFulfilledResult<any> => result.status === 'fulfilled')
+      .map(result => result.value);
+    
+    // Log any rejected promises
+    eventResults
+      .filter((result): result is PromiseRejectedResult => result.status === 'rejected')
+      .forEach((result, index) => {
+        console.error(`fetchInsightLAEvents: Failed to extract data from ${eventUrls[index]}:`, result.reason);
+      });
+    
+    console.log(`fetchInsightLAEvents: Successfully extracted ${extractedEvents.length} out of ${eventUrls.length} events`);
+    console.log("Raw extracted events sample:", extractedEvents.slice(0, 1));
+    
+    if (extractedEvents.length === 0) {
+      console.error("fetchInsightLAEvents: No events were successfully extracted");
+      return [];
+    }
     
     // Transform the extracted data into Retreat objects
     const retreats: Retreat[] = extractedEvents.map((eventData, index) => {
@@ -129,7 +152,7 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
         }
       }
       
-      return {
+      const retreat: Retreat = {
         id,
         title: eventData.title || `InsightLA Event ${index + 1}`,
         description: eventData.description || "A mindfulness retreat by InsightLA.",
@@ -162,13 +185,16 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
         },
         source: "InsightLA"
       };
+      
+      console.log(`Transformed InsightLA event ${id}:`, retreat.title);
+      return retreat;
     });
     
-    console.log("Transformed InsightLA events:", retreats);
+    console.log(`fetchInsightLAEvents: Successfully transformed ${retreats.length} InsightLA events`);
     return retreats;
   } catch (error) {
     console.error("Error fetching InsightLA events:", error);
-    toast.error("Failed to load InsightLA events");
-    return [];
+    // Throw the error so it can be handled by the caller
+    throw error;
   }
 };

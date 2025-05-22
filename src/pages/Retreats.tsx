@@ -10,7 +10,8 @@ import RetreatFilters from "@/components/retreats/RetreatFilters";
 import RetreatResultsHeader from "@/components/retreats/RetreatResults";
 import RetreatLoadingState from "@/components/retreats/RetreatLoadingState";
 import NoRetreatsFound from "@/components/retreats/NoRetreatsFound";
-import { retreats } from "@/lib/data";
+import { fetchSanghosRetreats } from "@/lib/data";
+import { fetchInsightLAEvents } from "@/lib/insightEvents";
 import { partnerEvents, eventToRetreatFormat } from "@/data/mockEvents";
 import { ensureValidCategory } from "@/mockEvents";
 
@@ -20,28 +21,56 @@ const Retreats = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
   const [isLoadingEvents, setIsLoadingEvents] = useState(true);
-
+  const [allRetreats, setAllRetreats] = useState([]);
+  const [insightLALoadingError, setInsightLALoadingError] = useState(false);
+  
   useEffect(() => {
-    // Check if real retreats have been loaded (more than just the placeholder)
-    const checkRetreatLoaded = () => {
-      if (retreats.length > 1 || (retreats.length === 1 && retreats[0].id !== "insight-la-1")) {
+    const loadAllEvents = async () => {
+      try {
+        console.log("Retreats page: Loading events from all sources...");
+        
+        // Ensure partner events have proper type conversions
+        const typeSafePartnerEvents = partnerEvents.map(event => ({
+          ...event,
+          category: ensureValidCategory(event.category),
+          location: {
+            ...event.location,
+            locationType: event.location.locationType === "venue" ? "venue" : "online"
+          }
+        }));
+        
+        // Convert partner events to retreat format
+        const partnerRetreats = typeSafePartnerEvents.map(event => eventToRetreatFormat(event));
+        
+        // Load Sanghos retreats
+        const sanghoRetreats = await fetchSanghosRetreats();
+        console.log(`Retreats page: Loaded ${sanghoRetreats.length} Sanghos retreats`);
+        
+        // Load InsightLA retreats
+        let insightLARetreats = [];
+        try {
+          insightLARetreats = await fetchInsightLAEvents();
+          console.log(`Retreats page: Loaded ${insightLARetreats.length} InsightLA retreats`);
+        } catch (insightError) {
+          console.error("Retreats page: Failed to load InsightLA retreats", insightError);
+          setInsightLALoadingError(true);
+        }
+        
+        // Combine all retreats
+        const combinedRetreats = [...sanghoRetreats, ...partnerRetreats, ...insightLARetreats];
+        console.log(`Retreats page: Loaded a total of ${combinedRetreats.length} retreats`);
+        
+        setAllRetreats(combinedRetreats);
+        setIsLoaded(true);
         setIsLoadingEvents(false);
-      } else {
-        setTimeout(checkRetreatLoaded, 500);
+      } catch (error) {
+        console.error("Retreats page: Error loading events", error);
+        setIsLoaded(true);
+        setIsLoadingEvents(false);
       }
     };
     
-    checkRetreatLoaded();
-    
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-      // Fallback timeout to stop loading state after 5 seconds
-      setTimeout(() => {
-        setIsLoadingEvents(false);
-      }, 5000);
-    }, 100);
-
-    return () => clearTimeout(timer);
+    loadAllEvents();
   }, []);
 
   const handleSearch = (query: string) => {
@@ -61,22 +90,6 @@ const Retreats = () => {
     setSearchQuery("");
     setSelectedCategory(null);
   };
-
-  // Ensure partner events have proper type conversions before transforming to retreat format
-  const typeSafePartnerEvents = partnerEvents.map(event => ({
-    ...event,
-    category: ensureValidCategory(event.category),
-    location: {
-      ...event.location,
-      locationType: event.location.locationType === "venue" ? "venue" : "online"
-    }
-  }));
-
-  // Convert partner events to retreat format for consistent display
-  const partnerRetreats = typeSafePartnerEvents.map(event => eventToRetreatFormat(event));
-
-  // Combine the original retreats with partner retreats
-  const allRetreats = [...retreats, ...partnerRetreats];
 
   const allCategories = Array.from(
     new Set(allRetreats.flatMap((retreat) => retreat.category))
@@ -150,7 +163,11 @@ const Retreats = () => {
 
           {/* Content section */}
           {isLoadingEvents ? (
-            <RetreatLoadingState />
+            <RetreatLoadingState message={
+              insightLALoadingError 
+                ? "Loading retreats... (InsightLA retreats unavailable)" 
+                : "Loading retreats..."
+            } />
           ) : filteredRetreats.length > 0 ? (
             <div 
               className={cn(

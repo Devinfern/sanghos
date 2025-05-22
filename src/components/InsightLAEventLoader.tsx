@@ -22,9 +22,10 @@ const InsightLAEventLoader: React.FC = () => {
     if (location.pathname === '/' || location.pathname === '/retreats') {
       const verifyInsightLAEvents = async () => {
         try {
-          console.log("InsightLAEventLoader: Verifying InsightLA events can be loaded...");
+          console.log("InsightLAEventLoader: Attempting to fetch InsightLA events...");
           const events = await fetchInsightLAEvents();
           console.log(`InsightLAEventLoader: Successfully fetched ${events.length} InsightLA events`);
+          console.log("InsightLA events data:", JSON.stringify(events.slice(0, 2)));
           
           if (events.length === 0) {
             toast.warning("Warning: No InsightLA events could be loaded", {
