@@ -87,7 +87,7 @@ const HomeHero = () => {
           <motion.div className="relative aspect-[4/3] rounded-2xl overflow-hidden" initial="hidden" whileInView="visible" viewport={{
           once: true
         }} variants={fadeUp}>
-            <img src="/lovable-uploads/6cfc97b1-427f-4ebf-a716-8fe99ee5694a.png" alt="Peaceful meditation space with natural light" className="w-full h-full object-cover" />
+            <img alt="Peaceful meditation space with natural light" className="w-full h-full object-cover" src="/lovable-uploads/440cf0e4-ee06-4235-9ec4-b3ecdefd7ee9.jpg" />
           </motion.div>
         </div>
       </div>
