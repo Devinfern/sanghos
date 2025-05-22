@@ -32,9 +32,7 @@ const HomePurpose = () => {
                 <span className="text-4xl">🧠</span>
               </div>
               <h3 className="text-2xl font-bold mb-3">Building Community</h3>
-              <p className="text-brand-slate text-lg">
-                We're tackling isolation through community-building experiences where we partner with diverse practitioners to shift perspectives about wellness.
-              </p>
+              <p className="text-brand-slate text-lg">Addressing isolation through community-focused experiences. Our name honors the word Sangha, the Sanskrit word for &quot;community.&quot; Like a Sangha, we gather to offer fresh perspectives on wellness and build meaningful connections.</p>
             </div>
             
             <div className="flex flex-col items-center">
