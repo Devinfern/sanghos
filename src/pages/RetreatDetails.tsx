@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -9,8 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { cn } from "@/lib/utils";
-import { partnerEvents, eventToRetreatFormat } from "@/data/mockEvents";
-import { ensureValidCategory } from "@/mockEvents";
+import { fetchInsightLAEvents } from "@/lib/insightEvents";
 
 const RetreatDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,66 +18,40 @@ const RetreatDetails = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const checkRetreatExists = () => {
-      // Convert partner events to retreat format for consistent display
-      // Ensure partner events have proper type conversions before transforming to retreat format
-      const typeSafePartnerEvents = partnerEvents.map(event => ({
-        ...event,
-        category: ensureValidCategory(event.category),
-        location: {
-          ...event.location,
-          locationType: event.location.locationType === "venue" ? "venue" : "online"
+    const fetchRetreatDetails = async () => {
+      try {
+        // Load retreats from Sanghos
+        const sanghosRetreats = await retreats;
+        
+        // Load InsightLA events
+        const insightLARetreats = await fetchInsightLAEvents().catch(err => {
+          console.error("Failed to load InsightLA retreats:", err);
+          return [];
+        });
+        
+        // Combine all retreats
+        const allRetreats = [...sanghosRetreats, ...insightLARetreats];
+        
+        // Find retreat with matching id
+        const foundRetreat = allRetreats.find(r => r.id === id);
+        
+        if (foundRetreat) {
+          setRetreat(foundRetreat);
+          setActiveImage(foundRetreat.image);
+          // Trigger animation after retreat is loaded
+          setTimeout(() => {
+            setIsVisible(true);
+          }, 100);
         }
-      }));
-      
-      // Convert partner events to retreat format for consistent display
-      const partnerRetreats = typeSafePartnerEvents.map(event => eventToRetreatFormat(event));
-      
-      // Combine the original retreats with partner retreats
-      const allRetreats = [...retreats, ...partnerRetreats];
-      
-      // Find retreat with matching id
-      const foundRetreat = allRetreats.find(r => r.id === id);
-      
-      if (foundRetreat) {
-        setRetreat(foundRetreat);
-        setActiveImage(foundRetreat.image);
-        setIsLoading(false);
         
-        // Trigger animation after retreat is loaded
-        setTimeout(() => {
-          setIsVisible(true);
-        }, 100);
-        
-        return true;
-      }
-      
-      // If no retreat was found and retreats array has non-placeholder items, stop loading
-      if (retreats.length > 1 || (retreats.length === 1 && retreats[0].id !== "insight-la-1")) {
         setIsLoading(false);
-        return true;
+      } catch (error) {
+        console.error("Error fetching retreat details:", error);
+        setIsLoading(false);
       }
-      
-      return false;
     };
     
-    // Try to find the retreat immediately
-    if (!checkRetreatExists()) {
-      // If not found, check periodically until retreats are loaded
-      const intervalId = setInterval(() => {
-        if (checkRetreatExists()) {
-          clearInterval(intervalId);
-        }
-      }, 500);
-      
-      // Timeout after 10 seconds to prevent infinite checking
-      setTimeout(() => {
-        clearInterval(intervalId);
-        setIsLoading(false);
-      }, 10000);
-      
-      return () => clearInterval(intervalId);
-    }
+    fetchRetreatDetails();
   }, [id]);
 
   if (isLoading) {

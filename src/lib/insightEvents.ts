@@ -135,11 +135,6 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
         eventData.price : 
         (eventData.priceDisplay ? parseInt(eventData.priceDisplay.replace(/\D/g, '')) || 85 : 85);
       
-      // Generate a short description if needed (first 100 chars)
-      const shortDescription = eventData.description && eventData.description.length > 100 ?
-        `${eventData.description.substring(0, 100)}...` :
-        (eventData.description || "A mindfulness event by InsightLA.");
-      
       // Convert categories to appropriate format for EventCard
       let eventCategory: string = "meditation";
       if (eventData.category && Array.isArray(eventData.category)) {
@@ -174,8 +169,7 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
         featured: true,
         isSanghos: false,
         sourceUrl: eventUrls[index],
-        // Additional fields for EventCard compatibility
-        shortDescription: shortDescription,
+        // Removed shortDescription field as it's not in the Retreat type
         startDate: startDate,
         endDate: endDate,
         bookingUrl: eventData.bookingLink || eventUrls[index],

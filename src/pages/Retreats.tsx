@@ -12,8 +12,6 @@ import RetreatLoadingState from "@/components/retreats/RetreatLoadingState";
 import NoRetreatsFound from "@/components/retreats/NoRetreatsFound";
 import { fetchSanghosRetreats } from "@/lib/data";
 import { fetchInsightLAEvents } from "@/lib/insightEvents";
-import { partnerEvents, eventToRetreatFormat } from "@/data/mockEvents";
-import { ensureValidCategory } from "@/mockEvents";
 
 const Retreats = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -28,19 +26,6 @@ const Retreats = () => {
     const loadAllEvents = async () => {
       try {
         console.log("Retreats page: Loading events from all sources...");
-        
-        // Ensure partner events have proper type conversions
-        const typeSafePartnerEvents = partnerEvents.map(event => ({
-          ...event,
-          category: ensureValidCategory(event.category),
-          location: {
-            ...event.location,
-            locationType: event.location.locationType === "venue" ? "venue" : "online"
-          }
-        }));
-        
-        // Convert partner events to retreat format
-        const partnerRetreats = typeSafePartnerEvents.map(event => eventToRetreatFormat(event));
         
         // Load Sanghos retreats
         const sanghoRetreats = await fetchSanghosRetreats();
@@ -57,7 +42,7 @@ const Retreats = () => {
         }
         
         // Combine all retreats
-        const combinedRetreats = [...sanghoRetreats, ...partnerRetreats, ...insightLARetreats];
+        const combinedRetreats = [...sanghoRetreats, ...insightLARetreats];
         console.log(`Retreats page: Loaded a total of ${combinedRetreats.length} retreats`);
         
         setAllRetreats(combinedRetreats);
@@ -185,7 +170,7 @@ const Retreats = () => {
               ))}
             </div>
           ) : (
-            <NoRetreatsFound resetFilters={resetFilters} />
+            <NoRetreatsFound resetFilters={resetFilters} loadingError={insightLALoadingError} />
           )}
         </div>
       </main>
