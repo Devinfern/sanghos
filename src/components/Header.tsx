@@ -118,7 +118,7 @@ const Header = () => {
       // Removed transform from the main container to avoid stacking context issues
       // Using static positioning and full-screen absolute dimensions
       <div 
-        className="fixed inset-0 bg-white z-[2000] flex flex-col pt-20 pb-6 px-6 md:hidden"
+        className="fixed inset-0 bg-white z-[1000] flex flex-col pt-20 pb-6 px-6 md:hidden"
         style={{ isolation: 'isolate' }} // Ensures this creates its own stacking context
       >
         <div className="flex flex-col space-y-6 mt-4">
@@ -246,7 +246,7 @@ const Header = () => {
         )}
       >
         <div className="container mx-auto px-4 lg:px-8 flex items-center justify-between">
-          <Link to="/" className="relative z-10">
+          <Link to="/" className="relative z-[1002]">
             <img 
               src="/lovable-uploads/e38deb47-fbee-4a9f-9466-0ad53f2d7a19.png" 
               alt="Sanghos Logo" 
@@ -381,7 +381,7 @@ const Header = () => {
           {/* Mobile menu button - ultra high z-index and fixed position to ensure it's always accessible */}
           <button 
             onClick={toggleMobileMenu}
-            className="md:hidden flex items-center justify-center z-[2001] bg-white rounded-full w-10 h-10 shadow-sm relative"
+            className="md:hidden flex items-center justify-center z-[1003] bg-white rounded-full w-10 h-10 shadow-sm relative"
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             style={{ isolation: 'isolate' }} // Creates its own stacking context
           >
