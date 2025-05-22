@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import OptimizedImage from "@/components/OptimizedImage";
+
 const About = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
@@ -389,7 +390,7 @@ const About = () => {
                   </a>
                 </Button>
                 <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/10 group rounded-full" asChild>
-                  <a href="/host/register" className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium rounded-full">
+                  <a href="/host/register">
                     Become a Host
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </a>
