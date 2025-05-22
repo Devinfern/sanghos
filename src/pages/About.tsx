@@ -88,7 +88,7 @@ const About = () => {
           <div className="container mx-auto max-w-7xl px-4 md:px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <motion.div initial="hidden" animate={isLoaded ? "visible" : "hidden"} variants={fadeIn} className="max-w-3xl">
-                <h1 className="text-6xl md:text-7xl font-bold mb-8 text-brand-dark leading-tight">Helping You Discover Local Wellness Retreats &amp; Experiences</h1>
+                <h1 className="text-6xl md:text-7xl font-bold mb-8 text-brand-dark leading-tight">Discover Local Wellness Retreats &amp; Experiences</h1>
                 
                 <ul className="space-y-4 mb-8 text-lg">
                   <li className="flex items-start">
