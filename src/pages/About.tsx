@@ -259,33 +259,36 @@ const About = () => {
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {retreatTypes.map((type, index) => (
-                <motion.Card
-                  key={type.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ delay: 0.2 + (index * 0.1), duration: 0.6 }}
-                  className="overflow-hidden bg-white border-0 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300"
-                >
-                  <div className="relative h-64 overflow-hidden">
-                    <OptimizedImage 
-                      src={type.image} 
-                      alt={type.title} 
-                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" 
-                    />
-                  </div>
-                  <CardContent className="p-8">
-                    <h3 className="text-2xl font-bold mb-2 text-brand-dark">{type.title}</h3>
-                    <p className="text-brand-slate text-lg mb-6">{type.description}</p>
-                    <Button 
-                      variant="outline" 
-                      className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium rounded-full"
-                    >
-                      Learn More
-                    </Button>
-                  </CardContent>
-                </motion.Card>
-              ))}
+              {retreatTypes.map((type, index) => {
+                const MotionCard = motion(Card);
+                return (
+                  <MotionCard
+                    key={type.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                    transition={{ delay: 0.2 + (index * 0.1), duration: 0.6 }}
+                    className="overflow-hidden bg-white border-0 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300"
+                  >
+                    <div className="relative h-64 overflow-hidden">
+                      <OptimizedImage 
+                        src={type.image} 
+                        alt={type.title} 
+                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" 
+                      />
+                    </div>
+                    <CardContent className="p-8">
+                      <h3 className="text-2xl font-bold mb-2 text-brand-dark">{type.title}</h3>
+                      <p className="text-brand-slate text-lg mb-6">{type.description}</p>
+                      <Button 
+                        variant="outline" 
+                        className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium rounded-full"
+                      >
+                        Learn More
+                      </Button>
+                    </CardContent>
+                  </MotionCard>
+                );
+              })}
             </div>
           </div>
         </section>
