@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { Toaster } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import InsightLAEventLoader from '@/components/InsightLAEventLoader';
+import ScrollToTop from '@/components/ScrollToTop';
 
 // Pages
 import Index from '@/pages/Index';
@@ -80,6 +81,8 @@ function App() {
           <Toaster richColors />
           {/* Add the InsightLA Event Loader */}
           <InsightLAEventLoader />
+          {/* Add the ScrollToTop component */}
+          <ScrollToTop />
           <style>{`
             .glass-morphism {
               background: rgba(255, 255, 255, 0.7);
