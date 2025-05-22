@@ -133,8 +133,8 @@ const CommunityTeaser = () => {
                 className="relative rounded-3xl overflow-hidden"
               >
                 <OptimizedImage 
-                  src="/lovable-uploads/60c5a966-4e10-4c09-af70-bfafe90c0630.png"
-                  alt="Community meditation session"
+                  src="/lovable-uploads/1bb523ae-38ed-4377-8a20-53ad930f2cba.png"
+                  alt="Community yoga session in nature"
                   className="w-full h-full object-cover"
                 />
               </motion.div>
