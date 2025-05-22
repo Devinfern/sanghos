@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -229,7 +228,7 @@ const Header = () => {
 
         <button 
           onClick={toggleMobileMenu} 
-          className="md:hidden flex items-center justify-center z-50 bg-white rounded-full w-10 h-10 shadow-sm"
+          className="md:hidden flex items-center justify-center z-[60] bg-white rounded-full w-10 h-10 shadow-sm"
           aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
         >
           {mobileMenuOpen ? (
@@ -242,7 +241,7 @@ const Header = () => {
 
       <div 
         className={cn(
-          "fixed inset-0 bg-white z-40 flex flex-col pt-20 pb-6 px-6 transition-transform duration-300 ease-in-out md:hidden",
+          "fixed inset-0 bg-white z-[55] flex flex-col pt-20 pb-6 px-6 transition-transform duration-300 ease-in-out md:hidden",
           mobileMenuOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
