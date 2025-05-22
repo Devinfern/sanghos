@@ -29,7 +29,7 @@ const HomeHero = () => {
       }
     }
   };
-  return <section className="relative pt-24 pb-32 bg-[#F3F1ED] overflow-hidden">
+  return <section className="relative pt-24 pb-32 bg-[#F3F1ED] overflow-hidden 100vh">
       {/* Background subtle shapes */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <div className="absolute h-96 w-96 rounded-full bg-brand-primary/5 -top-20 -left-20 blur-3xl"></div>
@@ -44,7 +44,7 @@ const HomeHero = () => {
         }} variants={fadeUp}>
             <span className="text-sm font-medium text-brand-primary uppercase tracking-wider mb-3 block">DISCOVER YOUR NEXT RETREAT</span>
             
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-brand-dark leading-[1.1] mb-6">Curated Wellness Experiences, Tailored to You.</h1>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-brand-dark leading-[1.1] mb-6">Wellness Experiences, Tailored To You.</h1>
             
             <ul className="space-y-4 mb-8 text-lg">
               <li className="flex items-start">
