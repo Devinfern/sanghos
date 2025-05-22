@@ -37,7 +37,7 @@ const HomeHero = () => {
       </div>
 
       <div className="container relative z-10 mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center my-0 py-[49px]">
           {/* Text content */}
           <motion.div className="max-w-3xl" initial="hidden" whileInView="visible" viewport={{
           once: true
