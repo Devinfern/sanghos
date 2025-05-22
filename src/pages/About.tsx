@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import OptimizedImage from "@/components/OptimizedImage";
-
 const About = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
@@ -281,9 +280,8 @@ const About = () => {
           <div className="container mx-auto max-w-6xl px-4 md:px-6">
             <motion.div initial="hidden" animate={isLoaded ? "visible" : "hidden"} variants={fadeIn} className="text-center mb-16">
               <span className="text-sm uppercase tracking-wider text-brand-primary font-semibold">Get Involved</span>
-              <h2 className="text-4xl md:text-6xl font-bold mt-4 mb-8 text-brand-dark">
-                Let's Change Wellness, For Good
-              </h2>
+              <h2 className="text-4xl md:text-6xl font-bold mt-4 mb-8 text-brand-dark">Let's Enhance Access
+To Wellness</h2>
               <p className="text-xl text-brand-slate max-w-3xl mx-auto">
                 Join our community and be part of the movement
               </p>
