@@ -25,9 +25,7 @@ const HomeCommunitySection = () => {
             <span className="text-sm uppercase tracking-wider text-[#D2EF9A] font-semibold">
               Get Involved
             </span>
-            <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold mt-4 mb-8 text-white leading-tight">
-              Let's Change Wellness, For Good
-            </h2>
+            <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold mt-4 mb-8 text-white leading-tight">Let's Change Access To Wellness</h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
