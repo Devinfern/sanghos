@@ -2,6 +2,9 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
+// Use the correct project constants
+const SUPABASE_URL = "https://ordomvdrqjthpzfyrrzp.supabase.co";
+
 type ConnectionStatus = "checking" | "connected" | "error" | "project_not_found";
 
 export const useSupabaseConnection = () => {
@@ -11,7 +14,7 @@ export const useSupabaseConnection = () => {
   useEffect(() => {
     const checkConnection = async () => {
       try {
-        console.log("Checking Supabase connection to:", supabase.supabaseUrl);
+        console.log("Checking Supabase connection to:", SUPABASE_URL);
         const { error } = await supabase.from('forum_posts').select('count', { count: 'exact', head: true });
         
         if (error) {
