@@ -4,8 +4,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 
 // URL and key constants for Supabase from the project's configuration
-const SUPABASE_URL = "https://ordomvdrqjthpzfyrrzp.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZG9tdmRycWp0aHB6ZnlycnpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyMzM3NDgsImV4cCI6MjA1NjgwOTc0OH0.fQqjrsQC--wNITiVq15SIwuY2sp3t5hxpbg0DVVeoLw";
+const SUPABASE_URL = "https://raijubzrdhwizxtupguy.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhaWp1YnpyZGh3aXp4dHVwZ3V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI3MDEyMzcsImV4cCI6MjA0ODI3NzIzN30.2hO4hhqYdcUhpZLqGSfJo7lgS4d5qVj7nVROzRaNdJM";
 
 export function useAdminStatus() {
   const [isAdmin, setIsAdmin] = useState(false);
