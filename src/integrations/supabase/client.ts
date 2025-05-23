@@ -5,7 +5,7 @@ import type { Database } from './types';
 
 // Project URL and anon key
 const SUPABASE_URL = "https://raijubzrdhwizxtupguy.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhaWp1YnpyZGh3aXp4dHVwZ3V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI3MDEyMzcsImV4cCI6MjA0ODI3NzIzN30.2hO4hhqYdcUhpZLqGSfJo7lgS4d5qVj7nVROzRaNdJM";
+const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhaWp1YnpyZGh3aXp4dHVwZ3V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ2NjkxODgsImV4cCI6MjA2MDI0NTE4OH0.vx5h9SHjv5XQ29kYi9sKjNNHc2f6_Nv-3wV27nHh2K8";
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
