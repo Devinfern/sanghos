@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -11,6 +10,8 @@ import Footer from "@/components/Footer";
 import SocialLoginButtons from "@/components/auth/SocialLoginButtons";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useSupabaseConnection } from "@/hooks/useSupabaseConnection";
+import ConnectionStatusAlert from "@/components/auth/ConnectionStatusAlert";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const { connectionStatus, error: connectionError } = useSupabaseConnection();
   
   // Initial preferences for localStorage
   const initialPreferences = {
@@ -116,6 +118,8 @@ const SignUp = () => {
     setShowPassword(!showPassword);
   };
 
+  const isFormDisabled = connectionStatus !== "connected";
+
   return (
     <>
       <Helmet>
@@ -132,6 +136,11 @@ const SignUp = () => {
               <h1 className="text-3xl font-bold mb-2 text-brand-dark">Join Sanghos</h1>
               <p className="text-muted-foreground">Start your wellness journey</p>
             </div>
+
+            <ConnectionStatusAlert 
+              connectionStatus={connectionStatus}
+              error={connectionError}
+            />
 
             {/* Social Login Buttons */}
             <div className="mb-6">
@@ -161,6 +170,7 @@ const SignUp = () => {
                   placeholder="Enter your name"
                   className="bg-white/80 border-brand-light focus-visible:ring-brand-primary"
                   required
+                  disabled={isFormDisabled}
                 />
               </div>
               <div className="space-y-2">
@@ -173,6 +183,7 @@ const SignUp = () => {
                   placeholder="Enter your email"
                   className="bg-white/80 border-brand-light focus-visible:ring-brand-primary"
                   required
+                  disabled={isFormDisabled}
                 />
               </div>
               <div className="space-y-2">
@@ -186,6 +197,7 @@ const SignUp = () => {
                     placeholder="Create a password"
                     className="bg-white/80 border-brand-light focus-visible:ring-brand-primary"
                     required
+                    disabled={isFormDisabled}
                   />
                   <Button
                     type="button"
@@ -193,6 +205,7 @@ const SignUp = () => {
                     size="sm"
                     className="absolute right-2.5 top-2.5 h-auto px-1"
                     onClick={toggleShowPassword}
+                    disabled={isFormDisabled}
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -205,7 +218,7 @@ const SignUp = () => {
               
               {error && <p className="text-red-500 text-sm">{error}</p>}
               
-              <Button type="submit" className="w-full bg-brand-primary hover:bg-brand-primary/90" disabled={isLoading}>
+              <Button type="submit" className="w-full bg-brand-primary hover:bg-brand-primary/90" disabled={isLoading || isFormDisabled}>
                 {isLoading ? "Creating Account..." : "Sign Up"}
               </Button>
             </form>

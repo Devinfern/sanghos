@@ -3,10 +3,6 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 
-// URL and key constants for Supabase from the project's configuration
-const SUPABASE_URL = "https://raijubzrdhwizxtupguy.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhaWp1YnpyZGh3aXp4dHVwZ3V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI3MDEyMzcsImV4cCI6MjA0ODI3NzIzN30.2hO4hhqYdcUhpZLqGSfJo7lgS4d5qVj7nVROzRaNdJM";
-
 export function useAdminStatus() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -26,12 +22,12 @@ export function useAdminStatus() {
         setIsLoading(true);
         console.log("Checking admin status for email:", user.email);
         
-        // Use the Edge Function for admin verification with direct URL and key
-        const response = await fetch(`${SUPABASE_URL}/functions/v1/is_user_admin`, {
+        // Use the Edge Function for admin verification
+        const response = await fetch(`${supabase.supabaseUrl}/functions/v1/is_user_admin`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+            'Authorization': `Bearer ${supabase.supabaseKey}`
           },
           body: JSON.stringify({ email: user.email })
         });

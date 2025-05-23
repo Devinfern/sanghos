@@ -11,6 +11,7 @@ export const useSupabaseConnection = () => {
   useEffect(() => {
     const checkConnection = async () => {
       try {
+        console.log("Checking Supabase connection to:", supabase.supabaseUrl);
         const { error } = await supabase.from('forum_posts').select('count', { count: 'exact', head: true });
         
         if (error) {
@@ -27,6 +28,7 @@ export const useSupabaseConnection = () => {
           }
         } else {
           setConnectionStatus("connected");
+          console.log("Successfully connected to Supabase");
         }
       } catch (err) {
         console.error("Supabase connection error:", err);

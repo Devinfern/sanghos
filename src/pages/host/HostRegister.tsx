@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useHost } from "@/contexts/HostContext";
 import { Link, Navigate } from "react-router-dom";
@@ -7,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft } from "lucide-react";
 import HostHeader from "@/components/HostHeader";
+import { useSupabaseConnection } from "@/hooks/useSupabaseConnection";
+import ConnectionStatusAlert from "@/components/auth/ConnectionStatusAlert";
 
 const HostRegister = () => {
   const [formData, setFormData] = useState({
@@ -19,6 +20,7 @@ const HostRegister = () => {
     yearsExperience: "0",
   });
   const { host, register, isLoading } = useHost();
+  const { connectionStatus, error } = useSupabaseConnection();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -44,6 +46,8 @@ const HostRegister = () => {
   if (host) {
     return <Navigate to="/host/dashboard" />;
   }
+  
+  const isFormDisabled = connectionStatus !== "connected";
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -58,6 +62,11 @@ const HostRegister = () => {
           </div>
 
           <div className="bg-white shadow-lg rounded-lg p-8">
+            <ConnectionStatusAlert 
+              connectionStatus={connectionStatus}
+              error={error}
+            />
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <label htmlFor="name" className="text-sm font-medium">
@@ -70,6 +79,7 @@ const HostRegister = () => {
                   onChange={handleChange}
                   placeholder="Maya Johnson"
                   required
+                  disabled={isFormDisabled}
                 />
               </div>
 
@@ -152,7 +162,7 @@ const HostRegister = () => {
               <Button
                 type="submit"
                 className="w-full"
-                disabled={isLoading}
+                disabled={isLoading || isFormDisabled}
                 size="lg"
               >
                 {isLoading ? "Registering..." : "Register as Host"}

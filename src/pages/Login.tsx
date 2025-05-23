@@ -23,11 +23,6 @@ const Login = () => {
     handleSubmit
   } = useLoginForm(connectionStatus);
 
-  const projectDetails = {
-    url: "https://raijubzrdhwizxtupguy.supabase.co",
-    key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....[truncated]"
-  };
-
   useEffect(() => {
     // Check if this is a join request
     const urlParams = new URLSearchParams(window.location.search);
@@ -55,7 +50,6 @@ const Login = () => {
             <ConnectionStatusAlert 
               connectionStatus={connectionStatus}
               error={error}
-              projectDetails={projectDetails}
             />
 
             {/* Social Login Buttons */}

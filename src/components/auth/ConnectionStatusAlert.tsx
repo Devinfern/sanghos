@@ -2,17 +2,20 @@
 import React from 'react';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { supabase } from '@/integrations/supabase/client';
 
 interface ConnectionStatusAlertProps {
   connectionStatus: "checking" | "connected" | "error" | "project_not_found";
   error: string;
-  projectDetails: {
-    url: string;
-    key: string;
-  };
 }
 
-const ConnectionStatusAlert = ({ connectionStatus, error, projectDetails }: ConnectionStatusAlertProps) => {
+const ConnectionStatusAlert = ({ connectionStatus, error }: ConnectionStatusAlertProps) => {
+  // Get the project details directly from the supabase client
+  const projectDetails = {
+    url: supabase.supabaseUrl,
+    key: supabase.supabaseKey.substring(0, 20) + "..." // Truncate for security
+  };
+
   if (connectionStatus === "checking") {
     return (
       <Alert className="mb-4 bg-blue-50">
