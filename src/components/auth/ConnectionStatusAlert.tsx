@@ -2,6 +2,7 @@
 import React from 'react';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { SUPABASE_PROJECT_URL, SUPABASE_PROJECT_KEY } from '@/integrations/supabase/client';
 
 interface ConnectionStatusAlertProps {
   connectionStatus: "checking" | "connected" | "error" | "project_not_found";
@@ -11,8 +12,8 @@ interface ConnectionStatusAlertProps {
 const ConnectionStatusAlert = ({ connectionStatus, error }: ConnectionStatusAlertProps) => {
   // Use the project constants directly
   const projectDetails = {
-    url: "https://ordomvdrqjthpzfyrrzp.supabase.co",
-    key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." // Truncate for security
+    url: SUPABASE_PROJECT_URL,
+    key: SUPABASE_PROJECT_KEY.substring(0, 20) + "..." // Truncate for security
   };
 
   if (connectionStatus === "checking") {

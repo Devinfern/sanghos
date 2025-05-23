@@ -5,12 +5,14 @@ import { useLocation } from 'react-router-dom';
 import { fetchInsightLAEvents } from "@/lib/insightEvents";
 
 /**
- * This component helps debug the InsightLA event loading issue
- * It monitors route changes and logs relevant information about InsightLA events
+ * This component monitors routes and ensures InsightLA events are properly loaded
+ * It provides debugging and error recovery for InsightLA event loading
  */
 const InsightLAEventLoader: React.FC = () => {
   const location = useLocation();
   const [previousPath, setPreviousPath] = useState<string | null>(null);
+  const [loadAttempts, setLoadAttempts] = useState(0);
+  const [hasShownError, setHasShownError] = useState(false);
   
   useEffect(() => {
     console.log(`Navigation detected: ${previousPath || 'initial'} → ${location.pathname}`);
@@ -23,22 +25,48 @@ const InsightLAEventLoader: React.FC = () => {
       const verifyInsightLAEvents = async () => {
         try {
           console.log("InsightLAEventLoader: Attempting to fetch InsightLA events...");
+          setLoadAttempts(prev => prev + 1);
+          
+          // Only attempt to load a maximum of 3 times
+          if (loadAttempts >= 3) {
+            console.log("InsightLAEventLoader: Maximum load attempts reached, using fallback data");
+            if (!hasShownError) {
+              toast.warning("Warning: No InsightLA events could be loaded", {
+                description: "Using fallback event data instead",
+                duration: 5000,
+              });
+              setHasShownError(true);
+            }
+            return;
+          }
+          
           const events = await fetchInsightLAEvents();
           console.log(`InsightLAEventLoader: Successfully fetched ${events.length} InsightLA events`);
-          console.log("InsightLA events data:", JSON.stringify(events.slice(0, 2)));
           
           if (events.length === 0) {
             toast.warning("Warning: No InsightLA events could be loaded", {
               description: "This may affect event listings on the site",
               duration: 5000,
             });
+          } else if (events.some(event => event.source?.includes("Fallback"))) {
+            console.log("InsightLAEventLoader: Some fallback events were used");
+            if (!hasShownError) {
+              toast.warning("Warning: Using some fallback InsightLA event data", {
+                description: "Some events couldn't be loaded from the original source",
+                duration: 5000,
+              });
+              setHasShownError(true);
+            }
           }
         } catch (error) {
           console.error("InsightLAEventLoader: Failed to fetch InsightLA events", error);
-          toast.error("Failed to load InsightLA events", {
-            description: "Please check network connection or try again later",
-            duration: 5000,
-          });
+          if (!hasShownError) {
+            toast.error("Failed to load InsightLA events", {
+              description: "Using fallback event data instead",
+              duration: 5000,
+            });
+            setHasShownError(true);
+          }
         }
       };
       

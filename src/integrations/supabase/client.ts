@@ -11,3 +11,7 @@ const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 // import { supabase } from "@/integrations/supabase/client";
 
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+// Export constants for use in other files
+export const SUPABASE_PROJECT_URL = SUPABASE_URL;
+export const SUPABASE_PROJECT_KEY = SUPABASE_PUBLISHABLE_KEY;

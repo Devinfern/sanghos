@@ -1,11 +1,7 @@
 
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, SUPABASE_PROJECT_URL, SUPABASE_PROJECT_KEY } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-
-// Use the correct project constants
-const SUPABASE_URL = "https://ordomvdrqjthpzfyrrzp.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZG9tdmRycWp0aHB6ZnlycnpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyMzM3NDgsImV4cCI6MjA1NjgwOTc0OH0.fQqjrsQC--wNITiVq15SIwuY2sp3t5hxpbg0DVVeoLw";
 
 export function useAdminStatus() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -27,11 +23,11 @@ export function useAdminStatus() {
         console.log("Checking admin status for email:", user.email);
         
         // Use the Edge Function for admin verification
-        const response = await fetch(`${SUPABASE_URL}/functions/v1/is_user_admin`, {
+        const response = await fetch(`${SUPABASE_PROJECT_URL}/functions/v1/is_user_admin`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+            'Authorization': `Bearer ${SUPABASE_PROJECT_KEY}`
           },
           body: JSON.stringify({ email: user.email })
         });
