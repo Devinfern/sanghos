@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { ArrowRight, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import HostHeader from "@/components/HostHeader";
+import SocialLoginButtons from "@/components/auth/SocialLoginButtons";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -114,6 +116,23 @@ const HostSignup = () => {
           </div>
 
           <div className="glass-morphism rounded-xl p-6 md:p-8">
+            {/* Social Login Buttons */}
+            <div className="mb-6">
+              <SocialLoginButtons 
+                isLoading={isLoading} 
+                onLoadingChange={setIsLoading}
+              />
+            </div>
+
+            <div className="relative mb-6">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-gray-300"></span>
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-white px-2 text-muted-foreground">Or continue with email</span>
+              </div>
+            </div>
+
             {error && (
               <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
                 <span className="block">{error}</span>

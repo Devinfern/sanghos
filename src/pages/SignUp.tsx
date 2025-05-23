@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SocialLoginButtons from "@/components/auth/SocialLoginButtons";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -111,26 +112,6 @@ const SignUp = () => {
     }
   };
 
-  const handleSocialSignup = async (provider: 'google' | 'facebook' | 'apple') => {
-    try {
-      setIsLoading(true);
-      
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo: `${window.location.origin}/onboarding`
-        }
-      });
-      
-      if (error) throw error;
-      
-    } catch (err) {
-      console.error("Social auth error:", err);
-      toast.error("Authentication failed. Please try again.");
-      setIsLoading(false);
-    }
-  };
-
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -150,6 +131,23 @@ const SignUp = () => {
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold mb-2 text-brand-dark">Join Sanghos</h1>
               <p className="text-muted-foreground">Start your wellness journey</p>
+            </div>
+
+            {/* Social Login Buttons */}
+            <div className="mb-6">
+              <SocialLoginButtons 
+                isLoading={isLoading} 
+                onLoadingChange={setIsLoading}
+              />
+            </div>
+
+            <div className="relative mb-6">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-gray-300"></span>
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-white px-2 text-muted-foreground">Or continue with email</span>
+              </div>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -210,45 +208,6 @@ const SignUp = () => {
               <Button type="submit" className="w-full bg-brand-primary hover:bg-brand-primary/90" disabled={isLoading}>
                 {isLoading ? "Creating Account..." : "Sign Up"}
               </Button>
-              
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-gray-300"></span>
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-white px-2 text-muted-foreground">Or continue with</span>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-3 gap-3">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => handleSocialSignup('google')}
-                  disabled={isLoading}
-                  className="border-gray-300"
-                >
-                  Google
-                </Button>
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => handleSocialSignup('facebook')}
-                  disabled={isLoading}
-                  className="border-gray-300"
-                >
-                  Facebook
-                </Button>
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => handleSocialSignup('apple')}
-                  disabled={isLoading}
-                  className="border-gray-300"
-                >
-                  Apple
-                </Button>
-              </div>
             </form>
 
             <div className="text-center mt-6">
