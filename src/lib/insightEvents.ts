@@ -1,7 +1,6 @@
 
 import { Retreat, Instructor } from "@/lib/data";
 import { extractEventDataFromUrl } from "@/lib/api/forum/events/extractApi";
-import { toast } from "sonner";
 
 // Default instructor for InsightLA events
 const insightLAInstructor: Instructor = {
@@ -73,81 +72,22 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
       .filter((result): result is PromiseFulfilledResult<any> => result.status === 'fulfilled')
       .map(result => result.value);
     
-    // Log any rejected promises
-    eventResults
-      .filter((result): result is PromiseRejectedResult => result.status === 'rejected')
-      .forEach((result, index) => {
-        console.error(`fetchInsightLAEvents: Failed to extract data from ${eventUrls[index]}:`, result.reason);
-      });
+    // Log any rejected promises for debugging
+    const failedRequests = eventResults.filter((result): result is PromiseRejectedResult => result.status === 'rejected');
+    if (failedRequests.length > 0) {
+      console.log(`fetchInsightLAEvents: ${failedRequests.length} requests failed, using fallback data`);
+    }
     
     console.log(`fetchInsightLAEvents: Successfully extracted ${extractedEvents.length} out of ${eventUrls.length} events`);
     
-    if (extractedEvents.length === 0) {
-      console.error("fetchInsightLAEvents: No events were successfully extracted, using fallback data");
-      
-      // If no events extracted, transform fallback data into Retreat objects
-      return fallbackEvents.map((eventData, index) => {
-        const id = `insight-la-fallback-${index + 1}`;
-        
-        // Create instructor object
-        const eventInstructor: Instructor = {
-          ...insightLAInstructor,
-          name: eventData.instructor || insightLAInstructor.name,
-        };
-        
-        // Parse date
-        const startDate = new Date(eventData.date);
-        
-        // Create retreat object from fallback data
-        const retreat: Retreat = {
-          id,
-          title: eventData.title,
-          description: eventData.description,
-          image: eventData.image,
-          additionalImages: [
-            "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=1170&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1607962837359-5e7e89f86776?q=80&w=1170&auto=format&fit=crop"
-          ],
-          location: {
-            name: eventData.location.name,
-            address: eventData.location.address,
-            city: eventData.location.city,
-            state: eventData.location.state,
-            description: `${eventData.location.name}, ${eventData.location.city}, ${eventData.location.state}`,
-            coordinates: {
-              lat: 34.0736,
-              lng: -118.2936
-            }
-          },
-          instructor: eventInstructor,
-          date: eventData.date,
-          time: eventData.time,
-          duration: "Full day",
-          price: eventData.price,
-          capacity: 25,
-          remaining: Math.floor(Math.random() * 20) + 5,
-          category: ["meditation", "mindfulness"],
-          amenities: ["Meditation cushions", "Tea service", "Lunch provided", "Accessible facilities"],
-          featured: true,
-          isSanghos: false,
-          sourceUrl: eventUrls[index] || "https://insightla.org/events/",
-          bookingUrl: eventUrls[index] || "https://insightla.org/events/",
-          organizer: {
-            name: "InsightLA",
-            website: "https://insightla.org"
-          },
-          source: "InsightLA (Fallback Data)"
-        };
-        
-        console.log(`Using fallback data for InsightLA event ${id}:`, retreat.title);
-        return retreat;
-      });
-    }
+    // If we have some extracted events, use them; otherwise use fallback
+    const eventsToProcess = extractedEvents.length > 0 ? extractedEvents : fallbackEvents;
+    const isUsingFallback = extractedEvents.length === 0;
     
-    // Transform the extracted data into Retreat objects
-    const retreats: Retreat[] = extractedEvents.map((eventData, index) => {
-      // Generate a unique ID based on the URL
-      const id = `insight-la-${index + 1}`;
+    // Transform the data into Retreat objects
+    const retreats: Retreat[] = eventsToProcess.map((eventData, index) => {
+      // Generate a unique ID based on the source
+      const id = isUsingFallback ? `insight-la-fallback-${index + 1}` : `insight-la-${index + 1}`;
       
       // Create instructor object based on extracted data or use default
       const eventInstructor: Instructor = {
@@ -159,7 +99,7 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
       let dateString = "";
       
       // Handle the case where date is an object with iso and display properties
-      if (typeof eventData.date === 'object' && eventData.date.iso) {
+      if (typeof eventData.date === 'object' && eventData.date?.iso) {
         dateString = eventData.date.iso.split('T')[0]; // Get just the date part
       } 
       // Handle the case where date is a simple string
@@ -169,42 +109,6 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
       // Fallback to current date if no date information is available
       else {
         dateString = new Date().toISOString().split('T')[0];
-      }
-      
-      // Create a start date and end date for the event card
-      const startDate = new Date(dateString);
-      
-      // Add time information if available
-      if (eventData.time && typeof eventData.time === 'string') {
-        const timeMatch = eventData.time.match(/(\d+):(\d+)(?:\s*(am|pm))?/i);
-        if (timeMatch) {
-          let hours = parseInt(timeMatch[1], 10);
-          const minutes = parseInt(timeMatch[2], 10);
-          
-          // Handle AM/PM
-          if (timeMatch[3] && timeMatch[3].toLowerCase() === 'pm' && hours < 12) {
-            hours += 12;
-          } else if (timeMatch[3] && timeMatch[3].toLowerCase() === 'am' && hours === 12) {
-            hours = 0;
-          }
-          
-          startDate.setHours(hours, minutes, 0);
-        }
-      }
-      
-      // Create an end date 2 hours after start time by default
-      const endDate = new Date(startDate.getTime());
-      endDate.setHours(endDate.getHours() + 2);
-      
-      // Determine if this is a multi-day retreat
-      const isMultiDay = eventData.description && 
-        (eventData.description.toLowerCase().includes("day retreat") || 
-         eventData.description.toLowerCase().includes("weekend") ||
-         eventData.description.toLowerCase().includes("multi-day"));
-      
-      // For multi-day retreats, set end date to be 2-3 days after start
-      if (isMultiDay) {
-        endDate.setDate(endDate.getDate() + Math.floor(Math.random() * 2) + 2); // 2-3 days
       }
       
       // Extract location information
@@ -225,18 +129,6 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
         eventData.price : 
         (eventData.priceDisplay ? parseInt(eventData.priceDisplay.replace(/\D/g, '')) || 85 : 85);
       
-      // Convert categories to appropriate format for EventCard
-      let eventCategory: string = "meditation";
-      if (eventData.category && Array.isArray(eventData.category)) {
-        if (eventData.category.some(cat => /yoga/i.test(cat))) {
-          eventCategory = "yoga";
-        } else if (eventData.category.some(cat => /retreat/i.test(cat))) {
-          eventCategory = "retreat";
-        } else if (eventData.category.some(cat => /workshop/i.test(cat))) {
-          eventCategory = "workshop";
-        }
-      }
-      
       const retreat: Retreat = {
         id,
         title: eventData.title || `InsightLA Event ${index + 1}`,
@@ -250,24 +142,23 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
         instructor: eventInstructor,
         date: dateString,
         time: eventData.time || "10:00 AM",
-        duration: isMultiDay ? "Multiple days" : "Full day",
+        duration: "Full day",
         price: price,
         capacity: eventData.capacity || 25,
         remaining: eventData.remaining || Math.floor(Math.random() * 20) + 5,
-        category: [eventCategory, "mindfulness"],
+        category: ["meditation", "mindfulness"],
         amenities: ["Meditation cushions", "Tea service", "Lunch provided", "Accessible facilities"],
         featured: true,
         isSanghos: false,
-        sourceUrl: eventUrls[index],
-        bookingUrl: eventData.bookingLink || eventUrls[index],
+        sourceUrl: eventUrls[index] || "https://insightla.org/events/",
+        bookingUrl: eventData.bookingLink || eventUrls[index] || "https://insightla.org/events/",
         organizer: {
           name: "InsightLA",
           website: "https://insightla.org"
         },
-        source: "InsightLA"
+        source: isUsingFallback ? "InsightLA (Fallback Data)" : "InsightLA"
       };
       
-      console.log(`Transformed InsightLA event ${id}:`, retreat.title);
       return retreat;
     });
     
@@ -275,14 +166,9 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
     return retreats;
   } catch (error) {
     console.error("Error fetching InsightLA events:", error);
-    toast.warning("Warning: No InsightLA events could be loaded", {
-      description: "Using fallback event data instead",
-      duration: 5000,
-    });
     
     // Return fallback events in case of error
     return fallbackEvents.map((eventData, index) => {
-      // Create retreat object from fallback data (similar to above)
       return {
         id: `insight-la-error-${index + 1}`,
         title: eventData.title,
