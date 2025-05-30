@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -168,7 +167,7 @@ const CommunityTeaser = () => {
           </div>
         </section>
 
-        {/* Benefits Section - Updated Design */}
+        {/* Benefits Section - Fixed Animation */}
         <section className="py-24 bg-white">
           <div className="container mx-auto max-w-7xl px-4 md:px-6">
             <motion.div
@@ -186,17 +185,27 @@ const CommunityTeaser = () => {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div 
+              className={`grid gap-8 transition-all duration-700 ease-in-out ${
+                expandedCard !== null 
+                  ? 'grid-cols-1' 
+                  : 'grid-cols-1 lg:grid-cols-3'
+              }`}
+            >
               {benefits.map((benefit, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
                   animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                   transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }}
-                  className={`${benefit.bgColor} ${benefit.textColor} rounded-3xl relative overflow-hidden group transition-all duration-500 ${
-                    expandedCard === index ? 'lg:col-span-3 min-h-[500px]' : 'hover:scale-105 min-h-[400px]'
+                  className={`${benefit.bgColor} ${benefit.textColor} rounded-3xl relative overflow-hidden group transition-all duration-700 ease-in-out ${
+                    expandedCard === index ? 'order-first' : ''
+                  } ${
+                    expandedCard !== null && expandedCard !== index ? 'hidden lg:hidden' : ''
                   }`}
-                  layout
+                  style={{
+                    minHeight: expandedCard === index ? '600px' : '400px'
+                  }}
                 >
                   {/* Background decoration */}
                   <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
