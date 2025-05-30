@@ -1,171 +1,231 @@
 
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { Toaster } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import InsightLAEventLoader from '@/components/InsightLAEventLoader';
-import ScrollToTop from '@/components/ScrollToTop';
-
-// Pages
-import Index from '@/pages/Index';
-import Pricing from '@/pages/Pricing';
-import Community from '@/pages/Community';
-import AboutUs from '@/pages/About';
-import AboutDesignOne from '@/pages/AboutDesignOne';
-import AboutDesignTwo from '@/pages/AboutDesignTwo';
-import ContactUs from '@/pages/Contact';
-import RetreatDetailsPage from '@/pages/RetreatDetails';
-import WellnessJournalPage from '@/pages/WellnessJournalPage';
-import ForumPage from '@/pages/ForumPage';
-import AdminCMS from '@/pages/AdminCMS';
-import CommunityCMS from '@/pages/CommunityCMS';
-import RetreatManagementCMS from '@/pages/RetreatManagementCMS';
-import NotFound from '@/pages/NotFound';
-import Retreats from '@/pages/Retreats';
-import Login from '@/pages/Login';
-import SignUp from '@/pages/SignUp';
-import CommunityTeaser from '@/pages/CommunityTeaser';
-import JoinNow from '@/pages/JoinNow';
-import UserDashboard from '@/pages/UserDashboard';
-import OnboardingPage from '@/pages/OnboardingPage';
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from 'react-helmet-async';
+import Index from "./pages/Index";
+import About from "./pages/About";
+import Retreats from "./pages/Retreats";
+import RetreatDetails from "./pages/RetreatDetails";
+import Contact from "./pages/Contact";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import UserDashboard from "./pages/UserDashboard";
+import Booking from "./pages/Booking";
+import CheckoutPage from "./pages/CheckoutPage";
+import NotFound from "./pages/NotFound";
+import AdminCMS from "./pages/AdminCMS";
+import CommunityCMS from "./pages/CommunityCMS";
+import Community from "./pages/Community";
+import CommunityTeaser from "./pages/CommunityTeaser";
+import CommunityBenefits from "./pages/CommunityBenefits";
+import CommunitySpaceDetails from "./pages/CommunitySpaceDetails";
+import RetreatCommunity from "./pages/RetreatCommunity";
+import WellnessJournalPage from "./pages/WellnessJournalPage";
+import JoinNow from "./pages/JoinNow";
+import OnboardingPage from "./pages/OnboardingPage";
+import Pricing from "./pages/Pricing";
+import Instructors from "./pages/Instructors";
+import InstructorProfile from "./pages/InstructorProfile";
+import Retreat from "./pages/Retreat";
+import RetreatManagementCMS from "./pages/RetreatManagementCMS";
+import ForumPage from "./pages/ForumPage";
+import AboutDesignOne from "./pages/AboutDesignOne";
+import AboutDesignTwo from "./pages/AboutDesignTwo";
+import Onboarding from "./pages/Onboarding";
 
 // Host pages
-import HostDashboard from '@/pages/host/HostDashboard';
-import HostRetreats from '@/pages/host/HostRetreats';
-import HostRetreatNew from '@/pages/host/HostRetreatNew';
-import HostRetreatEdit from '@/pages/host/HostRetreatEdit';
-import HostLogin from '@/pages/host/HostLogin';
-import HostSignup from '@/pages/host/HostSignup';
+import HostLogin from "./pages/host/HostLogin";
+import HostRegister from "./pages/host/HostRegister";
+import HostSignup from "./pages/host/HostSignup";
+import HostDashboard from "./pages/host/HostDashboard";
+import HostRetreats from "./pages/host/HostRetreats";
+import HostRetreatNew from "./pages/host/HostRetreatNew";
+import HostRetreatEdit from "./pages/host/HostRetreatEdit";
+import HostSpaces from "./pages/host/HostSpaces";
 
-// Context providers
-import { AuthProvider } from '@/contexts/AuthContext';
-import { HostProvider } from '@/contexts/HostContext';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
-import AdminProtectedRoute from '@/components/AdminProtectedRoute';
+import ProtectedRoute from "./components/ProtectedRoute";
+import AdminProtectedRoute from "./components/AdminProtectedRoute";
+import HostProtectedRoute from "./components/HostProtectedRoute";
+import ScrollToTop from "./components/ScrollToTop";
+import InsightLAEventLoader from "./components/InsightLAEventLoader";
+import { AuthProvider } from "./contexts/AuthContext";
+import { HostProvider } from "./contexts/HostContext";
 
-// Add global styles
-import './index.css';
+const queryClient = new QueryClient();
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [session, setSession] = useState(null);
-
-  useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    // Set up auth listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session);
-      }
-    );
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
-  }, []);
-
   return (
-    <Router>
-      <AuthProvider>
-        <HostProvider>
-          <Toaster richColors />
-          {/* Add the InsightLA Event Loader */}
-          <InsightLAEventLoader />
-          {/* Add the ScrollToTop component */}
-          <ScrollToTop />
-          <style>{`
-            .glass-morphism {
-              background: rgba(255, 255, 255, 0.7);
-              backdrop-filter: blur(10px);
-              -webkit-backdrop-filter: blur(10px);
-              border: 1px solid rgba(255, 255, 255, 0.18);
-              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-            }
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <HostProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <ScrollToTop />
+                <InsightLAEventLoader />
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/about-design-one" element={<AboutDesignOne />} />
+                  <Route path="/about-design-two" element={<AboutDesignTwo />} />
+                  <Route path="/retreats" element={<Retreats />} />
+                  <Route path="/retreat/:id" element={<RetreatDetails />} />
+                  <Route path="/retreat-page/:id" element={<Retreat />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<SignUp />} />
+                  <Route path="/join" element={<JoinNow />} />
+                  <Route path="/onboarding" element={<OnboardingPage />} />
+                  <Route path="/onboarding-flow" element={<Onboarding />} />
+                  <Route path="/pricing" element={<Pricing />} />
+                  <Route path="/instructors" element={<Instructors />} />
+                  <Route path="/instructor/:id" element={<InstructorProfile />} />
+                  <Route path="/community-teaser" element={<CommunityTeaser />} />
+                  <Route path="/community-benefits" element={<CommunityBenefits />} />
+                  <Route path="/forum" element={<ForumPage />} />
+                  
+                  {/* Protected Routes */}
+                  <Route
+                    path="/dashboard"
+                    element={
+                      <ProtectedRoute>
+                        <UserDashboard />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/community"
+                    element={
+                      <ProtectedRoute>
+                        <Community />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/community/space/:spaceId"
+                    element={
+                      <ProtectedRoute>
+                        <CommunitySpaceDetails />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/retreat/:id/community"
+                    element={
+                      <ProtectedRoute>
+                        <RetreatCommunity />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/journal"
+                    element={
+                      <ProtectedRoute>
+                        <WellnessJournalPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/booking/:id"
+                    element={
+                      <ProtectedRoute>
+                        <Booking />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/checkout"
+                    element={
+                      <ProtectedRoute>
+                        <CheckoutPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  
+                  {/* Admin Routes */}
+                  <Route
+                    path="/admin"
+                    element={
+                      <AdminProtectedRoute>
+                        <AdminCMS />
+                      </AdminProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin/community"
+                    element={
+                      <AdminProtectedRoute>
+                        <CommunityCMS />
+                      </AdminProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin/retreats"
+                    element={
+                      <AdminProtectedRoute>
+                        <RetreatManagementCMS />
+                      </AdminProtectedRoute>
+                    }
+                  />
 
-            body {
-              background-color: #f8f9fa;
-            }
-          `}</style>
-          <Routes>
-            {/* Public routes */}
-            <Route path="/" element={<Index />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/retreats" element={<Retreats />} />
-            <Route path="/community" element={<Community />} />
-            <Route path="/about-us" element={<AboutUs />} />
-            {/* Add route for /about that redirects to /about-us */}
-            <Route path="/about" element={<Navigate to="/about-us" replace />} />
-            <Route path="/about-design-1" element={<AboutDesignOne />} />
-            <Route path="/about-design-2" element={<AboutDesignTwo />} />
-            <Route path="/contact-us" element={<ContactUs />} />
-            
-            {/* Important: Update both routes for retreats for backward compatibility */}
-            <Route path="/retreat/:id" element={<RetreatDetailsPage />} />
-            <Route path="/retreats/:id" element={<RetreatDetailsPage />} />
-            
-            <Route path="/wellness-journal" element={<WellnessJournalPage />} />
-            <Route path="/forum" element={<ForumPage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/join" element={<JoinNow />} />
-            <Route path="/community-teaser" element={<CommunityTeaser />} />
-            <Route path="/onboarding" element={<OnboardingPage />} />
-            
-            {/* Dashboard route - protected */}
-            <Route path="/dashboard" element={<ProtectedRoute><UserDashboard /></ProtectedRoute>} />
+                  {/* Host Routes */}
+                  <Route path="/host/login" element={<HostLogin />} />
+                  <Route path="/host/register" element={<HostRegister />} />
+                  <Route path="/host/signup" element={<HostSignup />} />
+                  <Route
+                    path="/host/dashboard"
+                    element={
+                      <HostProtectedRoute>
+                        <HostDashboard />
+                      </HostProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/host/retreats"
+                    element={
+                      <HostProtectedRoute>
+                        <HostRetreats />
+                      </HostProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/host/retreats/new"
+                    element={
+                      <HostProtectedRoute>
+                        <HostRetreatNew />
+                      </HostProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/host/retreats/:id/edit"
+                    element={
+                      <HostProtectedRoute>
+                        <HostRetreatEdit />
+                      </HostProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/host/spaces"
+                    element={
+                      <HostProtectedRoute>
+                        <HostSpaces />
+                      </HostProtectedRoute>
+                    }
+                  />
 
-            {/* Host Routes */}
-            <Route path="/host/login" element={<HostLogin />} />
-            <Route path="/host/signup" element={<HostSignup />} />
-            <Route path="/host/dashboard" element={<HostDashboard />} />
-            <Route path="/host/retreats" element={<HostRetreats />} />
-            <Route path="/host/retreats/new" element={<HostRetreatNew />} />
-            <Route path="/host/retreats/edit/:retreatId" element={<HostRetreatEdit />} />
-
-            {/* Admin Routes */}
-            <Route 
-              path="/admin/cms" 
-              element={
-                <AdminProtectedRoute>
-                  <AdminCMS />
-                </AdminProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/retreat-management" 
-              element={
-                <AdminProtectedRoute>
-                  <RetreatManagementCMS />
-                </AdminProtectedRoute>
-              } 
-            />
-
-            {/* Community CMS Route - this should also be admin protected */}
-            <Route 
-              path="/community/cms" 
-              element={
-                <AdminProtectedRoute>
-                  <CommunityCMS />
-                </AdminProtectedRoute>
-              }
-            />
-
-            {/* Catch all for unknown routes */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </HostProvider>
-      </AuthProvider>
-    </Router>
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </TooltipProvider>
+          </HostProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
   );
 }
 
