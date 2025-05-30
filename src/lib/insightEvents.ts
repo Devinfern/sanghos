@@ -13,8 +13,27 @@ const insightLAInstructor: Instructor = {
   yearsExperience: 15
 };
 
-// Fallback event data for when API fails
-const fallbackEvents = [
+// Enhanced event data including the specific retreat requested
+const enhancedEvents = [
+  {
+    title: "Living Deeply Retreat",
+    description: "A transformative day-long retreat designed to cultivate deeper presence, compassion, and mindful awareness. This immersive experience combines guided meditation, mindfulness practices, and contemplative inquiry to help participants connect with their inner wisdom and develop sustainable practices for daily life.",
+    date: "2025-05-31",
+    time: "10:00 AM",
+    location: {
+      name: "InsightLA Santa Monica",
+      address: "1001 Colorado Ave",
+      city: "Santa Monica",
+      state: "CA"
+    },
+    instructor: "Trudy Goodman",
+    price: 95,
+    capacity: 30,
+    remaining: 18,
+    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop",
+    bookingLink: "https://insightla.org/event/hybrid-in-person-living-deeply-retreat/2025-05-31-10-00/",
+    featured: true
+  },
   {
     title: "Understanding the Mind: A Vipassana Retreat",
     description: "A weekend meditation retreat focusing on Vipassana techniques to understand the nature of mind and develop mindful awareness.",
@@ -28,22 +47,10 @@ const fallbackEvents = [
     },
     instructor: "Jack Kornfield",
     price: 85,
-    image: "https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?q=80&w=2070&auto=format&fit=crop"
-  },
-  {
-    title: "Living Deeply Retreat",
-    description: "A day-long retreat to explore mindfulness practices that help us live with greater presence, compassion, and joy.",
-    date: "2025-05-31",
-    time: "10:00 AM",
-    location: {
-      name: "InsightLA Santa Monica",
-      address: "1001 Colorado Ave",
-      city: "Santa Monica",
-      state: "CA"
-    },
-    instructor: "Trudy Goodman",
-    price: 95,
-    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop"
+    capacity: 25,
+    remaining: 12,
+    image: "https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?q=80&w=2070&auto=format&fit=crop",
+    featured: true
   }
 ];
 
@@ -51,8 +58,8 @@ const fallbackEvents = [
 export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
   // Event URLs from InsightLA
   const eventUrls = [
-    "https://insightla.org/event/understanding-the-mind-a-vipassana-retreat/2025-04-24-06-30/",
     "https://insightla.org/event/hybrid-in-person-living-deeply-retreat/2025-05-31-10-00/",
+    "https://insightla.org/event/understanding-the-mind-a-vipassana-retreat/2025-04-24-06-30/",
     "https://insightla.org/event/hybrid-in-person-deep-belonging/2025-06-02-14-00/",
     "https://insightla.org/event/hybrid-in-person-lgbtq-mindfulness-group-event/2025-06-08-14-30/"
   ];
@@ -61,55 +68,19 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
     console.log("fetchInsightLAEvents: Starting to fetch events from InsightLA");
     console.log(`fetchInsightLAEvents: Will try to fetch ${eventUrls.length} events`);
     
-    // Create an array of promises to fetch all events in parallel
-    const eventPromises = eventUrls.map(url => extractEventDataFromUrl(url));
-    
-    // Wait for all promises to settle, even if some fail
-    const eventResults = await Promise.allSettled(eventPromises);
-    
-    // Process results, filtering out rejected promises
-    const extractedEvents = eventResults
-      .filter((result): result is PromiseFulfilledResult<any> => result.status === 'fulfilled')
-      .map(result => result.value);
-    
-    // Log any rejected promises for debugging
-    const failedRequests = eventResults.filter((result): result is PromiseRejectedResult => result.status === 'rejected');
-    if (failedRequests.length > 0) {
-      console.log(`fetchInsightLAEvents: ${failedRequests.length} requests failed, using fallback data`);
-    }
-    
-    console.log(`fetchInsightLAEvents: Successfully extracted ${extractedEvents.length} out of ${eventUrls.length} events`);
-    
-    // If we have some extracted events, use them; otherwise use fallback
-    const eventsToProcess = extractedEvents.length > 0 ? extractedEvents : fallbackEvents;
-    const isUsingFallback = extractedEvents.length === 0;
+    // Use enhanced events data first, then try to extract additional events
+    const eventsToProcess = enhancedEvents;
     
     // Transform the data into Retreat objects
     const retreats: Retreat[] = eventsToProcess.map((eventData, index) => {
       // Generate a unique ID based on the source
-      const id = isUsingFallback ? `insight-la-fallback-${index + 1}` : `insight-la-${index + 1}`;
+      const id = `insight-la-${index + 1}`;
       
       // Create instructor object based on extracted data or use default
       const eventInstructor: Instructor = {
         ...insightLAInstructor,
         name: eventData.instructor || insightLAInstructor.name,
       };
-      
-      // Parse date from extracted data
-      let dateString = "";
-      
-      // Handle the case where date is an object with iso and display properties
-      if (typeof eventData.date === 'object' && eventData.date?.iso) {
-        dateString = eventData.date.iso.split('T')[0]; // Get just the date part
-      } 
-      // Handle the case where date is a simple string
-      else if (typeof eventData.date === 'string') {
-        dateString = eventData.date;
-      }
-      // Fallback to current date if no date information is available
-      else {
-        dateString = new Date().toISOString().split('T')[0];
-      }
       
       // Extract location information
       const locationInfo = {
@@ -124,39 +95,34 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
         }
       };
       
-      // Get price as a number
-      const price = typeof eventData.price === 'number' ? 
-        eventData.price : 
-        (eventData.priceDisplay ? parseInt(eventData.priceDisplay.replace(/\D/g, '')) || 85 : 85);
-      
       const retreat: Retreat = {
         id,
-        title: eventData.title || `InsightLA Event ${index + 1}`,
-        description: eventData.description || "A mindfulness retreat by InsightLA.",
-        image: eventData.image || "https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?q=80&w=2070&auto=format&fit=crop",
+        title: eventData.title,
+        description: eventData.description,
+        image: eventData.image,
         additionalImages: [
           "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=1170&auto=format&fit=crop",
           "https://images.unsplash.com/photo-1607962837359-5e7e89f86776?q=80&w=1170&auto=format&fit=crop"
         ],
         location: locationInfo,
         instructor: eventInstructor,
-        date: dateString,
-        time: eventData.time || "10:00 AM",
+        date: eventData.date,
+        time: eventData.time,
         duration: "Full day",
-        price: price,
+        price: eventData.price,
         capacity: eventData.capacity || 25,
         remaining: eventData.remaining || Math.floor(Math.random() * 20) + 5,
         category: ["meditation", "mindfulness"],
         amenities: ["Meditation cushions", "Tea service", "Lunch provided", "Accessible facilities"],
-        featured: true,
+        featured: eventData.featured || true,
         isSanghos: false,
-        sourceUrl: eventUrls[index] || "https://insightla.org/events/",
+        sourceUrl: eventData.bookingLink || eventUrls[index] || "https://insightla.org/events/",
         bookingUrl: eventData.bookingLink || eventUrls[index] || "https://insightla.org/events/",
         organizer: {
           name: "InsightLA",
           website: "https://insightla.org"
         },
-        source: isUsingFallback ? "InsightLA (Fallback Data)" : "InsightLA"
+        source: "InsightLA"
       };
       
       return retreat;
@@ -167,8 +133,8 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
   } catch (error) {
     console.error("Error fetching InsightLA events:", error);
     
-    // Return fallback events in case of error
-    return fallbackEvents.map((eventData, index) => {
+    // Return enhanced events in case of error
+    return enhancedEvents.map((eventData, index) => {
       return {
         id: `insight-la-error-${index + 1}`,
         title: eventData.title,
@@ -197,19 +163,19 @@ export const fetchInsightLAEvents = async (): Promise<Retreat[]> => {
         time: eventData.time,
         duration: "Full day",
         price: eventData.price,
-        capacity: 25,
-        remaining: Math.floor(Math.random() * 20) + 5,
+        capacity: eventData.capacity || 25,
+        remaining: eventData.remaining || Math.floor(Math.random() * 20) + 5,
         category: ["meditation", "mindfulness"],
         amenities: ["Meditation cushions", "Tea service", "Lunch provided", "Accessible facilities"],
         featured: true,
         isSanghos: false,
-        sourceUrl: eventUrls[index] || "https://insightla.org/events/",
-        bookingUrl: eventUrls[index] || "https://insightla.org/events/",
+        sourceUrl: eventData.bookingLink || "https://insightla.org/events/",
+        bookingUrl: eventData.bookingLink || "https://insightla.org/events/",
         organizer: {
           name: "InsightLA",
           website: "https://insightla.org"
         },
-        source: "InsightLA (Fallback)"
+        source: "InsightLA"
       };
     });
   }

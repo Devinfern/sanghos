@@ -51,14 +51,15 @@ export function determineRetreatCategory(categories: string[]): Event['category'
     'Online': 'online'
   };
   
-  // Find the first matching category, or default to workshop
+  // Find the first matching category, or default to retreat for meditation events
   for (const category of categories) {
     if (categoryMapping[category]) {
       return categoryMapping[category];
     }
   }
   
-  return 'workshop';
+  // Default to retreat for InsightLA meditation events
+  return 'retreat';
 }
 
 /**
@@ -73,7 +74,7 @@ export function transformSanghosRetreatToEvent(retreat: Retreat): Event {
     imageUrl: retreat.image,
     category: determineRetreatCategory(retreat.category),
     startDate: new Date(retreat.date),
-    endDate: new Date(new Date(retreat.date).getTime() + (2 * 60 * 60 * 1000)), // 2 hours after start
+    endDate: new Date(new Date(retreat.date).getTime() + (8 * 60 * 60 * 1000)), // 8 hours for full day retreat
     location: {
       locationType: "venue" as const,
       name: retreat.location.name,
@@ -172,15 +173,42 @@ export function transformForumEvent(event: any): Event {
  * Transform InsightLA retreat to Event format
  */
 export function transformInsightLARetreatToEvent(retreat: any): Event {
+  // Parse the date string and time for proper Date object creation
+  let startDate = new Date();
+  
+  if (retreat.date) {
+    startDate = new Date(retreat.date);
+    
+    // Parse time if available (format like "10:00 AM")
+    if (retreat.time) {
+      const timeMatch = retreat.time.match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
+      if (timeMatch) {
+        let hour = parseInt(timeMatch[1]);
+        const minute = parseInt(timeMatch[2]);
+        const ampm = timeMatch[3]?.toUpperCase();
+        
+        if (ampm === 'PM' && hour < 12) {
+          hour += 12;
+        } else if (ampm === 'AM' && hour === 12) {
+          hour = 0;
+        }
+        
+        startDate.setHours(hour, minute, 0, 0);
+      }
+    }
+  }
+  
+  const endDate = new Date(startDate.getTime() + (8 * 60 * 60 * 1000)); // 8 hours for full day
+  
   return {
     id: retreat.id,
     title: retreat.title,
-    shortDescription: retreat.shortDescription || retreat.description.substring(0, 120),
+    shortDescription: retreat.description.substring(0, 120) + (retreat.description.length > 120 ? '...' : ''),
     description: retreat.description,
     imageUrl: retreat.image,
     category: determineRetreatCategory(retreat.category),
-    startDate: retreat.startDate || new Date(retreat.date),
-    endDate: retreat.endDate || new Date(new Date(retreat.date).getTime() + (2 * 60 * 60 * 1000)),
+    startDate,
+    endDate,
     location: {
       locationType: "venue" as const,
       name: retreat.location.name,
