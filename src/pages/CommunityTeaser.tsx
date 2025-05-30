@@ -34,33 +34,27 @@ const CommunityTeaser = () => {
     }
   };
 
-  const staggerChildren = {
-    hidden: {
-      opacity: 0
-    },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
   const benefits = [
     {
-      icon: <Users className="h-10 w-10 text-brand-primary" />,
+      icon: <Users className="h-8 w-8 text-white" />,
       title: "Connect",
-      description: "Access to exclusive community discussions and connect with retreat participants before and after events"
+      description: "Access to exclusive community discussions and connect with retreat participants before and after events",
+      bgColor: "bg-gradient-to-br from-emerald-500 to-teal-600",
+      textColor: "text-white"
     },
     {
-      icon: <MessageCircle className="h-10 w-10 text-brand-primary" />,
+      icon: <MessageCircle className="h-8 w-8 text-white" />,
       title: "Share",
-      description: "Share your wellness journey with supportive members and learn from others' experiences"
+      description: "Share your wellness journey with supportive members and learn from others' experiences",
+      bgColor: "bg-gradient-to-br from-blue-500 to-indigo-600", 
+      textColor: "text-white"
     },
     {
-      icon: <Calendar className="h-10 w-10 text-brand-primary" />,
+      icon: <Calendar className="h-8 w-8 text-white" />,
       title: "Access",
-      description: "Early access to new retreats and special discounts on upcoming wellness events"
+      description: "Early access to new retreats and special discounts on upcoming wellness events",
+      bgColor: "bg-gradient-to-br from-orange-400 to-red-500",
+      textColor: "text-white"
     }
   ];
 
@@ -142,17 +136,17 @@ const CommunityTeaser = () => {
           </div>
         </section>
 
-        {/* Benefits Section */}
+        {/* Benefits Section - Updated Design */}
         <section className="py-24 bg-white">
-          <div className="container mx-auto max-w-6xl px-4 md:px-6">
+          <div className="container mx-auto max-w-7xl px-4 md:px-6">
             <motion.div
               initial="hidden"
               animate={isLoaded ? "visible" : "hidden"}
               variants={fadeIn}
               className="text-center mb-16"
             >
-              <span className="text-sm uppercase tracking-wider text-brand-primary font-semibold">Member Benefits</span>
-              <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-8 text-brand-dark">
+              <span className="text-sm uppercase tracking-wider text-brand-primary font-semibold">Community Benefits</span>
+              <h2 className="text-4xl md:text-6xl font-bold mt-4 mb-8 text-brand-dark">
                 Why Join Our Community?
               </h2>
               <p className="text-xl text-brand-slate max-w-3xl mx-auto">
@@ -160,20 +154,30 @@ const CommunityTeaser = () => {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {benefits.map((benefit, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
                   animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                   transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }}
-                  className="bg-brand-subtle/10 p-8 rounded-3xl text-center"
+                  className={`${benefit.bgColor} ${benefit.textColor} p-8 rounded-3xl relative overflow-hidden group hover:scale-105 transition-transform duration-300`}
                 >
-                  <div className="mx-auto mb-6 bg-white w-20 h-20 rounded-full flex items-center justify-center shadow-sm">
-                    {benefit.icon}
+                  {/* Background decoration */}
+                  <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="mb-6">
+                      {benefit.icon}
+                    </div>
+                    <h3 className="text-2xl font-bold mb-4">{benefit.title}</h3>
+                    <p className="text-lg opacity-90 leading-relaxed mb-6">{benefit.description}</p>
+                    
+                    <button className="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 group/btn">
+                      Learn More
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                    </button>
                   </div>
-                  <h3 className="text-2xl font-bold mb-4 text-brand-dark">{benefit.title}</h3>
-                  <p className="text-brand-slate text-lg">{benefit.description}</p>
                 </motion.div>
               ))}
             </div>
