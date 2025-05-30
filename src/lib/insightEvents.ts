@@ -19,15 +19,15 @@ const enhancedEvents = [
     title: "Living Deeply Retreat",
     description: "A transformative day-long retreat designed to cultivate deeper presence, compassion, and mindful awareness. This immersive experience combines guided meditation, mindfulness practices, and contemplative inquiry to help participants connect with their inner wisdom and develop sustainable practices for daily life.",
     date: "2025-05-31",
-    time: "10:00 AM",
+    time: "10:00 AM - 4:00 PM",
     location: {
       name: "InsightLA Santa Monica",
       address: "1001 Colorado Ave",
       city: "Santa Monica",
       state: "CA"
     },
-    instructor: "Trudy Goodman",
-    price: 95,
+    instructor: "Elizabeth Stomp & Lulu Toselli",
+    price: 85,
     capacity: 30,
     remaining: 18,
     image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop",
