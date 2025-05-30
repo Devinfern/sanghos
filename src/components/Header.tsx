@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -45,7 +44,7 @@ const Header = () => {
     window.location.href = "/";
   };
 
-  const handleCommunityClick = (e) => {
+  const handleCommunityClick = (e: React.MouseEvent) => {
     if (!isLoggedIn) {
       e.preventDefault();
       navigate('/community-teaser');

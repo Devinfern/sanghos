@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useHost } from "@/contexts/HostContext";
@@ -16,7 +16,7 @@ const HostProtectedRoute = ({ children }: HostProtectedRouteProps) => {
     if (!isLoading && !host) {
       toast.error("You must be logged in as a host to access this page");
     }
-  }, [host, isLoading, navigate]);
+  }, [host, isLoading]);
 
   // Show loading state while checking
   if (isLoading) {
