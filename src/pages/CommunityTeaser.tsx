@@ -149,19 +149,9 @@ const CommunityTeaser = () => {
               <h2 className="text-4xl md:text-6xl font-bold mt-4 mb-8 text-brand-dark">
                 Why Join Our Community?
               </h2>
-              <p className="text-xl text-brand-slate max-w-3xl mx-auto mb-8">
+              <p className="text-xl text-brand-slate max-w-3xl mx-auto">
                 Experience the power of connection and growth in our supportive wellness space
               </p>
-              <Button 
-                size="lg" 
-                className="bg-brand-primary hover:bg-brand-primary/90 text-white rounded-full group"
-                asChild
-              >
-                <Link to="/community-benefits">
-                  Explore All Benefits
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-              </Button>
             </motion.div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -183,17 +173,10 @@ const CommunityTeaser = () => {
                     <h3 className="text-2xl font-bold mb-4">{benefit.title}</h3>
                     <p className="text-lg opacity-90 leading-relaxed mb-6">{benefit.description}</p>
                     
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      className="bg-white/20 hover:bg-white/30 text-white border-0 rounded-full group/btn"
-                      asChild
-                    >
-                      <Link to="/community-benefits" className="flex items-center gap-2">
-                        Learn More
-                        <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                      </Link>
-                    </Button>
+                    <button className="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 group/btn">
+                      Learn More
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                    </button>
                   </div>
                 </motion.div>
               ))}
