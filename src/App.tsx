@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -45,7 +46,7 @@ import HostRetreatNew from "./pages/host/HostRetreatNew";
 import HostRetreatEdit from "./pages/host/HostRetreatEdit";
 import HostSpaces from "./pages/host/HostSpaces";
 
-import { ProtectedRoute } from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
 import HostProtectedRoute from "./components/HostProtectedRoute";
 import ScrollToTop from "./components/ScrollToTop";
