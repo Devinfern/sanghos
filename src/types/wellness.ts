@@ -1,4 +1,9 @@
 
+import { Tables } from '@/integrations/supabase/types';
+
+// Base Supabase type for wellness modules
+export type WellnessModuleRow = Tables<'wellness_modules'>;
+
 // Wellness module and retreat builder types
 export interface WellnessModule {
   id: string;
@@ -71,3 +76,31 @@ export interface SelectedModule extends WellnessModule {
 
 export type ModuleCategory = 'yoga' | 'meditation' | 'sound_healing' | 'breathwork' | 'cooking' | 'nature' | 'all';
 export type DifficultyLevel = 'beginner' | 'intermediate' | 'advanced' | 'all';
+
+// Type guard to validate difficulty level
+export function isValidDifficultyLevel(level: string): level is 'beginner' | 'intermediate' | 'advanced' {
+  return ['beginner', 'intermediate', 'advanced'].includes(level);
+}
+
+// Function to convert Supabase row to WellnessModule
+export function convertToWellnessModule(row: WellnessModuleRow): WellnessModule {
+  return {
+    id: row.id,
+    name: row.name,
+    category: row.category,
+    description: row.description,
+    default_duration: row.default_duration,
+    min_duration: row.min_duration,
+    max_duration: row.max_duration,
+    difficulty_level: isValidDifficultyLevel(row.difficulty_level) ? row.difficulty_level : 'beginner',
+    equipment_needed: row.equipment_needed || [],
+    space_requirements: row.space_requirements || '',
+    max_participants: row.max_participants,
+    base_price: row.base_price,
+    instructor_specialties: row.instructor_specialties || [],
+    tags: row.tags || [],
+    image_url: row.image_url,
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+  };
+}

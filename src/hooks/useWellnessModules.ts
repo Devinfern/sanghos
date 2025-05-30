@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { WellnessModule, ModuleCategory, DifficultyLevel } from '@/types/wellness';
+import { WellnessModule, ModuleCategory, DifficultyLevel, convertToWellnessModule } from '@/types/wellness';
 import { toast } from 'sonner';
 
 export const useWellnessModules = () => {
@@ -26,7 +26,9 @@ export const useWellnessModules = () => {
       
       if (error) throw error;
       
-      setModules(data || []);
+      // Convert Supabase rows to WellnessModule interface
+      const convertedModules = (data || []).map(convertToWellnessModule);
+      setModules(convertedModules);
       setError(null);
     } catch (err) {
       console.error('Error fetching wellness modules:', err);
