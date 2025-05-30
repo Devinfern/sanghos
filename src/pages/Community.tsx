@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { forumEvents, trendingPosts, loadForumEvents, loadTrendingPosts } from "@/lib/forumData";
 import CommunityLayout from "@/components/layouts/CommunityLayout";
@@ -15,7 +14,7 @@ const CommunityPage = () => {
   const [currentEvents, setCurrentEvents] = useState(forumEvents);
   const [currentTrendingPosts, setCurrentTrendingPosts] = useState(trendingPosts);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [activeSection, setActiveSection] = useState("discussions");
+  const [activeSection, setActiveSection] = useState("dashboard");
 
   useEffect(() => {
     const loadData = async () => {

@@ -7,6 +7,9 @@ import CommunityEventsPage from "./CommunityEventsPage";
 import CommunityResourcesPage from "./CommunityResourcesPage";
 import CommunityMembersPage from "./CommunityMembersPage";
 import RetreatCommunityList from "./RetreatCommunityList";
+import CommunityDashboard from "./CommunityDashboard";
+import CommunityBreadcrumb from "./CommunityBreadcrumb";
+import CommunitySearchBar from "./CommunitySearchBar";
 import { Button } from "@/components/ui/button";
 import { Settings, Bell, MessageSquare, Calendar, Users, BookOpen, Sparkles } from "lucide-react";
 
@@ -37,8 +40,22 @@ const CommunityContent = ({
     visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
   };
 
+  const handleSearch = (query: string, filters: any) => {
+    console.log('Searching for:', query, 'with filters:', filters);
+    // TODO: Implement actual search functionality
+  };
+
   const renderActiveSection = () => {
     switch (activeSection) {
+      case "dashboard":
+        return (
+          <CommunityDashboard
+            isLoggedIn={isLoggedIn}
+            currentEvents={currentEvents}
+            trendingPosts={trendingPosts}
+            onSectionChange={onSectionChange}
+          />
+        );
       case "discussions":
         return <CommunityDiscussions isLoggedIn={isLoggedIn} />;
       case "events":
@@ -50,7 +67,14 @@ const CommunityContent = ({
       case "retreats":
         return <RetreatCommunityList />;
       default:
-        return null;
+        return (
+          <CommunityDashboard
+            isLoggedIn={isLoggedIn}
+            currentEvents={currentEvents}
+            trendingPosts={trendingPosts}
+            onSectionChange={onSectionChange}
+          />
+        );
     }
   };
 
@@ -100,6 +124,16 @@ const CommunityContent = ({
             </motion.div>
           </div>
         </div>
+
+        {/* Enhanced Search Bar */}
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+          className="mb-8"
+        >
+          <CommunitySearchBar onSearch={handleSearch} />
+        </motion.div>
       </div>
       
       {/* Navigation */}
@@ -112,9 +146,12 @@ const CommunityContent = ({
       
       {/* Main Content */}
       <div className="container px-4 md:px-6 mx-auto mt-8">
+        {/* Breadcrumb Navigation */}
+        <CommunityBreadcrumb activeSection={activeSection} />
+
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-brand-dark">
-            {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
+            {activeSection === "dashboard" ? "Community Dashboard" : activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
           </h1>
           <div className="flex gap-2">
             <Button variant="outline" size="icon" className="text-muted-foreground rounded-full">

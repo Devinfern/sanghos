@@ -15,6 +15,7 @@ const CommunityNavigation = ({
   onSectionChange
 }: CommunityNavigationProps) => {
   const sections = [
+    { id: "dashboard", label: "Dashboard" },
     { id: "discussions", label: "Discussions" },
     { id: "retreats", label: "Retreats" },
     { id: "events", label: "Events" },
@@ -51,7 +52,7 @@ const CommunityNavigation = ({
           <div className="relative w-full md:w-auto min-w-[280px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input 
-              placeholder="Search discussions..." 
+              placeholder="Quick search..." 
               className="pl-10 pr-4 bg-transparent border-brand-subtle/30 focus:border-brand-primary rounded-full"
             />
           </div>
