@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -39,7 +40,7 @@ const CommunityTeaser = () => {
       icon: <Users className="h-8 w-8 text-white" />,
       title: "Connect",
       description: "Access to exclusive community discussions and connect with retreat participants before and after events",
-      bgColor: "bg-gradient-to-br from-emerald-500 to-teal-600",
+      backgroundImage: "/lovable-uploads/fb2aad72-57e6-4306-9ada-dd61eb448e1b.png",
       textColor: "text-white",
       expandedContent: {
         features: [
@@ -55,7 +56,7 @@ const CommunityTeaser = () => {
       icon: <MessageCircle className="h-8 w-8 text-white" />,
       title: "Share",
       description: "Share your wellness journey with supportive members and learn from others' experiences",
-      bgColor: "bg-gradient-to-br from-blue-500 to-indigo-600", 
+      backgroundImage: "/lovable-uploads/82cdec7c-edd5-46fb-be36-0bacda6e756d.png",
       textColor: "text-white",
       expandedContent: {
         features: [
@@ -71,7 +72,7 @@ const CommunityTeaser = () => {
       icon: <Calendar className="h-8 w-8 text-white" />,
       title: "Access",
       description: "Early access to new retreats and special discounts on upcoming wellness events",
-      bgColor: "bg-gradient-to-br from-orange-400 to-red-500",
+      backgroundImage: "/lovable-uploads/374c6d8d-b72d-4385-b859-d37c9b4869ed.png",
       textColor: "text-white",
       expandedContent: {
         features: [
@@ -198,7 +199,7 @@ const CommunityTeaser = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                   transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }}
-                  className={`${benefit.bgColor} ${benefit.textColor} rounded-3xl relative overflow-hidden group transition-all duration-700 ease-in-out ${
+                  className={`${benefit.textColor} rounded-3xl relative overflow-hidden group transition-all duration-700 ease-in-out ${
                     expandedCard === index ? 'order-first' : ''
                   } ${
                     expandedCard !== null && expandedCard !== index ? 'hidden lg:hidden' : ''
@@ -207,8 +208,16 @@ const CommunityTeaser = () => {
                     minHeight: expandedCard === index ? '600px' : '400px'
                   }}
                 >
-                  {/* Background decoration */}
-                  <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  {/* Background Image */}
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                    style={{
+                      backgroundImage: `url(${benefit.backgroundImage})`
+                    }}
+                  />
+                  
+                  {/* Overlay for text readability */}
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-all duration-300"></div>
                   
                   <div className="relative z-10 p-8 h-full">
                     <AnimatePresence mode="wait">
@@ -229,7 +238,7 @@ const CommunityTeaser = () => {
                           
                           <button 
                             onClick={() => handleCardExpand(index)}
-                            className="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 group/btn w-fit"
+                            className="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 group/btn w-fit backdrop-blur-sm"
                           >
                             Learn More
                             <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
@@ -251,7 +260,7 @@ const CommunityTeaser = () => {
                             </div>
                             <button 
                               onClick={() => setExpandedCard(null)}
-                              className="bg-white/20 hover:bg-white/30 p-2 rounded-full transition-all duration-200"
+                              className="bg-white/20 hover:bg-white/30 p-2 rounded-full transition-all duration-200 backdrop-blur-sm"
                             >
                               <X className="h-5 w-5" />
                             </button>
@@ -290,7 +299,7 @@ const CommunityTeaser = () => {
                                 <Button 
                                   size="lg" 
                                   variant="outline" 
-                                  className="border-white/50 text-white hover:bg-white/10 rounded-full"
+                                  className="border-white/50 text-white hover:bg-white/10 rounded-full backdrop-blur-sm"
                                   asChild
                                 >
                                   <Link to="/login">Sign In</Link>
