@@ -308,6 +308,156 @@ export type Database = {
         }
         Relationships: []
       }
+      retreat_modules: {
+        Row: {
+          created_at: string
+          custom_description: string | null
+          custom_duration: number
+          custom_name: string | null
+          custom_price: number | null
+          id: string
+          module_id: string
+          retreat_id: string
+          scheduled_date: string | null
+          scheduled_start_time: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          custom_description?: string | null
+          custom_duration: number
+          custom_name?: string | null
+          custom_price?: number | null
+          id?: string
+          module_id: string
+          retreat_id: string
+          scheduled_date?: string | null
+          scheduled_start_time?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          custom_description?: string | null
+          custom_duration?: number
+          custom_name?: string | null
+          custom_price?: number | null
+          id?: string
+          module_id?: string
+          retreat_id?: string
+          scheduled_date?: string | null
+          scheduled_start_time?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "retreat_modules_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "wellness_modules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "retreat_modules_retreat_id_fkey"
+            columns: ["retreat_id"]
+            isOneToOne: false
+            referencedRelation: "retreats"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      retreat_template_modules: {
+        Row: {
+          created_at: string
+          custom_duration: number
+          id: string
+          module_id: string
+          scheduled_date: string | null
+          scheduled_start_time: string | null
+          sort_order: number
+          template_id: string
+        }
+        Insert: {
+          created_at?: string
+          custom_duration: number
+          id?: string
+          module_id: string
+          scheduled_date?: string | null
+          scheduled_start_time?: string | null
+          sort_order?: number
+          template_id: string
+        }
+        Update: {
+          created_at?: string
+          custom_duration?: number
+          id?: string
+          module_id?: string
+          scheduled_date?: string | null
+          scheduled_start_time?: string | null
+          sort_order?: number
+          template_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "retreat_template_modules_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "wellness_modules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "retreat_template_modules_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "retreat_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      retreat_templates: {
+        Row: {
+          category: string | null
+          created_at: string
+          creator_id: string
+          description: string | null
+          difficulty_level: string
+          estimated_price: number | null
+          id: string
+          is_public: boolean
+          name: string
+          total_duration: number | null
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          creator_id: string
+          description?: string | null
+          difficulty_level?: string
+          estimated_price?: number | null
+          id?: string
+          is_public?: boolean
+          name: string
+          total_duration?: number | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          creator_id?: string
+          description?: string | null
+          difficulty_level?: string
+          estimated_price?: number | null
+          id?: string
+          is_public?: boolean
+          name?: string
+          total_duration?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       retreats: {
         Row: {
           additional_images: string[] | null
@@ -491,6 +641,66 @@ export type Database = {
           price?: number | null
           title?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      wellness_modules: {
+        Row: {
+          base_price: number
+          category: string
+          created_at: string
+          default_duration: number
+          description: string
+          difficulty_level: string
+          equipment_needed: string[] | null
+          id: string
+          image_url: string | null
+          instructor_specialties: string[] | null
+          max_duration: number
+          max_participants: number | null
+          min_duration: number
+          name: string
+          space_requirements: string | null
+          tags: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          base_price?: number
+          category: string
+          created_at?: string
+          default_duration: number
+          description: string
+          difficulty_level?: string
+          equipment_needed?: string[] | null
+          id?: string
+          image_url?: string | null
+          instructor_specialties?: string[] | null
+          max_duration?: number
+          max_participants?: number | null
+          min_duration?: number
+          name: string
+          space_requirements?: string | null
+          tags?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          base_price?: number
+          category?: string
+          created_at?: string
+          default_duration?: number
+          description?: string
+          difficulty_level?: string
+          equipment_needed?: string[] | null
+          id?: string
+          image_url?: string | null
+          instructor_specialties?: string[] | null
+          max_duration?: number
+          max_participants?: number | null
+          min_duration?: number
+          name?: string
+          space_requirements?: string | null
+          tags?: string[] | null
+          updated_at?: string
         }
         Relationships: []
       }
