@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { motion } from 'framer-motion';
-import { ArrowRight, Users, MessageCircle, Calendar } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight, Users, MessageCircle, Calendar, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -12,6 +12,7 @@ import OptimizedImage from '@/components/OptimizedImage';
 
 const CommunityTeaser = () => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [expandedCard, setExpandedCard] = useState<number | null>(null);
   
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -40,21 +41,48 @@ const CommunityTeaser = () => {
       title: "Connect",
       description: "Access to exclusive community discussions and connect with retreat participants before and after events",
       bgColor: "bg-gradient-to-br from-emerald-500 to-teal-600",
-      textColor: "text-white"
+      textColor: "text-white",
+      expandedContent: {
+        features: [
+          "Private discussion forums for retreat participants",
+          "Direct messaging with fellow community members",
+          "Virtual meetups and online wellness sessions",
+          "Mentorship opportunities with experienced practitioners"
+        ],
+        details: "Our connection platform helps you build lasting relationships with people who share your wellness journey. Whether you're preparing for a retreat or reflecting on your experience, you'll find a supportive community ready to listen and share."
+      }
     },
     {
       icon: <MessageCircle className="h-8 w-8 text-white" />,
       title: "Share",
       description: "Share your wellness journey with supportive members and learn from others' experiences",
       bgColor: "bg-gradient-to-br from-blue-500 to-indigo-600", 
-      textColor: "text-white"
+      textColor: "text-white",
+      expandedContent: {
+        features: [
+          "Personal journey documentation and reflection tools",
+          "Photo and video sharing from your wellness experiences",
+          "Expert-moderated discussion topics and Q&As",
+          "Resource library with member-contributed content"
+        ],
+        details: "Sharing your wellness journey amplifies its impact. Our platform provides safe spaces to document your growth, celebrate milestones, and learn from the diverse experiences of our global community."
+      }
     },
     {
       icon: <Calendar className="h-8 w-8 text-white" />,
       title: "Access",
       description: "Early access to new retreats and special discounts on upcoming wellness events",
       bgColor: "bg-gradient-to-br from-orange-400 to-red-500",
-      textColor: "text-white"
+      textColor: "text-white",
+      expandedContent: {
+        features: [
+          "48-hour early booking window for new retreats",
+          "Exclusive member-only discounts up to 20%",
+          "Priority waitlist placement for popular events",
+          "Complimentary access to monthly virtual workshops"
+        ],
+        details: "As a community member, you'll enjoy exclusive perks that make wellness more accessible. From early access to limited spots to special pricing, we ensure our most dedicated members get the best opportunities."
+      }
     }
   ];
 
@@ -70,6 +98,10 @@ const CommunityTeaser = () => {
       role: "Meditation Practitioner" 
     }
   ];
+
+  const handleCardExpand = (index: number) => {
+    setExpandedCard(expandedCard === index ? null : index);
+  };
 
   return (
     <>
@@ -161,22 +193,105 @@ const CommunityTeaser = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                   transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }}
-                  className={`${benefit.bgColor} ${benefit.textColor} p-8 rounded-3xl relative overflow-hidden group hover:scale-105 transition-transform duration-300`}
+                  className={`${benefit.bgColor} ${benefit.textColor} rounded-3xl relative overflow-hidden group transition-all duration-500 ${
+                    expandedCard === index ? 'lg:col-span-3 min-h-[500px]' : 'hover:scale-105 min-h-[400px]'
+                  }`}
+                  layout
                 >
                   {/* Background decoration */}
                   <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   
-                  <div className="relative z-10">
-                    <div className="mb-6">
-                      {benefit.icon}
-                    </div>
-                    <h3 className="text-2xl font-bold mb-4">{benefit.title}</h3>
-                    <p className="text-lg opacity-90 leading-relaxed mb-6">{benefit.description}</p>
-                    
-                    <button className="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 group/btn">
-                      Learn More
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                    </button>
+                  <div className="relative z-10 p-8 h-full">
+                    <AnimatePresence mode="wait">
+                      {expandedCard !== index ? (
+                        <motion.div
+                          key="collapsed"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="h-full flex flex-col"
+                        >
+                          <div className="mb-6">
+                            {benefit.icon}
+                          </div>
+                          <h3 className="text-2xl font-bold mb-4">{benefit.title}</h3>
+                          <p className="text-lg opacity-90 leading-relaxed mb-6 flex-1">{benefit.description}</p>
+                          
+                          <button 
+                            onClick={() => handleCardExpand(index)}
+                            className="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 group/btn w-fit"
+                          >
+                            Learn More
+                            <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                          </button>
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="expanded"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="h-full"
+                        >
+                          <div className="flex justify-between items-start mb-8">
+                            <div className="flex items-center gap-4">
+                              {benefit.icon}
+                              <h3 className="text-3xl font-bold">{benefit.title}</h3>
+                            </div>
+                            <button 
+                              onClick={() => setExpandedCard(null)}
+                              className="bg-white/20 hover:bg-white/30 p-2 rounded-full transition-all duration-200"
+                            >
+                              <X className="h-5 w-5" />
+                            </button>
+                          </div>
+
+                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div>
+                              <h4 className="text-xl font-semibold mb-4">What You Get:</h4>
+                              <ul className="space-y-3 mb-6">
+                                {benefit.expandedContent.features.map((feature, featureIndex) => (
+                                  <li key={featureIndex} className="flex items-start gap-3">
+                                    <div className="w-2 h-2 rounded-full bg-white/80 mt-2 flex-shrink-0"></div>
+                                    <span className="text-lg opacity-90">{feature}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                            
+                            <div>
+                              <h4 className="text-xl font-semibold mb-4">Why It Matters:</h4>
+                              <p className="text-lg opacity-90 leading-relaxed mb-6">
+                                {benefit.expandedContent.details}
+                              </p>
+                              
+                              <div className="flex gap-4 mt-8">
+                                <Button 
+                                  size="lg" 
+                                  className="bg-white text-gray-900 hover:bg-white/90 rounded-full group"
+                                  asChild
+                                >
+                                  <Link to="/signup">
+                                    Join Now
+                                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                  </Link>
+                                </Button>
+                                <Button 
+                                  size="lg" 
+                                  variant="outline" 
+                                  className="border-white/50 text-white hover:bg-white/10 rounded-full"
+                                  asChild
+                                >
+                                  <Link to="/login">Sign In</Link>
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 </motion.div>
               ))}
