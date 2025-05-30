@@ -10,7 +10,11 @@ import { supabase } from "@/integrations/supabase/client";
 const SUPABASE_URL = "https://raijubzrdhwizxtupguy.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhaWp1YnpyZGh3aXp4dHVwZ3V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI3MDEyMzcsImV4cCI6MjA0ODI3NzIzN30.2hO4hhqYdcUhpZLqGSfJo7lgS4d5qVj7nVROzRaNdJM";
 
-const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+interface AdminProtectedRouteProps {
+  children: React.ReactNode;
+}
+
+const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
