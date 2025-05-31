@@ -1,8 +1,6 @@
-
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 const HomeRetreatTypes = () => {
   // Animation variants for container
   const containerVariants = {
@@ -58,11 +56,7 @@ const HomeRetreatTypes = () => {
             </motion.p>
             
             <motion.div variants={itemVariants}>
-              <Button 
-                size="lg" 
-                className="bg-brand-primary hover:bg-brand-primary/90 text-white group rounded-full"
-                asChild
-              >
+              <Button size="lg" className="bg-brand-primary hover:bg-brand-primary/90 text-white group rounded-full" asChild>
                 <a href="/retreats">
                   Learn More
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -85,7 +79,7 @@ const HomeRetreatTypes = () => {
           ease: "easeOut",
           delay: 0.4
         }}>
-            <img src="/lovable-uploads/c7b66cfd-c5b4-498e-92bd-d17042163c8f.png" alt="Group meditation session in a cozy living room" className="w-full h-full object-cover" />
+            <img alt="Group meditation session in a cozy living room" className="w-full h-full object-cover" src="/lovable-uploads/cf8fc774-aba1-4ccc-a684-8a94a89150ce.jpg" />
           </motion.div>
         </div>
       </div>
