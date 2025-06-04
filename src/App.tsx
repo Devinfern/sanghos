@@ -28,6 +28,8 @@ import CommunityTeaser from '@/pages/CommunityTeaser';
 import JoinNow from '@/pages/JoinNow';
 import UserDashboard from '@/pages/UserDashboard';
 import OnboardingPage from '@/pages/OnboardingPage';
+import Blog from '@/pages/Blog';
+import BlogPost from '@/pages/BlogPost';
 
 // Host pages
 import HostDashboard from '@/pages/host/HostDashboard';
@@ -108,6 +110,10 @@ function App() {
             <Route path="/about-design-1" element={<AboutDesignOne />} />
             <Route path="/about-design-2" element={<AboutDesignTwo />} />
             <Route path="/contact-us" element={<ContactUs />} />
+            
+            {/* Blog routes */}
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:id" element={<BlogPost />} />
             
             {/* Important: Update both routes for retreats for backward compatibility */}
             <Route path="/retreat/:id" element={<RetreatDetailsPage />} />
