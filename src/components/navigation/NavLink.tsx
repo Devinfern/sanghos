@@ -6,7 +6,7 @@ interface NavLinkProps {
   to: string;
   children: React.ReactNode;
   className?: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }
 
 export const NavLink = ({ to, children, className, onClick }: NavLinkProps) => {
