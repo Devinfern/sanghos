@@ -8,9 +8,20 @@ import { Link } from "react-router-dom";
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
+  isLoggedIn: boolean;
+  onSignOut: () => void;
 }
 
-export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
+export const MobileMenu = ({ isOpen, onClose, isLoggedIn, onSignOut }: MobileMenuProps) => {
+  const handleCommunityClick = (e: React.MouseEvent) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      // Navigate to community teaser for non-logged in users
+      window.location.href = '/community-teaser';
+    }
+    onClose();
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -53,7 +64,11 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
                   <NavLink to="/blog" onClick={onClose} className="block text-lg">
                     Blog
                   </NavLink>
-                  <NavLink to="/community-teaser" onClick={onClose} className="block text-lg">
+                  <NavLink 
+                    to="/community" 
+                    onClick={handleCommunityClick} 
+                    className="block text-lg"
+                  >
                     Community
                   </NavLink>
                   <NavLink to="/about-us" onClick={onClose} className="block text-lg">
@@ -67,19 +82,43 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
 
               {/* Auth Buttons */}
               <div className="p-6 border-t border-gray-100 space-y-3">
-                <Button 
-                  variant="outline" 
-                  className="w-full border-brand-primary/20 text-brand-primary hover:bg-brand-primary/5"
-                  asChild
-                >
-                  <Link to="/login" onClick={onClose}>Sign In</Link>
-                </Button>
-                <Button 
-                  className="w-full bg-brand-primary hover:bg-brand-primary/90"
-                  asChild
-                >
-                  <Link to="/signup" onClick={onClose}>Join Sanghos</Link>
-                </Button>
+                {isLoggedIn ? (
+                  <>
+                    <Button 
+                      variant="outline" 
+                      className="w-full"
+                      asChild
+                    >
+                      <Link to="/dashboard" onClick={onClose}>Dashboard</Link>
+                    </Button>
+                    <Button 
+                      onClick={() => {
+                        onSignOut();
+                        onClose();
+                      }}
+                      variant="outline"
+                      className="w-full"
+                    >
+                      Sign Out
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button 
+                      variant="outline" 
+                      className="w-full border-brand-primary/20 text-brand-primary hover:bg-brand-primary/5"
+                      asChild
+                    >
+                      <Link to="/login" onClick={onClose}>Sign In</Link>
+                    </Button>
+                    <Button 
+                      className="w-full bg-brand-primary hover:bg-brand-primary/90"
+                      asChild
+                    >
+                      <Link to="/signup" onClick={onClose}>Join Sanghos</Link>
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>
