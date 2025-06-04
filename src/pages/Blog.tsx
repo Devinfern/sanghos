@@ -8,8 +8,10 @@ import { Input } from '@/components/ui/input';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BeehiivNewsletterSignup from '@/components/BeehiivNewsletterSignup';
+
 const Blog = () => {
   const [searchQuery, setSearchQuery] = useState("");
+
   const featuredArticle = {
     id: 'mindful-breathing-techniques',
     title: 'Mindful Breathing Techniques: Your Gateway to Inner Peace',
@@ -92,9 +94,10 @@ const Blog = () => {
       }
     }
   };
-  return <>
+  return (
+    <>
       <Helmet>
-        <title>Wellness Blog | Sanghos</title>
+        <title>Wellness Insights | Sanghos</title>
         <meta name="description" content="Explore our collection of wellness articles, meditation guides, and retreat insights to enhance your journey toward mindful living." />
       </Helmet>
 
@@ -116,7 +119,13 @@ const Blog = () => {
               {/* Search Bar */}
               <div className="relative max-w-md mx-auto mb-8">
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-brand-primary/60" />
-                <Input type="text" placeholder="Search articles..." className="pl-12 py-6 bg-white border-sand-200 rounded-full shadow-sm focus:ring-brand-primary/20" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
+                <Input
+                  type="text"
+                  placeholder="Search articles..."
+                  className="pl-12 py-6 bg-white border-sand-200 rounded-full shadow-sm focus:ring-brand-primary/20"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
               </div>
             </motion.div>
           </div>
@@ -233,6 +242,8 @@ const Blog = () => {
       </main>
 
       <Footer />
-    </>;
+    </>
+  );
 };
+
 export default Blog;

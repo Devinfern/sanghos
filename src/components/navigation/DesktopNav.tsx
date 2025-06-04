@@ -14,7 +14,7 @@ export const DesktopNav = ({ isLoggedIn, onSignOut, onCommunityClick }: DesktopN
     <div className="hidden lg:flex items-center space-x-8">
       <nav className="flex items-center space-x-8">
         <NavLink to="/retreats">Retreats</NavLink>
-        <NavLink to="/blog">Blog</NavLink>
+        <NavLink to="/blog">Insights</NavLink>
         <NavLink 
           to="/community" 
           onClick={onCommunityClick}
