@@ -5,6 +5,7 @@ import { ArrowRight, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const BeehiivNewsletterSignup = () => {
   const [email, setEmail] = useState("");
@@ -28,36 +29,30 @@ const BeehiivNewsletterSignup = () => {
     setIsLoading(true);
 
     try {
-      // Replace with your actual Beehiiv publication ID
-      const publicationId = "your-beehiiv-publication-id";
+      console.log('Subscribing email:', email);
       
-      // This is the Beehiiv API endpoint for subscribing
-      const response = await fetch(`https://api.beehiiv.com/v2/publications/${publicationId}/subscriptions`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.BEEHIIV_API_KEY}`, // You'll need to set this in Supabase secrets
-        },
-        body: JSON.stringify({
-          email: email,
-          reactivate_existing: false,
-          send_welcome_email: true,
-        }),
+      const { data, error } = await supabase.functions.invoke('subscribe-to-newsletter', {
+        body: { email: email.trim() }
       });
 
-      if (response.ok) {
-        toast.success("Thank you for subscribing! Welcome to our wellness community.");
-        setEmail("");
-      } else {
-        // For now, we'll show success since this is a demo
-        toast.success("Thank you for subscribing! Welcome to our wellness community.");
-        setEmail("");
+      if (error) {
+        console.error('Supabase function error:', error);
+        toast.error("Failed to subscribe. Please try again later.");
+        return;
       }
+
+      if (data?.success) {
+        toast.success(data.message || "Thank you for subscribing! Welcome to our wellness community.");
+        setEmail("");
+      } else if (data?.error) {
+        toast.error(data.error);
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+
     } catch (error) {
       console.error("Subscription error:", error);
-      // For demo purposes, show success
-      toast.success("Thank you for subscribing! Welcome to our wellness community.");
-      setEmail("");
+      toast.error("Failed to subscribe. Please try again later.");
     } finally {
       setIsLoading(false);
     }
