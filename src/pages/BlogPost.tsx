@@ -3,8 +3,10 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
-import { Calendar, User, Clock, ArrowLeft, Share2, Heart } from 'lucide-react';
+import { Calendar, User, Clock, ArrowLeft, Share2, Heart, BookmarkPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BeehiivNewsletterSignup from '@/components/BeehiivNewsletterSignup';
@@ -12,93 +14,126 @@ import BeehiivNewsletterSignup from '@/components/BeehiivNewsletterSignup';
 const BlogPost = () => {
   const { id } = useParams();
 
-  // Sample blog post data - in a real app, this would come from an API
+  // Enhanced blog post data with wellness focus
   const blogPosts = {
     'mindful-breathing-techniques': {
       title: 'Mindful Breathing Techniques: Your Gateway to Inner Peace',
+      subtitle: 'Transform your daily stress into moments of calm and clarity with these powerful practices.',
       author: 'Dr. Sarah Chen',
+      authorBio: 'Certified meditation teacher and breathwork specialist with 15+ years of experience.',
       date: 'December 15, 2024',
       readTime: '8 min read',
       image: '/lovable-uploads/cf8fc774-aba1-4ccc-a684-8a94a89150ce.jpg',
       category: 'Breathwork',
+      tags: ['Meditation', 'Stress Relief', 'Wellness'],
       content: `
-        <p>In our fast-paced world, the simple act of breathing mindfully can be a powerful tool for finding peace and clarity. Today, we'll explore proven breathing techniques that can transform your daily experience and help you navigate stress with greater ease.</p>
+        <p class="lead">In our fast-paced world, the simple act of breathing mindfully can be a powerful tool for finding peace and clarity. These evidence-based techniques can transform your relationship with stress and anxiety.</p>
 
         <h2>The Science Behind Mindful Breathing</h2>
-        <p>Mindful breathing activates the parasympathetic nervous system, which is responsible for the body's "rest and digest" response. When we breathe consciously and slowly, we signal to our brain that we're safe, which helps reduce cortisol levels and promote a sense of calm.</p>
+        <p>Mindful breathing activates the parasympathetic nervous system, which is responsible for the body's "rest and digest" response. When we breathe consciously and slowly, we signal to our brain that we're safe, helping to reduce cortisol levels and promote a natural state of calm.</p>
 
-        <h2>4-7-8 Breathing Technique</h2>
-        <p>This technique, popularized by Dr. Andrew Weil, is excellent for reducing anxiety and promoting sleep:</p>
+        <blockquote>
+          "Breath is the bridge which connects life to consciousness, which unites your body to your thoughts." - Thich Nhat Hanh
+        </blockquote>
+
+        <h2>4-7-8 Breathing: The Natural Tranquilizer</h2>
+        <p>This technique, developed by Dr. Andrew Weil, is excellent for reducing anxiety and promoting restful sleep:</p>
         <ol>
-          <li>Exhale completely through your mouth</li>
-          <li>Close your mouth and inhale through your nose for 4 counts</li>
+          <li>Exhale completely through your mouth, making a whoosh sound</li>
+          <li>Close your mouth and inhale quietly through your nose for 4 counts</li>
           <li>Hold your breath for 7 counts</li>
-          <li>Exhale through your mouth for 8 counts</li>
+          <li>Exhale through your mouth for 8 counts, making the whoosh sound</li>
           <li>Repeat the cycle 3-4 times</li>
         </ol>
 
-        <h2>Box Breathing (Square Breathing)</h2>
-        <p>Used by Navy SEALs and meditation practitioners alike, box breathing helps improve focus and emotional regulation:</p>
+        <div class="practice-tip">
+          <h3>Practice Tip</h3>
+          <p>Start slowly with this technique. The ratio is more important than the speed. As you become comfortable, you can increase the length of each count.</p>
+        </div>
+
+        <h2>Box Breathing: The Navy SEAL Technique</h2>
+        <p>Used by elite military personnel and meditation practitioners alike, box breathing helps improve focus and emotional regulation:</p>
         <ol>
-          <li>Inhale for 4 counts</li>
-          <li>Hold for 4 counts</li>
-          <li>Exhale for 4 counts</li>
+          <li>Inhale slowly for 4 counts</li>
+          <li>Hold your breath for 4 counts</li>
+          <li>Exhale slowly for 4 counts</li>
           <li>Hold empty for 4 counts</li>
           <li>Repeat for 5-10 cycles</li>
         </ol>
 
-        <h2>Coherent Breathing</h2>
+        <h2>Coherent Breathing: Finding Your Natural Rhythm</h2>
         <p>This technique involves breathing at a rate of 5 breaths per minute, which has been shown to optimize heart rate variability and promote emotional balance. Simply inhale for 6 seconds and exhale for 6 seconds, maintaining this rhythm for 5-20 minutes.</p>
 
         <h2>Creating Your Daily Practice</h2>
-        <p>The key to benefiting from breathwork is consistency. Start with just 5 minutes a day, choosing one technique that resonates with you. You can practice:</p>
+        <p>The key to benefiting from breathwork is consistency. Start with just 5 minutes a day, choosing one technique that resonates with you. Consider practicing:</p>
         <ul>
-          <li>First thing in the morning to set a calm tone for your day</li>
-          <li>During work breaks to reset your energy</li>
-          <li>Before meals to improve digestion</li>
-          <li>Before bed to promote restful sleep</li>
+          <li><strong>Morning:</strong> Set a calm, centered tone for your day</li>
+          <li><strong>Midday:</strong> Reset your energy during work breaks</li>
+          <li><strong>Before meals:</strong> Improve digestion and mindful eating</li>
+          <li><strong>Evening:</strong> Transition into restful sleep</li>
         </ul>
 
-        <p>Remember, like any skill, mindful breathing improves with practice. Be patient with yourself as you develop this powerful tool for well-being.</p>
+        <p>Remember, like any skill, mindful breathing improves with practice. Be patient and compassionate with yourself as you develop this powerful tool for well-being.</p>
       `
     },
     'forest-bathing-guide': {
       title: 'The Science Behind Forest Bathing: Why Nature Heals',
+      subtitle: 'Discover the Japanese practice of Shinrin-yoku and how it can boost immunity and reduce stress.',
       author: 'Michael Torres',
+      authorBio: 'Nature therapy researcher and certified forest bathing guide.',
       date: 'December 12, 2024',
       readTime: '6 min read',
       image: '/lovable-uploads/eb5e3a10-e1d3-49a7-9bd6-f9cfd8a697fc.jpg',
       category: 'Nature Therapy',
+      tags: ['Forest Bathing', 'Stress Relief', 'Immunity'],
       content: `
-        <p>Forest bathing, or "Shinrin-yoku" as it's known in Japan, is more than just a walk in the woods. It's a practice of mindful immersion in nature that has been scientifically proven to boost immune function, reduce stress hormones, and improve overall well-being.</p>
+        <p class="lead">Forest bathing, or "Shinrin-yoku" as it's known in Japan, is more than just a walk in the woods. It's a practice of mindful immersion in nature that has been scientifically proven to boost immune function and reduce stress.</p>
 
         <h2>The Origins of Forest Bathing</h2>
         <p>Developed in Japan in the 1980s as a form of preventive medicine and healing, forest bathing was created in response to rising stress levels and urbanization. The practice involves slowly and mindfully experiencing the forest through all five senses.</p>
 
-        <h2>Scientific Benefits</h2>
-        <p>Research has shown that forest bathing can:</p>
+        <h2>Remarkable Health Benefits</h2>
+        <p>Extensive research has shown that forest bathing can:</p>
         <ul>
-          <li>Increase natural killer (NK) cell activity, boosting immune function</li>
-          <li>Reduce cortisol levels by up to 50%</li>
+          <li>Increase natural killer (NK) cell activity by up to 50%, boosting immune function</li>
+          <li>Reduce cortisol levels significantly</li>
           <li>Lower blood pressure and heart rate</li>
-          <li>Improve mood and reduce anxiety</li>
+          <li>Improve mood and reduce symptoms of anxiety and depression</li>
           <li>Enhance creativity and problem-solving abilities</li>
+          <li>Increase energy levels and improve sleep quality</li>
         </ul>
 
+        <blockquote>
+          "In every walk with nature, one receives far more than they seek." - John Muir
+        </blockquote>
+
         <h2>How to Practice Forest Bathing</h2>
-        <p>Unlike hiking, forest bathing is about slowing down and being present. Here's how to practice:</p>
+        <p>Unlike hiking, forest bathing is about slowing down and being fully present. Here's your guide:</p>
+        
+        <h3>Preparation</h3>
         <ol>
-          <li><strong>Find a natural space:</strong> Any forest, park, or wooded area will work</li>
-          <li><strong>Leave devices behind:</strong> Disconnect from technology completely</li>
-          <li><strong>Move slowly:</strong> Walk at a leisurely pace, or simply sit</li>
-          <li><strong>Engage your senses:</strong> Listen to bird songs, feel tree bark, breathe in forest air</li>
-          <li><strong>Stay present:</strong> When your mind wanders, gently return to the sensory experience</li>
+          <li><strong>Choose your location:</strong> Any forest, park, or wooded area will work</li>
+          <li><strong>Disconnect:</strong> Leave devices behind or turn them off completely</li>
+          <li><strong>Set intention:</strong> Commit to being present and open</li>
         </ol>
 
-        <p>A typical session lasts 2-4 hours, but even 20-30 minutes can provide benefits. The key is quality over quantity – deep, mindful engagement with nature.</p>
+        <h3>The Practice</h3>
+        <ol>
+          <li><strong>Enter slowly:</strong> Cross the threshold mindfully</li>
+          <li><strong>Find your pace:</strong> Walk much slower than usual, or simply sit</li>
+          <li><strong>Engage your senses:</strong> Listen to bird songs, feel tree bark, breathe in forest air</li>
+          <li><strong>Stay present:</strong> When your mind wanders, gently return to sensory experience</li>
+          <li><strong>Connect:</strong> Touch trees, sit on the ground, observe wildlife</li>
+        </ol>
+
+        <div class="practice-tip">
+          <h3>Forest Bathing Invitation</h3>
+          <p>Find a tree that calls to you. Sit with your back against it for 10-15 minutes. Feel its support, listen to the sounds around you, and breathe deeply. This simple practice can be profoundly restorative.</p>
+        </div>
+
+        <p>A typical session lasts 2-4 hours, but even 20-30 minutes can provide significant benefits. The key is quality over quantity – deep, mindful engagement with the natural world.</p>
       `
     }
-    // Add more blog posts as needed
   };
 
   const post = blogPosts[id as keyof typeof blogPosts];
@@ -107,67 +142,83 @@ const BlogPost = () => {
     return (
       <>
         <Header />
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">Post not found</h1>
-            <Button asChild>
-              <Link to="/blog">Back to Blog</Link>
-            </Button>
-          </div>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-brand-subtle/10 to-white">
+          <Card className="max-w-md mx-auto text-center p-8">
+            <CardContent>
+              <h1 className="text-2xl font-bold mb-4 text-brand-dark">Article not found</h1>
+              <p className="text-brand-slate mb-6">The article you're looking for doesn't exist or has been moved.</p>
+              <Button asChild className="bg-brand-primary hover:bg-brand-primary/90">
+                <Link to="/blog">Back to Insights</Link>
+              </Button>
+            </CardContent>
+          </Card>
         </div>
         <Footer />
       </>
     );
   }
 
+  const fadeUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  };
+
   return (
     <>
       <Helmet>
-        <title>{post.title} | Sanghos Blog</title>
-        <meta name="description" content={post.title} />
+        <title>{post.title} | Sanghos Insights</title>
+        <meta name="description" content={post.subtitle} />
+        <meta property="og:title" content={post.title} />
+        <meta property="og:description" content={post.subtitle} />
+        <meta property="og:image" content={post.image} />
       </Helmet>
 
       <Header />
 
       <main className="bg-white">
-        {/* Back to Blog */}
-        <section className="py-8 border-b border-sand-100">
-          <div className="container mx-auto max-w-4xl px-4 md:px-6">
-            <Button variant="ghost" asChild className="group">
+        {/* Navigation */}
+        <section className="py-6 border-b border-sand-100 bg-gradient-to-r from-brand-subtle/5 to-transparent">
+          <div className="container mx-auto max-w-5xl px-4 md:px-6">
+            <Button variant="ghost" asChild className="group text-brand-primary hover:text-brand-primary/80">
               <Link to="/blog">
                 <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
-                Back to Blog
+                All Insights
               </Link>
             </Button>
           </div>
         </section>
 
         {/* Article Header */}
-        <section className="py-12">
-          <div className="container mx-auto max-w-4xl px-4 md:px-6">
+        <section className="py-16 bg-gradient-to-b from-white to-brand-subtle/5">
+          <div className="container mx-auto max-w-5xl px-4 md:px-6">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              className="max-w-4xl mx-auto"
             >
-              <div className="mb-6">
-                <span className="bg-brand-primary/10 text-brand-primary px-3 py-1 rounded-full text-sm font-medium">
+              {/* Category and Date */}
+              <div className="flex items-center gap-4 mb-6">
+                <Badge variant="default" className="bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/20">
                   {post.category}
-                </span>
+                </Badge>
+                <span className="text-brand-slate text-sm">{post.date}</span>
               </div>
               
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-brand-dark leading-tight">
+              {/* Title and Subtitle */}
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-brand-dark leading-tight">
                 {post.title}
               </h1>
               
-              <div className="flex items-center gap-6 mb-8 text-brand-slate">
+              <p className="text-xl md:text-2xl text-brand-slate mb-8 leading-relaxed max-w-3xl">
+                {post.subtitle}
+              </p>
+              
+              {/* Meta Info */}
+              <div className="flex flex-wrap items-center gap-6 mb-8 text-brand-slate">
                 <div className="flex items-center gap-2">
                   <User className="h-4 w-4" />
-                  <span>{post.author}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  <span>{post.date}</span>
+                  <span className="font-medium">{post.author}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4" />
@@ -175,56 +226,120 @@ const BlogPost = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 mb-8">
+              {/* Action Buttons */}
+              <div className="flex items-center gap-3 mb-12">
                 <Button variant="outline" size="sm" className="group">
                   <Share2 className="mr-2 h-4 w-4" />
                   Share
                 </Button>
                 <Button variant="outline" size="sm" className="group">
-                  <Heart className="mr-2 h-4 w-4" />
+                  <BookmarkPlus className="mr-2 h-4 w-4" />
                   Save
                 </Button>
+                <Button variant="outline" size="sm" className="group">
+                  <Heart className="mr-2 h-4 w-4" />
+                  Like
+                </Button>
+              </div>
+
+              {/* Tags */}
+              <div className="flex flex-wrap gap-2">
+                {post.tags.map((tag, index) => (
+                  <Badge key={index} variant="secondary" className="text-xs">
+                    {tag}
+                  </Badge>
+                ))}
               </div>
             </motion.div>
           </div>
         </section>
 
         {/* Featured Image */}
-        <section className="mb-12">
-          <div className="container mx-auto max-w-4xl px-4 md:px-6">
+        <section className="mb-16">
+          <div className="container mx-auto max-w-5xl px-4 md:px-6">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="rounded-2xl overflow-hidden"
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="rounded-3xl overflow-hidden shadow-2xl"
             >
               <img
                 src={post.image}
                 alt={post.title}
-                className="w-full h-96 object-cover"
+                className="w-full h-[400px] md:h-[500px] lg:h-[600px] object-cover"
               />
             </motion.div>
           </div>
         </section>
 
         {/* Article Content */}
-        <section className="pb-16">
+        <section className="pb-20">
           <div className="container mx-auto max-w-4xl px-4 md:px-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="prose prose-lg max-w-none"
-              style={{
-                '--tw-prose-body': 'rgb(81 96 114)',
-                '--tw-prose-headings': 'rgb(29 74 77)',
-                '--tw-prose-links': 'rgb(37 182 164)',
-                '--tw-prose-bold': 'rgb(29 74 77)',
-                '--tw-prose-counters': 'rgb(37 182 164)',
-                '--tw-prose-bullets': 'rgb(37 182 164)',
-              } as React.CSSProperties}
-              dangerouslySetInnerHTML={{ __html: post.content }}
-            />
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
+              {/* Main Content */}
+              <div className="lg:col-span-3">
+                <motion.article
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="prose prose-lg prose-brand max-w-none"
+                  style={{
+                    '--tw-prose-body': 'rgb(81 96 114)',
+                    '--tw-prose-headings': 'rgb(29 74 77)',
+                    '--tw-prose-links': 'rgb(37 182 164)',
+                    '--tw-prose-bold': 'rgb(29 74 77)',
+                    '--tw-prose-counters': 'rgb(37 182 164)',
+                    '--tw-prose-bullets': 'rgb(37 182 164)',
+                    '--tw-prose-quotes': 'rgb(29 74 77)',
+                  } as React.CSSProperties}
+                  dangerouslySetInnerHTML={{ __html: post.content }}
+                />
+              </div>
+
+              {/* Sidebar */}
+              <div className="lg:col-span-1">
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.6 }}
+                  className="sticky top-24 space-y-8"
+                >
+                  {/* Author Card */}
+                  <Card className="p-6 bg-gradient-to-br from-brand-subtle/10 to-brand-primary/5">
+                    <CardContent className="p-0">
+                      <div className="text-center">
+                        <div className="w-16 h-16 bg-brand-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <User className="h-8 w-8 text-brand-primary" />
+                        </div>
+                        <h3 className="font-bold text-brand-dark mb-2">{post.author}</h3>
+                        <p className="text-sm text-brand-slate">{post.authorBio}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Quick Actions */}
+                  <Card className="p-6">
+                    <CardContent className="p-0">
+                      <h3 className="font-bold text-brand-dark mb-4">Quick Actions</h3>
+                      <div className="space-y-3">
+                        <Button variant="outline" size="sm" className="w-full justify-start">
+                          <Share2 className="mr-2 h-4 w-4" />
+                          Share Article
+                        </Button>
+                        <Button variant="outline" size="sm" className="w-full justify-start">
+                          <BookmarkPlus className="mr-2 h-4 w-4" />
+                          Save for Later
+                        </Button>
+                        <Button variant="outline" size="sm" className="w-full justify-start">
+                          <Heart className="mr-2 h-4 w-4" />
+                          Like Article
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -233,6 +348,68 @@ const BlogPost = () => {
       </main>
 
       <Footer />
+
+      {/* Custom Styles */}
+      <style jsx>{`
+        .prose .lead {
+          font-size: 1.25rem;
+          line-height: 1.6;
+          color: rgb(81 96 114);
+          margin-bottom: 2rem;
+          font-weight: 400;
+        }
+        
+        .prose blockquote {
+          border-left: 4px solid rgb(37 182 164);
+          background: linear-gradient(135deg, rgb(37 182 164 / 0.05) 0%, rgb(37 182 164 / 0.1) 100%);
+          padding: 1.5rem;
+          margin: 2rem 0;
+          border-radius: 0.5rem;
+          font-style: italic;
+          font-size: 1.1rem;
+        }
+        
+        .prose .practice-tip {
+          background: linear-gradient(135deg, rgb(254 240 138 / 0.3) 0%, rgb(251 191 36 / 0.1) 100%);
+          border: 1px solid rgb(251 191 36 / 0.2);
+          border-radius: 1rem;
+          padding: 1.5rem;
+          margin: 2rem 0;
+        }
+        
+        .prose .practice-tip h3 {
+          color: rgb(161 98 7);
+          margin-top: 0;
+          margin-bottom: 0.5rem;
+          font-size: 1.1rem;
+        }
+        
+        .prose h2 {
+          margin-top: 3rem;
+          margin-bottom: 1rem;
+          font-size: 1.875rem;
+          line-height: 1.2;
+        }
+        
+        .prose h3 {
+          margin-top: 2rem;
+          margin-bottom: 0.75rem;
+          font-size: 1.5rem;
+        }
+        
+        .prose ol, .prose ul {
+          margin: 1.5rem 0;
+        }
+        
+        .prose li {
+          margin: 0.5rem 0;
+        }
+        
+        .prose p {
+          margin: 1.25rem 0;
+          line-height: 1.7;
+        }
+      `}</style>
     </>
   );
 };

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -15,7 +16,7 @@ const Blog = () => {
   const featuredArticle = {
     id: 'mindful-breathing-techniques',
     title: 'Mindful Breathing Techniques: Your Gateway to Inner Peace',
-    excerpt: 'Discover powerful breathing exercises that can transform your daily stress into moments of calm and clarity.',
+    excerpt: 'Transform your daily stress into moments of calm and clarity with these powerful, evidence-based breathing practices.',
     author: 'Dr. Sarah Chen',
     date: 'December 15, 2024',
     readTime: '8 min read',
@@ -23,64 +24,99 @@ const Blog = () => {
     category: 'Breathwork',
     featured: true
   };
-  const articles = [{
-    id: 'forest-bathing-guide',
-    title: 'The Science Behind Forest Bathing: Why Nature Heals',
-    excerpt: 'Explore the Japanese practice of Shinrin-yoku and how immersing yourself in nature can boost immunity and reduce stress.',
-    author: 'Michael Torres',
-    date: 'December 12, 2024',
-    readTime: '6 min read',
-    image: '/lovable-uploads/eb5e3a10-e1d3-49a7-9bd6-f9cfd8a697fc.jpg',
-    category: 'Nature Therapy'
-  }, {
-    id: 'meditation-retreat-preparation',
-    title: 'Preparing for Your First Meditation Retreat: A Complete Guide',
-    excerpt: 'Everything you need to know before embarking on your meditation journey, from packing essentials to mental preparation.',
-    author: 'Emma Rodriguez',
-    date: 'December 10, 2024',
-    readTime: '10 min read',
-    image: '/lovable-uploads/1bb523ae-38ed-4377-8a20-53ad930f2cba.png',
-    category: 'Meditation'
-  }, {
-    id: 'morning-wellness-rituals',
-    title: '7 Morning Rituals That Will Transform Your Day',
-    excerpt: 'Simple yet powerful practices to start your morning with intention and create lasting positive change.',
-    author: 'James Wilson',
-    date: 'December 8, 2024',
-    readTime: '5 min read',
-    image: '/lovable-uploads/374c6d8d-b72d-4385-b859-d37c9b4869ed.png',
-    category: 'Wellness'
-  }, {
-    id: 'yoga-for-beginners',
-    title: 'Yoga for Absolute Beginners: Finding Your Practice',
-    excerpt: 'A gentle introduction to yoga that will help you build confidence and discover the style that resonates with you.',
-    author: 'Lisa Patel',
-    date: 'December 5, 2024',
-    readTime: '7 min read',
-    image: '/lovable-uploads/82cdec7c-edd5-46fb-be36-0bacda6e756d.png',
-    category: 'Yoga'
-  }, {
-    id: 'digital-detox-retreat',
-    title: 'The Art of Digital Detox: Reclaiming Your Mental Space',
-    excerpt: 'Learn how to disconnect from technology and reconnect with yourself through mindful digital boundaries.',
-    author: 'David Kim',
-    date: 'December 3, 2024',
-    readTime: '6 min read',
-    image: '/lovable-uploads/fb2aad72-57e6-4306-9ada-dd61eb448e1b.png',
-    category: 'Mindfulness'
-  }, {
-    id: 'sound-healing-benefits',
-    title: 'Sound Healing: Ancient Practice for Modern Stress',
-    excerpt: 'Discover how sound frequencies can promote healing, reduce anxiety, and enhance your meditation practice.',
-    author: 'Rachel Green',
-    date: 'November 30, 2024',
-    readTime: '8 min read',
-    image: '/lovable-uploads/440cf0e4-ee06-4235-9ec4-b3ecdefd7ee9.jpg',
-    category: 'Sound Therapy'
-  }];
+
+  const articles = [
+    {
+      id: 'forest-bathing-guide',
+      title: 'The Science Behind Forest Bathing: Why Nature Heals',
+      excerpt: 'Explore the Japanese practice of Shinrin-yoku and how immersing yourself in nature can boost immunity and reduce stress.',
+      author: 'Michael Torres',
+      date: 'December 12, 2024',
+      readTime: '6 min read',
+      image: '/lovable-uploads/eb5e3a10-e1d3-49a7-9bd6-f9cfd8a697fc.jpg',
+      category: 'Nature Therapy'
+    },
+    {
+      id: 'meditation-retreat-preparation',
+      title: 'Preparing for Your First Meditation Retreat: A Complete Guide',
+      excerpt: 'Everything you need to know before embarking on your meditation journey, from packing essentials to mental preparation.',
+      author: 'Emma Rodriguez',
+      date: 'December 10, 2024',
+      readTime: '10 min read',
+      image: '/lovable-uploads/1bb523ae-38ed-4377-8a20-53ad930f2cba.png',
+      category: 'Meditation'
+    },
+    {
+      id: 'morning-wellness-rituals',
+      title: '7 Morning Rituals That Will Transform Your Day',
+      excerpt: 'Simple yet powerful practices to start your morning with intention and create lasting positive change.',
+      author: 'James Wilson',
+      date: 'December 8, 2024',
+      readTime: '5 min read',
+      image: '/lovable-uploads/374c6d8d-b72d-4385-b859-d37c9b4869ed.png',
+      category: 'Wellness'
+    },
+    {
+      id: 'yoga-for-beginners',
+      title: 'Yoga for Absolute Beginners: Finding Your Practice',
+      excerpt: 'A gentle introduction to yoga that will help you build confidence and discover the style that resonates with you.',
+      author: 'Lisa Patel',
+      date: 'December 5, 2024',
+      readTime: '7 min read',
+      image: '/lovable-uploads/82cdec7c-edd5-46fb-be36-0bacda6e756d.png',
+      category: 'Yoga'
+    },
+    {
+      id: 'digital-detox-retreat',
+      title: 'The Art of Digital Detox: Reclaiming Your Mental Space',
+      excerpt: 'Learn how to disconnect from technology and reconnect with yourself through mindful digital boundaries.',
+      author: 'David Kim',
+      date: 'December 3, 2024',
+      readTime: '6 min read',
+      image: '/lovable-uploads/fb2aad72-57e6-4306-9ada-dd61eb448e1b.png',
+      category: 'Mindfulness'
+    },
+    {
+      id: 'sound-healing-benefits',
+      title: 'Sound Healing: Ancient Practice for Modern Stress',
+      excerpt: 'Discover how sound frequencies can promote healing, reduce anxiety, and enhance your meditation practice.',
+      author: 'Rachel Green',
+      date: 'November 30, 2024',
+      readTime: '8 min read',
+      image: '/lovable-uploads/440cf0e4-ee06-4235-9ec4-b3ecdefd7ee9.jpg',
+      category: 'Sound Therapy'
+    },
+    {
+      id: 'ayurvedic-daily-routines',
+      title: 'Ayurvedic Daily Routines: Ancient Wisdom for Modern Living',
+      excerpt: 'Discover how traditional Ayurvedic practices can enhance your energy, digestion, and overall well-being.',
+      author: 'Dr. Priya Sharma',
+      date: 'November 28, 2024',
+      readTime: '9 min read',
+      image: '/lovable-uploads/91da0c1f-b9f1-4310-aea3-1afbfe1358f7.png',
+      category: 'Wellness'
+    },
+    {
+      id: 'chakra-balancing-guide',
+      title: 'Complete Guide to Chakra Balancing Through Meditation',
+      excerpt: 'Learn practical techniques to align your energy centers and promote physical, emotional, and spiritual harmony.',
+      author: 'Maya Singh',
+      date: 'November 25, 2024',
+      readTime: '12 min read',
+      image: '/lovable-uploads/6e9e763a-364b-4dbf-a17e-8f13d82681fa.png',
+      category: 'Meditation'
+    }
+  ];
+
   const categories = ['All', 'Meditation', 'Breathwork', 'Yoga', 'Nature Therapy', 'Wellness', 'Mindfulness', 'Sound Therapy'];
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const filteredArticles = articles.filter(article => (selectedCategory === 'All' || article.category === selectedCategory) && (article.title.toLowerCase().includes(searchQuery.toLowerCase()) || article.excerpt.toLowerCase().includes(searchQuery.toLowerCase())));
+
+  const filteredArticles = articles.filter(article => 
+    (selectedCategory === 'All' || article.category === selectedCategory) &&
+    (article.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+     article.excerpt.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
   const fadeUp = {
     hidden: {
       opacity: 0,
@@ -94,6 +130,7 @@ const Blog = () => {
       }
     }
   };
+
   return (
     <>
       <Helmet>
@@ -184,9 +221,19 @@ const Blog = () => {
         <section className="py-8">
           <div className="container mx-auto max-w-6xl px-4 md:px-6">
             <div className="flex flex-wrap gap-3 justify-center">
-              {categories.map(category => <button key={category} onClick={() => setSelectedCategory(category)} className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${selectedCategory === category ? 'bg-brand-primary text-white' : 'bg-sand-100 text-brand-slate hover:bg-sand-200'}`}>
+              {categories.map(category => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                    selectedCategory === category
+                      ? 'bg-brand-primary text-white'
+                      : 'bg-sand-100 text-brand-slate hover:bg-sand-200'
+                  }`}
+                >
                   {category}
-                </button>)}
+                </button>
+              ))}
             </div>
           </div>
         </section>
@@ -195,11 +242,21 @@ const Blog = () => {
         <section className="py-16">
           <div className="container mx-auto max-w-6xl px-4 md:px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredArticles.map((article, index) => <motion.article key={article.id} initial="hidden" animate="visible" variants={fadeUp} transition={{
-              delay: index * 0.1
-            }} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group">
+              {filteredArticles.map((article, index) => (
+                <motion.article
+                  key={article.id}
+                  initial="hidden"
+                  animate="visible"
+                  variants={fadeUp}
+                  transition={{ delay: index * 0.1 }}
+                  className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group"
+                >
                   <div className="relative h-48 overflow-hidden">
-                    <img src={article.image} alt={article.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                    <img
+                      src={article.image}
+                      alt={article.title}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
                     <div className="absolute top-4 left-4">
                       <span className="bg-white/90 text-brand-primary px-3 py-1 rounded-full text-sm font-medium">
                         {article.category}
@@ -223,17 +280,23 @@ const Blog = () => {
                         <span>{article.readTime}</span>
                       </div>
                     </div>
-                    <Link to={`/blog/${article.id}`} className="text-brand-primary font-medium hover:text-brand-primary/80 transition-colors flex items-center gap-2 group/link">
+                    <Link
+                      to={`/blog/${article.id}`}
+                      className="text-brand-primary font-medium hover:text-brand-primary/80 transition-colors flex items-center gap-2 group/link"
+                    >
                       Read More
                       <ArrowRight className="h-4 w-4 transition-transform group-hover/link:translate-x-1" />
                     </Link>
                   </div>
-                </motion.article>)}
+                </motion.article>
+              ))}
             </div>
 
-            {filteredArticles.length === 0 && <div className="text-center py-16">
+            {filteredArticles.length === 0 && (
+              <div className="text-center py-16">
                 <p className="text-brand-slate text-lg">No articles found matching your search criteria.</p>
-              </div>}
+              </div>
+            )}
           </div>
         </section>
 
