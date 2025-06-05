@@ -18,7 +18,7 @@ const BlogPost = () => {
     'mindful-breathing-techniques': {
       title: 'Mindful Breathing Techniques: Your Gateway to Inner Peace',
       subtitle: 'Transform your daily stress into moments of calm and clarity with these powerful practices.',
-      author: 'Devin Fernandez',
+      author: 'Devin Fernandez | Founder of Sanghos',
       authorBio: 'Founder of Sanghos, passionate mindful advocate and wellness enthusiast focused on connecting others to wellness.',
       date: 'December 15, 2024',
       readTime: '8 min read',
@@ -78,7 +78,7 @@ const BlogPost = () => {
     'forest-bathing-guide': {
       title: 'The Science Behind Forest Bathing: Why Nature Heals',
       subtitle: 'Discover the Japanese practice of Shinrin-yoku and how it can boost immunity and reduce stress.',
-      author: 'Devin Fernandez',
+      author: 'Devin Fernandez | Founder of Sanghos',
       authorBio: 'Founder of Sanghos, passionate mindful advocate and wellness enthusiast focused on connecting others to wellness.',
       date: 'December 12, 2024',
       readTime: '6 min read',
@@ -136,7 +136,7 @@ const BlogPost = () => {
     'morning-wellness-rituals': {
       title: '7 Morning Rituals That Will Transform Your Day',
       subtitle: 'Simple yet powerful practices to start your morning with intention and create lasting positive change.',
-      author: 'Devin Fernandez',
+      author: 'Devin Fernandez | Founder of Sanghos',
       authorBio: 'Founder of Sanghos, passionate mindful advocate and wellness enthusiast focused on connecting others to wellness.',
       date: 'December 8, 2024',
       readTime: '5 min read',
