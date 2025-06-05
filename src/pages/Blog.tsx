@@ -84,26 +84,6 @@ const Blog = () => {
       readTime: '8 min read',
       image: '/lovable-uploads/440cf0e4-ee06-4235-9ec4-b3ecdefd7ee9.jpg',
       category: 'Sound Therapy'
-    },
-    {
-      id: 'ayurvedic-daily-routines',
-      title: 'Ayurvedic Daily Routines: Ancient Wisdom for Modern Living',
-      excerpt: 'Discover how traditional Ayurvedic practices can enhance your energy, digestion, and overall well-being.',
-      author: 'Devin Fernandez',
-      date: 'November 28, 2024',
-      readTime: '9 min read',
-      image: '/lovable-uploads/91da0c1f-b9f1-4310-aea3-1afbfe1358f7.png',
-      category: 'Wellness'
-    },
-    {
-      id: 'chakra-balancing-guide',
-      title: 'Complete Guide to Chakra Balancing Through Meditation',
-      excerpt: 'Learn practical techniques to align your energy centers and promote physical, emotional, and spiritual harmony.',
-      author: 'Devin Fernandez',
-      date: 'November 25, 2024',
-      readTime: '12 min read',
-      image: '/lovable-uploads/6e9e763a-364b-4dbf-a17e-8f13d82681fa.png',
-      category: 'Meditation'
     }
   ];
 

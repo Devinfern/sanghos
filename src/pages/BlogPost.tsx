@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -134,6 +133,88 @@ const BlogPost = () => {
         <p>A typical session lasts 2-4 hours, but even 20-30 minutes can provide significant benefits. The key is quality over quantity – deep, mindful engagement with the natural world.</p>
       `
     },
+    'meditation-retreat-preparation': {
+      title: 'Preparing for Your First Meditation Retreat: A Complete Guide',
+      subtitle: 'Everything you need to know before embarking on your meditation journey, from packing essentials to mental preparation.',
+      author: 'Devin Fernandez | Founder of Sanghos',
+      authorBio: 'Founder of Sanghos, passionate mindful advocate and wellness enthusiast focused on connecting others to wellness.',
+      date: 'December 10, 2024',
+      readTime: '10 min read',
+      image: '/lovable-uploads/1bb523ae-38ed-4377-8a20-53ad930f2cba.png',
+      category: 'Meditation',
+      tags: ['Meditation', 'Retreat', 'Mindfulness'],
+      content: `
+        <p class="lead">Your first meditation retreat can be a transformative experience. With proper preparation, you'll maximize the benefits and create a foundation for lasting inner peace and clarity.</p>
+
+        <h2>What to Expect at a Meditation Retreat</h2>
+        <p>Meditation retreats offer a structured environment for deepening your practice. Most include periods of sitting meditation, walking meditation, dharma talks, and noble silence. The schedule is typically designed to support introspection and inner exploration.</p>
+
+        <blockquote>
+          "The quieter you become, the more able you are to hear." - Rumi
+        </blockquote>
+
+        <h2>Mental and Emotional Preparation</h2>
+        <h3>Set Clear Intentions</h3>
+        <p>Before arriving, reflect on why you're attending. Are you seeking stress relief, spiritual growth, or simply a break from daily life? Setting intentions helps guide your experience.</p>
+
+        <h3>Prepare for Silence</h3>
+        <p>Many retreats include periods of noble silence. This can initially feel uncomfortable but becomes deeply nourishing. Practice short periods of silence at home to prepare.</p>
+
+        <h3>Embrace Beginner's Mind</h3>
+        <p>Release expectations about how your meditation "should" go. Each moment offers an opportunity for discovery, regardless of your experience level.</p>
+
+        <h2>Physical Preparation</h2>
+        <h3>Build Your Sitting Practice</h3>
+        <p>If you're new to meditation, start building your sitting tolerance:</p>
+        <ul>
+          <li>Begin with 10-15 minute sessions</li>
+          <li>Gradually increase duration by 5 minutes weekly</li>
+          <li>Practice sitting in various positions to find what works</li>
+          <li>Focus on consistency over perfection</li>
+        </ul>
+
+        <h3>Gentle Body Preparation</h3>
+        <p>Prepare your body for extended sitting with simple stretches focusing on hips, back, and shoulders. Basic yoga poses like child's pose and gentle twists can be helpful.</p>
+
+        <h2>What to Pack</h2>
+        <h3>Essential Items</h3>
+        <ul>
+          <li><strong>Meditation cushion or mat:</strong> For comfort during sitting practice</li>
+          <li><strong>Blanket:</strong> Retreat centers can be cool, especially during early morning sessions</li>
+          <li><strong>Comfortable, loose-fitting clothes:</strong> Layers work best</li>
+          <li><strong>Journal and pen:</strong> For insights and reflections</li>
+          <li><strong>Water bottle:</strong> Stay hydrated throughout the day</li>
+        </ul>
+
+        <h3>Leave at Home</h3>
+        <ul>
+          <li>Electronics (unless specifically allowed)</li>
+          <li>Books and reading materials</li>
+          <li>Jewelry and valuable items</li>
+          <li>Strong scents or perfumes</li>
+        </ul>
+
+        <div class="practice-tip">
+          <h3>Arrival Day Tip</h3>
+          <p>Arrive early if possible to settle in and familiarize yourself with the space. This helps you transition more smoothly into retreat mode.</p>
+        </div>
+
+        <h2>During the Retreat</h2>
+        <h3>Embrace the Schedule</h3>
+        <p>Trust the structure, even if it feels challenging. The schedule is designed to support your practice and create optimal conditions for insight.</p>
+
+        <h3>Work with Difficulty</h3>
+        <p>Physical discomfort, emotional reactions, or restlessness are normal. These experiences often become valuable teachers when approached with curiosity rather than resistance.</p>
+
+        <h3>Practice Self-Compassion</h3>
+        <p>Be gentle with yourself. There's no "perfect" way to meditate. Each moment of awareness, however brief, is valuable.</p>
+
+        <h2>Integration and Beyond</h2>
+        <p>The real work begins when you return home. Plan how you'll integrate your retreat insights into daily life. Consider establishing a regular practice schedule and connecting with a local meditation community.</p>
+
+        <p>Remember, a meditation retreat is not an escape from life but a preparation for living more fully. Approach it with openness, patience, and trust in the process.</p>
+      `
+    },
     'morning-wellness-rituals': {
       title: '7 Morning Rituals That Will Transform Your Day',
       subtitle: 'Simple yet powerful practices to start your morning with intention and create lasting positive change.',
@@ -190,6 +271,322 @@ const BlogPost = () => {
 
         <h2>The Future of Mornings</h2>
         <p>By prioritizing proactive self-care at dawn, we're challenging the norm of reactive mornings. This approach underscores the advantage of understanding why wellness works and helps individuals feel the difference, one sunrise at a time.</p>
+      `
+    },
+    'yoga-for-beginners': {
+      title: 'Yoga for Absolute Beginners: Finding Your Practice',
+      subtitle: 'A gentle introduction to yoga that will help you build confidence and discover the style that resonates with you.',
+      author: 'Devin Fernandez | Founder of Sanghos',
+      authorBio: 'Founder of Sanghos, passionate mindful advocate and wellness enthusiast focused on connecting others to wellness.',
+      date: 'December 5, 2024',
+      readTime: '7 min read',
+      image: '/lovable-uploads/82cdec7c-edd5-46fb-be36-0bacda6e756d.png',
+      category: 'Yoga',
+      tags: ['Yoga', 'Beginner', 'Flexibility', 'Mindfulness'],
+      content: `
+        <p class="lead">Starting a yoga practice can feel overwhelming with so many styles, poses, and philosophies to explore. This guide will help you begin your journey with confidence and find the approach that best serves your unique needs and goals.</p>
+
+        <h2>What is Yoga Really?</h2>
+        <p>Yoga, which means "union" in Sanskrit, is far more than physical postures. It's a holistic practice that integrates movement, breath, and mindfulness to promote physical health, mental clarity, and spiritual well-being.</p>
+
+        <blockquote>
+          "Yoga is not about touching your toes. It is about what you learn on the way down." - Judith Hanson Lasater
+        </blockquote>
+
+        <h2>Debunking Common Myths</h2>
+        <h3>Myth: You Need to Be Flexible to Start</h3>
+        <p>Flexibility is a result of yoga practice, not a prerequisite. Every pose can be modified to meet your current abilities.</p>
+
+        <h3>Myth: Yoga is Only for Certain Body Types</h3>
+        <p>Yoga is for every body. Modifications and props make the practice accessible regardless of age, size, or physical limitations.</p>
+
+        <h3>Myth: You Must Be Spiritual</h3>
+        <p>While yoga has spiritual roots, you can practice purely for physical benefits. The practice meets you where you are.</p>
+
+        <h2>Popular Yoga Styles for Beginners</h2>
+        <h3>Hatha Yoga</h3>
+        <p>Gentle and slow-paced, focusing on basic postures and breathing. Perfect for building foundational strength and flexibility.</p>
+
+        <h3>Vinyasa Yoga</h3>
+        <p>Links movement with breath in flowing sequences. Offers variety and builds heat in the body.</p>
+
+        <h3>Yin Yoga</h3>
+        <p>Passive poses held for longer periods (3-5 minutes). Excellent for deep stretching and stress relief.</p>
+
+        <h3>Restorative Yoga</h3>
+        <p>Uses props to support the body in restful poses. Ideal for relaxation and nervous system healing.</p>
+
+        <div class="practice-tip">
+          <h3>First Class Tips</h3>
+          <p>Arrive early to introduce yourself to the instructor. Let them know you're new so they can offer modifications. Remember, everyone was a beginner once!</p>
+        </div>
+
+        <h2>Essential Beginner Poses</h2>
+        <h3>Mountain Pose (Tadasana)</h3>
+        <p>The foundation of all standing poses. Teaches proper alignment and body awareness.</p>
+
+        <h3>Child's Pose (Balasana)</h3>
+        <p>A resting pose that can be taken anytime during practice. Calms the mind and gently stretches the back.</p>
+
+        <h3>Downward Facing Dog (Adho Mukha Svanasana)</h3>
+        <p>Builds strength in arms and legs while lengthening the spine. Can be modified by bending knees or using blocks.</p>
+
+        <h3>Warrior I (Virabhadrasana I)</h3>
+        <p>Strengthens legs and opens hips and chest. Builds confidence and stability.</p>
+
+        <h3>Cat-Cow Pose (Marjaryasana-Bitilasana)</h3>
+        <p>Gentle spinal movement that improves flexibility and relieves tension.</p>
+
+        <h2>Breathing Basics</h2>
+        <p>Breath is the heart of yoga practice. Start with these fundamental techniques:</p>
+
+        <h3>Ujjayi Breath</h3>
+        <p>Deep breathing through the nose with a slight constriction in the throat, creating an ocean-like sound. Calms the mind and maintains focus.</p>
+
+        <h3>Natural Breath</h3>
+        <p>Simply breathing naturally while maintaining awareness. Perfect for beginners or when feeling overwhelmed.</p>
+
+        <h2>Setting Up Your Home Practice</h2>
+        <h3>Essential Equipment</h3>
+        <ul>
+          <li><strong>Yoga mat:</strong> Provides stability and cushioning</li>
+          <li><strong>Blocks:</strong> Help bring the ground closer to you</li>
+          <li><strong>Strap:</strong> Assists in reaching poses safely</li>
+          <li><strong>Blanket:</strong> For warmth during relaxation</li>
+        </ul>
+
+        <h3>Creating Your Space</h3>
+        <p>Choose a quiet area with enough room to extend your arms. Clear the space of distractions and set an intention for your practice.</p>
+
+        <h2>Building Consistency</h2>
+        <p>Start with just 10-15 minutes, 2-3 times per week. Consistency is more important than duration. As you build strength and flexibility, gradually increase your practice time.</p>
+
+        <h2>Listening to Your Body</h2>
+        <p>Yoga should never cause pain. Distinguish between the sensation of stretching and actual discomfort. Honor your body's limits and remember that they change daily.</p>
+
+        <p>Remember, yoga is a practice, not a performance. Embrace the journey of discovery, celebrate small progress, and be patient with yourself as you explore this ancient, transformative art.</p>
+      `
+    },
+    'digital-detox-retreat': {
+      title: 'The Art of Digital Detox: Reclaiming Your Mental Space',
+      subtitle: 'Learn how to disconnect from technology and reconnect with yourself through mindful digital boundaries.',
+      author: 'Devin Fernandez | Founder of Sanghos',
+      authorBio: 'Founder of Sanghos, passionate mindful advocate and wellness enthusiast focused on connecting others to wellness.',
+      date: 'December 3, 2024',
+      readTime: '6 min read',
+      image: '/lovable-uploads/fb2aad72-57e6-4306-9ada-dd61eb448e1b.png',
+      category: 'Mindfulness',
+      tags: ['Digital Detox', 'Mindfulness', 'Mental Health'],
+      content: `
+        <p class="lead">In our hyperconnected world, the constant ping of notifications and endless scroll of social media has created a new form of mental pollution. A digital detox isn't about rejecting technology entirely—it's about creating intentional boundaries that allow you to reclaim your attention and mental clarity.</p>
+
+        <h2>The Hidden Cost of Digital Overwhelm</h2>
+        <p>Research shows that the average person checks their phone 96 times per day—that's once every 10 minutes during waking hours. This constant digital stimulation affects our ability to focus deeply, be present in relationships, and access the quiet moments where creativity and insight emerge.</p>
+
+        <blockquote>
+          "The real problem of humanity is the following: We have paleolithic emotions, medieval institutions, and god-like technology." - E.O. Wilson
+        </blockquote>
+
+        <h2>Signs You Need a Digital Detox</h2>
+        <ul>
+          <li>Feeling anxious when separated from your phone</li>
+          <li>Difficulty concentrating on single tasks</li>
+          <li>Phantom vibration syndrome (feeling your phone buzz when it hasn't)</li>
+          <li>Scrolling mindlessly without purpose</li>
+          <li>Sleep disturbances from late-night screen time</li>
+          <li>Decreased face-to-face social interaction</li>
+          <li>Constant comparison triggered by social media</li>
+        </ul>
+
+        <h2>The Neuroscience of Digital Addiction</h2>
+        <p>Social media platforms and apps are designed to trigger dopamine releases in the brain—the same neurotransmitter involved in addiction. Each notification, like, or new piece of content provides a small hit of pleasure, creating a cycle that keeps us reaching for our devices.</p>
+
+        <h2>Designing Your Digital Detox</h2>
+        <h3>Start Small: Micro-Detoxes</h3>
+        <p>Begin with manageable periods of disconnection:</p>
+        <ul>
+          <li><strong>Phone-free meals:</strong> Eat without devices to practice mindful eating</li>
+          <li><strong>Morning sanctuary:</strong> Keep the first hour device-free</li>
+          <li><strong>Digital sunset:</strong> No screens 1 hour before bed</li>
+          <li><strong>Weekend mornings:</strong> Delay checking emails until afternoon</li>
+        </ul>
+
+        <h3>Progressive Challenges</h3>
+        <ol>
+          <li><strong>24-hour detox:</strong> One full day offline</li>
+          <li><strong>Weekend retreat:</strong> Friday evening to Sunday evening</li>
+          <li><strong>Week-long cleanse:</strong> Extended period for deeper reset</li>
+        </ol>
+
+        <div class="practice-tip">
+          <h3>Preparation is Key</h3>
+          <p>Inform friends and family about your detox. Set up auto-responders for email and social media. Prepare offline activities to fill the time meaningfully.</p>
+        </div>
+
+        <h2>Mindful Re-engagement</h2>
+        <h3>Creating Intentional Usage</h3>
+        <p>When you return to digital tools, approach them with consciousness:</p>
+        <ul>
+          <li><strong>Purpose-driven consumption:</strong> Ask "Why am I opening this app?"</li>
+          <li><strong>Curate your feeds:</strong> Unfollow accounts that trigger comparison or negativity</li>
+          <li><strong>Set specific times:</strong> Check email and social media at designated times</li>
+          <li><strong>Use focus modes:</strong> Leverage built-in tools to limit distractions</li>
+        </ul>
+
+        <h2>Reclaiming Analog Pleasures</h2>
+        <p>Digital detox creates space for forgotten joys:</p>
+        <ul>
+          <li>Reading physical books</li>
+          <li>Handwritten journaling</li>
+          <li>Face-to-face conversations</li>
+          <li>Nature walks without photography</li>
+          <li>Cooking without recipe videos</li>
+          <li>Board games and puzzles</li>
+          <li>Art and crafting</li>
+        </ul>
+
+        <h2>Long-term Digital Wellness</h2>
+        <h3>Establishing Boundaries</h3>
+        <ul>
+          <li><strong>Physical boundaries:</strong> Charge devices outside the bedroom</li>
+          <li><strong>Time boundaries:</strong> Specific hours for checking messages</li>
+          <li><strong>Content boundaries:</strong> Limit news consumption and triggering content</li>
+          <li><strong>Social boundaries:</strong> Practice saying no to constant availability</li>
+        </ul>
+
+        <h3>Creating Tech-Free Zones</h3>
+        <p>Designate sacred spaces in your home where devices aren't welcome—the bedroom, dining table, or a meditation corner. These zones become refuges for presence and connection.</p>
+
+        <h2>The Paradox of Mindful Technology</h2>
+        <p>The goal isn't to become a digital hermit but to develop a conscious relationship with technology. Use devices as tools that serve your intentions rather than unconscious habits that consume your attention.</p>
+
+        <p>Regular digital detoxes act as reset buttons, helping you remember what it feels like to be fully present in your own life. In the silence between notifications, you might rediscover the quiet voice of your own wisdom.</p>
+      `
+    },
+    'sound-healing-benefits': {
+      title: 'Sound Healing: Ancient Practice for Modern Stress',
+      subtitle: 'Discover how sound frequencies can promote healing, reduce anxiety, and enhance your meditation practice.',
+      author: 'Devin Fernandez | Founder of Sanghos',
+      authorBio: 'Founder of Sanghos, passionate mindful advocate and wellness enthusiast focused on connecting others to wellness.',
+      date: 'November 30, 2024',
+      readTime: '8 min read',
+      image: '/lovable-uploads/440cf0e4-ee06-4235-9ec4-b3ecdefd7ee9.jpg',
+      category: 'Sound Therapy',
+      tags: ['Sound Healing', 'Meditation', 'Stress Relief'],
+      content: `
+        <p class="lead">Sound healing, one of humanity's oldest therapeutic practices, is experiencing a renaissance as modern science validates what ancient cultures have always known: specific frequencies and vibrations can profoundly impact our physical, emotional, and spiritual well-being.</p>
+
+        <h2>The Science of Sound and Healing</h2>
+        <p>Everything in the universe vibrates at specific frequencies, including our bodies. When we're healthy, our organs, tissues, and cells vibrate in harmony. Stress, illness, and emotional imbalance can disrupt these natural frequencies, and sound healing works to restore harmonic balance.</p>
+
+        <blockquote>
+          "If you want to find the secrets of the universe, think in terms of energy, frequency, and vibration." - Nikola Tesla
+        </blockquote>
+
+        <h2>Historical Roots of Sound Healing</h2>
+        <p>Sound has been used therapeutically across cultures for millennia:</p>
+        <ul>
+          <li><strong>Ancient Egypt:</strong> Priests used vowel sounds and chanting in healing temples</li>
+          <li><strong>Tibet:</strong> Singing bowls and mantras for spiritual and physical healing</li>
+          <li><strong>Aboriginal Australia:</strong> Didgeridoo for sound healing ceremonies</li>
+          <li><strong>Ancient Greece:</strong> Pythagoras prescribed specific musical intervals for ailments</li>
+          <li><strong>India:</strong> Vedic chanting and nada yoga (sound yoga) practices</li>
+        </ul>
+
+        <h2>How Sound Healing Works</h2>
+        <h3>Brainwave Entrainment</h3>
+        <p>Sound frequencies can guide brainwaves into specific states:</p>
+        <ul>
+          <li><strong>Delta waves (0.5-4 Hz):</strong> Deep sleep and healing</li>
+          <li><strong>Theta waves (4-8 Hz):</strong> Deep meditation and creativity</li>
+          <li><strong>Alpha waves (8-13 Hz):</strong> Relaxed awareness and learning</li>
+          <li><strong>Beta waves (13-30 Hz):</strong> Alert consciousness</li>
+        </ul>
+
+        <h3>Resonance and Sympathetic Vibration</h3>
+        <p>When an external frequency matches the natural frequency of an organ or system, resonance occurs, potentially restoring optimal function and promoting healing.</p>
+
+        <h2>Types of Sound Healing</h2>
+        <h3>Tibetan Singing Bowls</h3>
+        <p>These metal bowls produce rich, harmonic tones that can induce deep states of relaxation and meditation. Each bowl is tuned to specific frequencies that correspond to different chakras or energy centers.</p>
+
+        <h3>Crystal Singing Bowls</h3>
+        <p>Made from pure quartz crystal, these bowls produce clear, penetrating tones. Each bowl is typically tuned to specific musical notes that correspond to the body's energy centers.</p>
+
+        <h3>Gongs</h3>
+        <p>Gong baths create waves of sound that can shift consciousness and release emotional blockages. The complex overtones help quiet mental chatter and promote deep states of awareness.</p>
+
+        <h3>Tuning Forks</h3>
+        <p>Precision instruments that create specific frequencies. When applied to the body or held near the ears, they can help restore balance to specific organs or energy systems.</p>
+
+        <div class="practice-tip">
+          <h3>Simple Sound Healing Practice</h3>
+          <p>Try humming or chanting "OM" for 5-10 minutes. Feel the vibrations in your chest and head. This simple practice can calm the nervous system and center your awareness.</p>
+        </div>
+
+        <h2>Benefits of Sound Healing</h2>
+        <h3>Physical Benefits</h3>
+        <ul>
+          <li>Reduced blood pressure and heart rate</li>
+          <li>Decreased cortisol levels</li>
+          <li>Improved immune function</li>
+          <li>Pain reduction</li>
+          <li>Better sleep quality</li>
+          <li>Enhanced circulation</li>
+        </ul>
+
+        <h3>Mental and Emotional Benefits</h3>
+        <ul>
+          <li>Reduced anxiety and depression</li>
+          <li>Improved focus and concentration</li>
+          <li>Emotional release and processing</li>
+          <li>Enhanced creativity</li>
+          <li>Greater sense of peace and well-being</li>
+        </ul>
+
+        <h2>Incorporating Sound Healing into Daily Life</h2>
+        <h3>Morning Practices</h3>
+        <ul>
+          <li>Start your day with 5 minutes of humming or toning</li>
+          <li>Listen to Tibetan bowl recordings during morning meditation</li>
+          <li>Use a tuning fork to set intention for the day</li>
+        </ul>
+
+        <h3>Evening Practices</h3>
+        <ul>
+          <li>Take a sound bath using apps or recordings</li>
+          <li>Practice vocal toning to release the day's stress</li>
+          <li>Listen to binaural beats designed for sleep</li>
+        </ul>
+
+        <h3>Workplace Integration</h3>
+        <ul>
+          <li>Use noise-canceling headphones with healing frequencies</li>
+          <li>Take brief sound meditation breaks</li>
+          <li>Keep a small singing bowl at your desk for stress relief</li>
+        </ul>
+
+        <h2>Creating Your Sound Healing Practice</h2>
+        <h3>For Beginners</h3>
+        <ol>
+          <li>Start with guided sound meditations online</li>
+          <li>Experiment with your own voice through humming and chanting</li>
+          <li>Attend a local sound bath or healing session</li>
+          <li>Invest in a small singing bowl or tuning fork</li>
+        </ol>
+
+        <h3>Advanced Practice</h3>
+        <ul>
+          <li>Learn to play singing bowls or other healing instruments</li>
+          <li>Study the relationship between chakras and sound frequencies</li>
+          <li>Explore vocal toning and mantra practice</li>
+          <li>Consider training in sound healing modalities</li>
+        </ul>
+
+        <h2>The Future of Sound Healing</h2>
+        <p>As neuroscience continues to validate the effects of sound on the brain and body, sound healing is moving from alternative therapy to evidence-based practice. Hospitals, therapy centers, and wellness clinics are increasingly incorporating sound healing into their treatment protocols.</p>
+
+        <p>Whether you're seeking stress relief, emotional healing, or spiritual growth, sound healing offers a accessible, non-invasive path to wellness that works with your body's natural capacity for self-healing and restoration.</p>
       `
     }
   };
