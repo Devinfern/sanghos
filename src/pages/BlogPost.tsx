@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -327,71 +328,22 @@ const BlogPost = () => {
         {/* Article Content */}
         <section className="pb-20">
           <div className="container mx-auto max-w-4xl px-4 md:px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
-              {/* Main Content */}
-              <div className="lg:col-span-3">
-                <motion.article 
-                  initial={{ opacity: 0, y: 20 }} 
-                  animate={{ opacity: 1, y: 0 }} 
-                  transition={{ duration: 0.6, delay: 0.4 }} 
-                  className="prose prose-lg prose-brand max-w-none blog-content" 
-                  style={{
-                    '--tw-prose-body': 'rgb(81 96 114)',
-                    '--tw-prose-headings': 'rgb(29 74 77)',
-                    '--tw-prose-links': 'rgb(37 182 164)',
-                    '--tw-prose-bold': 'rgb(29 74 77)',
-                    '--tw-prose-counters': 'rgb(37 182 164)',
-                    '--tw-prose-bullets': 'rgb(37 182 164)',
-                    '--tw-prose-quotes': 'rgb(29 74 77)'
-                  } as React.CSSProperties} 
-                  dangerouslySetInnerHTML={{ __html: post.content }} 
-                />
-              </div>
-
-              {/* Sidebar */}
-              <div className="lg:col-span-1">
-                <motion.div 
-                  initial={{ opacity: 0, x: 20 }} 
-                  animate={{ opacity: 1, x: 0 }} 
-                  transition={{ duration: 0.6, delay: 0.6 }} 
-                  className="sticky top-24 space-y-8"
-                >
-                  {/* Author Card */}
-                  <Card className="p-6 bg-gradient-to-br from-brand-subtle/10 to-brand-primary/5">
-                    <CardContent className="p-0">
-                      <div className="text-center">
-                        <div className="w-16 h-16 bg-brand-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                          <User className="h-8 w-8 text-brand-primary" />
-                        </div>
-                        <h3 className="font-bold text-brand-dark mb-2">{post.author}</h3>
-                        <p className="text-sm text-brand-slate">{post.authorBio}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* Quick Actions */}
-                  <Card className="p-6">
-                    <CardContent className="p-0">
-                      <h3 className="font-bold text-brand-dark mb-4">Quick Actions</h3>
-                      <div className="space-y-3">
-                        <Button variant="outline" size="sm" className="w-full justify-start">
-                          <Share2 className="mr-2 h-4 w-4" />
-                          Share Article
-                        </Button>
-                        <Button variant="outline" size="sm" className="w-full justify-start">
-                          <BookmarkPlus className="mr-2 h-4 w-4" />
-                          Save for Later
-                        </Button>
-                        <Button variant="outline" size="sm" className="w-full justify-start">
-                          <Heart className="mr-2 h-4 w-4" />
-                          Like Article
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              </div>
-            </div>
+            <motion.article 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.6, delay: 0.4 }} 
+              className="prose prose-lg prose-brand max-w-none blog-content" 
+              style={{
+                '--tw-prose-body': 'rgb(81 96 114)',
+                '--tw-prose-headings': 'rgb(29 74 77)',
+                '--tw-prose-links': 'rgb(37 182 164)',
+                '--tw-prose-bold': 'rgb(29 74 77)',
+                '--tw-prose-counters': 'rgb(37 182 164)',
+                '--tw-prose-bullets': 'rgb(37 182 164)',
+                '--tw-prose-quotes': 'rgb(29 74 77)'
+              } as React.CSSProperties} 
+              dangerouslySetInnerHTML={{ __html: post.content }} 
+            />
           </div>
         </section>
 
