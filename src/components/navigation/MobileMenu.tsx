@@ -74,9 +74,6 @@ export const MobileMenu = ({ isOpen, onClose, isLoggedIn, onSignOut }: MobileMen
                   <NavLink to="/about-us" onClick={onClose} className="block text-lg">
                     About
                   </NavLink>
-                  <NavLink to="/contact-us" onClick={onClose} className="block text-lg">
-                    Contact
-                  </NavLink>
                 </div>
               </nav>
 
