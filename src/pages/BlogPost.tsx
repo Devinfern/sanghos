@@ -282,7 +282,7 @@ const BlogPost = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
-                  className="prose prose-lg prose-brand max-w-none"
+                  className="prose prose-lg prose-brand max-w-none blog-content"
                   style={{
                     '--tw-prose-body': 'rgb(81 96 114)',
                     '--tw-prose-headings': 'rgb(29 74 77)',
@@ -350,8 +350,8 @@ const BlogPost = () => {
       <Footer />
 
       {/* Custom Styles */}
-      <style jsx>{`
-        .prose .lead {
+      <style>{`
+        .blog-content .lead {
           font-size: 1.25rem;
           line-height: 1.6;
           color: rgb(81 96 114);
@@ -359,7 +359,7 @@ const BlogPost = () => {
           font-weight: 400;
         }
         
-        .prose blockquote {
+        .blog-content blockquote {
           border-left: 4px solid rgb(37 182 164);
           background: linear-gradient(135deg, rgb(37 182 164 / 0.05) 0%, rgb(37 182 164 / 0.1) 100%);
           padding: 1.5rem;
@@ -369,7 +369,7 @@ const BlogPost = () => {
           font-size: 1.1rem;
         }
         
-        .prose .practice-tip {
+        .blog-content .practice-tip {
           background: linear-gradient(135deg, rgb(254 240 138 / 0.3) 0%, rgb(251 191 36 / 0.1) 100%);
           border: 1px solid rgb(251 191 36 / 0.2);
           border-radius: 1rem;
@@ -377,35 +377,35 @@ const BlogPost = () => {
           margin: 2rem 0;
         }
         
-        .prose .practice-tip h3 {
+        .blog-content .practice-tip h3 {
           color: rgb(161 98 7);
           margin-top: 0;
           margin-bottom: 0.5rem;
           font-size: 1.1rem;
         }
         
-        .prose h2 {
+        .blog-content h2 {
           margin-top: 3rem;
           margin-bottom: 1rem;
           font-size: 1.875rem;
           line-height: 1.2;
         }
         
-        .prose h3 {
+        .blog-content h3 {
           margin-top: 2rem;
           margin-bottom: 0.75rem;
           font-size: 1.5rem;
         }
         
-        .prose ol, .prose ul {
+        .blog-content ol, .blog-content ul {
           margin: 1.5rem 0;
         }
         
-        .prose li {
+        .blog-content li {
           margin: 0.5rem 0;
         }
         
-        .prose p {
+        .blog-content p {
           margin: 1.25rem 0;
           line-height: 1.7;
         }
