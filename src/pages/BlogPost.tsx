@@ -9,17 +9,16 @@ import { Card, CardContent } from '@/components/ui/card';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BeehiivNewsletterSignup from '@/components/BeehiivNewsletterSignup';
+
 const BlogPost = () => {
-  const {
-    id
-  } = useParams();
+  const { id } = useParams();
 
   // Enhanced blog post data with wellness focus
   const blogPosts = {
     'mindful-breathing-techniques': {
       title: 'Mindful Breathing Techniques: Your Gateway to Inner Peace',
       subtitle: 'Transform your daily stress into moments of calm and clarity with these powerful practices.',
-      author: 'Dr. Sarah Chen',
+      author: 'Devin Fernandez',
       authorBio: 'Certified meditation teacher and breathwork specialist with 15+ years of experience.',
       date: 'December 15, 2024',
       readTime: '8 min read',
@@ -79,7 +78,7 @@ const BlogPost = () => {
     'forest-bathing-guide': {
       title: 'The Science Behind Forest Bathing: Why Nature Heals',
       subtitle: 'Discover the Japanese practice of Shinrin-yoku and how it can boost immunity and reduce stress.',
-      author: 'Michael Torres',
+      author: 'Devin Fernandez',
       authorBio: 'Nature therapy researcher and certified forest bathing guide.',
       date: 'December 12, 2024',
       readTime: '6 min read',
@@ -135,9 +134,12 @@ const BlogPost = () => {
       `
     }
   };
+
   const post = blogPosts[id as keyof typeof blogPosts];
+
   if (!post) {
-    return <>
+    return (
+      <>
         <Header />
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-brand-subtle/10 to-white">
           <Card className="max-w-md mx-auto text-center p-8">
@@ -151,22 +153,17 @@ const BlogPost = () => {
           </Card>
         </div>
         <Footer />
-      </>;
+      </>
+    );
   }
+
   const fadeUp = {
-    hidden: {
-      opacity: 0,
-      y: 20
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6
-      }
-    }
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
   };
-  return <>
+
+  return (
+    <>
       <Helmet>
         <title>{post.title} | Sanghos Insights</title>
         <meta name="description" content={post.subtitle} />
@@ -241,9 +238,11 @@ const BlogPost = () => {
 
               {/* Tags */}
               <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag, index) => <Badge key={index} variant="secondary" className="text-xs">
+                {post.tags.map((tag, index) => (
+                  <Badge key={index} variant="secondary" className="text-xs">
                     {tag}
-                  </Badge>)}
+                  </Badge>
+                ))}
               </div>
             </motion.div>
           </div>
@@ -252,17 +251,17 @@ const BlogPost = () => {
         {/* Featured Image */}
         <section className="mb-16">
           <div className="container mx-auto max-w-5xl px-4 md:px-6">
-            <motion.div initial={{
-            opacity: 0,
-            scale: 0.95
-          }} animate={{
-            opacity: 1,
-            scale: 1
-          }} transition={{
-            duration: 0.8,
-            delay: 0.2
-          }} className="rounded-3xl overflow-hidden shadow-2xl">
-              <img src={post.image} alt={post.title} className="w-full h-[400px] md:h-[500px] lg:h-[600px] object-cover" />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }} 
+              animate={{ opacity: 1, scale: 1 }} 
+              transition={{ duration: 0.8, delay: 0.2 }} 
+              className="rounded-3xl overflow-hidden shadow-2xl"
+            >
+              <img 
+                src={post.image} 
+                alt={post.title} 
+                className="w-full h-[400px] md:h-[500px] lg:h-[600px] object-cover" 
+              />
             </motion.div>
           </div>
         </section>
@@ -273,40 +272,32 @@ const BlogPost = () => {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
               {/* Main Content */}
               <div className="lg:col-span-3">
-                <motion.article initial={{
-                opacity: 0,
-                y: 20
-              }} animate={{
-                opacity: 1,
-                y: 0
-              }} transition={{
-                duration: 0.6,
-                delay: 0.4
-              }} className="prose prose-lg prose-brand max-w-none blog-content" style={{
-                '--tw-prose-body': 'rgb(81 96 114)',
-                '--tw-prose-headings': 'rgb(29 74 77)',
-                '--tw-prose-links': 'rgb(37 182 164)',
-                '--tw-prose-bold': 'rgb(29 74 77)',
-                '--tw-prose-counters': 'rgb(37 182 164)',
-                '--tw-prose-bullets': 'rgb(37 182 164)',
-                '--tw-prose-quotes': 'rgb(29 74 77)'
-              } as React.CSSProperties} dangerouslySetInnerHTML={{
-                __html: post.content
-              }} />
+                <motion.article 
+                  initial={{ opacity: 0, y: 20 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  transition={{ duration: 0.6, delay: 0.4 }} 
+                  className="prose prose-lg prose-brand max-w-none blog-content" 
+                  style={{
+                    '--tw-prose-body': 'rgb(81 96 114)',
+                    '--tw-prose-headings': 'rgb(29 74 77)',
+                    '--tw-prose-links': 'rgb(37 182 164)',
+                    '--tw-prose-bold': 'rgb(29 74 77)',
+                    '--tw-prose-counters': 'rgb(37 182 164)',
+                    '--tw-prose-bullets': 'rgb(37 182 164)',
+                    '--tw-prose-quotes': 'rgb(29 74 77)'
+                  } as React.CSSProperties} 
+                  dangerouslySetInnerHTML={{ __html: post.content }} 
+                />
               </div>
 
               {/* Sidebar */}
               <div className="lg:col-span-1">
-                <motion.div initial={{
-                opacity: 0,
-                x: 20
-              }} animate={{
-                opacity: 1,
-                x: 0
-              }} transition={{
-                duration: 0.6,
-                delay: 0.6
-              }} className="sticky top-24 space-y-8">
+                <motion.div 
+                  initial={{ opacity: 0, x: 20 }} 
+                  animate={{ opacity: 1, x: 0 }} 
+                  transition={{ duration: 0.6, delay: 0.6 }} 
+                  className="sticky top-24 space-y-8"
+                >
                   {/* Author Card */}
                   <Card className="p-6 bg-gradient-to-br from-brand-subtle/10 to-brand-primary/5">
                     <CardContent className="p-0">
@@ -413,6 +404,8 @@ const BlogPost = () => {
           line-height: 1.7;
         }
       `}</style>
-    </>;
+    </>
+  );
 };
+
 export default BlogPost;
