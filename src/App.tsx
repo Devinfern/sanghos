@@ -30,6 +30,8 @@ import UserDashboard from '@/pages/UserDashboard';
 import OnboardingPage from '@/pages/OnboardingPage';
 import Blog from '@/pages/Blog';
 import BlogPost from '@/pages/BlogPost';
+import PrivacyPolicy from '@/pages/PrivacyPolicy';
+import TermsOfService from '@/pages/TermsOfService';
 
 // Host pages
 import HostDashboard from '@/pages/host/HostDashboard';
@@ -110,6 +112,10 @@ function App() {
             <Route path="/about-design-1" element={<AboutDesignOne />} />
             <Route path="/about-design-2" element={<AboutDesignTwo />} />
             <Route path="/contact-us" element={<ContactUs />} />
+            
+            {/* Legal pages */}
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
             
             {/* Blog routes */}
             <Route path="/blog" element={<Blog />} />
