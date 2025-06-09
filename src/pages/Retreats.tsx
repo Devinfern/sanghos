@@ -1,6 +1,4 @@
-
 import { useState, useEffect } from "react";
-import { Helmet } from "react-helmet";
 import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -10,6 +8,8 @@ import RetreatFilters from "@/components/retreats/RetreatFilters";
 import RetreatResultsHeader from "@/components/retreats/RetreatResults";
 import RetreatLoadingState from "@/components/retreats/RetreatLoadingState";
 import NoRetreatsFound from "@/components/retreats/NoRetreatsFound";
+import SEOHead from "@/components/seo/SEOHead";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import { fetchSanghosRetreats } from "@/lib/data";
 import { fetchInsightLAEvents } from "@/lib/insightEvents";
 
@@ -108,19 +108,36 @@ const Retreats = () => {
 
   const hasFilters = searchQuery !== "" || selectedCategory !== null;
 
+  const retreatsKeywords = [
+    "wellness retreats",
+    "mindfulness retreats",
+    "yoga retreats", 
+    "meditation retreats",
+    "breathwork retreats",
+    "day retreats",
+    "wellness experiences",
+    "spiritual retreats",
+    "private retreat spaces",
+    "retreat bookings"
+  ];
+
   return (
     <>
-      <Helmet>
-        <title>Retreats | Sanghos</title>
-        <meta 
-          name="description" 
-          content="Discover our mindfulness and wellness retreats to reconnect with yourself."
-        />
-      </Helmet>
+      <SEOHead
+        title="Wellness Retreats & Mindfulness Experiences"
+        description="Browse our curated collection of wellness retreats including yoga, meditation, breathwork, and mindfulness experiences in beautiful private settings."
+        keywords={retreatsKeywords}
+        canonicalUrl="https://sanghos.com/retreats"
+        ogType="website"
+      />
 
       <Header />
       
       <main className="pt-20 bg-sage-50/30 min-h-screen flex flex-col">
+        <div className="container px-4 md:px-6 pt-4">
+          <Breadcrumbs />
+        </div>
+        
         <RetreatHero 
           onSearch={handleSearch} 
           onCategorySelect={handleCategorySelect}

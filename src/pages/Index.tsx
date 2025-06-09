@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
@@ -14,11 +13,17 @@ import HomeRetreatTypes from "@/components/home/HomeRetreatTypes";
 import HomeCommunitySection from "@/components/home/HomeCommunitySection";
 import EventsSection from "@/components/sections/EventsSection";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/seo/SEOHead";
+import { createOrganizationSchema } from "@/components/seo/StructuredData";
+import { useSitemapGeneration } from "@/components/seo/XMLSitemap";
 import { useEvents } from "@/hooks/useEvents";
 
 const Index = () => {
   const { events, isLoading } = useEvents();
   const [isVisible, setIsVisible] = useState(false);
+  
+  // Generate sitemap on app load
+  useSitemapGeneration();
 
   useEffect(() => {
     // Add a slight delay before showing content for smoother transitions
@@ -43,15 +48,37 @@ const Index = () => {
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
   };
 
+  const organizationSchema = createOrganizationSchema({
+    description: "Transformative daylong wellness retreats hosted by expert instructors in unique private spaces. Mindfulness, yoga, meditation, breathwork and more.",
+    contactPoint: {
+      contactType: "customer service",
+      email: "hello@sanghos.com"
+    }
+  });
+
+  const homeKeywords = [
+    "wellness retreats",
+    "mindfulness retreats", 
+    "private home retreats",
+    "day retreats",
+    "meditation retreats",
+    "yoga retreats",
+    "breathwork retreats",
+    "spiritual wellness",
+    "personal transformation",
+    "wellness experiences"
+  ];
+
   return (
     <>
-      <Helmet>
-        <title>Sanghos | Wellness Retreats in Private Homes</title>
-        <meta
-          name="description"
-          content="Discover transformative daylong wellness retreats hosted by expert instructors in unique private spaces."
-        />
-      </Helmet>
+      <SEOHead
+        title="Wellness Retreats in Private Homes"
+        description="Discover transformative daylong wellness retreats hosted by expert instructors in unique private spaces. Mindfulness, yoga, meditation, breathwork and more."
+        keywords={homeKeywords}
+        canonicalUrl="https://sanghos.com"
+        structuredData={organizationSchema}
+        ogType="website"
+      />
 
       <Header />
       
