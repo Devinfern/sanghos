@@ -1,5 +1,5 @@
 
-import { TrendingUp, ArrowRight, Fire, Sparkles } from "lucide-react";
+import { TrendingUp, ArrowRight, Flame, Sparkles } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -67,7 +67,7 @@ const EnhancedTrendingTopicsCard = ({ onSectionChange }: EnhancedTrendingTopicsC
             Trending Topics
           </div>
           <Badge className="bg-gradient-to-r from-orange-400 to-red-500 text-white border-0 px-3 py-1">
-            <Fire className="h-3 w-3 mr-1" />
+            <Flame className="h-3 w-3 mr-1" />
             Hot
           </Badge>
         </CardTitle>
