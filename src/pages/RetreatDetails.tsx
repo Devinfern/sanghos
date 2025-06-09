@@ -1,15 +1,12 @@
-
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import { ArrowLeft, Calendar, MapPin, Users, Clock, Tag, Loader2 } from "lucide-react";
 import { retreats, formatDate, formatCurrency, getRemainingText } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import SEOHead from "@/components/seo/SEOHead";
-import Breadcrumbs from "@/components/seo/Breadcrumbs";
-import { createEventSchema, createLocalBusinessSchema } from "@/components/seo/StructuredData";
 import { cn } from "@/lib/utils";
 import { fetchInsightLAEvents } from "@/lib/insightEvents";
 import { Card, CardContent } from "@/components/ui/card";
@@ -93,71 +90,17 @@ const RetreatDetails = () => {
     );
   }
 
-  // Generate structured data for the retreat
-  const eventSchema = createEventSchema({
-    name: retreat.title,
-    description: retreat.description,
-    startDate: retreat.date,
-    location: {
-      name: retreat.location.name,
-      address: `${retreat.location.city}, ${retreat.location.state}`
-    },
-    organizer: {
-      name: "Sanghos",
-      url: "https://sanghos.com"
-    },
-    offers: {
-      price: retreat.price,
-      currency: "USD",
-      availability: retreat.remaining > 0 ? "InStock" : "SoldOut"
-    },
-    image: retreat.image
-  });
-
-  const localBusinessSchema = createLocalBusinessSchema(
-    retreat.location.name,
-    `${retreat.location.city}, ${retreat.location.state}`
-  );
-
-  const combinedSchema = [eventSchema, localBusinessSchema];
-
-  const breadcrumbItems = [
-    { name: "Home", path: "/" },
-    { name: "Retreats", path: "/retreats" },
-    { name: retreat.title, path: `/retreat/${retreat.id}` }
-  ];
-
-  const retreatKeywords = [
-    ...retreat.category,
-    "wellness retreat",
-    "mindfulness",
-    retreat.location.city.toLowerCase(),
-    retreat.location.state.toLowerCase(),
-    retreat.instructor.name.toLowerCase(),
-    "private retreat",
-    "day retreat"
-  ];
-
   return (
     <>
-      <SEOHead
-        title={retreat.title}
-        description={`${retreat.description} Join this ${retreat.category.join(', ')} retreat with ${retreat.instructor.name} in ${retreat.location.city}, ${retreat.location.state}.`}
-        keywords={retreatKeywords}
-        canonicalUrl={`https://sanghos.com/retreat/${retreat.id}`}
-        ogImage={retreat.image}
-        ogType="event"
-        structuredData={combinedSchema}
-      />
+      <Helmet>
+        <title>{retreat.title} | Sanghos</title>
+        <meta name="description" content={retreat.description} />
+      </Helmet>
 
       <Header />
 
       <main className="pt-24 pb-16 bg-gray-50">
         <div className="container px-4 md:px-6 max-w-7xl mx-auto">
-          <div className="mb-6">
-            <Breadcrumbs items={breadcrumbItems} />
-          </div>
-
           {/* Back Button */}
           <motion.div 
             initial={{ opacity: 0, x: -20 }}

@@ -1,122 +1,128 @@
-
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { forumEvents, trendingPosts, loadForumEvents, loadTrendingPosts } from "@/lib/forumData";
 import CommunityLayout from "@/components/layouts/CommunityLayout";
-import CommunityDashboard from "@/components/community/CommunityDashboard";
-import CommunityEvents from "@/components/community/CommunityEvents";
-import CommunityMembers from "@/components/community/CommunityMembers";
-import CommunityResources from "@/components/community/CommunityResources";
+import CommunityContent from "@/components/community/CommunityContent";
 import CommunityManagement from "@/components/community/CommunityManagement";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import SEOHead from "@/components/seo/SEOHead";
-import Breadcrumbs from "@/components/seo/Breadcrumbs";
+import { useAdminStatus } from "@/hooks/useAdminStatus";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
-const Community = () => {
-  const [activeTab, setActiveTab] = useState("dashboard");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentEvents, setCurrentEvents] = useState([]);
-  const [trendingPosts, setTrendingPosts] = useState([]);
+const CommunityPage = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const { isAdmin, isLoading: isAdminLoading } = useAdminStatus();
+  const [showCMS, setShowCMS] = useState<boolean>(false);
+  const [currentEvents, setCurrentEvents] = useState(forumEvents);
+  const [currentTrendingPosts, setCurrentTrendingPosts] = useState(trendingPosts);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [activeSection, setActiveSection] = useState("dashboard");
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setIsLoggedIn(!!session);
+    const loadData = async () => {
+      setIsLoading(true);
+      await Promise.all([
+        loadForumEvents(),
+        loadTrendingPosts()
+      ]);
+      setCurrentEvents(forumEvents);
+      setCurrentTrendingPosts(trendingPosts);
+      setIsLoading(false);
     };
+    
+    loadData();
 
-    // Mock data for now since database tables don't exist
-    const mockEvents = [
-      { id: 1, title: "Morning Meditation", date: "2025-06-10", time: "8:00 AM" },
-      { id: 2, title: "Yoga Flow Session", date: "2025-06-11", time: "6:00 PM" }
-    ];
+    // Set up real-time subscriptions
+    const eventsChannel = supabase
+      .channel('public:forum_events')
+      .on('postgres_changes', {
+        event: '*', // Listen to all events
+        schema: 'public',
+        table: 'forum_events'
+      }, () => {
+        // Reload events when any changes occur
+        console.log('Real-time events update detected, reloading...');
+        loadForumEvents().then(() => {
+          setCurrentEvents([...forumEvents]);
+        });
+      })
+      .subscribe();
+      
+    const trendingChannel = supabase
+      .channel('public:trending_posts')
+      .on('postgres_changes', {
+        event: '*', // Listen to all events
+        schema: 'public',
+        table: 'trending_posts'
+      }, () => {
+        // Reload trending posts when any changes occur
+        console.log('Real-time trending posts update detected, reloading...');
+        loadTrendingPosts().then(() => {
+          setCurrentTrendingPosts([...trendingPosts]);
+        });
+      })
+      .subscribe();
 
-    const mockTrendingPosts = [
-      { id: 1, title: "Best meditation practices", author: "Sarah" },
-      { id: 2, title: "Retreat preparation tips", author: "Mike" }
-    ];
-
-    setCurrentEvents(mockEvents);
-    setTrendingPosts(mockTrendingPosts);
-    checkAuth();
+    // Check login status
+    const checkLoginStatus = () => {
+      const userString = localStorage.getItem("sanghos_user");
+      setIsLoggedIn(userString !== null);
+    };
+    
+    checkLoginStatus();
+    
+    return () => {
+      supabase.removeChannel(eventsChannel);
+      supabase.removeChannel(trendingChannel);
+    };
   }, []);
 
-  const handleSectionChange = (section: string) => {
-    setActiveTab(section);
+  const toggleCMS = () => {
+    if (!isAdmin) {
+      toast.error("You need admin privileges to access the CMS");
+      return;
+    }
+    setShowCMS(!showCMS);
   };
 
-  const handleBack = () => {
-    setActiveTab("dashboard");
-  };
-
-  const communityKeywords = [
-    "wellness community",
-    "mindfulness community",
-    "retreat community",
-    "spiritual community",
-    "wellness discussion",
-    "meditation community",
-    "yoga community",
-    "wellness events",
-    "mindful living"
-  ];
-
-  return (
-    <>
-      <SEOHead
-        title="Wellness Community - Connect & Share"
-        description="Join our vibrant wellness community to connect with like-minded individuals, share experiences, participate in discussions, and discover upcoming retreat events."
-        keywords={communityKeywords}
-        canonicalUrl="https://sanghos.com/community"
-      />
-
-      <CommunityLayout title="Community Hub">
-        <div className="container px-4 md:px-6 pt-4">
-          <Breadcrumbs />
-        </div>
-        
-        <div className="container px-4 md:px-6 py-8">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-brand-dark mb-2">Community Hub</h1>
-            <p className="text-muted-foreground">Connect, share, and grow with our wellness community</p>
+  if (isLoading || isAdminLoading) {
+    return (
+      <CommunityLayout>
+        <div className="container mx-auto px-4 text-center py-12">
+          <div className="animate-pulse flex flex-col space-y-4 items-center">
+            <div className="h-8 bg-brand-subtle/50 rounded w-1/3 mx-auto"></div>
+            <div className="h-4 bg-brand-subtle/50 rounded w-1/2 mx-auto"></div>
+            <div className="h-32 bg-brand-subtle/50 rounded w-full max-w-xl mx-auto"></div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
+              <div className="h-24 bg-brand-subtle/50 rounded"></div>
+              <div className="h-24 bg-brand-subtle/50 rounded"></div>
+              <div className="h-24 bg-brand-subtle/50 rounded"></div>
+            </div>
           </div>
-
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-5 mb-8">
-              <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-              <TabsTrigger value="events">Events</TabsTrigger>
-              <TabsTrigger value="members">Members</TabsTrigger>
-              <TabsTrigger value="resources">Resources</TabsTrigger>
-              <TabsTrigger value="manage">Manage</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="dashboard" className="space-y-6">
-              <CommunityDashboard 
-                isLoggedIn={isLoggedIn}
-                currentEvents={currentEvents}
-                trendingPosts={trendingPosts}
-                onSectionChange={handleSectionChange}
-              />
-            </TabsContent>
-            
-            <TabsContent value="events" className="space-y-6">
-              <CommunityEvents events={currentEvents} />
-            </TabsContent>
-            
-            <TabsContent value="members" className="space-y-6">
-              <CommunityMembers trendingPosts={trendingPosts} />
-            </TabsContent>
-            
-            <TabsContent value="resources" className="space-y-6">
-              <CommunityResources />
-            </TabsContent>
-            
-            <TabsContent value="manage" className="space-y-6">
-              <CommunityManagement onBack={handleBack} />
-            </TabsContent>
-          </Tabs>
         </div>
       </CommunityLayout>
-    </>
+    );
+  }
+
+  if (showCMS && isAdmin) {
+    return (
+      <CommunityLayout title="Community Management" showCMS={true}>
+        <CommunityManagement onBack={toggleCMS} />
+      </CommunityLayout>
+    );
+  }
+
+  return (
+    <CommunityLayout>
+      <CommunityContent
+        isAdmin={isAdmin}
+        isLoggedIn={isLoggedIn}
+        activeSection={activeSection}
+        currentEvents={currentEvents}
+        trendingPosts={currentTrendingPosts}
+        onSectionChange={setActiveSection}
+        onToggleCMS={toggleCMS}
+      />
+    </CommunityLayout>
   );
 };
 
-export default Community;
+export default CommunityPage;
