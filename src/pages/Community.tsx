@@ -19,14 +19,14 @@ const Community = () => {
     {
       id: "1",
       title: "Morning Meditation",
-      date: { day: "15", month: "JUN" },
+      date: { day: 15, month: "JUN" },
       time: "9:00 AM",
       location: "Online"
     },
     {
       id: "2", 
       title: "Yoga Flow Session",
-      date: { day: "18", month: "JUN" },
+      date: { day: 18, month: "JUN" },
       time: "6:00 PM",
       location: "Central Park"
     }
