@@ -74,9 +74,9 @@ const CommunityContent = ({
   };
 
   return (
-    <div className="bg-gradient-to-b from-white to-brand-subtle/10 min-h-screen pt-24 pb-16">
+    <div className="bg-gradient-to-b from-white to-brand-subtle/10 min-h-screen pt-16 pb-16">
       {/* Navigation */}
-      <div className="bg-white py-2 sticky top-16 z-30 border-b border-brand-subtle/20">
+      <div className="bg-white/98 backdrop-blur-lg sticky top-16 z-30 border-b border-brand-subtle/20 shadow-sm">
         <EnhancedCommunityNavigation 
           activeSection={activeSection} 
           onSectionChange={onSectionChange} 
@@ -84,21 +84,22 @@ const CommunityContent = ({
       </div>
       
       {/* Main Content */}
-      <div className="container px-4 md:px-6 mx-auto mt-8">
-        {/* Breadcrumb Navigation */}
-        <CommunityBreadcrumb activeSection={activeSection} />
-
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-brand-dark">
-            {activeSection === "dashboard" ? "Community Dashboard" : activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
-          </h1>
-          <div className="flex gap-2">
+      <div className="container px-4 md:px-6 mx-auto mt-6">
+        {/* Header Section - Reduced spacing */}
+        <div className="flex justify-between items-center mb-4">
+          <div>
+            <CommunityBreadcrumb activeSection={activeSection} />
+            <h1 className="text-2xl font-bold text-brand-dark mt-2">
+              {activeSection === "dashboard" ? "Community Dashboard" : activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
+            </h1>
+          </div>
+          <div className="flex gap-3 items-center">
             <NotificationBell />
             {isAdmin && (
               <Button 
                 variant="outline" 
                 onClick={onToggleCMS}
-                className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 rounded-full"
+                className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 rounded-full px-4 py-2"
               >
                 <Settings className="h-4 w-4 mr-2" />
                 Manage Content
@@ -117,13 +118,13 @@ const CommunityContent = ({
                 variants={fadeInUp}
                 className="overflow-hidden rounded-xl border border-brand-subtle/20 bg-gradient-to-br from-white to-brand-subtle/5"
               >
-                <div className="bg-gradient-to-br from-brand-primary/90 to-brand-dark/90 backdrop-blur-xl p-5 rounded-t-xl">
+                <div className="bg-gradient-to-br from-brand-primary/90 to-brand-dark/90 backdrop-blur-xl p-4 rounded-t-xl">
                   <h3 className="text-lg font-semibold text-white flex items-center">
                     <BookOpen className="h-4 w-4 mr-2" />
                     Resources
                   </h3>
                 </div>
-                <div className="bg-white/90 backdrop-blur-sm p-5 rounded-b-xl">
+                <div className="bg-white/90 backdrop-blur-sm p-4 rounded-b-xl">
                   <div className="space-y-3">
                     <div className="flex items-center p-2 rounded-lg hover:bg-brand-subtle/20 transition-colors cursor-pointer">
                       <div className="h-8 w-8 rounded-full bg-brand-rose/10 flex items-center justify-center">
@@ -182,7 +183,7 @@ const CommunityContent = ({
                 custom={1}
                 className="overflow-hidden rounded-xl border border-brand-subtle/20 bg-gradient-to-br from-white to-brand-subtle/5"
               >
-                <div className="bg-gradient-to-br from-brand-sand/90 to-brand-sand/70 backdrop-blur-xl p-5 rounded-t-xl">
+                <div className="bg-gradient-to-br from-brand-sand/90 to-brand-sand/70 backdrop-blur-xl p-4 rounded-t-xl">
                   <h3 className="text-lg font-semibold text-white flex items-center">
                     <Calendar className="h-4 w-4 mr-2" />
                     Upcoming Events

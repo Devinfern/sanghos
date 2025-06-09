@@ -26,7 +26,7 @@ const EnhancedWelcomeSection = ({ onSectionChange }: { onSectionChange: (section
       initial="hidden"
       animate="visible"
       variants={fadeInUp}
-      className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-primary via-brand-dark to-brand-primary/90 text-white p-8 md:p-12 mb-8"
+      className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-primary via-brand-dark to-brand-primary/90 text-white p-6 md:p-8 mb-6"
     >
       {/* Enhanced Background Elements */}
       <div className="absolute inset-0 opacity-20">
@@ -43,17 +43,17 @@ const EnhancedWelcomeSection = ({ onSectionChange }: { onSectionChange: (section
           transition={{ delay: 0.2, duration: 0.6 }}
           className="mb-6"
         >
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3">
             {getGreeting()}, {userName}! ✨
           </h1>
-          <p className="text-lg md:text-xl opacity-90 max-w-2xl leading-relaxed">
+          <p className="text-base md:text-lg opacity-90 max-w-2xl leading-relaxed">
             Welcome to your wellness community. Connect, grow, and embark on your journey with like-minded souls.
           </p>
         </motion.div>
         
         {/* Enhanced Primary CTAs */}
         <motion.div 
-          className="flex flex-wrap gap-4"
+          className="flex flex-wrap gap-3"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
@@ -63,7 +63,7 @@ const EnhancedWelcomeSection = ({ onSectionChange }: { onSectionChange: (section
             className="bg-white/20 hover:bg-white/30 text-white border-2 border-white/30 hover:border-white/50 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-xl group"
             onClick={() => onSectionChange("events")}
           >
-            <Sparkles className="h-5 w-5 mr-2 group-hover:rotate-12 transition-transform" />
+            <Sparkles className="h-4 w-4 mr-2 group-hover:rotate-12 transition-transform" />
             Explore Events
           </Button>
           <Button 
@@ -71,7 +71,7 @@ const EnhancedWelcomeSection = ({ onSectionChange }: { onSectionChange: (section
             className="bg-brand-sand hover:bg-brand-sand/90 text-brand-dark border-2 border-brand-sand hover:border-brand-sand/90 transition-all duration-300 hover:scale-105 hover:shadow-xl group font-semibold"
             onClick={() => onSectionChange("discussions")}
           >
-            <MessageSquare className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
+            <MessageSquare className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
             Start Discussion
           </Button>
           <Button 
@@ -80,7 +80,7 @@ const EnhancedWelcomeSection = ({ onSectionChange }: { onSectionChange: (section
             className="text-white hover:bg-white/10 border-2 border-white/20 hover:border-white/40 transition-all duration-300 group"
             onClick={() => onSectionChange("retreats")}
           >
-            <Calendar className="h-5 w-5 mr-2 group-hover:bounce transition-transform" />
+            <Calendar className="h-4 w-4 mr-2 group-hover:bounce transition-transform" />
             View Retreats
           </Button>
         </motion.div>

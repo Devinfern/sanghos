@@ -90,13 +90,13 @@ const RetreatCommunityList = () => {
 
   if (isLoading) {
     return (
-      <div className="space-y-4">
+      <div className="space-y-6">
         {[1, 2, 3].map((i) => (
           <div key={i} className="p-6 rounded-xl border border-brand-subtle/20">
-            <div className="animate-pulse space-y-3">
+            <div className="animate-pulse space-y-4">
               <div className="h-6 bg-gray-200 rounded w-3/4"></div>
               <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-              <div className="h-32 bg-gray-200 rounded w-full"></div>
+              <div className="h-48 bg-gray-200 rounded w-full"></div>
             </div>
           </div>
         ))}
@@ -105,29 +105,29 @@ const RetreatCommunityList = () => {
   }
   
   return (
-    <div className="space-y-6">
-      <div className="bg-gradient-to-r from-brand-subtle/20 via-brand-primary/10 to-brand-sand/20 p-6 rounded-xl mb-6 border border-brand-subtle/20">
-        <h2 className="text-xl font-semibold mb-2 text-brand-dark">Retreat Communities</h2>
+    <div className="space-y-8">
+      <div className="bg-gradient-to-r from-brand-subtle/20 via-brand-primary/10 to-brand-sand/20 p-6 rounded-xl mb-8 border border-brand-subtle/20">
+        <h2 className="text-xl font-semibold mb-3 text-brand-dark">Retreat Communities</h2>
         <p className="text-muted-foreground leading-relaxed">
           Connect with fellow retreat participants before and after your wellness experiences. 
           Share insights, coordinate travel plans, and continue your journey together.
         </p>
       </div>
       
-      <Tabs defaultValue="upcoming">
-        <TabsList className="bg-brand-subtle/10">
-          <TabsTrigger value="upcoming" className="flex items-center gap-2">
+      <Tabs defaultValue="upcoming" className="space-y-6">
+        <TabsList className="bg-brand-subtle/10 p-1 rounded-xl">
+          <TabsTrigger value="upcoming" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg px-4 py-2">
             <Calendar className="h-4 w-4" />
             <span>Upcoming Retreats</span>
           </TabsTrigger>
-          <TabsTrigger value="past" className="flex items-center gap-2">
+          <TabsTrigger value="past" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg px-4 py-2">
             <Users className="h-4 w-4" />
             <span>Past Retreats</span>
           </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="upcoming" className="mt-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <TabsContent value="upcoming" className="mt-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
             {upcomingRetreats.map((retreat, index) => (
               <EnhancedRetreatCard
                 key={retreat.id}
@@ -146,8 +146,8 @@ const RetreatCommunityList = () => {
           </div>
         </TabsContent>
         
-        <TabsContent value="past" className="mt-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <TabsContent value="past" className="mt-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
             {pastRetreats.map((retreat, index) => (
               <EnhancedRetreatCard
                 key={retreat.id}

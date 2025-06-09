@@ -56,7 +56,7 @@ const NotificationBell = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative rounded-full hover:bg-brand-subtle/10">
+        <Button variant="ghost" size="icon" className="relative rounded-full hover:bg-brand-subtle/10 w-10 h-10">
           <Bell className="h-5 w-5 text-brand-dark" />
           <AnimatePresence>
             {unreadCount > 0 && (
@@ -64,9 +64,9 @@ const NotificationBell = () => {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 exit={{ scale: 0 }}
-                className="absolute -top-1 -right-1"
+                className="absolute -top-1 -right-1 z-10"
               >
-                <Badge className="h-5 w-5 p-0 flex items-center justify-center bg-red-500 text-white text-xs rounded-full">
+                <Badge className="h-5 w-5 p-0 flex items-center justify-center bg-red-500 text-white text-xs rounded-full border-2 border-white">
                   {unreadCount}
                 </Badge>
               </motion.div>
