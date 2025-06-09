@@ -1,12 +1,13 @@
 
 import { motion } from "framer-motion";
 import "./BentoDashboard.css";
-import WelcomeSection from "./dashboard/WelcomeSection";
-import SearchSection from "./dashboard/SearchSection";
+import EnhancedWelcomeSection from "./dashboard/EnhancedWelcomeSection";
+import EnhancedSearchSection from "./dashboard/EnhancedSearchSection";
 import QuickStatsGrid from "./dashboard/QuickStatsGrid";
-import TrendingTopicsCard from "./dashboard/TrendingTopicsCard";
-import QuickActionsCard from "./dashboard/QuickActionsCard";
+import EnhancedTrendingTopicsCard from "./dashboard/EnhancedTrendingTopicsCard";
+import EnhancedQuickActionsCard from "./dashboard/EnhancedQuickActionsCard";
 import RecentActivityCard from "./dashboard/RecentActivityCard";
+import UserProgressWidget from "./dashboard/UserProgressWidget";
 
 interface CommunityDashboardProps {
   isLoggedIn: boolean;
@@ -28,10 +29,10 @@ const CommunityDashboard = ({
 
   return (
     <div className="space-y-8 p-6">
-      <WelcomeSection />
-      <SearchSection />
+      <EnhancedWelcomeSection onSectionChange={onSectionChange} />
+      <EnhancedSearchSection />
 
-      {/* Bento Grid Layout */}
+      {/* Enhanced Bento Grid Layout */}
       <motion.div
         initial="hidden"
         animate="visible"
@@ -40,9 +41,14 @@ const CommunityDashboard = ({
         className="bento-grid gap-6"
       >
         <QuickStatsGrid currentEvents={currentEvents} />
-        <TrendingTopicsCard onSectionChange={onSectionChange} />
-        <QuickActionsCard onSectionChange={onSectionChange} />
+        <EnhancedTrendingTopicsCard onSectionChange={onSectionChange} />
+        <EnhancedQuickActionsCard onSectionChange={onSectionChange} />
         <RecentActivityCard onSectionChange={onSectionChange} />
+        
+        {/* Add User Progress Widget */}
+        <div className="col-span-full">
+          <UserProgressWidget />
+        </div>
       </motion.div>
     </div>
   );
