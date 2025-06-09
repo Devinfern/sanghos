@@ -1,5 +1,4 @@
 
-import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AboutHero from "@/components/about/AboutHero";
@@ -13,12 +12,6 @@ import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import { createOrganizationSchema } from "@/components/seo/StructuredData";
 
 const About = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
-
   const organizationSchema = createOrganizationSchema({
     description: "Learn about Sanghos mission to transform wellness through intimate, transformative retreat experiences in private homes with expert instructors."
   });
@@ -52,12 +45,12 @@ const About = () => {
           <Breadcrumbs />
         </div>
         
-        <AboutHero isLoaded={isLoaded} />
-        <AboutMission isLoaded={isLoaded} />
-        <CompanyValues isLoaded={isLoaded} />
-        <TeamSection isLoaded={isLoaded} />
-        <CompanyTimeline isLoaded={isLoaded} />
-        <JoinCTA isLoaded={isLoaded} />
+        <AboutHero />
+        <AboutMission />
+        <CompanyValues />
+        <TeamSection />
+        <CompanyTimeline />
+        <JoinCTA />
       </main>
       
       <Footer />
