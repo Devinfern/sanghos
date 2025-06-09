@@ -84,25 +84,25 @@ const CommunityContent = ({
       </div>
       
       {/* Main Content */}
-      <div className="container px-4 md:px-6 mx-auto mt-6">
-        {/* Header Section - Reduced spacing */}
-        <div className="flex justify-between items-center mb-4">
-          <div>
+      <div className="container px-4 md:px-6 mx-auto mt-4">
+        {/* Header Section - Reduced spacing and improved layout */}
+        <div className="flex justify-between items-start mb-4">
+          <div className="flex-1">
             <CommunityBreadcrumb activeSection={activeSection} />
-            <h1 className="text-2xl font-bold text-brand-dark mt-2">
+            <h1 className="text-2xl font-bold text-brand-dark mt-1">
               {activeSection === "dashboard" ? "Community Dashboard" : activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
             </h1>
           </div>
-          <div className="flex gap-3 items-center">
+          <div className="flex gap-2 items-center ml-4">
             <NotificationBell />
             {isAdmin && (
               <Button 
                 variant="outline" 
                 onClick={onToggleCMS}
-                className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 rounded-full px-4 py-2"
+                className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 rounded-full px-3 py-2 text-sm"
               >
-                <Settings className="h-4 w-4 mr-2" />
-                Manage Content
+                <Settings className="h-4 w-4 mr-1" />
+                Manage
               </Button>
             )}
           </div>

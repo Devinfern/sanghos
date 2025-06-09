@@ -105,10 +105,10 @@ const RetreatCommunityList = () => {
   }
   
   return (
-    <div className="space-y-8">
-      <div className="bg-gradient-to-r from-brand-subtle/20 via-brand-primary/10 to-brand-sand/20 p-6 rounded-xl mb-8 border border-brand-subtle/20">
-        <h2 className="text-xl font-semibold mb-3 text-brand-dark">Retreat Communities</h2>
-        <p className="text-muted-foreground leading-relaxed">
+    <div className="space-y-6">
+      <div className="bg-gradient-to-r from-brand-subtle/20 via-brand-primary/10 to-brand-sand/20 p-5 rounded-xl mb-6 border border-brand-subtle/20">
+        <h2 className="text-xl font-semibold mb-2 text-brand-dark">Retreat Communities</h2>
+        <p className="text-muted-foreground leading-relaxed text-sm">
           Connect with fellow retreat participants before and after your wellness experiences. 
           Share insights, coordinate travel plans, and continue your journey together.
         </p>
@@ -126,8 +126,8 @@ const RetreatCommunityList = () => {
           </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="upcoming" className="mt-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <TabsContent value="upcoming" className="mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {upcomingRetreats.map((retreat, index) => (
               <EnhancedRetreatCard
                 key={retreat.id}
@@ -146,8 +146,8 @@ const RetreatCommunityList = () => {
           </div>
         </TabsContent>
         
-        <TabsContent value="past" className="mt-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <TabsContent value="past" className="mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {pastRetreats.map((retreat, index) => (
               <EnhancedRetreatCard
                 key={retreat.id}
