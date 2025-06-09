@@ -32,6 +32,7 @@ import Blog from '@/pages/Blog';
 import BlogPost from '@/pages/BlogPost';
 import PrivacyPolicy from '@/pages/PrivacyPolicy';
 import TermsOfService from '@/pages/TermsOfService';
+import RetreatCommunity from '@/pages/RetreatCommunity';
 
 // Host pages
 import HostDashboard from '@/pages/host/HostDashboard';
@@ -124,6 +125,11 @@ function App() {
             {/* Important: Update both routes for retreats for backward compatibility */}
             <Route path="/retreat/:id" element={<RetreatDetailsPage />} />
             <Route path="/retreats/:id" element={<RetreatDetailsPage />} />
+            
+            {/* NEW: Individual retreat community routes */}
+            <Route path="/community/retreats/:retreatId" element={<RetreatCommunity />} />
+            <Route path="/community/retreats/:retreatId/pre" element={<RetreatCommunity />} />
+            <Route path="/community/retreats/:retreatId/post" element={<RetreatCommunity />} />
             
             <Route path="/wellness-journal" element={<WellnessJournalPage />} />
             <Route path="/forum" element={<ForumPage />} />

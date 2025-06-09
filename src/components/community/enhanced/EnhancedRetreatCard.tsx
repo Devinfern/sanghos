@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 interface EnhancedRetreatCardProps {
   retreat: any;
@@ -18,11 +19,18 @@ const EnhancedRetreatCard = ({
   onJoinCommunity, 
   onExploreDetails 
 }: EnhancedRetreatCardProps) => {
+  const navigate = useNavigate();
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', { 
       month: 'short', 
       day: 'numeric' 
     });
+  };
+
+  const handleJoinCommunity = () => {
+    // Navigate to the individual retreat community page
+    navigate(`/community/retreats/${retreat.id}`);
   };
 
   return (
@@ -93,7 +101,7 @@ const EnhancedRetreatCard = ({
             </Button>
             <Button 
               size="sm"
-              onClick={onJoinCommunity}
+              onClick={handleJoinCommunity}
               className="w-full bg-brand-primary hover:bg-brand-primary/90 transition-all duration-300 group/btn py-2"
             >
               Join Community
