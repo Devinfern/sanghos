@@ -9,6 +9,7 @@ import NotificationSystem from "@/components/community/NotificationSystem";
 import PrivateMessaging from "@/components/community/PrivateMessaging";
 import BookingIntegration from "@/components/community/BookingIntegration";
 import UserDashboardWidget from "@/components/community/UserDashboardWidget";
+import "./MobileOptimization.css";
 
 const RetreatCommunity = () => {
   const { retreatId } = useParams<{ retreatId: string }>();

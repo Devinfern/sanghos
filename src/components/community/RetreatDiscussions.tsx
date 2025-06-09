@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CommunityPost from "./CommunityPost";
@@ -7,6 +6,7 @@ import EmptyDiscussionState from "./EmptyDiscussionState";
 import CreatePost from "./CreatePost";
 import { useRetreatPosts } from "@/hooks/useRetreatPosts";
 import { Badge } from "@/components/ui/badge";
+import RichContentEditor from "./RichContentEditor";
 
 // Define the Post type to match what's expected
 interface Post {
@@ -62,7 +62,28 @@ const RetreatDiscussions = ({ retreatId, phase = "pre" }: RetreatDiscussionsProp
       retreat_id: post.retreat_id || retreatId
     }));
 
-  const handlePostCreated = () => {
+  const handlePostCreated = (postData: any) => {
+    // Create new post with rich content
+    const newPost: Post = {
+      id: Date.now().toString(),
+      title: postData.title,
+      content: postData.content,
+      user_id: "current-user",
+      author_name: "You",
+      created_at: new Date().toISOString(),
+      category: 'general',
+      likes: [],
+      likes_count: 0,
+      comments_count: 0,
+      tags: postData.tags || [],
+      phase_type: phase,
+      retreat_id: retreatId
+    };
+
+    // Add to local state (in real app, would save to Supabase)
+    const currentPosts = filterPostsByCategory(activeTab);
+    // Update posts state here
+    
     setShowCreatePost(false);
     refetchPosts();
   };
@@ -126,10 +147,10 @@ const RetreatDiscussions = ({ retreatId, phase = "pre" }: RetreatDiscussionsProp
   return (
     <div className="mt-6">
       {showCreatePost ? (
-        <CreatePost 
+        <RichContentEditor
+          onSubmit={handlePostCreated}
           onCancel={() => setShowCreatePost(false)}
-          onPostCreated={handlePostCreated}
-          retreatId={retreatId}
+          placeholder={`Share your thoughts about the ${phase}-retreat experience...`}
         />
       ) : (
         <>
