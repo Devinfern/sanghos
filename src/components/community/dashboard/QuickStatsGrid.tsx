@@ -10,9 +10,13 @@ interface QuickStatsGridProps {
 const QuickStatsGrid = ({ currentEvents }: QuickStatsGridProps) => {
   const { posts } = useCommunityPosts("", "");
 
+  // Safely handle undefined posts
+  const postsCount = posts?.length || 0;
+  const eventsCount = currentEvents?.length || 0;
+
   const quickStats = [
-    { label: "Active Discussions", value: posts.length, icon: MessageSquare },
-    { label: "Upcoming Events", value: currentEvents.length, icon: Calendar },
+    { label: "Active Discussions", value: postsCount, icon: MessageSquare },
+    { label: "Upcoming Events", value: eventsCount, icon: Calendar },
     { label: "Community Members", value: "2.4k", icon: Users },
     { label: "Resources", value: "156", icon: BookOpen }
   ];

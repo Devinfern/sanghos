@@ -9,9 +9,43 @@ import CommunityManagement from "@/components/community/CommunityManagement";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SEOHead from "@/components/seo/SEOHead";
 import Breadcrumbs from "@/components/seo/Breadcrumbs";
+import { supabase } from "@/integrations/supabase/client";
 
 const Community = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentEvents, setCurrentEvents] = useState([]);
+  const [trendingPosts, setTrendingPosts] = useState([]);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsLoggedIn(!!session);
+    };
+
+    // Mock data for now since database tables don't exist
+    const mockEvents = [
+      { id: 1, title: "Morning Meditation", date: "2025-06-10", time: "8:00 AM" },
+      { id: 2, title: "Yoga Flow Session", date: "2025-06-11", time: "6:00 PM" }
+    ];
+
+    const mockTrendingPosts = [
+      { id: 1, title: "Best meditation practices", author: "Sarah" },
+      { id: 2, title: "Retreat preparation tips", author: "Mike" }
+    ];
+
+    setCurrentEvents(mockEvents);
+    setTrendingPosts(mockTrendingPosts);
+    checkAuth();
+  }, []);
+
+  const handleSectionChange = (section: string) => {
+    setActiveTab(section);
+  };
+
+  const handleBack = () => {
+    setActiveTab("dashboard");
+  };
 
   const communityKeywords = [
     "wellness community",
@@ -55,15 +89,20 @@ const Community = () => {
             </TabsList>
             
             <TabsContent value="dashboard" className="space-y-6">
-              <CommunityDashboard />
+              <CommunityDashboard 
+                isLoggedIn={isLoggedIn}
+                currentEvents={currentEvents}
+                trendingPosts={trendingPosts}
+                onSectionChange={handleSectionChange}
+              />
             </TabsContent>
             
             <TabsContent value="events" className="space-y-6">
-              <CommunityEvents />
+              <CommunityEvents events={currentEvents} />
             </TabsContent>
             
             <TabsContent value="members" className="space-y-6">
-              <CommunityMembers />
+              <CommunityMembers trendingPosts={trendingPosts} />
             </TabsContent>
             
             <TabsContent value="resources" className="space-y-6">
@@ -71,7 +110,7 @@ const Community = () => {
             </TabsContent>
             
             <TabsContent value="manage" className="space-y-6">
-              <CommunityManagement />
+              <CommunityManagement onBack={handleBack} />
             </TabsContent>
           </Tabs>
         </div>
