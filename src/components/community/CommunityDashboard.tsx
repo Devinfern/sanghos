@@ -1,10 +1,10 @@
-
 import { motion } from "framer-motion";
 import { Calendar, Users, MessageSquare, BookOpen, TrendingUp, ArrowRight, Star, Sparkles } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 import "./BentoDashboard.css";
 
 interface CommunityDashboardProps {
@@ -21,6 +21,7 @@ const CommunityDashboard = ({
   onSectionChange
 }: CommunityDashboardProps) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
@@ -55,7 +56,7 @@ const CommunityDashboard = ({
       icon: Users,
       label: "View Retreats",
       description: "Join retreat communities",
-      action: () => onSectionChange("retreats"),
+      action: () => navigate("/retreats"),
       color: "from-purple-500 to-purple-600"
     },
     {
@@ -100,7 +101,7 @@ const CommunityDashboard = ({
             <Button 
               size="lg"
               className="bg-white/20 hover:bg-white/30 text-white border-2 border-white/30 hover:border-white/50 backdrop-blur-sm transition-all duration-300 hover:scale-105"
-              onClick={() => onSectionChange("retreats")}
+              onClick={() => navigate("/retreats")}
             >
               <Sparkles className="h-4 w-4 mr-2" />
               Explore Retreats
