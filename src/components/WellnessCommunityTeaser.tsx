@@ -44,14 +44,14 @@ const WellnessCommunityTeaser = () => {
             </div>
           </div>
 
-          <h2 className="text-5xl md:text-7xl lg:text-8xl font-playfair font-light leading-[0.9] text-center text-white drop-shadow-lg">
-            <span className="block mb-4 drop-shadow-xl">Finding <span className="text-brand-peach italic drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] font-medium">sanctuary</span></span>
-            <span className="block mb-4 drop-shadow-xl">in the present moment.</span>
-            <span className="block mb-4 drop-shadow-xl">Creating <span className="text-brand-peach italic drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] font-medium">space</span></span>
-            <span className="block mb-4 drop-shadow-xl">for mindfulness.</span>
-            <span className="block mb-4 drop-shadow-xl">Connecting with</span>
-            <span className="block mb-4 drop-shadow-xl"><span className="text-brand-peach italic drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] font-medium">yourself</span> and others.</span>
-            <span className="block text-brand-primary font-medium drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">This is <em>Sanghos</em>.</span>
+          <h2 className="text-5xl md:text-7xl lg:text-8xl font-playfair font-light leading-[0.9] text-center">
+            <span className="block mb-4">Finding <span className="text-brand-peach italic">sanctuary</span></span>
+            <span className="block mb-4">in the present moment.</span>
+            <span className="block mb-4">Creating <span className="text-brand-peach italic">space</span></span>
+            <span className="block mb-4">for mindfulness.</span>
+            <span className="block mb-4">Connecting with</span>
+            <span className="block mb-4"><span className="text-brand-peach italic">yourself</span> and others.</span>
+            <span className="block text-brand-primary font-medium">This is <em>Sanghos</em>.</span>
           </h2>
         </motion.div>
 
