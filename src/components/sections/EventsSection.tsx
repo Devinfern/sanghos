@@ -4,7 +4,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { Event } from "@/types/event";
 import EventList from "@/components/EventList";
 import DateFilter, { DateFilterOption } from "@/components/DateFilter";
-import { startOfDay, getDay, isSameDay, isThisWeek } from "date-fns";
+import { startOfDay, getDay, isSameDay, isThisWeek, isToday, isTomorrow, startOfWeek, endOfWeek } from "date-fns";
 
 interface EventsSectionProps {
   events: Event[];
@@ -17,30 +17,39 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events, isLoading }) => {
 
   function isDateInThisWeekend(date: Date) {
     const day = getDay(date);
-    return day === 0 || day === 6;
+    return day === 0 || day === 6; // Sunday (0) or Saturday (6)
   }
 
   const filteredEvents = useMemo(() => {
     if (selectedDateFilter === "all") return events;
 
     const today = startOfDay(new Date());
+    
     switch (selectedDateFilter) {
       case "today":
         return events.filter(event =>
-          isSameDay(event.startDate, today)
+          isToday(event.startDate)
         );
       case "tomorrow":
-        const tomorrow = startOfDay(new Date(today.getTime() + 24 * 60 * 60 * 1000));
         return events.filter(event =>
-          isSameDay(event.startDate, tomorrow)
+          isTomorrow(event.startDate)
         );
       case "this-week":
+        const weekStart = startOfWeek(today, { weekStartsOn: 1 }); // Monday start
+        const weekEnd = endOfWeek(today, { weekStartsOn: 1 });
         return events.filter(event =>
-          isThisWeek(event.startDate, { weekStartsOn: 1 })
+          event.startDate >= weekStart && event.startDate <= weekEnd
         );
       case "this-weekend":
+        // Get the current week's weekend dates
+        const currentWeekStart = startOfWeek(today, { weekStartsOn: 1 });
+        const saturday = new Date(currentWeekStart);
+        saturday.setDate(saturday.getDate() + 5); // Saturday
+        const sunday = new Date(currentWeekStart);
+        sunday.setDate(sunday.getDate() + 6); // Sunday
+        
         return events.filter(event =>
-          isDateInThisWeekend(event.startDate)
+          isSameDay(event.startDate, saturday) || isSameDay(event.startDate, sunday)
         );
       case "custom":
         if (customDate) {

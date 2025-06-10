@@ -44,6 +44,13 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
     }).format(date);
   };
 
+  const handleBookingClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (retreat.bookingUrl) {
+      window.open(retreat.bookingUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -123,14 +130,25 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
               </div>
             </div>
             
-            <Link to={`/retreat/${retreat.id}`} className="block mt-4">
-              <Button 
-                variant="outline" 
-                className="w-full bg-white hover:bg-sage-50 border-sage-200 text-sage-700 hover:text-sage-800 transition-colors"
-              >
-                View Details
-              </Button>
-            </Link>
+            <div className="flex gap-2 mt-4">
+              <Link to={`/retreat/${retreat.id}`} className="flex-1">
+                <Button 
+                  variant="outline" 
+                  className="w-full bg-white hover:bg-sage-50 border-sage-200 text-sage-700 hover:text-sage-800 transition-colors"
+                >
+                  View Details
+                </Button>
+              </Link>
+              
+              {retreat.bookingUrl && (
+                <Button 
+                  onClick={handleBookingClick}
+                  className="bg-sage-600 hover:bg-sage-700 text-white px-6"
+                >
+                  Book Now
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </div>

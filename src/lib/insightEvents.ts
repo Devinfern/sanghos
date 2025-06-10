@@ -1,3 +1,4 @@
+
 import { Instructor, Location, Retreat } from "@/lib/data";
 
 export const fetchInsightLAEvents = async (): Promise<any[]> => {
@@ -41,6 +42,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
         featured: false,
         isSanghos: false,
         sourceUrl: "https://insightla.org/events/cultivating-emotional-balance/",
+        bookingUrl: "https://insightla.org/events/cultivating-emotional-balance/",
         organizer: {
           name: "InsightLA",
           website: "https://insightla.org"
@@ -83,6 +85,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
         featured: false,
         isSanghos: false,
         sourceUrl: "https://insightla.org/events/mindful-communication-retreat/",
+        bookingUrl: "https://insightla.org/events/mindful-communication-retreat/",
         organizer: {
           name: "InsightLA",
           website: "https://insightla.org"
@@ -125,6 +128,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
         featured: true,
         isSanghos: false,
         sourceUrl: "https://www.insightretreatcenter.org/online-retreats/daylong-online-retreats/",
+        bookingUrl: "https://www.insightretreatcenter.org/online-retreats/daylong-online-retreats/",
         organizer: {
           name: "Insight Retreat Center",
           website: "https://www.insightretreatcenter.org"
@@ -167,6 +171,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
         featured: true,
         isSanghos: false,
         sourceUrl: "https://trinitychurchnyc.org/trinity-retreat-center/retreats/daylong-retreats",
+        bookingUrl: "https://trinitychurchnyc.org/trinity-retreat-center/retreats/daylong-retreats",
         organizer: {
           name: "Trinity Retreat Center",
           website: "https://trinitychurchnyc.org"
@@ -209,6 +214,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
         featured: true,
         isSanghos: false,
         sourceUrl: "https://www.nyimc.org/events/category/daylong-programs/",
+        bookingUrl: "https://www.nyimc.org/events/category/daylong-programs/",
         organizer: {
           name: "New York Insight Meditation Center",
           website: "https://www.nyimc.org"
@@ -251,6 +257,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
         featured: false,
         isSanghos: false,
         sourceUrl: "https://www.adayoga.com/event-listings/ggf-daylong-retreat-aug-2025",
+        bookingUrl: "https://www.adayoga.com/event-listings/ggf-daylong-retreat-aug-2025",
         organizer: {
           name: "Ada Yoga",
           website: "https://www.adayoga.com"
@@ -293,6 +300,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
         featured: false,
         isSanghos: false,
         sourceUrl: "https://www.wetravel.com/trips/virtual-in-person-daylong-august2025-refuge-recovery-48552967",
+        bookingUrl: "https://www.wetravel.com/trips/virtual-in-person-daylong-august2025-refuge-recovery-48552967",
         organizer: {
           name: "Refuge Recovery",
           website: "https://www.wetravel.com"
@@ -335,6 +343,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
         featured: false,
         isSanghos: false,
         sourceUrl: "https://trinitychurchnyc.org/trinity-retreat-center/retreats/daylong-retreats",
+        bookingUrl: "https://trinitychurchnyc.org/trinity-retreat-center/retreats/daylong-retreats",
         organizer: {
           name: "Trinity Retreat Center",
           website: "https://trinitychurchnyc.org"

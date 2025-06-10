@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Event } from "@/types/event";
 import { getCategoryLabel, getCategoryColor } from "@/utils/categoryUtils";
@@ -37,6 +38,12 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
     date1.getFullYear() === date2.getFullYear();
 
   const categoryClass = getCategoryColor(event.category);
+
+  const handleBookingClick = () => {
+    if (event.bookingUrl) {
+      window.open(event.bookingUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
 
   return (
     <>
@@ -95,7 +102,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
           </CardContent>
           
           <CardFooter className="px-5 pb-5 pt-0 flex-shrink-0 border-t border-transparent">
-            <div className="w-full flex justify-between items-center">
+            <div className="w-full flex justify-between items-center gap-2">
               <div className="font-medium text-sm">
                 {event.price === "Free" ? (
                   <span className="text-green-600">Free</span>
@@ -104,14 +111,24 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
                 )}
               </div>
               
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-sage-200 text-sage-700 hover:bg-sage-50"
-                onClick={() => setIsModalOpen(true)}
-              >
-                View Details
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-sage-200 text-sage-700 hover:bg-sage-50"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  View Details
+                </Button>
+                
+                <Button
+                  size="sm"
+                  className="bg-sage-600 hover:bg-sage-700 text-white"
+                  onClick={handleBookingClick}
+                >
+                  Book Now
+                </Button>
+              </div>
             </div>
           </CardFooter>
         </Card>
@@ -194,10 +211,8 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
                   </div>
                 </div>
               </div>
-              <Button className="w-full bg-sage-500 hover:bg-sage-600 mb-3 text-white rounded-full transition-all" asChild>
-                <a href={event.bookingUrl} target="_blank" rel="noopener noreferrer">
-                  Book Now
-                </a>
+              <Button className="w-full bg-sage-500 hover:bg-sage-600 mb-3 text-white rounded-full transition-all" onClick={handleBookingClick}>
+                Book Now
               </Button>
               <Button
                 variant="outline"
