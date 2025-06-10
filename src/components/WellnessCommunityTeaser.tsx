@@ -45,12 +45,12 @@ const WellnessCommunityTeaser = () => {
           </div>
 
           <h2 className="text-5xl md:text-7xl lg:text-8xl font-playfair font-light leading-[0.9] text-center">
-            <span className="block mb-4">Finding <span className="text-brand-peach italic">sanctuary</span></span>
-            <span className="block mb-4">in the present moment.</span>
-            <span className="block mb-4">Creating <span className="text-brand-peach italic">space</span></span>
-            <span className="block mb-4">for mindfulness.</span>
-            <span className="block mb-4">Connecting with</span>
-            <span className="block mb-4"><span className="text-brand-peach italic">yourself</span> and others.</span>
+            <span className="block mb-4 text-white">Finding <span className="text-brand-peach italic">sanctuary</span></span>
+            <span className="block mb-4 text-white">in the present moment.</span>
+            <span className="block mb-4 text-white">Creating <span className="text-brand-peach italic">space</span></span>
+            <span className="block mb-4 text-white">for mindfulness.</span>
+            <span className="block mb-4 text-white">Connecting with</span>
+            <span className="block mb-4 text-white"><span className="text-brand-peach italic">yourself</span> and others.</span>
             <span className="block text-brand-primary font-medium">This is <em>Sanghos</em>.</span>
           </h2>
         </motion.div>
@@ -68,13 +68,13 @@ const WellnessCommunityTeaser = () => {
             >
               {/* Enhanced text blocks */}
               <div className="space-y-6 text-lg md:text-xl font-light leading-relaxed">
-                <p className="text-white/90 backdrop-blur-sm">
+                <p className="text-white backdrop-blur-sm">
                   Sanghos creates transformative daylong wellness retreats in unique, private spaces. 
                   We believe that wellness shouldn't require weeks away or expensive travel—it can be 
                   found right in your community, led by expert instructors who bring authentic practice 
                   and deep knowledge.
                 </p>
-                <p className="text-white/80">
+                <p className="text-white/90">
                   Each Sanghos retreat offers an opportunity to step away from daily routines, connect 
                   with like-minded individuals, and immerse yourself in practices that nourish both 
                   body and mind—all in beautiful, intimate settings that feel worlds away from ordinary life.
@@ -116,7 +116,7 @@ const WellnessCommunityTeaser = () => {
                     </h3>
                   </div>
                   
-                  <p className="text-lg text-white/80 leading-relaxed">
+                  <p className="text-lg text-white leading-relaxed">
                     At Sanghos, we are committed to bringing balance and joy to your life. 
                     We offer a broad range of retreats and a supportive community for every level. 
                     It's time to invite more meaning and calm to your daily routine.
