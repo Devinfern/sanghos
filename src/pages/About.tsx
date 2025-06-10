@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
@@ -6,7 +7,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, X, Clock, Users, Star, Heart } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import OptimizedImage from "@/components/OptimizedImage";
 
 const About = () => {
@@ -31,17 +32,6 @@ const About = () => {
       y: 0,
       transition: {
         duration: 0.6
-      }
-    }
-  };
-  const staggerChildren = {
-    hidden: {
-      opacity: 0
-    },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
       }
     }
   };
@@ -104,7 +94,7 @@ const About = () => {
         "Deepens spiritual connection",
         "Improves overall well-being"
       ],
-      whatToExpected: [
+      whatToExpect: [
         "Periods of silent sitting meditation",
         "Walking meditation in nature",
         "Gentle yoga and stretching",
@@ -144,6 +134,7 @@ const About = () => {
       difficulty: "All levels, trauma-sensitive"
     }
   }];
+
   return <>
       <Helmet>
         <title>About Us | Sanghos</title>
@@ -352,6 +343,9 @@ const About = () => {
         {/* Retreat Detail Modal */}
         <Dialog open={!!selectedRetreat} onOpenChange={() => setSelectedRetreat(null)}>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 bg-transparent border-0">
+            <DialogTitle className="sr-only">
+              {selectedRetreat?.title} Retreat Details
+            </DialogTitle>
             {selectedRetreat && (
               <div className="relative">
                 {/* Glass morphism background */}
@@ -592,4 +586,5 @@ To Wellness</h2>
       <Footer />
     </>;
 };
+
 export default About;
