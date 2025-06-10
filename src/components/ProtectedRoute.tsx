@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
-const ProtectedRoute = ({ children }: ProtectedRouteProps): JSX.Element => {
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = React.useState<boolean | null>(null);
 
@@ -46,5 +46,3 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps): JSX.Element => {
   // If authenticated, render the protected content
   return <>{children}</>;
 };
-
-export { ProtectedRoute };
