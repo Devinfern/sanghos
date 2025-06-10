@@ -99,7 +99,7 @@ export const fetchSanghosRetreats = async (): Promise<Retreat[]> => {
           description: "A secluded meditation center nestled in redwood groves",
         },
         instructor: instructors[0],
-        date: new Date().toISOString().split('T')[0],
+        date: new Date(Date.now() + 7*24*60*60*1000).toISOString().split('T')[0], // 1 week from now
         time: "9:00 AM",
         duration: "Weekend",
         price: 299,
@@ -107,7 +107,7 @@ export const fetchSanghosRetreats = async (): Promise<Retreat[]> => {
         remaining: 8,
         category: ["Meditation", "Nature", "Wellness"],
         amenities: ["Meals included", "Accommodation", "Guided hikes"],
-        featured: true,
+        featured: false, // Changed to false so the new retreats can be featured
         isSanghos: true
       },
       {
@@ -132,7 +132,7 @@ export const fetchSanghosRetreats = async (): Promise<Retreat[]> => {
         remaining: 15,
         category: ["Mindfulness", "Workshop"],
         amenities: ["Lunch included", "Journal materials"],
-        featured: true,
+        featured: false, // Changed to false so the new retreats can be featured
         isSanghos: true
       }
     ];
