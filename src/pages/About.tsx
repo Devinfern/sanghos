@@ -484,10 +484,9 @@ To Wellness</h2>
                   <p className="text-brand-slate mb-6">
                     Want to help shape the future of wellness? Partner with us to create meaningful experiences.
                   </p>
-                  <Button variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium group rounded-full">
-                    Learn More
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Button>
+                  <div className="inline-flex items-center px-4 py-2 bg-brand-subtle/30 rounded-full">
+                    <span className="text-sm font-medium text-brand-slate">Coming Soon</span>
+                  </div>
                 </div>
               </motion.div>
 
@@ -509,9 +508,11 @@ To Wellness</h2>
                   <p className="text-brand-slate mb-6">
                     Share your space and join our community of hosts offering transformative retreat venues.
                   </p>
-                  <Button variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium group rounded-full">
-                    Apply Now
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  <Button variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium group rounded-full" asChild>
+                    <Link to="/become-host">
+                      Apply Now
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Link>
                   </Button>
                 </div>
               </motion.div>
@@ -534,9 +535,11 @@ To Wellness</h2>
                   <p className="text-brand-slate mb-6">
                     Are you a wellness practitioner? Join our instructor community and share your expertise.
                   </p>
-                  <Button variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium group rounded-full">
-                    Apply Now
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  <Button variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium group rounded-full" asChild>
+                    <Link to="/teach-with-us">
+                      Apply Now
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Link>
                   </Button>
                 </div>
               </motion.div>
