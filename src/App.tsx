@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -68,6 +69,7 @@ function App() {
                 {/* Public routes */}
                 <Route path="/" element={<Index />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/about-us" element={<About />} />
                 <Route path="/become-host" element={<BecomeHost />} />
                 <Route path="/teach-with-us" element={<TeachWithUs />} />
                 <Route path="/retreats" element={<Retreats />} />
