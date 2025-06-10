@@ -4,11 +4,15 @@ import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, X, Clock, Users, Star, Heart } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import OptimizedImage from "@/components/OptimizedImage";
+
 const About = () => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [selectedRetreat, setSelectedRetreat] = useState(null);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(true);
@@ -57,22 +61,88 @@ const About = () => {
     description: "Every retreat, space and interaction is crafted with purpose and mindfulness."
   }];
 
-  // Retreat types
+  // Enhanced retreat types with detailed content
   const retreatTypes = [{
     id: 1,
     title: "Breathwork",
     description: "Experience transformative breathing techniques to release tension, boost energy, and find inner calm.",
-    image: "/lovable-uploads/d3e397b5-0ff3-412e-b6ce-537617953355.png"
+    image: "/lovable-uploads/d3e397b5-0ff3-412e-b6ce-537617953355.png",
+    detailedContent: {
+      overview: "Breathwork is a powerful practice that uses conscious breathing techniques to promote physical, mental, and emotional healing. Our breathwork retreats combine ancient wisdom with modern understanding to create transformative experiences.",
+      benefits: [
+        "Reduces stress and anxiety naturally",
+        "Increases energy and mental clarity",
+        "Releases emotional blockages and trauma",
+        "Enhances immune system function",
+        "Improves sleep quality and relaxation",
+        "Develops greater self-awareness"
+      ],
+      whatToExpect: [
+        "Guided breathing sessions with expert facilitators",
+        "Integration circles for sharing and reflection",
+        "Movement and somatic practices",
+        "Meditation and mindfulness exercises",
+        "Nutritious meals and herbal teas",
+        "Take-home practices for daily life"
+      ],
+      duration: "6-8 hours",
+      groupSize: "8-12 participants",
+      difficulty: "All levels welcome"
+    }
   }, {
     id: 2,
     title: "Silent Meditation",
     description: "Discover the power of silence in a supportive environment to deepen mindfulness and self-awareness.",
-    image: "/lovable-uploads/dc289f39-f518-4603-88f5-b92a074c6949.png"
+    image: "/lovable-uploads/dc289f39-f518-4603-88f5-b92a074c6949.png",
+    detailedContent: {
+      overview: "Silent meditation retreats offer a profound opportunity to step away from the noise of daily life and connect with your inner wisdom. Through guided silence, participants experience deep states of peace and clarity.",
+      benefits: [
+        "Develops sustained attention and focus",
+        "Cultivates inner peace and equanimity",
+        "Reduces mental chatter and overthinking",
+        "Enhances emotional regulation",
+        "Deepens spiritual connection",
+        "Improves overall well-being"
+      ],
+      whatToExpected: [
+        "Periods of silent sitting meditation",
+        "Walking meditation in nature",
+        "Gentle yoga and stretching",
+        "Dharma talks and teachings",
+        "One-on-one guidance sessions",
+        "Mindful meals in silence"
+      ],
+      duration: "8-10 hours",
+      groupSize: "6-10 participants",
+      difficulty: "Beginner to advanced"
+    }
   }, {
     id: 3,
     title: "Somatic Healing",
     description: "Integrate body-based healing approaches with therapeutic practices for holistic emotional wellbeing.",
-    image: "/lovable-uploads/c664e811-a15f-43cf-b260-d4f59fdb6e80.png"
+    image: "/lovable-uploads/c664e811-a15f-43cf-b260-d4f59fdb6e80.png",
+    detailedContent: {
+      overview: "Somatic healing recognizes that trauma and stress are stored in the body. Our retreats use gentle, body-based approaches to help participants release tension, heal old wounds, and restore natural vitality.",
+      benefits: [
+        "Releases stored trauma and tension",
+        "Improves body awareness and connection",
+        "Enhances emotional resilience",
+        "Reduces chronic pain and inflammation",
+        "Restores nervous system balance",
+        "Develops healthy boundaries"
+      ],
+      whatToExpect: [
+        "Somatic experiencing exercises",
+        "Trauma-informed movement practices",
+        "Breathwork and grounding techniques",
+        "Gentle touch and massage therapy",
+        "Art and expressive therapies",
+        "Integration and self-care planning"
+      ],
+      duration: "7-9 hours",
+      groupSize: "6-8 participants",
+      difficulty: "All levels, trauma-sensitive"
+    }
   }];
   return <>
       <Helmet>
@@ -122,7 +192,7 @@ const About = () => {
           <div className="container mx-auto max-w-6xl px-4 md:px-6">
             <motion.div initial="hidden" animate={isLoaded ? "visible" : "hidden"} variants={fadeIn} className="text-center mb-16">
               <span className="text-sm uppercase tracking-wider text-brand-primary font-semibold">Our Purpose</span>
-              <h2 className="text-4xl md:text-6xl font-bold mt-4 mb-12 text-brand-dark max-w-5xl mx-auto leading-tight">We're Bridging The Gap Between Wellness Retreat Access </h2>
+              <h2 className="text-4xl md:text-6xl font-bold mt-4 mb-12 text-brand-dark max-w-5xl mx-auto leading-tight">We're Bridging The Gap Between Wellness Retreat Access </h2>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mt-16">
@@ -265,7 +335,11 @@ const About = () => {
                     <CardContent className="p-8">
                       <h3 className="text-2xl font-bold mb-2 text-brand-dark">{type.title}</h3>
                       <p className="text-brand-slate text-lg mb-6">{type.description}</p>
-                      <Button variant="outline" className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium rounded-full">
+                      <Button 
+                        variant="outline" 
+                        className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium rounded-full"
+                        onClick={() => setSelectedRetreat(type)}
+                      >
                         Learn More
                       </Button>
                     </CardContent>
@@ -274,6 +348,122 @@ const About = () => {
             </div>
           </div>
         </section>
+
+        {/* Retreat Detail Modal */}
+        <Dialog open={!!selectedRetreat} onOpenChange={() => setSelectedRetreat(null)}>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 bg-transparent border-0">
+            {selectedRetreat && (
+              <div className="relative">
+                {/* Glass morphism background */}
+                <div className="absolute inset-0 bg-white/20 backdrop-blur-xl rounded-3xl border border-white/30 shadow-2xl"></div>
+                
+                {/* Content */}
+                <div className="relative p-8 md:p-12">
+                  {/* Close button */}
+                  <button
+                    onClick={() => setSelectedRetreat(null)}
+                    className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center hover:bg-white/30 transition-all"
+                  >
+                    <X className="h-5 w-5 text-brand-dark" />
+                  </button>
+
+                  {/* Header */}
+                  <div className="mb-8">
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="w-16 h-16 rounded-2xl overflow-hidden">
+                        <OptimizedImage 
+                          src={selectedRetreat.image} 
+                          alt={selectedRetreat.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div>
+                        <h2 className="text-3xl md:text-4xl font-bold text-brand-dark mb-2">
+                          {selectedRetreat.title}
+                        </h2>
+                        <div className="flex items-center gap-4 text-sm text-brand-slate">
+                          <div className="flex items-center gap-1">
+                            <Clock className="h-4 w-4" />
+                            <span>{selectedRetreat.detailedContent.duration}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Users className="h-4 w-4" />
+                            <span>{selectedRetreat.detailedContent.groupSize}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Star className="h-4 w-4" />
+                            <span>{selectedRetreat.detailedContent.difficulty}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Overview */}
+                  <div className="mb-8">
+                    <h3 className="text-xl font-semibold mb-4 text-brand-dark">About This Experience</h3>
+                    <p className="text-brand-slate leading-relaxed">
+                      {selectedRetreat.detailedContent.overview}
+                    </p>
+                  </div>
+
+                  {/* Benefits and What to Expect Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    {/* Benefits */}
+                    <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                      <h3 className="text-xl font-semibold mb-4 text-brand-dark flex items-center gap-2">
+                        <Heart className="h-5 w-5 text-brand-primary" />
+                        Key Benefits
+                      </h3>
+                      <ul className="space-y-3">
+                        {selectedRetreat.detailedContent.benefits.map((benefit, index) => (
+                          <li key={index} className="flex items-start gap-3 text-brand-slate">
+                            <div className="w-2 h-2 rounded-full bg-brand-primary mt-2 flex-shrink-0"></div>
+                            <span>{benefit}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* What to Expect */}
+                    <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                      <h3 className="text-xl font-semibold mb-4 text-brand-dark flex items-center gap-2">
+                        <Star className="h-5 w-5 text-brand-peach" />
+                        What to Expect
+                      </h3>
+                      <ul className="space-y-3">
+                        {selectedRetreat.detailedContent.whatToExpect.map((item, index) => (
+                          <li key={index} className="flex items-start gap-3 text-brand-slate">
+                            <div className="w-2 h-2 rounded-full bg-brand-peach mt-2 flex-shrink-0"></div>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* CTA Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Button 
+                      size="lg" 
+                      className="bg-brand-primary hover:bg-brand-primary/90 text-white px-8 py-4 rounded-full font-medium"
+                    >
+                      Book Your Retreat
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                    <Button 
+                      size="lg" 
+                      variant="outline" 
+                      className="border-2 border-white/30 text-brand-dark hover:bg-white/10 px-8 py-4 rounded-full font-medium backdrop-blur-sm"
+                    >
+                      View Schedule
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
 
         {/* Get Involved CTA Section */}
         <section className="py-24 bg-brand-primary/5">
