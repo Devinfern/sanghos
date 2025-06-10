@@ -51,7 +51,7 @@ import HostRetreatEdit from "@/pages/host/HostRetreatEdit";
 import HostSpaces from "@/pages/host/HostSpaces";
 
 // Protected route components
-import ProtectedRoute from "@/components/ProtectedRoute";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import HostProtectedRoute from "@/components/HostProtectedRoute";
 import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 
