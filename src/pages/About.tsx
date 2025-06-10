@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
@@ -341,7 +342,7 @@ const About = () => {
 
         {/* Retreat Detail Modal */}
         <Dialog open={!!selectedRetreat} onOpenChange={() => setSelectedRetreat(null)}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 bg-white border border-gray-200 rounded-3xl shadow-2xl">
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 bg-white border border-gray-200 rounded-3xl shadow-2xl [&>button]:hidden">
             <DialogTitle className="sr-only">
               {selectedRetreat?.title} Retreat Details
             </DialogTitle>
