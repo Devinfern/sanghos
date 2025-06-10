@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
@@ -342,117 +341,111 @@ const About = () => {
 
         {/* Retreat Detail Modal */}
         <Dialog open={!!selectedRetreat} onOpenChange={() => setSelectedRetreat(null)}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 bg-transparent border-0">
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 bg-white border border-gray-200 rounded-3xl shadow-2xl">
             <DialogTitle className="sr-only">
               {selectedRetreat?.title} Retreat Details
             </DialogTitle>
             {selectedRetreat && (
-              <div className="relative">
-                {/* Glass morphism background */}
-                <div className="absolute inset-0 bg-white/20 backdrop-blur-xl rounded-3xl border border-white/30 shadow-2xl"></div>
-                
-                {/* Content */}
-                <div className="relative p-8 md:p-12">
-                  {/* Close button */}
-                  <button
-                    onClick={() => setSelectedRetreat(null)}
-                    className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center hover:bg-white/30 transition-all"
-                  >
-                    <X className="h-5 w-5 text-brand-dark" />
-                  </button>
+              <div className="relative p-8 md:p-12">
+                {/* Close button */}
+                <button
+                  onClick={() => setSelectedRetreat(null)}
+                  className="absolute top-6 right-6 w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all"
+                >
+                  <X className="h-5 w-5 text-gray-600" />
+                </button>
 
-                  {/* Header */}
-                  <div className="mb-8">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="w-16 h-16 rounded-2xl overflow-hidden">
-                        <OptimizedImage 
-                          src={selectedRetreat.image} 
-                          alt={selectedRetreat.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div>
-                        <h2 className="text-3xl md:text-4xl font-bold text-brand-dark mb-2">
-                          {selectedRetreat.title}
-                        </h2>
-                        <div className="flex items-center gap-4 text-sm text-brand-slate">
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
-                            <span>{selectedRetreat.detailedContent.duration}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Users className="h-4 w-4" />
-                            <span>{selectedRetreat.detailedContent.groupSize}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Star className="h-4 w-4" />
-                            <span>{selectedRetreat.detailedContent.difficulty}</span>
-                          </div>
+                {/* Header */}
+                <div className="mb-8">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-16 h-16 rounded-2xl overflow-hidden">
+                      <OptimizedImage 
+                        src={selectedRetreat.image} 
+                        alt={selectedRetreat.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                        {selectedRetreat.title}
+                      </h2>
+                      <div className="flex items-center gap-4 text-sm text-gray-600">
+                        <div className="flex items-center gap-1">
+                          <Clock className="h-4 w-4" />
+                          <span>{selectedRetreat.detailedContent.duration}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Users className="h-4 w-4" />
+                          <span>{selectedRetreat.detailedContent.groupSize}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Star className="h-4 w-4" />
+                          <span>{selectedRetreat.detailedContent.difficulty}</span>
                         </div>
                       </div>
                     </div>
                   </div>
+                </div>
 
-                  {/* Overview */}
-                  <div className="mb-8">
-                    <h3 className="text-xl font-semibold mb-4 text-brand-dark">About This Experience</h3>
-                    <p className="text-brand-slate leading-relaxed">
-                      {selectedRetreat.detailedContent.overview}
-                    </p>
+                {/* Overview */}
+                <div className="mb-8">
+                  <h3 className="text-xl font-semibold mb-4 text-gray-900">About This Experience</h3>
+                  <p className="text-gray-700 leading-relaxed">
+                    {selectedRetreat.detailedContent.overview}
+                  </p>
+                </div>
+
+                {/* Benefits and What to Expect Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                  {/* Benefits */}
+                  <div className="bg-brand-primary/5 rounded-2xl p-6 border border-brand-primary/10">
+                    <h3 className="text-xl font-semibold mb-4 text-gray-900 flex items-center gap-2">
+                      <Heart className="h-5 w-5 text-brand-primary" />
+                      Key Benefits
+                    </h3>
+                    <ul className="space-y-3">
+                      {selectedRetreat.detailedContent.benefits.map((benefit, index) => (
+                        <li key={index} className="flex items-start gap-3 text-gray-700">
+                          <div className="w-2 h-2 rounded-full bg-brand-primary mt-2 flex-shrink-0"></div>
+                          <span>{benefit}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
 
-                  {/* Benefits and What to Expect Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                    {/* Benefits */}
-                    <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                      <h3 className="text-xl font-semibold mb-4 text-brand-dark flex items-center gap-2">
-                        <Heart className="h-5 w-5 text-brand-primary" />
-                        Key Benefits
-                      </h3>
-                      <ul className="space-y-3">
-                        {selectedRetreat.detailedContent.benefits.map((benefit, index) => (
-                          <li key={index} className="flex items-start gap-3 text-brand-slate">
-                            <div className="w-2 h-2 rounded-full bg-brand-primary mt-2 flex-shrink-0"></div>
-                            <span>{benefit}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* What to Expect */}
-                    <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                      <h3 className="text-xl font-semibold mb-4 text-brand-dark flex items-center gap-2">
-                        <Star className="h-5 w-5 text-brand-peach" />
-                        What to Expect
-                      </h3>
-                      <ul className="space-y-3">
-                        {selectedRetreat.detailedContent.whatToExpect.map((item, index) => (
-                          <li key={index} className="flex items-start gap-3 text-brand-slate">
-                            <div className="w-2 h-2 rounded-full bg-brand-peach mt-2 flex-shrink-0"></div>
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                  {/* What to Expect */}
+                  <div className="bg-brand-peach/5 rounded-2xl p-6 border border-brand-peach/10">
+                    <h3 className="text-xl font-semibold mb-4 text-gray-900 flex items-center gap-2">
+                      <Star className="h-5 w-5 text-brand-peach" />
+                      What to Expect
+                    </h3>
+                    <ul className="space-y-3">
+                      {selectedRetreat.detailedContent.whatToExpect.map((item, index) => (
+                        <li key={index} className="flex items-start gap-3 text-gray-700">
+                          <div className="w-2 h-2 rounded-full bg-brand-peach mt-2 flex-shrink-0"></div>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
+                </div>
 
-                  {/* CTA Buttons */}
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button 
-                      size="lg" 
-                      className="bg-brand-primary hover:bg-brand-primary/90 text-white px-8 py-4 rounded-full font-medium"
-                    >
-                      Book Your Retreat
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                    <Button 
-                      size="lg" 
-                      variant="outline" 
-                      className="border-2 border-white/30 text-brand-dark hover:bg-white/10 px-8 py-4 rounded-full font-medium backdrop-blur-sm"
-                    >
-                      View Schedule
-                    </Button>
-                  </div>
+                {/* CTA Buttons */}
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button 
+                    size="lg" 
+                    className="bg-brand-primary hover:bg-brand-primary/90 text-white px-8 py-4 rounded-full font-medium"
+                  >
+                    Book Your Retreat
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary/5 px-8 py-4 rounded-full font-medium"
+                  >
+                    View Schedule
+                  </Button>
                 </div>
               </div>
             )}
