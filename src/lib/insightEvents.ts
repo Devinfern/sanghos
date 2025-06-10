@@ -303,7 +303,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
         bookingUrl: "https://www.wetravel.com/trips/virtual-in-person-daylong-august2025-refuge-recovery-48552967",
         organizer: {
           name: "Refuge Recovery",
-          website: "https://www.wetravel.com"
+          website: "https://refugerecovery.org"
         },
         source: "InsightLA"
       },
