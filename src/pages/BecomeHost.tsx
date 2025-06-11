@@ -5,10 +5,11 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Button } from "@/components/ui/button";
 import { ArrowRight, Home, Heart, Users, Star, CheckCircle, MapPin } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
 import OptimizedImage from "@/components/OptimizedImage";
+import InteractiveGlassBenefitCard from "@/components/InteractiveGlassBenefitCard";
+import EnhancedGlassButton from "@/components/EnhancedGlassButton";
+import AdvancedFloatingGlass from "@/components/AdvancedFloatingGlass";
 
 const BecomeHost = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -66,15 +67,11 @@ const BecomeHost = () => {
       <Header />
 
       <main className="min-h-screen relative overflow-hidden">
-        {/* Background with glass morphism elements */}
+        {/* Enhanced background with advanced glass layers */}
         <div className="absolute inset-0 bg-gradient-to-br from-brand-subtle/20 via-white to-brand-peach/10"></div>
         
-        {/* Floating glass elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-96 h-96 rounded-full bg-white/10 backdrop-blur-3xl border border-white/20 animate-float"></div>
-          <div className="absolute bottom-20 right-20 w-80 h-80 rounded-full bg-brand-primary/5 backdrop-blur-3xl border border-brand-primary/10 animate-float" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute top-1/2 left-1/3 w-64 h-64 rounded-full bg-brand-peach/5 backdrop-blur-3xl border border-brand-peach/10 animate-float" style={{ animationDelay: '4s' }}></div>
-        </div>
+        {/* Advanced floating glass elements */}
+        <AdvancedFloatingGlass />
 
         {/* Hero Section */}
         <section className="relative py-32 md:py-40">
@@ -86,9 +83,9 @@ const BecomeHost = () => {
                 variants={fadeIn}
                 className="relative z-10"
               >
-                {/* Glass morphism card */}
-                <div className="relative p-8 md:p-12 rounded-3xl bg-white/20 backdrop-blur-xl border border-white/30 shadow-2xl">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-white/10 rounded-3xl"></div>
+                {/* Enhanced glass morphism card with better layering */}
+                <div className="relative p-8 md:p-12 rounded-3xl bg-white/25 backdrop-blur-2xl border border-white/40 shadow-2xl">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/10 rounded-3xl"></div>
                   
                   <div className="relative z-10">
                     <div className="flex items-center space-x-2 mb-6">
@@ -108,20 +105,22 @@ const BecomeHost = () => {
                     </p>
                     
                     <div className="flex flex-col sm:flex-row gap-4">
-                      <Button 
-                        size="lg" 
-                        className="bg-brand-primary hover:bg-brand-primary/90 text-white group rounded-full"
+                      <EnhancedGlassButton 
+                        variant="primary"
+                        size="lg"
+                        className="text-lg px-8 py-4"
                       >
                         Start Your Application
                         <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                      </Button>
-                      <Button 
-                        size="lg" 
-                        variant="outline" 
-                        className="border-2 border-white/30 bg-white/10 backdrop-blur-sm text-brand-dark hover:bg-white/20 rounded-full"
+                      </EnhancedGlassButton>
+                      
+                      <EnhancedGlassButton 
+                        variant="secondary"
+                        size="lg"
+                        className="text-lg px-8 py-4"
                       >
                         Learn More
-                      </Button>
+                      </EnhancedGlassButton>
                     </div>
                   </div>
                 </div>
@@ -146,7 +145,7 @@ const BecomeHost = () => {
           </div>
         </section>
 
-        {/* Benefits Section */}
+        {/* Benefits Section with Interactive Glass Cards */}
         <section className="relative py-24">
           <div className="container mx-auto max-w-6xl px-4 md:px-6">
             <motion.div
@@ -165,26 +164,13 @@ const BecomeHost = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {benefits.map((benefit, index) => (
-                <motion.div
+                <InteractiveGlassBenefitCard
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }}
-                >
-                  <Card className="p-8 bg-white/30 backdrop-blur-xl border border-white/30 shadow-lg hover:shadow-xl transition-all duration-300 rounded-3xl">
-                    <CardContent className="p-0">
-                      <div className="flex items-start space-x-4">
-                        <div className="p-3 rounded-2xl bg-white/40 backdrop-blur-sm">
-                          {benefit.icon}
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="text-2xl font-bold mb-3 text-brand-dark">{benefit.title}</h3>
-                          <p className="text-brand-slate text-lg leading-relaxed">{benefit.description}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
+                  icon={benefit.icon}
+                  title={benefit.title}
+                  description={benefit.description}
+                  index={index}
+                />
               ))}
             </div>
           </div>
@@ -207,17 +193,23 @@ const BecomeHost = () => {
               </p>
             </motion.div>
 
-            <div className="relative p-8 md:p-12 rounded-3xl bg-white/20 backdrop-blur-xl border border-white/30 shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-white/10 rounded-3xl"></div>
+            <div className="relative p-8 md:p-12 rounded-3xl bg-white/25 backdrop-blur-2xl border border-white/40 shadow-2xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/10 rounded-3xl"></div>
               
               <div className="relative z-10">
                 <h3 className="text-2xl font-bold mb-8 text-brand-dark text-center">Space Requirements</h3>
                 <div className="space-y-4">
                   {requirements.map((requirement, index) => (
-                    <div key={index} className="flex items-start space-x-3">
+                    <motion.div 
+                      key={index} 
+                      className="flex items-start space-x-3"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={isLoaded ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+                      transition={{ delay: 0.3 + index * 0.1, duration: 0.5 }}
+                    >
                       <CheckCircle className="h-6 w-6 text-brand-primary mt-1 flex-shrink-0" />
                       <span className="text-lg text-brand-slate">{requirement}</span>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               </div>
@@ -225,7 +217,7 @@ const BecomeHost = () => {
           </div>
         </section>
 
-        {/* CTA Section */}
+        {/* CTA Section with Enhanced Glass Button */}
         <section className="relative py-24">
           <div className="container mx-auto max-w-4xl px-4 md:px-6 text-center">
             <motion.div
@@ -233,8 +225,8 @@ const BecomeHost = () => {
               animate={isLoaded ? "visible" : "hidden"}
               variants={fadeIn}
             >
-              <div className="relative p-12 rounded-3xl bg-white/20 backdrop-blur-xl border border-white/30 shadow-2xl">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-white/10 rounded-3xl"></div>
+              <div className="relative p-12 rounded-3xl bg-white/25 backdrop-blur-2xl border border-white/40 shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/10 rounded-3xl"></div>
                 
                 <div className="relative z-10">
                   <h2 className="text-4xl md:text-5xl font-bold mb-6 text-brand-dark">
@@ -243,13 +235,15 @@ const BecomeHost = () => {
                   <p className="text-xl text-brand-slate mb-8 max-w-2xl mx-auto">
                     Join our community of hosts and start creating meaningful wellness experiences in your space.
                   </p>
-                  <Button 
+                  
+                  <EnhancedGlassButton 
+                    variant="primary"
                     size="lg" 
-                    className="bg-brand-primary hover:bg-brand-primary/90 text-white group text-lg px-8 py-4 rounded-full"
+                    className="text-lg px-8 py-4"
                   >
                     Apply to Become a Host
                     <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                  </Button>
+                  </EnhancedGlassButton>
                 </div>
               </div>
             </motion.div>
