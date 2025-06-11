@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { HostProvider } from "@/contexts/HostContext";
 import ScrollToTop from "@/components/ScrollToTop";
-import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 // Page imports
 import Index from "@/pages/Index";
@@ -52,6 +51,7 @@ import HostRetreatEdit from "@/pages/host/HostRetreatEdit";
 import HostSpaces from "@/pages/host/HostSpaces";
 
 // Protected route components
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import HostProtectedRoute from "@/components/HostProtectedRoute";
 import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 
