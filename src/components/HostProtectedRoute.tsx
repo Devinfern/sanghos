@@ -1,9 +1,9 @@
 
 import React from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useHost } from "@/contexts/HostContext";
 
-const HostProtectedRoute = () => {
+const HostProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { host, isLoading } = useHost();
   
   // Show loading state while checking authentication
@@ -17,7 +17,7 @@ const HostProtectedRoute = () => {
   }
   
   // If authenticated, render the child routes
-  return <Outlet />;
+  return <>{children}</>;
 };
 
 export default HostProtectedRoute;
