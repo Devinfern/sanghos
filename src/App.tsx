@@ -87,104 +87,38 @@ function App() {
                 <Route path="/pricing" element={<Pricing />} />
                 <Route path="/community-teaser" element={<CommunityTeaser />} />
                 
-                {/* Protected routes */}
-                <Route path="/dashboard" element={
-                  <ProtectedRoute>
-                    <UserDashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="/community" element={
-                  <ProtectedRoute>
-                    <Community />
-                  </ProtectedRoute>
-                } />
-                <Route path="/retreat/:id/community" element={
-                  <ProtectedRoute>
-                    <RetreatCommunity />
-                  </ProtectedRoute>
-                } />
-                <Route path="/community/space/:spaceId" element={
-                  <ProtectedRoute>
-                    <CommunitySpaceDetails />
-                  </ProtectedRoute>
-                } />
-                <Route path="/journal" element={
-                  <ProtectedRoute>
-                    <WellnessJournalPage />
-                  </ProtectedRoute>
-                } />
-                <Route path="/onboarding" element={
-                  <ProtectedRoute>
-                    <Onboarding />
-                  </ProtectedRoute>
-                } />
-                <Route path="/onboarding-flow" element={
-                  <ProtectedRoute>
-                    <OnboardingPage />
-                  </ProtectedRoute>
-                } />
-                <Route path="/booking/:retreatId" element={
-                  <ProtectedRoute>
-                    <Booking />
-                  </ProtectedRoute>
-                } />
-                <Route path="/checkout" element={
-                  <ProtectedRoute>
-                    <CheckoutPage />
-                  </ProtectedRoute>
-                } />
-                <Route path="/forum" element={
-                  <ProtectedRoute>
-                    <ForumPage />
-                  </ProtectedRoute>
-                } />
+                {/* USER Protected routes - these already work, so we leave them as is. */}
+                <Route path="/dashboard" element={<ProtectedRoute><UserDashboard /></ProtectedRoute>} />
+                <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+                <Route path="/retreat/:id/community" element={<ProtectedRoute><RetreatCommunity /></ProtectedRoute>} />
+                <Route path="/community/space/:spaceId" element={<ProtectedRoute><CommunitySpaceDetails /></ProtectedRoute>} />
+                <Route path="/journal" element={<ProtectedRoute><WellnessJournalPage /></ProtectedRoute>} />
+                <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
+                <Route path="/onboarding-flow" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
+                <Route path="/booking/:retreatId" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
+                <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
+                <Route path="/forum" element={<ProtectedRoute><ForumPage /></ProtectedRoute>} />
                 
-                {/* Host routes */}
+                {/* Public Host routes */}
                 <Route path="/host/login" element={<HostLogin />} />
                 <Route path="/host/signup" element={<HostSignup />} />
                 <Route path="/host/register" element={<HostRegister />} />
-                <Route path="/host/dashboard" element={
-                  <HostProtectedRoute>
-                    <HostDashboard />
-                  </HostProtectedRoute>
-                } />
-                <Route path="/host/retreats" element={
-                  <HostProtectedRoute>
-                    <HostRetreats />
-                  </HostProtectedRoute>
-                } />
-                <Route path="/host/retreats/new" element={
-                  <HostProtectedRoute>
-                    <HostRetreatNew />
-                  </HostProtectedRoute>
-                } />
-                <Route path="/host/retreats/:id/edit" element={
-                  <HostProtectedRoute>
-                    <HostRetreatEdit />
-                  </HostProtectedRoute>
-                } />
-                <Route path="/host/spaces" element={
-                  <HostProtectedRoute>
-                    <HostSpaces />
-                  </HostProtectedRoute>
-                } />
+
+                {/* HOST Protected routes - Refactored to fix build errors */}
+                <Route element={<HostProtectedRoute />}>
+                  <Route path="/host/dashboard" element={<HostDashboard />} />
+                  <Route path="/host/retreats" element={<HostRetreats />} />
+                  <Route path="/host/retreats/new" element={<HostRetreatNew />} />
+                  <Route path="/host/retreats/:id/edit" element={<HostRetreatEdit />} />
+                  <Route path="/host/spaces" element={<HostSpaces />} />
+                </Route>
                 
-                {/* Admin routes */}
-                <Route path="/admin/cms" element={
-                  <AdminProtectedRoute>
-                    <AdminCMS />
-                  </AdminProtectedRoute>
-                } />
-                <Route path="/admin/community" element={
-                  <AdminProtectedRoute>
-                    <CommunityCMS />
-                  </AdminProtectedRoute>
-                } />
-                <Route path="/admin/retreats" element={
-                  <AdminProtectedRoute>
-                    <RetreatManagementCMS />
-                  </AdminProtectedRoute>
-                } />
+                {/* ADMIN Protected routes - Refactored to fix build errors */}
+                <Route element={<AdminProtectedRoute />}>
+                  <Route path="/admin/cms" element={<AdminCMS />} />
+                  <Route path="/admin/community" element={<CommunityCMS />} />
+                  <Route path="/admin/retreats" element={<RetreatManagementCMS />} />
+                </Route>
                 
                 {/* 404 */}
                 <Route path="*" element={<NotFound />} />
