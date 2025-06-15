@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { cn } from "@/lib/utils";
@@ -12,6 +11,7 @@ import RetreatLoadingState from "@/components/retreats/RetreatLoadingState";
 import NoRetreatsFound from "@/components/retreats/NoRetreatsFound";
 import { fetchSanghosRetreats } from "@/lib/data";
 import { fetchInsightLAEvents } from "@/lib/insightEvents";
+import { Link } from "react-router-dom";
 
 import { motion } from 'framer-motion';
 import { MapPin, Star, ArrowRight } from 'lucide-react';
@@ -19,6 +19,13 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import OptimizedImage from '@/components/OptimizedImage';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 
 // --- New components for Featured Retreat Centers section ---
@@ -117,46 +124,45 @@ const featuredCenters = [
 
 const FeaturedRetreatCenters = () => {
     return (
-        <section className="py-20 bg-sand-50 relative overflow-hidden">
-            <div className="absolute inset-0 z-0">
-                <div className="absolute -top-20 -left-20 w-80 h-80 bg-brand-sky/20 rounded-full filter blur-3xl opacity-50 animate-pulse-glow" />
-                <div className="absolute -bottom-20 -right-10 w-96 h-96 bg-brand-primary/10 rounded-full filter blur-3xl opacity-60 animate-float" />
-            </div>
-
-            <div className="container mx-auto px-4 relative z-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="text-center mb-12"
-                >
-                    <h2 className="text-3xl md:text-4xl font-bold text-brand-dark mb-4">
-                        Featured Retreat Centers & Studios
+        <section className="py-20 bg-white">
+            <div className="container mx-auto px-4">
+                <div className="flex justify-between items-center mb-8">
+                    <h2 className="text-3xl font-bold text-brand-dark">
+                        Featured Wellness Studios
                     </h2>
-                    <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                        Discover world-class venues that host our transformative wellness experiences.
-                    </p>
-                </motion.div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {featuredCenters.map((center, index) => (
-                        <RetreatCenterCard key={center.id} center={center} index={index} />
-                    ))}
+                    <Button variant="link" asChild className="text-brand-primary group hidden md:inline-flex">
+                        <Link to="/become-host">
+                           View All
+                           <ArrowRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                    </Button>
                 </div>
 
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.3 }}
-                    className="text-center mt-16"
+                <Carousel
+                    opts={{
+                        align: "start",
+                        loop: true,
+                    }}
+                    className="w-full"
                 >
-                    <Button size="lg" className="bg-brand-primary hover:bg-brand-primary/90 text-white group">
-                        Become a Partner Center
-                        <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                </motion.div>
+                    <CarouselContent className="-ml-4">
+                        {featuredCenters.map((center, index) => (
+                            <CarouselItem key={center.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                                <RetreatCenterCard center={center} index={index} />
+                            </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                    <CarouselPrevious />
+                    <CarouselNext />
+                </Carousel>
+                <div className="text-center mt-8 md:hidden">
+                  <Button asChild variant="outline" size="lg">
+                    <Link to="/become-host">
+                      View All
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </Link>
+                  </Button>
+                </div>
             </div>
         </section>
     );
@@ -278,8 +284,6 @@ const Retreats = () => {
           retreatCounts={retreatCounts}
           activeTab={activeTab}
         />
-
-        <FeaturedRetreatCenters />
         
         <div className="container px-4 md:px-6 py-10 flex-grow bg-sage-50/30">
           {/* Filters section */}
@@ -325,6 +329,7 @@ const Retreats = () => {
             <NoRetreatsFound resetFilters={resetFilters} loadingError={insightLALoadingError} />
           )}
         </div>
+        <FeaturedRetreatCenters />
       </main>
       
       <Footer />

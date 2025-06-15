@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -104,21 +103,17 @@ function App() {
                 <Route path="/host/signup" element={<HostSignup />} />
                 <Route path="/host/register" element={<HostRegister />} />
 
-                {/* HOST Protected routes - Refactored to fix build errors */}
-                <Route element={<HostProtectedRoute />}>
-                  <Route path="/host/dashboard" element={<HostDashboard />} />
-                  <Route path="/host/retreats" element={<HostRetreats />} />
-                  <Route path="/host/retreats/new" element={<HostRetreatNew />} />
-                  <Route path="/host/retreats/:id/edit" element={<HostRetreatEdit />} />
-                  <Route path="/host/spaces" element={<HostSpaces />} />
-                </Route>
-                
-                {/* ADMIN Protected routes - Refactored to fix build errors */}
-                <Route element={<AdminProtectedRoute />}>
-                  <Route path="/admin/cms" element={<AdminCMS />} />
-                  <Route path="/admin/community" element={<CommunityCMS />} />
-                  <Route path="/admin/retreats" element={<RetreatManagementCMS />} />
-                </Route>
+                {/* HOST Protected routes - Fixed to fix build errors */}
+                <Route path="/host/dashboard" element={<HostProtectedRoute><HostDashboard /></HostProtectedRoute>} />
+                <Route path="/host/retreats" element={<HostProtectedRoute><HostRetreats /></HostProtectedRoute>} />
+                <Route path="/host/retreats/new" element={<HostProtectedRoute><HostRetreatNew /></HostProtectedRoute>} />
+                <Route path="/host/retreats/:id/edit" element={<HostProtectedRoute><HostRetreatEdit /></HostProtectedRoute>} />
+                <Route path="/host/spaces" element={<HostProtectedRoute><HostSpaces /></HostProtectedRoute>} />
+
+                {/* ADMIN Protected routes - Fixed to fix build errors */}
+                <Route path="/admin/cms" element={<AdminProtectedRoute><AdminCMS /></AdminProtectedRoute>} />
+                <Route path="/admin/community" element={<AdminProtectedRoute><CommunityCMS /></AdminProtectedRoute>} />
+                <Route path="/admin/retreats" element={<AdminProtectedRoute><RetreatManagementCMS /></AdminProtectedRoute>} />
                 
                 {/* 404 */}
                 <Route path="*" element={<NotFound />} />
