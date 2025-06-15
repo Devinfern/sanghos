@@ -38,6 +38,7 @@ import BlogPost from "@/pages/BlogPost";
 import Pricing from "@/pages/Pricing";
 import CommunityTeaser from "@/pages/CommunityTeaser";
 import ForumPage from "@/pages/ForumPage";
+import WellnessStudios from "@/pages/WellnessStudios";
 
 // Host pages
 import HostLogin from "@/pages/host/HostLogin";
@@ -85,6 +86,7 @@ function App() {
                 <Route path="/blog/:slug" element={<BlogPost />} />
                 <Route path="/pricing" element={<Pricing />} />
                 <Route path="/community-teaser" element={<CommunityTeaser />} />
+                <Route path="/wellness-studios" element={<WellnessStudios />} />
                 
                 {/* USER Protected routes - these already work, so we leave them as is. */}
                 <Route path="/dashboard" element={<ProtectedRoute><UserDashboard /></ProtectedRoute>} />
