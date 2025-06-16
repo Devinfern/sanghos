@@ -15,7 +15,7 @@ interface RetreatCardProps {
   retreat: any;
   index: number;
   comingSoon?: boolean;
-  viewMode?: 'grid' | 'list' | 'map';
+  viewMode?: 'grid' | 'list';
   userLocation?: UserLocation | null;
 }
 
@@ -60,11 +60,6 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
       minimumFractionDigits: 0
     }).format(price);
   };
-
-  // Map view mode is handled by RetreatMapView component, so we don't render cards for map view
-  if (viewMode === 'map') {
-    return null;
-  }
 
   const isListView = viewMode === 'list';
 

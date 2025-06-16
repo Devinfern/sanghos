@@ -113,7 +113,7 @@ const RetreatQuickPreview: React.FC<RetreatQuickPreviewProps> = ({ retreat, isOp
                 )}
                 <div>
                   <p className="font-medium text-sm">{retreat.instructor.name}</p>
-                  <p className="text-xs text-muted-foreground">{retreat.instructor.expertise || 'Wellness Instructor'}</p>
+                  <p className="text-xs text-muted-foreground">Wellness Instructor</p>
                 </div>
               </div>
             </div>

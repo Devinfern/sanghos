@@ -14,7 +14,7 @@ import RetreatCenterCard from "./RetreatCenterCard";
 
 const FeaturedRetreatCenters = () => {
     return (
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-white overflow-hidden">
             <div className="container mx-auto px-4">
                 <div className="flex justify-between items-center mb-8">
                     <div>
@@ -33,23 +33,26 @@ const FeaturedRetreatCenters = () => {
                     </Button>
                 </div>
 
-                <Carousel
-                    opts={{
-                        align: "start",
-                        loop: true,
-                    }}
-                    className="w-full"
-                >
-                    <CarouselContent className="-ml-4">
-                        {featuredCenters.slice(0, 8).map((center, index) => (
-                            <CarouselItem key={center.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
-                                <RetreatCenterCard center={center} index={index} />
-                            </CarouselItem>
-                        ))}
-                    </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
-                </Carousel>
+                <div className="relative">
+                    <Carousel
+                        opts={{
+                            align: "start",
+                            loop: true,
+                        }}
+                        className="w-full"
+                    >
+                        <CarouselContent className="-ml-4">
+                            {featuredCenters.slice(0, 8).map((center, index) => (
+                                <CarouselItem key={center.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                                    <RetreatCenterCard center={center} index={index} />
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                        <CarouselPrevious className="absolute -left-4 top-1/2 -translate-y-1/2" />
+                        <CarouselNext className="absolute -right-4 top-1/2 -translate-y-1/2" />
+                    </Carousel>
+                </div>
+                
                 <div className="text-center mt-8 md:hidden">
                   <Button asChild variant="outline" size="lg">
                     <Link to="/wellness-studios">

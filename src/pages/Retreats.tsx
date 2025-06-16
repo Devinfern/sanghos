@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet";
 import { cn } from "@/lib/utils";
@@ -373,7 +372,7 @@ const Retreats = () => {
                       retreat={retreat} 
                       index={index}
                       comingSoon={retreat.isSanghos}
-                      viewMode={viewMode}
+                      viewMode={viewMode === 'map' ? 'grid' : viewMode}
                       userLocation={userLocation}
                     />
                   </div>
