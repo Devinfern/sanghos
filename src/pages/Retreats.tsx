@@ -7,7 +7,6 @@ import { RetreatProvider } from "@/contexts/RetreatContext";
 import ComparisonBar from "@/components/retreats/ComparisonBar";
 import RetreatQuickPreview from "@/components/retreats/RetreatQuickPreview";
 import RetreatPageHeader from "@/components/retreats/RetreatPageHeader";
-import RetreatPageFilters from "@/components/retreats/RetreatPageFilters";
 import RetreatPageContent from "@/components/retreats/RetreatPageContent";
 import { useRetreatPageData } from "@/hooks/useRetreatPageData";
 
@@ -84,41 +83,30 @@ const Retreats = () => {
           activeTab={activeTab}
           searchQuery={searchQuery}
           selectedCategory={selectedCategory}
+          selectedLocation={selectedLocation}
+          selectedPriceRange={selectedPriceRange}
+          startDate={startDate}
+          endDate={endDate}
+          viewMode={viewMode}
+          sortBy={sortBy}
+          allCategories={allCategories}
           retreatCounts={retreatCounts}
           onCategorySelect={handleCategorySelect}
           onTabChange={handleTabChange}
           setSearchQuery={setSearchQuery}
+          setSelectedCategory={setSelectedCategory}
+          setSelectedLocation={setSelectedLocation}
+          setSelectedPriceRange={setSelectedPriceRange}
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+          setViewMode={setViewMode}
+          setSortBy={setSortBy}
           onSearch={handleSearch}
+          resetFilters={resetFilters}
+          getCardViewMode={getCardViewMode}
         />
         
         <div className="container px-4 md:px-6 space-y-6">
-          <RetreatPageFilters
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            selectedLocation={selectedLocation}
-            setSelectedLocation={setSelectedLocation}
-            selectedPriceRange={selectedPriceRange}
-            setSelectedPriceRange={setSelectedPriceRange}
-            startDate={startDate}
-            setStartDate={setStartDate}
-            endDate={endDate}
-            setEndDate={setEndDate}
-            viewMode={viewMode}
-            setViewMode={setViewMode}
-            sortBy={sortBy}
-            setSortBy={setSortBy}
-            allCategories={allCategories}
-            allRetreats={allRetreats}
-            resetFilters={resetFilters}
-            getCardViewMode={getCardViewMode}
-            onSearch={handleSearch}
-            activeTab={activeTab}
-            onTabChange={handleTabChange}
-            retreatCounts={retreatCounts}
-          />
-
           <RetreatPageContent
             filteredAndSortedRetreats={filteredAndSortedRetreats}
             paginatedRetreats={paginatedRetreats}
