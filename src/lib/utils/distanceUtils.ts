@@ -93,7 +93,7 @@ export function sortByDistance<T extends { location: { coordinates?: LocationCoo
         );
         return { ...item, distance };
       }
-      return item;
+      return { ...item, distance: undefined };
     })
     .sort((a, b) => {
       if (a.distance !== undefined && b.distance !== undefined) {

@@ -27,6 +27,8 @@ import { Grid, List, MapIcon } from "lucide-react";
 import { getUserLocation, sortByDistance, type UserLocation } from "@/lib/utils/distanceUtils";
 import { toast } from "sonner";
 
+type ViewMode = 'grid' | 'list' | 'map';
+
 const Retreats = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -34,7 +36,7 @@ const Retreats = () => {
   const [selectedPriceRange, setSelectedPriceRange] = useState("All");
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
-  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'map'>('grid');
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [sortBy, setSortBy] = useState('date');
   const [isLoaded, setIsLoaded] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
@@ -342,7 +344,7 @@ const Retreats = () => {
                 : "flex flex-col space-y-4"
             )}>
               {Array.from({ length: 6 }).map((_, index) => (
-                <RetreatCardSkeleton key={index} viewMode={viewMode} />
+                <RetreatCardSkeleton key={index} viewMode={viewMode === 'map' ? 'grid' : viewMode} />
               ))}
             </div>
           ) : viewMode === 'map' ? (
