@@ -1,5 +1,9 @@
 
 import React from 'react';
+import { Search, ChevronRight } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ViewMode } from '@/hooks/useRetreatPageData';
 import AdvancedRetreatFilters from './AdvancedRetreatFilters';
 
@@ -25,6 +29,13 @@ interface RetreatPageFiltersProps {
   resetFilters: () => void;
   getCardViewMode: (viewMode: ViewMode) => 'grid' | 'list';
   onSearch: (query: string) => void;
+  activeTab: string;
+  onTabChange: (tab: string) => void;
+  retreatCounts: {
+    all: number;
+    sanghos: number;
+    thirdparty: number;
+  };
 }
 
 const RetreatPageFilters: React.FC<RetreatPageFiltersProps> = ({
@@ -48,10 +59,58 @@ const RetreatPageFilters: React.FC<RetreatPageFiltersProps> = ({
   allRetreats,
   resetFilters,
   getCardViewMode,
-  onSearch
+  onSearch,
+  activeTab,
+  onTabChange,
+  retreatCounts
 }) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSearch(searchQuery);
+  };
+
   return (
     <div className="space-y-6">
+      {/* Main search bar */}
+      <div className="mb-8">
+        <form onSubmit={handleSubmit} className="relative max-w-2xl mx-auto">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
+            <Input 
+              type="search" 
+              placeholder="Search retreats by name, location, or type..." 
+              className="pl-10 py-6 bg-white border-0 shadow-md hover:shadow-lg transition-shadow duration-300" 
+              value={searchQuery} 
+              onChange={e => setSearchQuery(e.target.value)} 
+            />
+            <Button 
+              type="submit" 
+              className="absolute right-1.5 top-1/2 transform -translate-y-1/2 group"
+            >
+              Search
+              <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Button>
+          </div>
+        </form>
+      </div>
+
+      {/* Retreat type tabs integrated with filters */}
+      <div className="flex items-center justify-between gap-4 mb-6">
+        <Tabs value={activeTab} onValueChange={onTabChange}>
+          <TabsList className="grid w-full grid-cols-3 max-w-md bg-white shadow-sm">
+            <TabsTrigger value="all" className="data-[state=active]:bg-sage-100">
+              All ({retreatCounts.all})
+            </TabsTrigger>
+            <TabsTrigger value="sanghos" className="data-[state=active]:bg-sage-100">
+              Sanghos ({retreatCounts.sanghos})
+            </TabsTrigger>
+            <TabsTrigger value="thirdparty" className="data-[state=active]:bg-sage-100">
+              Partners ({retreatCounts.thirdparty})
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
+
       <AdvancedRetreatFilters 
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}

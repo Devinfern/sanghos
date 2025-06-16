@@ -114,6 +114,9 @@ const Retreats = () => {
             resetFilters={resetFilters}
             getCardViewMode={getCardViewMode}
             onSearch={handleSearch}
+            activeTab={activeTab}
+            onTabChange={handleTabChange}
+            retreatCounts={retreatCounts}
           />
 
           <RetreatPageContent
