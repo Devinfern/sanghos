@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { ArrowRight, MapPin, Star, Home, Hotel } from "lucide-react";
+import { ArrowRight, MapPin, Star, Home, Hotel, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,33 +10,36 @@ const HomeWellnessProperties = () => {
   const properties = [
     {
       id: 1,
-      name: "Zen Garden Retreat House",
+      name: "Esalen Institute",
       location: "Big Sur, California",
       type: "Retreat Center",
       rating: 4.8,
       image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      features: ["Meditation Garden", "Ocean Views", "Organic Kitchen"],
-      icon: <Home className="h-4 w-4" />
+      features: ["Hot Springs", "Ocean Views", "Workshops"],
+      icon: <Home className="h-4 w-4" />,
+      website: "https://www.esalen.org"
     },
     {
       id: 2,
-      name: "Mindful Mountain Lodge",
-      location: "Asheville, North Carolina",
-      type: "Wellness Hotel",
+      name: "The Ranch Malibu",
+      location: "Malibu, California",
+      type: "Wellness Resort",
       rating: 4.9,
       image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      features: ["Spa Services", "Hiking Trails", "Yoga Studio"],
-      icon: <Hotel className="h-4 w-4" />
+      features: ["Fitness Bootcamp", "Hiking", "Plant-Based Cuisine"],
+      icon: <Hotel className="h-4 w-4" />,
+      website: "https://www.theranchmalibu.com"
     },
     {
       id: 3,
-      name: "Serenity Cottage Escape",
-      location: "Sedona, Arizona",
-      type: "Wellness Cottage",
+      name: "Kripalu Center",
+      location: "Stockbridge, Massachusetts",
+      type: "Yoga Retreat",
       rating: 4.7,
       image: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      features: ["Private Hot Tub", "Vortex Access", "Sound Healing"],
-      icon: <Home className="h-4 w-4" />
+      features: ["Yoga Programs", "Meditation", "Wellness Workshops"],
+      icon: <Home className="h-4 w-4" />,
+      website: "https://kripalu.org"
     }
   ];
 
@@ -131,19 +134,33 @@ const HomeWellnessProperties = () => {
                 </div>
                 
                 <CardContent className="p-5 flex flex-col flex-grow">
-                  <h3 className="text-xl font-bold text-brand-dark mb-2 group-hover:text-brand-primary transition-colors">
-                    {property.name}
-                  </h3>
-                  <div className="flex items-center text-sm text-muted-foreground mb-3">
-                    <MapPin className="h-4 w-4 mr-2 text-brand-primary/80 flex-shrink-0" />
-                    <span>{property.location}</span>
+                  <div className="flex-grow">
+                    <h3 className="text-xl font-bold text-brand-dark mb-2 group-hover:text-brand-primary transition-colors">
+                      {property.name}
+                    </h3>
+                    <div className="flex items-center text-sm text-muted-foreground mb-3">
+                      <MapPin className="h-4 w-4 mr-2 text-brand-primary/80 flex-shrink-0" />
+                      <span>{property.location}</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {property.features.map((feature, featureIndex) => (
+                        <Badge key={featureIndex} variant="outline" className="text-xs">
+                          {feature}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
-                  <div className="flex flex-wrap gap-2 mt-auto">
-                    {property.features.map((feature, featureIndex) => (
-                      <Badge key={featureIndex} variant="outline" className="text-xs">
-                        {feature}
-                      </Badge>
-                    ))}
+                  <div className="mt-auto">
+                    <Button 
+                      variant="outline" 
+                      className="w-full border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white group"
+                      asChild
+                    >
+                      <a href={property.website} target="_blank" rel="noopener noreferrer">
+                        Visit Website
+                        <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </a>
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
