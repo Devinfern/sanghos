@@ -84,16 +84,6 @@ const RetreatPageFilters: React.FC<RetreatPageFiltersProps> = ({
         </form>
       </div>
 
-      {/* Enhanced search with suggestions */}
-      <div className="mb-6">
-        <RetreatSearchSuggestions
-          value={searchQuery}
-          onChange={setSearchQuery}
-          retreats={allRetreats}
-          className="max-w-2xl mx-auto"
-        />
-      </div>
-
       <AdvancedRetreatFilters 
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}

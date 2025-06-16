@@ -1,14 +1,9 @@
 
 import { useState, useEffect } from "react";
-import { ChevronRight, Info, Sparkles } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import SanghosIcon from "@/components/SanghosIcon";
-
-const categories = ["Meditation", "Yoga", "Breathwork", "Sound Healing", "Forest Therapy", "Mindfulness"];
+import { Sparkles } from "lucide-react";
 
 interface RetreatHeroProps {
-  onCategorySelect: (category: string) => void;
+  onCategorySelect?: (category: string) => void;
   onTabChange?: (tab: string) => void;
   retreatCounts?: {
     all: number;
@@ -50,7 +45,7 @@ const RetreatHero = ({
       </div>
       
       <div className="container px-4 md:px-6 relative z-10">
-        <div className="max-w-3xl mx-auto text-center mb-6">
+        <div className="max-w-3xl mx-auto text-center">
           <div className={`transition-all duration-700 delay-300 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-sage-900 mb-4">
               Find Your Perfect <span className="text-primary">Daylong Retreat</span>
@@ -60,75 +55,6 @@ const RetreatHero = ({
               Discover curated retreats designed to help you reconnect with yourself, 
               find balance, and cultivate mindfulness in stunning locations.
             </p>
-          </div>
-          
-          {/* Integrated Tab Navigation */}
-          {onTabChange && (
-            <div className={`mb-6 transition-all duration-700 delay-400 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              <Tabs defaultValue={activeTab} onValueChange={onTabChange} className="w-full">
-                <div className="flex justify-center mb-4">
-                  <TabsList className="grid grid-cols-3 w-full max-w-md bg-white/90 shadow-sm">
-                    <TabsTrigger value="all" className="relative overflow-hidden group">
-                      All Retreats
-                      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-data-[state=active]:scale-x-100 transition-transform origin-left duration-300"></span>
-                    </TabsTrigger>
-                    <TabsTrigger value="sanghos" className="relative overflow-hidden group">
-                      <span className="flex items-center gap-1">
-                        Sanghos 
-                        <SanghosIcon className="ml-0.5 w-4 h-4" />
-                      </span>
-                      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-data-[state=active]:scale-x-100 transition-transform origin-left duration-300"></span>
-                    </TabsTrigger>
-                    <TabsTrigger value="thirdparty" className="relative overflow-hidden group">
-                      Partners
-                      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-data-[state=active]:scale-x-100 transition-transform origin-left duration-300"></span>
-                    </TabsTrigger>
-                  </TabsList>
-                </div>
-
-                <TabsContent value="all" className="animate-fade-up">
-                  <div className="flex justify-center">
-                    <div className="inline-flex items-center bg-white/90 rounded-full px-3 py-1 text-sm text-sage-600">
-                      <Info className="w-3.5 h-3.5 mr-1.5" />
-                      Showing all {retreatCounts.all} retreats
-                    </div>
-                  </div>
-                </TabsContent>
-                <TabsContent value="sanghos" className="animate-fade-up">
-                  <div className="flex justify-center">
-                    <div className="inline-flex items-center bg-white/90 rounded-full px-3 py-1 text-sm text-sage-600">
-                      <Info className="w-3.5 h-3.5 mr-1.5" />
-                      Showing {retreatCounts.sanghos} retreats organized by Sanghos
-                    </div>
-                  </div>
-                </TabsContent>
-                <TabsContent value="thirdparty" className="animate-fade-up">
-                  <div className="flex justify-center">
-                    <div className="inline-flex items-center bg-white/90 rounded-full px-3 py-1 text-sm text-sage-600">
-                      <Info className="w-3.5 h-3.5 mr-1.5" />
-                      Showing {retreatCounts.thirdparty} partner retreats
-                    </div>
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </div>
-          )}
-          
-          <div 
-            className={`flex flex-wrap justify-center gap-2.5 transition-all duration-700 delay-600 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-            }`}
-          >
-            {categories.map(category => (
-              <Badge 
-                key={category} 
-                variant="outline" 
-                className="bg-white hover:bg-sage-100 cursor-pointer text-sage-700 hover:text-sage-900 border-sage-200 transition-all duration-300 hover:scale-105 py-1.5 px-3 text-sm" 
-                onClick={() => onCategorySelect(category)}
-              >
-                {category}
-              </Badge>
-            ))}
           </div>
         </div>
       </div>
