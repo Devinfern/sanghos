@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Users, Clock, Star, Heart, Scale } from "lucide-react";
+import { Calendar, MapPin, Users, Clock, Star, Heart, Scale, Navigation } from "lucide-react";
 import { Retreat } from "@/lib/data";
 import SanghosIcon from "./SanghosIcon";
 import { motion } from "framer-motion";
 import OptimizedImage from "./OptimizedImage";
 import { useRetreatContext } from "@/contexts/RetreatContext";
+import { formatDistance } from "@/lib/utils/distanceUtils";
 
 // Location interface for the userLocation prop
 interface UserLocation {
@@ -18,7 +19,7 @@ interface UserLocation {
 }
 
 interface RetreatCardProps {
-  retreat: Retreat;
+  retreat: Retreat & { distance?: number };
   index: number;
   comingSoon?: boolean;
   viewMode?: "grid" | "list" | "map";
@@ -68,7 +69,6 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
   };
 
   const getDifficultyBadge = () => {
-    // Mock difficulty based on price range
     if (retreat.price <= 100) return { label: "Beginner", color: "bg-green-100 text-green-700" };
     if (retreat.price <= 300) return { label: "Intermediate", color: "bg-yellow-100 text-yellow-700" };
     return { label: "Advanced", color: "bg-red-100 text-red-700" };
@@ -239,6 +239,12 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
               <div className="flex items-center w-full sm:w-auto sm:mr-4">
                 <MapPin className="h-3.5 w-3.5 mr-1.5 flex-shrink-0 text-sage-500" />
                 <span className="truncate">{retreat.location.city}, {retreat.location.state}</span>
+                {retreat.distance !== undefined && (
+                  <span className="ml-2 text-xs bg-sage-100 text-sage-700 px-2 py-1 rounded-full">
+                    <Navigation className="h-3 w-3 inline mr-1" />
+                    {formatDistance(retreat.distance)}
+                  </span>
+                )}
               </div>
               
               <div className="flex items-center w-full sm:w-auto">

@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet";
 import { cn } from "@/lib/utils";
@@ -13,10 +14,18 @@ import NoRetreatsFound from "@/components/retreats/NoRetreatsFound";
 import RetreatBreadcrumb from "@/components/retreats/RetreatBreadcrumb";
 import RecentlyViewedSection from "@/components/retreats/RecentlyViewedSection";
 import ComparisonBar from "@/components/retreats/ComparisonBar";
+import RetreatMapView from "@/components/retreats/RetreatMapView";
+import RetreatQuickPreview from "@/components/retreats/RetreatQuickPreview";
+import RetreatPagination from "@/components/retreats/RetreatPagination";
+import RetreatSearchSuggestions from "@/components/retreats/RetreatSearchSuggestions";
 import { fetchSanghosRetreats } from "@/lib/data";
 import { fetchInsightLAEvents } from "@/lib/insightEvents";
 import FeaturedRetreatCenters from "@/components/FeaturedRetreatCenters";
 import { RetreatProvider } from "@/contexts/RetreatContext";
+import { Button } from "@/components/ui/button";
+import { Grid, List, MapIcon } from "lucide-react";
+import { getUserLocation, sortByDistance, type UserLocation } from "@/lib/utils/distanceUtils";
+import { toast } from "sonner";
 
 const Retreats = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,13 +34,20 @@ const Retreats = () => {
   const [selectedPriceRange, setSelectedPriceRange] = useState("All");
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'map'>('grid');
   const [sortBy, setSortBy] = useState('date');
   const [isLoaded, setIsLoaded] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
   const [isLoadingEvents, setIsLoadingEvents] = useState(true);
   const [allRetreats, setAllRetreats] = useState([]);
   const [insightLALoadingError, setInsightLALoadingError] = useState(false);
+  
+  // New state for Phase 4 features
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(12);
+  const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
+  const [previewRetreat, setPreviewRetreat] = useState(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   
   useEffect(() => {
     const loadAllEvents = async () => {
@@ -71,15 +87,30 @@ const Retreats = () => {
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
+    setCurrentPage(1); // Reset to first page on search
   };
 
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category);
     setActiveTab("all");
+    setCurrentPage(1);
   };
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
+    setCurrentPage(1);
+  };
+
+  const handleGetUserLocation = async () => {
+    try {
+      const location = await getUserLocation();
+      setUserLocation(location);
+      setSortBy('distance'); // Auto-sort by distance when location is detected
+      toast.success('Location detected! Sorting by distance.');
+    } catch (error) {
+      console.error('Error getting user location:', error);
+      toast.error('Could not detect your location');
+    }
   };
 
   const resetFilters = () => {
@@ -90,6 +121,7 @@ const Retreats = () => {
     setStartDate(undefined);
     setEndDate(undefined);
     setSortBy('date');
+    setCurrentPage(1);
   };
 
   const allCategories = Array.from(
@@ -113,12 +145,10 @@ const Retreats = () => {
         (activeTab === "sanghos" && retreat.isSanghos) ||
         (activeTab === "thirdparty" && !retreat.isSanghos);
 
-      // Location filter
       const matchesLocation = selectedLocation === "All" || 
         retreat.location.state.toLowerCase().includes(selectedLocation.toLowerCase()) ||
         (selectedLocation === "Online" && retreat.location.city.toLowerCase().includes("online"));
 
-      // Price filter
       const matchesPriceRange = (() => {
         if (selectedPriceRange === "All") return true;
         const price = retreat.price || 0;
@@ -131,7 +161,6 @@ const Retreats = () => {
         }
       })();
 
-      // Date filters
       const retreatDate = new Date(retreat.date);
       const matchesStartDate = !startDate || retreatDate >= startDate;
       const matchesEndDate = !endDate || retreatDate <= endDate;
@@ -140,27 +169,36 @@ const Retreats = () => {
              matchesLocation && matchesPriceRange && matchesStartDate && matchesEndDate;
     });
 
-    // Sorting logic
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case 'date':
-          return new Date(a.date).getTime() - new Date(b.date).getTime();
-        case 'price-low':
-          return (a.price || 0) - (b.price || 0);
-        case 'price-high':
-          return (b.price || 0) - (a.price || 0);
-        case 'name':
-          return a.title.localeCompare(b.title);
-        case 'popularity':
-          return (b.capacity - b.remaining) - (a.capacity - a.remaining);
-        default:
-          return 0;
-      }
-    });
+    // Sorting logic with distance support
+    if (sortBy === 'distance' && userLocation) {
+      filtered = sortByDistance(filtered, userLocation);
+    } else {
+      filtered.sort((a, b) => {
+        switch (sortBy) {
+          case 'date':
+            return new Date(a.date).getTime() - new Date(b.date).getTime();
+          case 'price-low':
+            return (a.price || 0) - (b.price || 0);
+          case 'price-high':
+            return (b.price || 0) - (a.price || 0);
+          case 'name':
+            return a.title.localeCompare(b.title);
+          case 'popularity':
+            return (b.capacity - b.remaining) - (a.capacity - a.remaining);
+          default:
+            return 0;
+        }
+      });
+    }
 
     return filtered;
   }, [allRetreats, searchQuery, selectedCategory, activeTab, selectedLocation, 
-      selectedPriceRange, startDate, endDate, sortBy]);
+      selectedPriceRange, startDate, endDate, sortBy, userLocation]);
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredAndSortedRetreats.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedRetreats = filteredAndSortedRetreats.slice(startIndex, startIndex + itemsPerPage);
 
   const sanghoRetreats = allRetreats.filter(retreat => retreat.isSanghos);
   const thirdPartyRetreats = allRetreats.filter(retreat => !retreat.isSanghos);
@@ -169,6 +207,11 @@ const Retreats = () => {
     all: allRetreats.length,
     sanghos: sanghoRetreats.length,
     thirdparty: thirdPartyRetreats.length
+  };
+
+  const handleRetreatPreview = (retreat) => {
+    setPreviewRetreat(retreat);
+    setIsPreviewOpen(true);
   };
 
   return (
@@ -193,17 +236,24 @@ const Retreats = () => {
         />
         
         <div className="container px-4 md:px-6 py-10 flex-grow bg-sage-50/30">
-          {/* Breadcrumb Navigation */}
           <RetreatBreadcrumb 
             activeTab={activeTab}
             searchQuery={searchQuery}
             selectedCategory={selectedCategory}
           />
 
-          {/* Recently Viewed Section */}
           <RecentlyViewedSection />
 
-          {/* Advanced Filters section */}
+          {/* Enhanced search with suggestions */}
+          <div className="mb-6">
+            <RetreatSearchSuggestions
+              value={searchQuery}
+              onChange={handleSearch}
+              retreats={allRetreats}
+              className="max-w-2xl"
+            />
+          </div>
+
           <AdvancedRetreatFilters 
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
@@ -225,14 +275,65 @@ const Retreats = () => {
             resetFilters={resetFilters}
           />
 
-          {/* Results header */}
-          <RetreatResultsHeader 
-            filteredCount={filteredAndSortedRetreats.length} 
-            activeTab={activeTab}
-            isLoadingEvents={isLoadingEvents}
-          />
+          {/* Enhanced view mode controls */}
+          <div className="flex items-center justify-between mb-6">
+            <RetreatResultsHeader 
+              filteredCount={filteredAndSortedRetreats.length} 
+              activeTab={activeTab}
+              isLoadingEvents={isLoadingEvents}
+            />
+            
+            <div className="flex items-center gap-2">
+              {!userLocation && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleGetUserLocation}
+                  className="text-sm"
+                >
+                  Detect Location
+                </Button>
+              )}
+              
+              <div className="flex border rounded-lg overflow-hidden">
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  className={cn(
+                    "rounded-none border-0", 
+                    viewMode === "grid" && "bg-sage-100"
+                  )}
+                  onClick={() => setViewMode("grid")}
+                >
+                  <Grid className="h-4 w-4" />
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  className={cn(
+                    "rounded-none border-0 border-l border-r", 
+                    viewMode === "list" && "bg-sage-100"
+                  )}
+                  onClick={() => setViewMode("list")}
+                >
+                  <List className="h-4 w-4" />
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  className={cn(
+                    "rounded-none border-0", 
+                    viewMode === "map" && "bg-sage-100"
+                  )}
+                  onClick={() => setViewMode("map")}
+                >
+                  <MapIcon className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
 
-          {/* Content section */}
+          {/* Content section with map view support */}
           {isLoadingEvents ? (
             <div className={cn(
               "gap-6 mb-10",
@@ -244,35 +345,68 @@ const Retreats = () => {
                 <RetreatCardSkeleton key={index} viewMode={viewMode} />
               ))}
             </div>
+          ) : viewMode === 'map' ? (
+            <RetreatMapView
+              retreats={filteredAndSortedRetreats}
+              onRetreatSelect={handleRetreatPreview}
+            />
           ) : filteredAndSortedRetreats.length > 0 ? (
-            <div 
-              className={cn(
-                "gap-6 mb-10 transition-opacity duration-700",
-                viewMode === 'grid' 
-                  ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" 
-                  : "flex flex-col space-y-4",
-                isLoaded ? "opacity-100" : "opacity-0"
-              )}
-            >
-              {filteredAndSortedRetreats.map((retreat, index) => (
-                <RetreatCard 
-                  key={retreat.id} 
-                  retreat={retreat} 
-                  index={index}
-                  comingSoon={retreat.isSanghos}
-                  viewMode={viewMode}
-                />
-              ))}
-            </div>
+            <>
+              <div 
+                className={cn(
+                  "gap-6 mb-10 transition-opacity duration-700",
+                  viewMode === 'grid' 
+                    ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" 
+                    : "flex flex-col space-y-4",
+                  isLoaded ? "opacity-100" : "opacity-0"
+                )}
+              >
+                {paginatedRetreats.map((retreat, index) => (
+                  <div
+                    key={retreat.id}
+                    className="cursor-pointer"
+                    onClick={() => handleRetreatPreview(retreat)}
+                  >
+                    <RetreatCard 
+                      retreat={retreat} 
+                      index={index}
+                      comingSoon={retreat.isSanghos}
+                      viewMode={viewMode}
+                      userLocation={userLocation}
+                    />
+                  </div>
+                ))}
+              </div>
+              
+              {/* Pagination */}
+              <RetreatPagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                totalItems={filteredAndSortedRetreats.length}
+                itemsPerPage={itemsPerPage}
+                onPageChange={setCurrentPage}
+                onItemsPerPageChange={(newItemsPerPage) => {
+                  setItemsPerPage(newItemsPerPage);
+                  setCurrentPage(1);
+                }}
+              />
+            </>
           ) : (
             <NoRetreatsFound resetFilters={resetFilters} loadingError={insightLALoadingError} />
           )}
         </div>
+        
         <FeaturedRetreatCenters />
         
-        {/* Comparison Bar */}
         <ComparisonBar />
       </main>
+      
+      {/* Quick Preview Modal */}
+      <RetreatQuickPreview
+        retreat={previewRetreat}
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
+      />
       
       <Footer />
     </RetreatProvider>
