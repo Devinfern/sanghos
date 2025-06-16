@@ -27,14 +27,14 @@ const RetreatFilters: React.FC<RetreatFiltersProps> = ({
   }
   
   return (
-    <Card className="mb-6 overflow-hidden shadow-md">
+    <Card className="mb-6 overflow-hidden shadow-sm border-sage-200">
       <CardContent className="p-4">
-        <div className="flex items-center">
+        <div className="flex items-center justify-between">
           <div className="flex items-center flex-wrap gap-2">
             <span className="text-sm text-muted-foreground mr-2">Active filters:</span>
             
             {searchQuery && (
-              <Badge variant="secondary" className="gap-1 pl-2 pr-1 py-1">
+              <Badge variant="secondary" className="gap-1 pl-2 pr-1 py-1 bg-sage-100 text-sage-700">
                 Search: {searchQuery.length > 15 ? `${searchQuery.substring(0, 15)}...` : searchQuery}
                 <Button 
                   variant="ghost" 
@@ -48,7 +48,7 @@ const RetreatFilters: React.FC<RetreatFiltersProps> = ({
             )}
             
             {selectedCategory && (
-              <Badge variant="secondary" className="gap-1 pl-2 pr-1 py-1">
+              <Badge variant="secondary" className="gap-1 pl-2 pr-1 py-1 bg-sage-100 text-sage-700">
                 Category: {selectedCategory}
                 <Button 
                   variant="ghost" 
@@ -60,17 +60,17 @@ const RetreatFilters: React.FC<RetreatFiltersProps> = ({
                 </Button>
               </Badge>
             )}
-            
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="text-sm text-muted-foreground hover:text-primary ml-auto"
-              onClick={resetFilters}
-            >
-              <X className="h-3.5 w-3.5 mr-1" />
-              Clear all filters
-            </Button>
           </div>
+          
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-sm text-muted-foreground hover:text-sage-700"
+            onClick={resetFilters}
+          >
+            <X className="h-3.5 w-3.5 mr-1" />
+            Clear all
+          </Button>
         </div>
       </CardContent>
     </Card>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Users } from "lucide-react";
+import { Calendar, MapPin, Users, Clock, Star } from "lucide-react";
 import { Retreat } from "@/lib/data";
 import SanghosIcon from "./SanghosIcon";
 import { motion } from "framer-motion";
@@ -21,18 +21,17 @@ interface RetreatCardProps {
   retreat: Retreat;
   index: number;
   comingSoon?: boolean;
-  viewMode?: "grid" | "list" | "map"; // Add viewMode prop
-  userLocation?: UserLocation | null; // Add userLocation prop
+  viewMode?: "grid" | "list" | "map";
+  userLocation?: UserLocation | null;
 }
 
 const RetreatCard: React.FC<RetreatCardProps> = ({ 
   retreat, 
   index, 
   comingSoon = false,
-  viewMode = "grid", // Default to grid
-  userLocation = null // Default to null
+  viewMode = "grid",
+  userLocation = null
 }) => {
-  // Determine if this is a list view or grid view
   const isList = viewMode === "list";
 
   const formatShortDate = (dateString: string) => {
@@ -44,12 +43,29 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
     }).format(date);
   };
 
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0
+    }).format(price);
+  };
+
   const handleBookingClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (retreat.bookingUrl) {
       window.open(retreat.bookingUrl, '_blank', 'noopener,noreferrer');
     }
   };
+
+  const getDifficultyBadge = () => {
+    // Mock difficulty based on price range
+    if (retreat.price <= 100) return { label: "Beginner", color: "bg-green-100 text-green-700" };
+    if (retreat.price <= 300) return { label: "Intermediate", color: "bg-yellow-100 text-yellow-700" };
+    return { label: "Advanced", color: "bg-red-100 text-red-700" };
+  };
+
+  const difficulty = getDifficultyBadge();
 
   return (
     <motion.div
@@ -62,7 +78,7 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
       )}
     >
       <div className={cn(
-        "bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-sage-100/50",
+        "bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-sage-100/50 group",
         isList ? "flex flex-col md:flex-row w-full" : "flex flex-col h-full"
       )}>
         <div className={cn(
@@ -72,25 +88,47 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
           <OptimizedImage
             src={retreat.image}
             alt={retreat.title}
-            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             aspectRatio="custom" 
             objectFit="cover"
           />
           
-          {comingSoon && (
-            <div className="absolute top-3 left-3">
-              <Badge className="bg-blue-500 text-white font-medium">Coming Soon</Badge>
-            </div>
-          )}
+          {/* Top badges */}
+          <div className="absolute top-3 left-3 flex flex-col gap-2">
+            {comingSoon && (
+              <Badge className="bg-blue-500 text-white font-medium shadow-md">
+                Coming Soon
+              </Badge>
+            )}
+            <Badge className={`${difficulty.color} font-medium shadow-md`}>
+              {difficulty.label}
+            </Badge>
+          </div>
+
+          {/* Price badge */}
+          <div className="absolute top-3 right-3">
+            <Badge className="bg-white/90 text-sage-800 font-semibold shadow-md backdrop-blur-sm">
+              {formatPrice(retreat.price)}
+            </Badge>
+          </div>
           
-          {retreat.isSanghos && (
-            <div className="absolute bottom-3 right-3">
-              <div className="flex items-center bg-white/90 backdrop-blur-sm text-sage-600 rounded-full px-3 py-1 text-xs font-medium">
+          {/* Bottom badges */}
+          <div className="absolute bottom-3 left-3 flex items-center gap-2">
+            {retreat.isSanghos && (
+              <div className="flex items-center bg-white/90 backdrop-blur-sm text-sage-600 rounded-full px-3 py-1 text-xs font-medium shadow-md">
                 <SanghosIcon className="h-3.5 w-3.5 mr-1" />
                 <span>Sanghos</span>
               </div>
-            </div>
-          )}
+            )}
+          </div>
+
+          {/* Duration badge */}
+          <div className="absolute bottom-3 right-3">
+            <Badge variant="secondary" className="bg-white/90 text-sage-700 backdrop-blur-sm shadow-md">
+              <Clock className="h-3 w-3 mr-1" />
+              {retreat.duration}
+            </Badge>
+          </div>
         </div>
         
         <div className={cn(
@@ -99,24 +137,41 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
           "flex-grow justify-between"
         )}>
           <div className="space-y-3 mb-auto">
-            <div className="flex items-center">
-              <Calendar className="h-3.5 w-3.5 mr-1.5 text-sage-500" />
-              <span className="text-sm font-medium text-sage-600">
-                {formatShortDate(retreat.date)}
-              </span>
+            {/* Date and instructor */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Calendar className="h-3.5 w-3.5 mr-1.5 text-sage-500" />
+                <span className="text-sm font-medium text-sage-600">
+                  {formatShortDate(retreat.date)}
+                </span>
+              </div>
+              {retreat.instructor && (
+                <span className="text-xs text-muted-foreground">
+                  with {retreat.instructor.name}
+                </span>
+              )}
             </div>
             
-            <h3 className="text-lg font-semibold text-gray-800 line-clamp-2">
+            <h3 className="text-lg font-semibold text-gray-800 line-clamp-2 group-hover:text-sage-700 transition-colors">
               {retreat.title}
             </h3>
             
             <p className="text-sm text-gray-600 line-clamp-2">
               {retreat.description}
             </p>
+
+            {/* Categories */}
+            <div className="flex flex-wrap gap-1">
+              {retreat.category.slice(0, 2).map((cat) => (
+                <Badge key={cat} variant="outline" className="text-xs bg-sage-50 text-sage-600 border-sage-200">
+                  {cat}
+                </Badge>
+              ))}
+            </div>
           </div>
           
           <div className="mt-4 pt-4 border-t border-gray-100">
-            <div className="flex flex-wrap text-sm text-gray-500 gap-y-2">
+            <div className="flex flex-wrap text-sm text-gray-500 gap-y-2 mb-4">
               <div className="flex items-center w-full sm:w-auto sm:mr-4">
                 <MapPin className="h-3.5 w-3.5 mr-1.5 flex-shrink-0 text-sage-500" />
                 <span className="truncate">{retreat.location.city}, {retreat.location.state}</span>
@@ -130,7 +185,7 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
               </div>
             </div>
             
-            <div className="flex gap-2 mt-4">
+            <div className="flex gap-2">
               <Link to={`/retreat/${retreat.id}`} className="flex-1">
                 <Button 
                   variant="outline" 
@@ -143,7 +198,7 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
               {retreat.bookingUrl && (
                 <Button 
                   onClick={handleBookingClick}
-                  className="bg-sage-600 hover:bg-sage-700 text-white px-6"
+                  className="bg-sage-600 hover:bg-sage-700 text-white px-6 transition-colors"
                 >
                   Book Now
                 </Button>
