@@ -157,18 +157,36 @@ const RetreatPageHeader: React.FC<RetreatPageHeaderProps> = ({
           </div>
         </div>
 
-        {/* Retreat Type Tabs */}
-        <div className="flex items-center justify-center gap-4 mb-8">
-          <Tabs value={activeTab} onValueChange={onTabChange}>
-            <TabsList className="grid w-full grid-cols-3 max-w-md bg-white shadow-lg border border-sage-100 rounded-xl p-1">
-              <TabsTrigger value="all" className="data-[state=active]:bg-sage-100 data-[state=active]:text-sage-700 rounded-lg py-3">
-                All ({retreatCounts.all})
+        {/* Redesigned Retreat Type Tabs */}
+        <div className="flex items-center justify-center mb-12">
+          <Tabs value={activeTab} onValueChange={onTabChange} className="w-full max-w-2xl">
+            <TabsList className="grid w-full grid-cols-3 bg-white shadow-lg border border-sage-100 rounded-2xl p-2 h-auto">
+              <TabsTrigger 
+                value="all" 
+                className="data-[state=active]:bg-sage-100 data-[state=active]:text-sage-700 data-[state=active]:shadow-sm rounded-xl py-4 px-6 text-base font-medium transition-all duration-200 hover:bg-sage-50"
+              >
+                All Retreats
+                <span className="ml-2 text-xs bg-sage-200 text-sage-700 px-2 py-1 rounded-full">
+                  {retreatCounts.all}
+                </span>
               </TabsTrigger>
-              <TabsTrigger value="sanghos" className="data-[state=active]:bg-sage-100 data-[state=active]:text-sage-700 rounded-lg py-3">
-                Sanghos ({retreatCounts.sanghos})
+              <TabsTrigger 
+                value="sanghos" 
+                className="data-[state=active]:bg-sage-100 data-[state=active]:text-sage-700 data-[state=active]:shadow-sm rounded-xl py-4 px-6 text-base font-medium transition-all duration-200 hover:bg-sage-50"
+              >
+                Sanghos
+                <span className="ml-2 text-xs bg-sage-200 text-sage-700 px-2 py-1 rounded-full">
+                  {retreatCounts.sanghos}
+                </span>
               </TabsTrigger>
-              <TabsTrigger value="thirdparty" className="data-[state=active]:bg-sage-100 data-[state=active]:text-sage-700 rounded-lg py-3">
-                Partners ({retreatCounts.thirdparty})
+              <TabsTrigger 
+                value="thirdparty" 
+                className="data-[state=active]:bg-sage-100 data-[state=active]:text-sage-700 data-[state=active]:shadow-sm rounded-xl py-4 px-6 text-base font-medium transition-all duration-200 hover:bg-sage-50"
+              >
+                Partners
+                <span className="ml-2 text-xs bg-sage-200 text-sage-700 px-2 py-1 rounded-full">
+                  {retreatCounts.thirdparty}
+                </span>
               </TabsTrigger>
             </TabsList>
           </Tabs>
