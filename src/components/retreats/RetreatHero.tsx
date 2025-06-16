@@ -177,15 +177,9 @@ const RetreatHero = ({
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
                   Find Your Perfect{" "}
                   <span className="relative inline-block">
-                    <span className="bg-gradient-to-r from-brand-peach via-brand-peach to-white bg-clip-text text-transparent">
+                    <span className="bg-gradient-to-r from-white via-brand-peach to-white bg-clip-text text-transparent font-extrabold">
                       Daylong Retreat
                     </span>
-                    <motion.div
-                      className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-brand-peach to-brand-subtle rounded-full"
-                      initial={{ scaleX: 0 }}
-                      animate={isLoaded ? { scaleX: 1 } : {}}
-                      transition={{ duration: 1, delay: 1.2 }}
-                    />
                   </span>
                 </h1>
               </motion.div>
