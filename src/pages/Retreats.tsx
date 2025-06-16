@@ -79,7 +79,7 @@ const Retreats = () => {
 
       <Header />
       
-      <main className="pt-20 bg-white min-h-100SH flex flex-col">
+      <main className="pt-20 bg-white min-h-100VH flex flex-col">
         <RetreatPageHeader
           activeTab={activeTab}
           searchQuery={searchQuery}
