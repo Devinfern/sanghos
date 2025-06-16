@@ -68,7 +68,7 @@ const App = () => (
           <HostProvider>
             <Toaster />
             <Sonner />
-            <BrowserRouter>
+            <Router>
               <Routes>
                 {/* Public routes */}
                 <Route path="/" element={<Index />} />
@@ -124,7 +124,7 @@ const App = () => (
                 {/* 404 */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
-            </BrowserRouter>
+            </Router>
           </HostProvider>
         </RetreatProvider>
       </AuthProvider>
