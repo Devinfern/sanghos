@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
@@ -11,6 +10,7 @@ import HomeHero from "@/components/home/HomeHero";
 import HomePurpose from "@/components/home/HomePurpose";
 import HomeFeatures from "@/components/home/HomeFeatures";
 import HomeRetreatTypes from "@/components/home/HomeRetreatTypes";
+import HomeWellnessProperties from "@/components/home/HomeWellnessProperties";
 import HomeCommunitySection from "@/components/home/HomeCommunitySection";
 import EventsSection from "@/components/sections/EventsSection";
 import Footer from "@/components/Footer";
@@ -78,6 +78,10 @@ const Index = () => {
           
           <motion.div variants={itemVariants}>
             <HomeRetreatTypes />
+          </motion.div>
+          
+          <motion.div variants={itemVariants}>
+            <HomeWellnessProperties />
           </motion.div>
           
           <motion.div variants={itemVariants}>
