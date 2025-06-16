@@ -1,6 +1,6 @@
 
 import { motion } from 'framer-motion';
-import { MapPin, Star } from 'lucide-react';
+import { MapPin, ExternalLink } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -52,9 +52,15 @@ const RetreatCenterCard = ({ center, index }: RetreatCenterCardProps) => {
             </p>
           </div>
           <div className="mt-auto pt-4 border-t border-sand-100">
-            <Button variant="outline" className="w-full border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white">
-              <Star className="w-4 h-4 mr-2" />
-              View Available Retreats
+            <Button 
+              variant="outline" 
+              className="w-full border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white group"
+              asChild
+            >
+              <a href={center.website} target="_blank" rel="noopener noreferrer">
+                Visit Website
+                <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </a>
             </Button>
           </div>
         </CardContent>
