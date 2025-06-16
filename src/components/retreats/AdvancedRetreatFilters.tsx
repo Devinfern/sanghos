@@ -1,7 +1,6 @@
 
 import { useState } from 'react';
-import { Search, SlidersHorizontal, Grid3X3, List, ArrowUpDown } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { SlidersHorizontal, Grid3X3, List, ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -69,63 +68,49 @@ const AdvancedRetreatFilters = ({
 
   return (
     <div className="space-y-4">
-      {/* Top Row: Search + View Toggle + Sort */}
-      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-        {/* Search Bar */}
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            type="text"
-            placeholder="Search retreats..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-11 w-full rounded-full h-12 bg-white border-sage-200"
-          />
-        </div>
+      {/* Top Row: View Toggle + Sort + Advanced Filters Toggle */}
+      <div className="flex items-center justify-end gap-2">
+        {/* View Toggle */}
+        <Tabs value={viewMode} onValueChange={(value) => setViewMode(value as 'grid' | 'list')}>
+          <TabsList className="bg-white border border-sage-200">
+            <TabsTrigger value="grid" className="data-[state=active]:bg-sage-100">
+              <Grid3X3 className="h-4 w-4" />
+            </TabsTrigger>
+            <TabsTrigger value="list" className="data-[state=active]:bg-sage-100">
+              <List className="h-4 w-4" />
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
 
-        <div className="flex items-center gap-2">
-          {/* View Toggle */}
-          <Tabs value={viewMode} onValueChange={(value) => setViewMode(value as 'grid' | 'list')}>
-            <TabsList className="bg-white border border-sage-200">
-              <TabsTrigger value="grid" className="data-[state=active]:bg-sage-100">
-                <Grid3X3 className="h-4 w-4" />
-              </TabsTrigger>
-              <TabsTrigger value="list" className="data-[state=active]:bg-sage-100">
-                <List className="h-4 w-4" />
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
+        {/* Sort Dropdown */}
+        <Select value={sortBy} onValueChange={setSortBy}>
+          <SelectTrigger className="w-[180px] bg-white border-sage-200">
+            <ArrowUpDown className="h-4 w-4 mr-2" />
+            <SelectValue placeholder="Sort by" />
+          </SelectTrigger>
+          <SelectContent>
+            {sortOptions.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
-          {/* Sort Dropdown */}
-          <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-[180px] bg-white border-sage-200">
-              <ArrowUpDown className="h-4 w-4 mr-2" />
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              {sortOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          {/* Advanced Filters Toggle */}
-          <Collapsible open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
-            <CollapsibleTrigger asChild>
-              <Button variant="outline" className="border-sage-200">
-                <SlidersHorizontal className="h-4 w-4 mr-2" />
-                Filters
-                {hasActiveFilters && (
-                  <Badge variant="default" className="ml-2 h-5 w-5 p-0 text-xs">
-                    {[selectedCategory, selectedLocation !== 'All', selectedPriceRange !== 'All', startDate, endDate].filter(Boolean).length}
-                  </Badge>
-                )}
-              </Button>
-            </CollapsibleTrigger>
-          </Collapsible>
-        </div>
+        {/* Advanced Filters Toggle */}
+        <Collapsible open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
+          <CollapsibleTrigger asChild>
+            <Button variant="outline" className="border-sage-200">
+              <SlidersHorizontal className="h-4 w-4 mr-2" />
+              Filters
+              {hasActiveFilters && (
+                <Badge variant="default" className="ml-2 h-5 w-5 p-0 text-xs">
+                  {[selectedCategory, selectedLocation !== 'All', selectedPriceRange !== 'All', startDate, endDate].filter(Boolean).length}
+                </Badge>
+              )}
+            </Button>
+          </CollapsibleTrigger>
+        </Collapsible>
       </div>
 
       {/* Advanced Filters Panel */}
