@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { fetchSanghosRetreats } from '@/lib/data';
@@ -6,6 +5,7 @@ import { fetchInsightLAEvents } from '@/lib/insightEvents';
 import { getUserLocation, sortByDistance, type UserLocation } from '@/lib/utils/distanceUtils';
 
 export type ViewMode = 'grid' | 'list' | 'map';
+export type { UserLocation };
 
 export const useRetreatPageData = () => {
   // Data state

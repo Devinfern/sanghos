@@ -69,6 +69,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <Router>
+            <ScrollToTop />
             <HostProvider>
               <Routes>
                 {/* Public routes */}
