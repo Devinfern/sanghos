@@ -177,7 +177,7 @@ const RetreatHero = ({
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
                   Find Your Perfect{" "}
                   <span className="relative inline-block">
-                    <span className="bg-gradient-to-r from-white via-brand-peach to-white bg-clip-text text-transparent font-extrabold">
+                    <span className="bg-gradient-to-r from-white via-brand-peach via-brand-peach to-white bg-clip-text text-transparent font-extrabold">
                       Daylong Retreat
                     </span>
                   </span>
