@@ -215,6 +215,11 @@ const Retreats = () => {
     setIsPreviewOpen(true);
   };
 
+  // Helper function to get the correct view mode for components that don't support map
+  const getCardViewMode = (viewMode: ViewMode): 'grid' | 'list' => {
+    return viewMode === 'map' ? 'grid' : viewMode;
+  };
+
   return (
     <RetreatProvider>
       <Helmet>
@@ -268,8 +273,8 @@ const Retreats = () => {
             setStartDate={setStartDate}
             endDate={endDate}
             setEndDate={setEndDate}
-            viewMode={viewMode}
-            setViewMode={setViewMode}
+            viewMode={getCardViewMode(viewMode)}
+            setViewMode={(mode) => setViewMode(mode as ViewMode)}
             sortBy={sortBy}
             setSortBy={setSortBy}
             allCategories={allCategories}
@@ -343,7 +348,7 @@ const Retreats = () => {
                 : "flex flex-col space-y-4"
             )}>
               {Array.from({ length: 6 }).map((_, index) => (
-                <RetreatCardSkeleton key={index} viewMode={viewMode === 'map' ? 'grid' : viewMode} />
+                <RetreatCardSkeleton key={index} viewMode={getCardViewMode(viewMode)} />
               ))}
             </div>
           ) : viewMode === 'map' ? (
@@ -372,7 +377,7 @@ const Retreats = () => {
                       retreat={retreat} 
                       index={index}
                       comingSoon={retreat.isSanghos}
-                      viewMode={viewMode === 'map' ? 'grid' : viewMode}
+                      viewMode={getCardViewMode(viewMode)}
                       userLocation={userLocation}
                     />
                   </div>

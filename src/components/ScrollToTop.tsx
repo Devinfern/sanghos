@@ -6,33 +6,59 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    // Use requestAnimationFrame to ensure the scroll happens after the DOM update
+    // Multiple approaches to ensure scroll works across different scenarios
     const scrollToTop = () => {
+      // Method 1: Standard window scroll
       window.scrollTo(0, 0);
+      
+      // Method 2: Document element scroll
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
       
-      // Additional check to ensure scroll worked
-      if (window.pageYOffset !== 0 || document.documentElement.scrollTop !== 0) {
-        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-      }
+      // Method 3: Smooth scroll with immediate behavior
+      window.scrollTo({ 
+        top: 0, 
+        left: 0, 
+        behavior: 'auto' 
+      });
     };
 
     // Execute immediately
     scrollToTop();
     
-    // Also execute on next frame to handle any delayed renders
-    requestAnimationFrame(() => {
+    // Execute after React has rendered (next tick)
+    const immediateTimeout = setTimeout(() => {
       scrollToTop();
+    }, 0);
+    
+    // Execute after DOM updates (next frame)
+    const frameId = requestAnimationFrame(() => {
+      scrollToTop();
+      
+      // Double-check after another frame for complex layouts
+      requestAnimationFrame(() => {
+        scrollToTop();
+      });
     });
     
-    // And one more time after a short delay for extra safety
-    const timeoutId = setTimeout(() => {
+    // Final safety net for stubborn cases
+    const delayedTimeout = setTimeout(() => {
       scrollToTop();
+      
+      // Verify scroll position and force if needed
+      if (window.pageYOffset > 0 || document.documentElement.scrollTop > 0) {
+        console.log('Scroll position not reset, forcing scroll to top');
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      }
     }, 100);
 
+    // Cleanup function
     return () => {
-      clearTimeout(timeoutId);
+      clearTimeout(immediateTimeout);
+      clearTimeout(delayedTimeout);
+      cancelAnimationFrame(frameId);
     };
   }, [pathname]);
 
