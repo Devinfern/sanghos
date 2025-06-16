@@ -1,14 +1,14 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Users, Clock, Star } from "lucide-react";
+import { Calendar, MapPin, Users, Clock, Star, Heart, Scale } from "lucide-react";
 import { Retreat } from "@/lib/data";
 import SanghosIcon from "./SanghosIcon";
 import { motion } from "framer-motion";
 import OptimizedImage from "./OptimizedImage";
+import { useRetreatContext } from "@/contexts/RetreatContext";
 
 // Location interface for the userLocation prop
 interface UserLocation {
@@ -33,6 +33,15 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
   userLocation = null
 }) => {
   const isList = viewMode === "list";
+  const { 
+    isFavorite, 
+    addToFavorites, 
+    removeFromFavorites,
+    addToComparison,
+    removeFromComparison,
+    isInComparison,
+    comparison
+  } = useRetreatContext();
 
   const formatShortDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -67,6 +76,28 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
 
   const difficulty = getDifficultyBadge();
 
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isFavorite(retreat.id)) {
+      removeFromFavorites(retreat.id);
+    } else {
+      addToFavorites(retreat.id);
+    }
+  };
+
+  const handleComparisonClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isInComparison(retreat.id)) {
+      removeFromComparison(retreat.id);
+    } else if (comparison.length < 3) {
+      addToComparison(retreat);
+    }
+  };
+
+  const isComparisonFull = comparison.length >= 3 && !isInComparison(retreat.id);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -92,6 +123,39 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
             aspectRatio="custom" 
             objectFit="cover"
           />
+          
+          {/* Action buttons overlay */}
+          <div className="absolute top-3 right-3 flex flex-col gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleFavoriteClick}
+              className={cn(
+                "h-8 w-8 p-0 rounded-full backdrop-blur-sm transition-colors",
+                isFavorite(retreat.id) 
+                  ? "bg-red-500 text-white hover:bg-red-600" 
+                  : "bg-white/90 text-gray-600 hover:bg-white hover:text-red-500"
+              )}
+            >
+              <Heart className={cn("h-4 w-4", isFavorite(retreat.id) && "fill-current")} />
+            </Button>
+            
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleComparisonClick}
+              disabled={isComparisonFull}
+              className={cn(
+                "h-8 w-8 p-0 rounded-full backdrop-blur-sm transition-colors",
+                isInComparison(retreat.id)
+                  ? "bg-blue-500 text-white hover:bg-blue-600"
+                  : "bg-white/90 text-gray-600 hover:bg-white hover:text-blue-500",
+                isComparisonFull && "opacity-50 cursor-not-allowed"
+              )}
+            >
+              <Scale className="h-4 w-4" />
+            </Button>
+          </div>
           
           {/* Top badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">

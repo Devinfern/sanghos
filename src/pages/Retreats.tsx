@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet";
 import { cn } from "@/lib/utils";
@@ -9,10 +8,15 @@ import RetreatHero from "@/components/retreats/RetreatHero";
 import AdvancedRetreatFilters from "@/components/retreats/AdvancedRetreatFilters";
 import RetreatResultsHeader from "@/components/retreats/RetreatResults";
 import RetreatLoadingState from "@/components/retreats/RetreatLoadingState";
+import RetreatCardSkeleton from "@/components/retreats/RetreatCardSkeleton";
 import NoRetreatsFound from "@/components/retreats/NoRetreatsFound";
+import RetreatBreadcrumb from "@/components/retreats/RetreatBreadcrumb";
+import RecentlyViewedSection from "@/components/retreats/RecentlyViewedSection";
+import ComparisonBar from "@/components/retreats/ComparisonBar";
 import { fetchSanghosRetreats } from "@/lib/data";
 import { fetchInsightLAEvents } from "@/lib/insightEvents";
 import FeaturedRetreatCenters from "@/components/FeaturedRetreatCenters";
+import { RetreatProvider } from "@/contexts/RetreatContext";
 
 const Retreats = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -168,7 +172,7 @@ const Retreats = () => {
   };
 
   return (
-    <>
+    <RetreatProvider>
       <Helmet>
         <title>Retreats | Sanghos</title>
         <meta 
@@ -189,6 +193,16 @@ const Retreats = () => {
         />
         
         <div className="container px-4 md:px-6 py-10 flex-grow bg-sage-50/30">
+          {/* Breadcrumb Navigation */}
+          <RetreatBreadcrumb 
+            activeTab={activeTab}
+            searchQuery={searchQuery}
+            selectedCategory={selectedCategory}
+          />
+
+          {/* Recently Viewed Section */}
+          <RecentlyViewedSection />
+
           {/* Advanced Filters section */}
           <AdvancedRetreatFilters 
             searchQuery={searchQuery}
@@ -220,11 +234,16 @@ const Retreats = () => {
 
           {/* Content section */}
           {isLoadingEvents ? (
-            <RetreatLoadingState message={
-              insightLALoadingError 
-                ? "Loading retreats... (InsightLA retreats unavailable)" 
-                : "Loading retreats..."
-            } />
+            <div className={cn(
+              "gap-6 mb-10",
+              viewMode === 'grid' 
+                ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" 
+                : "flex flex-col space-y-4"
+            )}>
+              {Array.from({ length: 6 }).map((_, index) => (
+                <RetreatCardSkeleton key={index} viewMode={viewMode} />
+              ))}
+            </div>
           ) : filteredAndSortedRetreats.length > 0 ? (
             <div 
               className={cn(
@@ -250,10 +269,13 @@ const Retreats = () => {
           )}
         </div>
         <FeaturedRetreatCenters />
+        
+        {/* Comparison Bar */}
+        <ComparisonBar />
       </main>
       
       <Footer />
-    </>
+    </RetreatProvider>
   );
 };
 
