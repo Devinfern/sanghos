@@ -13,7 +13,6 @@ interface RetreatPageHeaderProps {
     sanghos: number;
     thirdparty: number;
   };
-  onSearch: (query: string) => void;
   onCategorySelect: (category: string) => void;
   onTabChange: (tab: string) => void;
 }
@@ -23,14 +22,12 @@ const RetreatPageHeader: React.FC<RetreatPageHeaderProps> = ({
   searchQuery,
   selectedCategory,
   retreatCounts,
-  onSearch,
   onCategorySelect,
   onTabChange
 }) => {
   return (
     <>
       <RetreatHero 
-        onSearch={onSearch} 
         onCategorySelect={onCategorySelect}
         onTabChange={onTabChange}
         retreatCounts={retreatCounts}

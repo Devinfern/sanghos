@@ -85,7 +85,6 @@ const Retreats = () => {
           searchQuery={searchQuery}
           selectedCategory={selectedCategory}
           retreatCounts={retreatCounts}
-          onSearch={handleSearch}
           onCategorySelect={handleCategorySelect}
           onTabChange={handleTabChange}
         />
@@ -112,6 +111,7 @@ const Retreats = () => {
             allRetreats={allRetreats}
             resetFilters={resetFilters}
             getCardViewMode={getCardViewMode}
+            onSearch={handleSearch}
           />
 
           <RetreatPageContent

@@ -1,5 +1,8 @@
 
 import React from 'react';
+import { Search, ChevronRight } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { ViewMode } from '@/hooks/useRetreatPageData';
 import AdvancedRetreatFilters from './AdvancedRetreatFilters';
 import RetreatSearchSuggestions from './RetreatSearchSuggestions';
@@ -25,6 +28,7 @@ interface RetreatPageFiltersProps {
   allRetreats: any[];
   resetFilters: () => void;
   getCardViewMode: (viewMode: ViewMode) => 'grid' | 'list';
+  onSearch: (query: string) => void;
 }
 
 const RetreatPageFilters: React.FC<RetreatPageFiltersProps> = ({
@@ -47,17 +51,46 @@ const RetreatPageFilters: React.FC<RetreatPageFiltersProps> = ({
   allCategories,
   allRetreats,
   resetFilters,
-  getCardViewMode
+  getCardViewMode,
+  onSearch
 }) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSearch(searchQuery);
+  };
+
   return (
     <div className="space-y-6">
+      {/* Main search bar */}
+      <div className="mb-6">
+        <form onSubmit={handleSubmit} className="relative max-w-2xl mx-auto">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
+            <Input 
+              type="search" 
+              placeholder="Search retreats by name, location, or type..." 
+              className="pl-10 py-6 bg-white border-0 shadow-md hover:shadow-lg transition-shadow duration-300" 
+              value={searchQuery} 
+              onChange={e => setSearchQuery(e.target.value)} 
+            />
+            <Button 
+              type="submit" 
+              className="absolute right-1.5 top-1/2 transform -translate-y-1/2 group"
+            >
+              Search
+              <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Button>
+          </div>
+        </form>
+      </div>
+
       {/* Enhanced search with suggestions */}
       <div className="mb-6">
         <RetreatSearchSuggestions
           value={searchQuery}
           onChange={setSearchQuery}
           retreats={allRetreats}
-          className="max-w-2xl"
+          className="max-w-2xl mx-auto"
         />
       </div>
 

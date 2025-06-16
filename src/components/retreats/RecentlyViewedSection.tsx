@@ -21,9 +21,9 @@ const RecentlyViewedSection: React.FC = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {recentlyViewed.slice(0, 3).map((retreat, index) => (
-            <div key={retreat.id} className="transform scale-95">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+          {recentlyViewed.slice(0, 5).map((retreat, index) => (
+            <div key={retreat.id} className="transform scale-90">
               <RetreatCard 
                 retreat={retreat} 
                 index={index}

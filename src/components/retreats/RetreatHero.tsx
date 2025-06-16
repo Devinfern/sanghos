@@ -1,8 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Search, ChevronRight, Info, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { ChevronRight, Info, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SanghosIcon from "@/components/SanghosIcon";
@@ -10,7 +8,6 @@ import SanghosIcon from "@/components/SanghosIcon";
 const categories = ["Meditation", "Yoga", "Breathwork", "Sound Healing", "Forest Therapy", "Mindfulness"];
 
 interface RetreatHeroProps {
-  onSearch: (query: string) => void;
   onCategorySelect: (category: string) => void;
   onTabChange?: (tab: string) => void;
   retreatCounts?: {
@@ -22,7 +19,6 @@ interface RetreatHeroProps {
 }
 
 const RetreatHero = ({
-  onSearch,
   onCategorySelect,
   onTabChange,
   retreatCounts = {
@@ -32,38 +28,12 @@ const RetreatHero = ({
   },
   activeTab = "all"
 }: RetreatHeroProps) => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [expandedSearch, setExpandedSearch] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-
-  // If the user scrolls down more than 300px, we'll consider the search "expanded"
-  useEffect(() => {
-    const handleScroll = () => {
-      setExpandedSearch(window.scrollY > 300);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   // Animation effect when component mounts
   useEffect(() => {
     setIsLoaded(true);
   }, []);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSearch(searchQuery);
-
-    // Automatically scroll to results
-    if (!expandedSearch) {
-      setTimeout(() => {
-        window.scrollTo({
-          top: 450,
-          behavior: 'smooth'
-        });
-      }, 100);
-    }
-  };
 
   return (
     <div className="relative overflow-hidden bg-gradient-to-r from-sage-50 to-sage-100 pt-16 pb-12 md:pt-20 md:pb-14">
@@ -143,31 +113,6 @@ const RetreatHero = ({
               </Tabs>
             </div>
           )}
-          
-          <form 
-            onSubmit={handleSubmit} 
-            className={`relative max-w-xl mx-auto mb-6 transition-all duration-700 delay-500 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-            }`}
-          >
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-              <Input 
-                type="search" 
-                placeholder="Search retreats by name, location, or type..." 
-                className="pl-10 py-6 bg-white border-0 shadow-md hover:shadow-lg transition-shadow duration-300" 
-                value={searchQuery} 
-                onChange={e => setSearchQuery(e.target.value)} 
-              />
-              <Button 
-                type="submit" 
-                className="absolute right-1.5 top-1/2 transform -translate-y-1/2 group"
-              >
-                Search
-                <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-              </Button>
-            </div>
-          </form>
           
           <div 
             className={`flex flex-wrap justify-center gap-2.5 transition-all duration-700 delay-600 ${
