@@ -37,6 +37,12 @@ const RetreatPageHeader: React.FC<RetreatPageHeaderProps> = ({
     onSearch(searchQuery);
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      onSearch(searchQuery);
+    }
+  };
+
   return (
     <>
       <RetreatHero 
@@ -47,27 +53,30 @@ const RetreatPageHeader: React.FC<RetreatPageHeaderProps> = ({
       />
       
       <div className="container px-4 md:px-6 py-10 flex-grow bg-sage-50/30">
-        {/* Search Bar */}
+        {/* Redesigned Search Bar */}
         <div className="mb-8">
-          <form onSubmit={handleSubmit} className="relative max-w-2xl mx-auto">
-            <div className="relative group">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 z-10" />
+          <div className="relative max-w-2xl mx-auto">
+            <div className="relative flex items-center bg-white rounded-2xl shadow-sm border border-gray-200 hover:shadow-md focus-within:shadow-lg focus-within:border-sage-300 transition-all duration-300">
+              <Search className="absolute left-5 text-gray-400 h-5 w-5" />
               <Input 
                 type="search" 
                 placeholder="Search retreats by name, location, or type..." 
-                className="pl-12 pr-20 py-4 bg-white border border-gray-200 rounded-full shadow-sm hover:shadow-md focus:shadow-lg transition-all duration-300 focus:border-sage-300 text-base" 
+                className="flex-1 pl-14 pr-4 py-4 bg-transparent border-0 rounded-2xl focus:ring-0 focus:outline-none text-base placeholder:text-gray-500" 
                 value={searchQuery} 
-                onChange={e => setSearchQuery(e.target.value)} 
+                onChange={e => setSearchQuery(e.target.value)}
+                onKeyPress={handleKeyPress}
               />
               <Button 
-                type="submit" 
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-sage-600 hover:bg-sage-700 text-white px-6 py-2 rounded-full transition-colors duration-200 shadow-sm hover:shadow-md"
+                type="button"
+                onClick={() => onSearch(searchQuery)}
+                variant="ghost"
                 size="sm"
+                className="mr-2 text-sage-600 hover:text-sage-700 hover:bg-sage-50 rounded-xl px-4 py-2 transition-colors duration-200"
               >
                 Search
               </Button>
             </div>
-          </form>
+          </div>
         </div>
 
         <RetreatBreadcrumb 
