@@ -177,7 +177,7 @@ const RetreatHero = ({
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
                   Find Your Perfect{" "}
                   <span className="relative inline-block">
-                    <span className="bg-gradient-to-r from-brand-peach via-white to-brand-subtle bg-clip-text text-transparent">
+                    <span className="bg-gradient-to-r from-brand-peach via-brand-peach to-white bg-clip-text text-transparent">
                       Daylong Retreat
                     </span>
                     <motion.div
@@ -231,7 +231,7 @@ const RetreatHero = ({
               </motion.div>
             </motion.div>
 
-            {/* Right Column - Journey Visualization */}
+            {/* Right Column - Journey Steps */}
             <motion.div
               className="hidden lg:block relative"
               initial="hidden"
@@ -242,58 +242,50 @@ const RetreatHero = ({
                 variants={itemVariants}
                 className="relative"
               >
-                {/* Journey Steps */}
-                <div className="space-y-8">
+                {/* Journey Steps - Properly Aligned */}
+                <div className="space-y-6">
                   <motion.div
-                    className="flex items-center space-x-4 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20"
+                    className="flex items-start space-x-4 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20"
                     whileHover={{ x: 10, backgroundColor: "rgba(255,255,255,0.15)" }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
                     <div className="flex-shrink-0 w-12 h-12 bg-brand-peach rounded-full flex items-center justify-center">
-                      <span className="text-white font-bold">1</span>
+                      <span className="text-white font-bold text-lg">1</span>
                     </div>
-                    <div>
-                      <h3 className="text-white font-semibold mb-1">Choose Your Experience</h3>
-                      <p className="text-white/70 text-sm">Browse curated retreats that match your wellness goals</p>
+                    <div className="pt-1">
+                      <h3 className="text-white font-semibold mb-2 text-lg">Choose Your Experience</h3>
+                      <p className="text-white/70 text-sm leading-relaxed">Browse curated retreats that match your wellness goals</p>
                     </div>
                   </motion.div>
 
                   <motion.div
-                    className="flex items-center space-x-4 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 ml-8"
+                    className="flex items-start space-x-4 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20"
                     whileHover={{ x: 10, backgroundColor: "rgba(255,255,255,0.15)" }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
                     <div className="flex-shrink-0 w-12 h-12 bg-brand-peach rounded-full flex items-center justify-center">
-                      <span className="text-white font-bold">2</span>
+                      <span className="text-white font-bold text-lg">2</span>
                     </div>
-                    <div>
-                      <h3 className="text-white font-semibold mb-1">Connect & Prepare</h3>
-                      <p className="text-white/70 text-sm">Join your retreat community and get ready for transformation</p>
+                    <div className="pt-1">
+                      <h3 className="text-white font-semibold mb-2 text-lg">Connect & Prepare</h3>
+                      <p className="text-white/70 text-sm leading-relaxed">Join your retreat community and get ready for transformation</p>
                     </div>
                   </motion.div>
 
                   <motion.div
-                    className="flex items-center space-x-4 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20"
+                    className="flex items-start space-x-4 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20"
                     whileHover={{ x: 10, backgroundColor: "rgba(255,255,255,0.15)" }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
                     <div className="flex-shrink-0 w-12 h-12 bg-brand-peach rounded-full flex items-center justify-center">
-                      <span className="text-white font-bold">3</span>
+                      <span className="text-white font-bold text-lg">3</span>
                     </div>
-                    <div>
-                      <h3 className="text-white font-semibold mb-1">Experience & Grow</h3>
-                      <p className="text-white/70 text-sm">Immerse yourself in mindful practices and natural beauty</p>
+                    <div className="pt-1">
+                      <h3 className="text-white font-semibold mb-2 text-lg">Experience & Grow</h3>
+                      <p className="text-white/70 text-sm leading-relaxed">Immerse yourself in mindful practices and natural beauty</p>
                     </div>
                   </motion.div>
                 </div>
-
-                {/* Connecting Lines */}
-                <motion.div
-                  className="absolute left-6 top-20 bottom-20 w-0.5 bg-gradient-to-b from-brand-peach/50 to-transparent"
-                  initial={{ scaleY: 0 }}
-                  animate={isLoaded ? { scaleY: 1 } : {}}
-                  transition={{ duration: 1.5, delay: 1 }}
-                />
               </motion.div>
             </motion.div>
           </div>
