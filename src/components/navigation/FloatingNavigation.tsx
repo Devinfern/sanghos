@@ -233,80 +233,80 @@ export const FloatingNavigation = ({ isLoggedIn, onCommunityClick }: FloatingNav
                     {item.label}
                   </Link>
                 )}
+
+                {/* Individual Button Positioned Dropdown */}
+                <AnimatePresence>
+                  {activeMenu === item.id && megaMenuData[item.id] && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 5, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 5, scale: 0.98 }}
+                      transition={{ duration: 0.15, ease: "easeOut" }}
+                      className="absolute top-full left-0 mt-1 z-40"
+                      onMouseEnter={() => handleMouseEnter(activeMenu)}
+                      onMouseLeave={handleMouseLeave}
+                    >
+                      {(() => {
+                        const sections = megaMenuData[item.id];
+                        const layoutConfig = getLayoutConfig(sections);
+                        
+                        return (
+                          <div 
+                            className="bg-white/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl shadow-black/10 p-6"
+                            style={{ width: `${layoutConfig.width}px` }}
+                          >
+                            <div 
+                              className={cn(
+                                "gap-6",
+                                layoutConfig.useSingleColumn ? "space-y-6" : "grid grid-cols-2 gap-8"
+                              )}
+                            >
+                              {sections.map((section, sectionIndex) => (
+                                <div key={sectionIndex} className="space-y-4">
+                                  <h3 className="text-sm font-semibold text-brand-slate/60 uppercase tracking-wide">
+                                    {section.title}
+                                  </h3>
+                                  <div className="space-y-2">
+                                    {section.items.map((item, itemIndex) => (
+                                      <Link
+                                        key={itemIndex}
+                                        to={item.href}
+                                        className="group flex items-start space-x-3 p-3 rounded-xl hover:bg-brand-primary/5 transition-all duration-200"
+                                      >
+                                        <div className="flex-shrink-0 w-8 h-8 bg-brand-primary/10 rounded-lg flex items-center justify-center group-hover:bg-brand-primary/20 transition-colors">
+                                          <item.icon className="h-4 w-4 text-brand-primary" />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                          <div className="flex items-center space-x-2">
+                                            <h4 className="text-sm font-medium text-brand-dark group-hover:text-brand-primary transition-colors">
+                                              {item.title}
+                                            </h4>
+                                            {item.badge && (
+                                              <span className="px-2 py-0.5 text-xs font-medium bg-brand-primary/10 text-brand-primary rounded-full">
+                                                {item.badge}
+                                              </span>
+                                            )}
+                                          </div>
+                                          <p className="text-xs text-brand-slate/70 mt-0.5 leading-relaxed">
+                                            {item.description}
+                                          </p>
+                                        </div>
+                                      </Link>
+                                    ))}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      })()}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             ))}
           </div>
         </div>
-
-        {/* Adaptive Mega Menu Dropdown */}
-        <AnimatePresence>
-          {activeMenu && megaMenuData[activeMenu] && (
-            <motion.div
-              initial={{ opacity: 0, y: 5, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 5, scale: 0.98 }}
-              transition={{ duration: 0.15, ease: "easeOut" }}
-              className="absolute top-full left-1/2 -translate-x-1/2 mt-1 z-40"
-              onMouseEnter={() => handleMouseEnter(activeMenu)}
-              onMouseLeave={handleMouseLeave}
-            >
-              {(() => {
-                const sections = megaMenuData[activeMenu];
-                const layoutConfig = getLayoutConfig(sections);
-                
-                return (
-                  <div 
-                    className="bg-white/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl shadow-black/10 p-6"
-                    style={{ width: `${layoutConfig.width}px` }}
-                  >
-                    <div 
-                      className={cn(
-                        "gap-6",
-                        layoutConfig.useSingleColumn ? "space-y-6" : "grid grid-cols-2 gap-8"
-                      )}
-                    >
-                      {sections.map((section, sectionIndex) => (
-                        <div key={sectionIndex} className="space-y-4">
-                          <h3 className="text-sm font-semibold text-brand-slate/60 uppercase tracking-wide">
-                            {section.title}
-                          </h3>
-                          <div className="space-y-2">
-                            {section.items.map((item, itemIndex) => (
-                              <Link
-                                key={itemIndex}
-                                to={item.href}
-                                className="group flex items-start space-x-3 p-3 rounded-xl hover:bg-brand-primary/5 transition-all duration-200"
-                              >
-                                <div className="flex-shrink-0 w-8 h-8 bg-brand-primary/10 rounded-lg flex items-center justify-center group-hover:bg-brand-primary/20 transition-colors">
-                                  <item.icon className="h-4 w-4 text-brand-primary" />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-center space-x-2">
-                                    <h4 className="text-sm font-medium text-brand-dark group-hover:text-brand-primary transition-colors">
-                                      {item.title}
-                                    </h4>
-                                    {item.badge && (
-                                      <span className="px-2 py-0.5 text-xs font-medium bg-brand-primary/10 text-brand-primary rounded-full">
-                                        {item.badge}
-                                      </span>
-                                    )}
-                                  </div>
-                                  <p className="text-xs text-brand-slate/70 mt-0.5 leading-relaxed">
-                                    {item.description}
-                                  </p>
-                                </div>
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })()}
-            </motion.div>
-          )}
-        </AnimatePresence>
       </motion.nav>
     </div>
   );
