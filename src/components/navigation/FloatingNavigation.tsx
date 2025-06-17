@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -156,6 +157,7 @@ interface FloatingNavigationProps {
 export const FloatingNavigation = ({ isLoggedIn, onCommunityClick }: FloatingNavigationProps) => {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout>();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleMouseEnter = (menu: string) => {
     if (timeoutRef.current) {
@@ -186,7 +188,7 @@ export const FloatingNavigation = ({ isLoggedIn, onCommunityClick }: FloatingNav
   ];
 
   return (
-    <div className="hidden lg:flex items-center justify-center relative">
+    <div className="hidden lg:flex items-center justify-center relative" ref={containerRef}>
       {/* Main Floating Navigation Pill */}
       <motion.nav
         initial={{ opacity: 0, y: -10 }}
@@ -230,77 +232,82 @@ export const FloatingNavigation = ({ isLoggedIn, onCommunityClick }: FloatingNav
             ))}
           </div>
         </div>
-      </motion.nav>
 
-      {/* Full-Width Mega Menu Dropdown - Positioned outside navigation pill */}
-      <AnimatePresence>
-        {activeMenu && megaMenuData[activeMenu] && (
-          <motion.div
-            initial={{ opacity: 0, y: 5, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 5, scale: 0.98 }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
-            className="absolute top-full left-1/2 -translate-x-1/2 mt-1 z-40 w-full max-w-6xl"
-            onMouseEnter={() => handleMouseEnter(activeMenu)}
-            onMouseLeave={handleMouseLeave}
-          >
-            {(() => {
-              const sections = megaMenuData[activeMenu];
-              const layoutConfig = getLayoutConfig(sections);
-              
-              return (
-                <div className="bg-white/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl shadow-black/10 p-8 mx-4">
-                  {/* Active menu indicator */}
-                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white/95 border-l border-t border-white/20 rotate-45 backdrop-blur-xl"></div>
-                  
-                  <div 
-                    className={cn(
-                      "gap-8",
-                      layoutConfig.useSingleColumn ? "space-y-8" : "grid grid-cols-2 gap-12"
-                    )}
-                  >
-                    {sections.map((section, sectionIndex) => (
-                      <div key={sectionIndex} className="space-y-6">
-                        <h3 className="text-sm font-semibold text-brand-slate/60 uppercase tracking-wide">
-                          {section.title}
-                        </h3>
-                        <div className="space-y-3">
-                          {section.items.map((item, itemIndex) => (
-                            <Link
-                              key={itemIndex}
-                              to={item.href}
-                              className="group flex items-start space-x-4 p-4 rounded-xl hover:bg-brand-primary/5 transition-all duration-200"
-                            >
-                              <div className="flex-shrink-0 w-10 h-10 bg-brand-primary/10 rounded-lg flex items-center justify-center group-hover:bg-brand-primary/20 transition-colors">
-                                <item.icon className="h-5 w-5 text-brand-primary" />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center space-x-2">
-                                  <h4 className="text-sm font-medium text-brand-dark group-hover:text-brand-primary transition-colors">
-                                    {item.title}
-                                  </h4>
-                                  {item.badge && (
-                                    <span className="px-2 py-0.5 text-xs font-medium bg-brand-primary/10 text-brand-primary rounded-full">
-                                      {item.badge}
-                                    </span>
-                                  )}
+        {/* Full-Width Mega Menu Dropdown - Positioned relative to the entire navigation container */}
+        <AnimatePresence>
+          {activeMenu && megaMenuData[activeMenu] && (
+            <motion.div
+              initial={{ opacity: 0, y: 5, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 5, scale: 0.98 }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
+              className="absolute top-full left-1/2 -translate-x-1/2 mt-1 z-40 w-screen max-w-5xl"
+              style={{
+                left: '50%',
+                transform: 'translateX(-50%)',
+                minWidth: '800px'
+              }}
+              onMouseEnter={() => handleMouseEnter(activeMenu)}
+              onMouseLeave={handleMouseLeave}
+            >
+              {(() => {
+                const sections = megaMenuData[activeMenu];
+                const layoutConfig = getLayoutConfig(sections);
+                
+                return (
+                  <div className="bg-white/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl shadow-black/10 p-8 mx-4">
+                    {/* Active menu indicator */}
+                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white/95 border-l border-t border-white/20 rotate-45 backdrop-blur-xl"></div>
+                    
+                    <div 
+                      className={cn(
+                        "gap-8",
+                        layoutConfig.useSingleColumn ? "space-y-8" : "grid grid-cols-2 gap-12"
+                      )}
+                    >
+                      {sections.map((section, sectionIndex) => (
+                        <div key={sectionIndex} className="space-y-6">
+                          <h3 className="text-sm font-semibold text-brand-slate/60 uppercase tracking-wide">
+                            {section.title}
+                          </h3>
+                          <div className="space-y-3">
+                            {section.items.map((item, itemIndex) => (
+                              <Link
+                                key={itemIndex}
+                                to={item.href}
+                                className="group flex items-start space-x-4 p-4 rounded-xl hover:bg-brand-primary/5 transition-all duration-200"
+                              >
+                                <div className="flex-shrink-0 w-10 h-10 bg-brand-primary/10 rounded-lg flex items-center justify-center group-hover:bg-brand-primary/20 transition-colors">
+                                  <item.icon className="h-5 w-5 text-brand-primary" />
                                 </div>
-                                <p className="text-xs text-brand-slate/70 mt-1 leading-relaxed">
-                                  {item.description}
-                                </p>
-                              </div>
-                            </Link>
-                          ))}
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center space-x-2">
+                                    <h4 className="text-sm font-medium text-brand-dark group-hover:text-brand-primary transition-colors">
+                                      {item.title}
+                                    </h4>
+                                    {item.badge && (
+                                      <span className="px-2 py-0.5 text-xs font-medium bg-brand-primary/10 text-brand-primary rounded-full">
+                                        {item.badge}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <p className="text-xs text-brand-slate/70 mt-1 leading-relaxed">
+                                    {item.description}
+                                  </p>
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
-              );
-            })()}
-          </motion.div>
-        )}
-      </AnimatePresence>
+                );
+              })()}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.nav>
     </div>
   );
 };
