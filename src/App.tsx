@@ -1,4 +1,5 @@
 
+
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -23,11 +24,11 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <HostProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <HostProvider>
             <ScrollToTop />
             <Routes>
               <Route path="/" element={<Index />} />
@@ -37,11 +38,12 @@ const App = () => (
               <Route path="/blog/:id" element={<BlogPost />} />
               <Route path="/blog/mindfulness-news-june-2025" element={<BlogPostMindfulnessNews />} />
             </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </HostProvider>
+          </HostProvider>
+        </BrowserRouter>
+      </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>
 );
 
 export default App;
+
