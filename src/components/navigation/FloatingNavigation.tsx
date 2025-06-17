@@ -252,7 +252,7 @@ export const FloatingNavigation = ({ isLoggedIn, onCommunityClick }: FloatingNav
                         
                         return (
                           <div 
-                            className="bg-white/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl shadow-black/10 p-6"
+                            className="bg-white backdrop-blur-xl border border-gray-200/50 rounded-2xl shadow-2xl shadow-black/15 p-6"
                             style={{ width: `${layoutConfig.width}px` }}
                           >
                             <div 
