@@ -20,6 +20,11 @@ import BlogPost from "./pages/BlogPost";
 import BlogPostMindfulnessNews from "./pages/BlogPostMindfulnessNews";
 import CommunityTeaser from "./pages/CommunityTeaser";
 import About from "./pages/About";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import UserDashboard from "./pages/UserDashboard";
+import Community from "./pages/Community";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +47,19 @@ const App = () => (
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:id" element={<BlogPost />} />
               <Route path="/blog/mindfulness-news-june-2025" element={<BlogPostMindfulnessNews />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <UserDashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/community" element={
+                <ProtectedRoute>
+                  <Community />
+                </ProtectedRoute>
+              } />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </HostProvider>
         </BrowserRouter>
