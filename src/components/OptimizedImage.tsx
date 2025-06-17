@@ -32,10 +32,7 @@ const OptimizedImage = ({
   style,
   onLoad
 }: OptimizedImageProps) => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [error, setError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [errorDetails, setErrorDetails] = useState<string>("");
+  const [loadingState, setLoadingState] = useState<'loading' | 'loaded' | 'error'>('loading');
 
   // For priority images, preload them
   useEffect(() => {
@@ -46,36 +43,15 @@ const OptimizedImage = ({
     }
   }, [priority, src]);
 
-  // Debug logging for image src changes and file existence check
+  // Reset loading state when src changes
   useEffect(() => {
     console.log(`OptimizedImage: Loading image ${src} for ${alt}`);
-    setIsLoaded(false);
-    setError(false);
-    setErrorDetails("");
-    setIsLoading(true);
-
-    // For local files, try to check if they exist
-    if (src.startsWith('/lovable-uploads/')) {
-      console.log(`OptimizedImage: Checking local file existence for ${src}`);
-      fetch(src, { method: 'HEAD' })
-        .then(response => {
-          console.log(`OptimizedImage: HEAD request for ${src} returned status: ${response.status}`);
-          if (!response.ok) {
-            console.error(`OptimizedImage: Local file ${src} returned ${response.status} ${response.statusText}`);
-          }
-        })
-        .catch(error => {
-          console.error(`OptimizedImage: HEAD request failed for ${src}:`, error);
-        });
-    }
+    setLoadingState('loading');
   }, [src, alt]);
 
   const handleLoad = () => {
     console.log(`OptimizedImage: Successfully loaded ${src}`);
-    setIsLoaded(true);
-    setIsLoading(false);
-    setError(false);
-    setErrorDetails("");
+    setLoadingState('loaded');
     if (onLoad) onLoad();
   };
 
@@ -87,16 +63,13 @@ const OptimizedImage = ({
       naturalHeight: e?.target?.naturalHeight,
       complete: e?.target?.complete
     });
-    setError(true);
-    setIsLoading(false);
-    setIsLoaded(false);
-    setErrorDetails(errorMsg);
+    setLoadingState('error');
   };
 
   const aspectClass = AspectRatioClasses[aspectRatio];
 
   // If image failed to load, show a detailed fallback
-  if (error) {
+  if (loadingState === 'error') {
     return (
       <div className={cn(
         aspectClass,
@@ -107,9 +80,6 @@ const OptimizedImage = ({
           <div className="text-xs opacity-70 mb-1">Image failed to load</div>
           <div className="text-xs opacity-50 mb-2 truncate">{alt}</div>
           <div className="text-xs opacity-40 font-mono truncate">{src.split('/').pop()}</div>
-          {errorDetails && (
-            <div className="text-xs opacity-30 mt-1">Error: {errorDetails}</div>
-          )}
         </div>
       </div>
     );
@@ -118,13 +88,15 @@ const OptimizedImage = ({
   return (
     <div className={cn(
       aspectClass,
-      isLoading && !isLoaded && loadingClassName,
       "overflow-hidden relative",
       className
     )}>
       {/* Show loading state */}
-      {isLoading && !isLoaded && (
-        <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
+      {loadingState === 'loading' && (
+        <div className={cn(
+          "absolute inset-0 flex items-center justify-center",
+          loadingClassName
+        )}>
           <div className="text-gray-400 text-xs">Loading {src.split('/').pop()}...</div>
         </div>
       )}
@@ -140,7 +112,7 @@ const OptimizedImage = ({
           objectFit === "fill" && "object-fill",
           objectFit === "none" && "object-none",
           objectFit === "scale-down" && "object-scale-down",
-          !isLoaded ? "opacity-0 scale-[1.02]" : "opacity-100 scale-100"
+          loadingState === 'loading' ? "opacity-0" : "opacity-100"
         )}
         loading={priority ? "eager" : "lazy"}
         onLoad={handleLoad}
