@@ -7,13 +7,13 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
     
     const retreatData = [
       {
-        id: "insightla-emotional-balance-retreat",
-        title: "InsightLA: Cultivating Emotional Balance",
+        id: "insight-retreat-1",
+        title: "Cultivating Emotional Balance",
         description: "This retreat explores the relationship between thoughts, emotions, and behavior, offering practical tools for cultivating emotional balance and resilience.",
-        image: "/lovable-uploads/d8aea9eb-5a8a-4820-8b0d-d0784196142f.png",
+        image: "https://images.unsplash.com/photo-1543827980-4cb8992b773d?q=80&w=2070&auto=format&fit=crop",
         additionalImages: [
-          "/lovable-uploads/440cf0e4-ee06-4235-9ec4-b3ecdefd7ee9.jpg",
-          "/lovable-uploads/cf8fc774-aba1-4ccc-a684-8a94a89150ce.jpg"
+          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=2070&auto=format&fit=crop"
         ],
         location: {
           name: "InsightLA Retreat Center",
@@ -26,7 +26,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
           id: "instructor-4",
           name: "Dr. Emily Carter",
           title: "Clinical Psychologist",
-          image: "/lovable-uploads/fa3f6f2b-dad3-4ff9-a13f-a7753609b9f1.png",
+          image: "https://images.unsplash.com/photo-1589156190881-ebff532156bb?w=500&auto=format&fit=crop&q=60",
           bio: "Dr. Carter is a clinical psychologist specializing in emotional regulation and mindfulness-based therapies.",
           specialties: ["Emotional Balance", "Mindfulness", "Cognitive Therapy"],
           yearsExperience: 15
@@ -50,13 +50,13 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
         source: "InsightLA"
       },
       {
-        id: "insightla-mindful-communication-retreat",
-        title: "InsightLA: Mindful Communication Retreat",
+        id: "insight-retreat-2",
+        title: "Mindful Communication Retreat",
         description: "Learn to communicate with clarity, compassion, and presence in this transformative retreat. Develop skills for resolving conflicts and building stronger relationships.",
-        image: "/lovable-uploads/2c63596a-a6e6-4645-8547-54046e807b1a.png",
+        image: "https://images.unsplash.com/photo-1504328345606-1892cb659a49?q=80&w=2070&auto=format&fit=crop",
         additionalImages: [
-          "/lovable-uploads/6bab8880-8765-4e83-9a38-d482633fdc95.png",
-          "/lovable-uploads/6cfc97b1-427f-4ebf-a716-8fe99ee5694a.png"
+          "https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=2070&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop"
         ],
         location: {
           name: "InsightLA Retreat Center",
@@ -69,7 +69,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
           id: "instructor-5",
           name: "Laura Rodriguez",
           title: "Communication Expert",
-          image: "/lovable-uploads/af823cb5-4260-4ec4-bbb4-d1a8cf2185ad.png",
+          image: "https://images.unsplash.com/photo-1599507363083-9448849596fd?w=500&auto=format&fit=crop&q=60",
           bio: "Laura is a communication expert with over 20 years of experience in helping individuals and organizations improve their communication skills.",
           specialties: ["Mindful Communication", "Conflict Resolution", "Relationship Building"],
           yearsExperience: 20
@@ -96,10 +96,10 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
         id: "insight-retreat-center-awareness-wisdom-june-2025",
         title: "Awareness and Wisdom Daylong Online Retreat",
         description: "This retreat explores relaxed open awareness with an emphasis on qualities of mind and attitude towards one's experience. It includes alternating periods of sitting and walking meditation, instructions, and discussion, primarily in silence. Suitable for both beginners and experienced practitioners.",
-        image: "/lovable-uploads/17bc5976-d935-434d-807f-a14574abd422.png",
+        image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop",
         additionalImages: [
-          "/lovable-uploads/9f0938ba-7408-4146-aa4f-fc5a780ef721.png",
-          "/lovable-uploads/af823cb5-4260-4ec4-bbb4-d1a8cf2185ad.png"
+          "https://images.unsplash.com/photo-1545389336-cf090694435e?q=80&w=2070&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1599447421416-3414500d18a5?q=80&w=2070&auto=format&fit=crop"
         ],
         location: {
           name: "Online Zoom Virtual Meditation Hall",
@@ -112,7 +112,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
           id: "insight-retreat-center-team",
           name: "Insight Retreat Center Team",
           title: "Meditation Teachers",
-          image: "/lovable-uploads/9f0938ba-7408-4146-aa4f-fc5a780ef721.png",
+          image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=60",
           bio: "Experienced meditation teachers from the Insight Retreat Center.",
           specialties: ["Mindfulness", "Vipassana", "Online Teaching"],
           yearsExperience: 15
@@ -139,10 +139,10 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
         id: "trinity-retreat-contemplative-photography-june-2025",
         title: "Holy in the Ordinary: A Day of Contemplative Photography",
         description: "Photographers of all levels are invited to experience the quiet joy of contemplative photography as a spiritual practice, learning to see with 'the eyes of the heart' to recognize the holy in the ordinary.",
-        image: "/lovable-uploads/f0037ad0-9984-49e7-8f7f-cdb9a489329b.png",
+        image: "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?q=80&w=2070&auto=format&fit=crop",
         additionalImages: [
-          "/lovable-uploads/63278e9b-148b-472f-8a90-0b044d4c7aad.png",
-          "/lovable-uploads/c9aa8f45-54df-452f-85e5-4ced4b56e21a.png"
+          "https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?q=80&w=2070&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1519904981063-b0cf448d479e?q=80&w=2070&auto=format&fit=crop"
         ],
         location: {
           name: "Trinity Retreat Center",
@@ -155,7 +155,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
           id: "trinity-retreat-photography-team",
           name: "Trinity Retreat Center Team",
           title: "Contemplative Photography Instructors",
-          image: "/lovable-uploads/fa3f6f2b-dad3-4ff9-a13f-a7753609b9f1.png",
+          image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500&auto=format&fit=crop&q=60",
           bio: "Experienced instructors in contemplative photography and spiritual practices.",
           specialties: ["Contemplative Photography", "Spiritual Practice", "Mindfulness"],
           yearsExperience: 10
@@ -182,10 +182,10 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
         id: "nyimc-day-of-insight-july-2025",
         title: "Day of Insight – A Daylong Meditation Retreat",
         description: "A special in-person or online daylong silent meditation retreat for those who want to reconnect and deepen their practice, offering an opportunity to pause, reset, and find mental space and clarity.",
-        image: "/lovable-uploads/17bc5976-d935-434d-807f-a14574abd422.png",
+        image: "https://images.unsplash.com/photo-1508672019048-805c876b67e2?q=80&w=2070&auto=format&fit=crop",
         additionalImages: [
-          "/lovable-uploads/9f0938ba-7408-4146-aa4f-fc5a780ef721.png",
-          "/lovable-uploads/af823cb5-4260-4ec4-bbb4-d1a8cf2185ad.png"
+          "https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?q=80&w=2070&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2070&auto=format&fit=crop"
         ],
         location: {
           name: "New York Insight Meditation Center",
@@ -198,7 +198,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
           id: "nyimc-meditation-teachers",
           name: "NYIMC Meditation Teachers",
           title: "Senior Meditation Instructors",
-          image: "/lovable-uploads/9f0938ba-7408-4146-aa4f-fc5a780ef721.png",
+          image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500&auto=format&fit=crop&q=60",
           bio: "Experienced meditation teachers from the New York Insight Meditation Center.",
           specialties: ["Vipassana", "Silent Meditation", "Mindfulness"],
           yearsExperience: 20
@@ -225,10 +225,10 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
         id: "ada-yoga-mindfulness-movement-august-2025",
         title: "Daylong Mindfulness + Movement Retreat",
         description: "A day dedicated to self-care, reflection, and rejuvenation in the serene environment of Green Gulch Farm & Zen Center, including two yoga practices, myofascial release, organic vegetarian lunch, and personal time for exploration.",
-        image: "/lovable-uploads/9f0938ba-7408-4146-aa4f-fc5a780ef721.png",
+        image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2070&auto=format&fit=crop",
         additionalImages: [
-          "/lovable-uploads/17bc5976-d935-434d-807f-a14574abd422.png",
-          "/lovable-uploads/d8aea9eb-5a8a-4820-8b0d-d0784196142f.png"
+          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=2070&auto=format&fit=crop"
         ],
         location: {
           name: "Green Gulch Farm & Zen Center",
@@ -241,7 +241,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
           id: "ada-yoga-instructors",
           name: "Ada Yoga Instructors",
           title: "Yoga and Mindfulness Teachers",
-          image: "/lovable-uploads/fa3f6f2b-dad3-4ff9-a13f-a7753609b9f1.png",
+          image: "https://images.unsplash.com/photo-1494790108755-2616c96344ce?w=500&auto=format&fit=crop&q=60",
           bio: "Experienced yoga and mindfulness instructors specializing in movement and meditation.",
           specialties: ["Yoga", "Mindfulness", "Movement Therapy"],
           yearsExperience: 12
@@ -268,10 +268,10 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
         id: "refuge-recovery-virtual-daylong-august-2025",
         title: "Virtual/In-Person Daylong Retreat",
         description: "A 6-hour retreat with guided meditation instructions and a dharma talk. Includes mindfulness and heart practices for sitting and walking meditation. Open to all levels.",
-        image: "/lovable-uploads/17bc5976-d935-434d-807f-a14574abd422.png",
+        image: "https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?q=80&w=2070&auto=format&fit=crop",
         additionalImages: [
-          "/lovable-uploads/9f0938ba-7408-4146-aa4f-fc5a780ef721.png",
-          "/lovable-uploads/af823cb5-4260-4ec4-bbb4-d1a8cf2185ad.png"
+          "https://images.unsplash.com/photo-1508672019048-805c876b67e2?q=80&w=2070&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1516401266446-6432a8a07d41?q=80&w=2070&auto=format&fit=crop"
         ],
         location: {
           name: "Refuge Recovery Center",
@@ -284,7 +284,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
           id: "refuge-recovery-teachers",
           name: "Refuge Recovery Teachers",
           title: "Dharma and Meditation Instructors",
-          image: "/lovable-uploads/af823cb5-4260-4ec4-bbb4-d1a8cf2185ad.png",
+          image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=60",
           bio: "Compassionate teachers specializing in recovery-based meditation and dharma practices.",
           specialties: ["Recovery Dharma", "Meditation", "Mindfulness"],
           yearsExperience: 8
@@ -311,10 +311,10 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
         id: "trinity-spirituality-movement-breath-august-2025",
         title: "The Spirituality of Movement and the Breath",
         description: "A day to practice trust and kindness through quiet time, group activities, and mindful movement and breath work, led by a yoga and meditation teacher.",
-        image: "/lovable-uploads/d8aea9eb-5a8a-4820-8b0d-d0784196142f.png",
+        image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=2070&auto=format&fit=crop",
         additionalImages: [
-          "/lovable-uploads/9f0938ba-7408-4146-aa4f-fc5a780ef721.png",
-          "/lovable-uploads/17bc5976-d935-434d-807f-a14574abd422.png"
+          "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2070&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop"
         ],
         location: {
           name: "Trinity Retreat Center",
@@ -327,7 +327,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
           id: "trinity-movement-teachers",
           name: "Trinity Movement Teachers",
           title: "Yoga and Meditation Instructors",
-          image: "/lovable-uploads/fa3f6f2b-dad3-4ff9-a13f-a7753609b9f1.png",
+          image: "https://images.unsplash.com/photo-1494790108755-2616c96344ce?w=500&auto=format&fit=crop&q=60",
           bio: "Experienced yoga and meditation teachers specializing in movement and breath work.",
           specialties: ["Yoga", "Breathwork", "Movement Therapy"],
           yearsExperience: 10
