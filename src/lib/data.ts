@@ -1,4 +1,3 @@
-
 export type Instructor = {
   id: string;
   name: string;
@@ -157,6 +156,56 @@ export const fetchSanghosRetreats = async (): Promise<Retreat[]> => {
         remaining: 12,
         category: ["Movement", "Expressive Arts", "Healing"],
         amenities: ["Movement props provided", "Refreshments"],
+        featured: true,
+        isSanghos: true
+      },
+      {
+        id: "sanghos-retreat-4",
+        title: "Cultivating Emotional Balance",
+        description: "Learn to navigate emotions with grace and develop lasting emotional resilience through mindfulness and self-compassion practices.",
+        image: "/lovable-uploads/eb5e3a10-e1d3-49a7-9bd6-f9cfd8a697fc.jpg",
+        additionalImages: ["/lovable-uploads/440cf0e4-ee06-4235-9ec4-b3ecdefd7ee9.jpg", "/lovable-uploads/cf8fc774-aba1-4ccc-a684-8a94a89150ce.jpg"],
+        location: {
+          name: "Serenity Gardens",
+          address: "321 Peaceful Way",
+          city: "Marin",
+          state: "CA",
+          description: "A tranquil garden setting perfect for emotional healing",
+        },
+        instructor: instructors[2],
+        date: new Date(Date.now() + 28*24*60*60*1000).toISOString().split('T')[0], // 4 weeks from now
+        time: "1:00 PM",
+        duration: "Full day",
+        price: 175,
+        capacity: 18,
+        remaining: 6,
+        category: ["Emotional Wellness", "Mindfulness", "Self-Compassion"],
+        amenities: ["Healthy lunch", "Take-home resources", "Group support"],
+        featured: true,
+        isSanghos: true
+      },
+      {
+        id: "sanghos-retreat-5",
+        title: "Mindful Communication Retreat",
+        description: "Transform your relationships through conscious communication, deep listening, and compassionate dialogue techniques.",
+        image: "/lovable-uploads/60c5a966-4e10-4c09-af70-bfafe90c0630.png",
+        additionalImages: ["/lovable-uploads/6bab8880-8765-4e83-9a38-d482633fdc95.png", "/lovable-uploads/6cfc97b1-427f-4ebf-a716-8fe99ee5694a.png", "/lovable-uploads/6d18343c-7100-4964-a39e-2a3215536423.png"],
+        location: {
+          name: "Connection Center",
+          address: "456 Harmony Lane",
+          city: "Sausalito",
+          state: "CA",
+          description: "A welcoming space designed for authentic connection",
+        },
+        instructor: instructors[0],
+        date: new Date(Date.now() + 35*24*60*60*1000).toISOString().split('T')[0], // 5 weeks from now
+        time: "9:30 AM",
+        duration: "Weekend",
+        price: 225,
+        capacity: 16,
+        remaining: 9,
+        category: ["Communication", "Relationships", "Mindfulness"],
+        amenities: ["All meals included", "Communication toolkit", "Practice partners"],
         featured: true,
         isSanghos: true
       }
