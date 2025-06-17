@@ -1,11 +1,13 @@
 
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Logo } from "./navigation/Logo";
-import { MenuToggle } from "./navigation/MenuToggle";
-import { MobileMenu } from "./navigation/MobileMenu";
-import { DesktopNav } from "./navigation/DesktopNav";
+import { FloatingNavigation } from "./navigation/FloatingNavigation";
+import { FloatingActionButtons } from "./navigation/FloatingActionButtons";
+import { FloatingMenuToggle } from "./navigation/FloatingMenuToggle";
+import { EnhancedMobileMenu } from "./navigation/EnhancedMobileMenu";
 import { useScrollDetection } from "./navigation/useScrollDetection";
 
 const Header = () => {
@@ -45,7 +47,7 @@ const Header = () => {
     window.location.href = "/";
   };
 
-  const handleCommunityClick = (e) => {
+  const handleCommunityClick = (e: React.MouseEvent) => {
     if (!isLoggedIn) {
       e.preventDefault();
       navigate('/community-teaser');
@@ -54,45 +56,56 @@ const Header = () => {
 
   return (
     <>
-      {/* 
-        IMPORTANT Z-INDEX FIX:
-        Increased the header's z-index from z-50 to z-[2000] to create a higher stacking context.
-        This ensures the header and its children (logo and menu toggle) appear above the mobile menu
-        which is rendered at the document body level with z-[1000].
-      */}
+      {/* Enhanced Floating Header */}
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-[2000] w-full transition-all duration-300",
+          "fixed top-0 left-0 right-0 z-[2000] w-full transition-all duration-500",
           isScrolled 
-            ? "bg-white/95 backdrop-blur-md shadow-sm py-3"
-            : "bg-white/95 backdrop-blur-md shadow-sm py-4"
+            ? "py-4" 
+            : "py-6"
         )}
       >
-        <div className="container mx-auto px-4 lg:px-8 flex items-center justify-between">
-          <Logo />
-          
-          <DesktopNav 
-            isLoggedIn={isLoggedIn}
-            onSignOut={handleSignOut}
-            onCommunityClick={handleCommunityClick}
-          />
-          
-          <MenuToggle 
-            isOpen={mobileMenuOpen} 
-            onClick={toggleMobileMenu}
-          />
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="flex items-center justify-between">
+            {/* Logo - Enhanced with floating effect */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="relative z-[1002]"
+            >
+              <div className="bg-white/90 backdrop-blur-lg border border-white/20 rounded-full px-4 py-2 shadow-lg">
+                <Logo />
+              </div>
+            </motion.div>
+            
+            {/* Floating Navigation - Desktop */}
+            <FloatingNavigation 
+              isLoggedIn={isLoggedIn}
+              onCommunityClick={handleCommunityClick}
+            />
+            
+            {/* Floating Action Buttons - Desktop */}
+            <FloatingActionButtons 
+              isLoggedIn={isLoggedIn}
+              onSignOut={handleSignOut}
+            />
+          </div>
         </div>
       </header>
 
-      {/* 
-        MobileMenu is rendered via Portal directly to document.body
-        It needs to have a lower z-index than the header
-      */}
-      <MobileMenu 
+      {/* Floating Menu Toggle - Mobile */}
+      <FloatingMenuToggle 
+        isOpen={mobileMenuOpen} 
+        onClick={toggleMobileMenu}
+      />
+
+      {/* Enhanced Mobile Menu */}
+      <EnhancedMobileMenu 
         isOpen={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
         isLoggedIn={isLoggedIn}
         onSignOut={handleSignOut}
+        onCommunityClick={handleCommunityClick}
       />
     </>
   );
