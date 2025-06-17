@@ -87,7 +87,7 @@ export const fetchSanghosRetreats = async (): Promise<Retreat[]> => {
         id: "sanghos-retreat-4",
         title: "Cultivating Emotional Balance",
         description: "Learn to navigate emotions with grace and develop lasting emotional resilience through mindfulness and self-compassion practices.",
-        image: "/lovable-uploads/4511c999-5d12-4f0a-b5a5-b326abb84ceb.png",
+        image: "/lovable-uploads/d8aea9eb-5a8a-4820-8b0d-d0784196142f.png",
         additionalImages: ["/lovable-uploads/440cf0e4-ee06-4235-9ec4-b3ecdefd7ee9.jpg", "/lovable-uploads/cf8fc774-aba1-4ccc-a684-8a94a89150ce.jpg"],
         location: {
           name: "Serenity Gardens",
