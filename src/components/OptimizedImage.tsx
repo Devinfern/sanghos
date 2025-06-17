@@ -1,4 +1,5 @@
-import { useState, useEffect, CSSProperties, useRef } from "react";
+
+import { useState, useEffect, CSSProperties, useRef, SyntheticEvent } from "react";
 import { cn } from "@/lib/utils";
 
 interface OptimizedImageProps {
@@ -67,19 +68,19 @@ const OptimizedImage = ({
     }
   };
 
-  const handleError = (e: Event | string) => {
-    // Check for specific error types or messages if needed,
-    // but generally, if onerror fires, we assume it's a failure.
-    const errorMsg =
-      typeof e === "string"
-        ? e
-        : (e as any)?.target?.error?.message || (e as any)?.message || "Unknown error";
+  // Corrected type for the event parameter
+  const handleError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+    const errorMsg = 
+        (e.nativeEvent instanceof ErrorEvent && e.nativeEvent.message) || // More specific for ErrorEvent
+        (e.target instanceof HTMLImageElement && e.target.src) || // Fallback to src if other error info is missing
+        'Unknown image loading error';
 
     console.error(`OptimizedImage: (Event) Failed to load image: ${src}`, {
       error: errorMsg,
-      naturalWidth: (e as any)?.target?.naturalWidth,
-      naturalHeight: (e as any)?.target?.naturalHeight,
-      complete: (e as any)?.target?.complete,
+      // Access naturalWidth/Height/complete from e.target, which is the HTMLImageElement
+      naturalWidth: (e.target as HTMLImageElement).naturalWidth,
+      naturalHeight: (e.target as HTMLImageElement).naturalHeight,
+      complete: (e.target as HTMLImageElement).complete,
     });
     setLoadingState('error');
   };
