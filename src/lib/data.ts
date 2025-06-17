@@ -17,7 +17,7 @@ export const instructors: Instructor[] = [
     title: "Meditation Teacher & Yoga Instructor",
     bio: "Sarah has been teaching meditation and mindfulness for over 15 years. She specializes in helping beginners develop a consistent practice and has led retreats across North America and Europe. Her approach combines traditional meditation techniques with modern neuroscience insights.",
     specialties: ["Mindfulness Meditation", "Yoga", "Stress Reduction"],
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cG9ydHJhaXR8ZW58MHx8MHx8fDA%3D",
+    image: "/lovable-uploads/9f0938ba-7408-4146-aa4f-fc5a780ef721.png",
     yearsExperience: 15
   },
   {
@@ -26,7 +26,7 @@ export const instructors: Instructor[] = [
     title: "Wellness Coach & Tai Chi Master",
     bio: "With roots in traditional Chinese medicine and modern wellness practices, Michael brings a holistic approach to his teaching. He has spent the last decade helping people find balance through movement, breathwork, and mindful living practices.",
     specialties: ["Tai Chi", "Qigong", "Breathwork"],
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cG9ydHJhaXR8ZW58MHx8MHx8fDA%3D",
+    image: "/lovable-uploads/af823cb5-4260-4ec4-bbb4-d1a8cf2185ad.png",
     yearsExperience: 12
   },
   {
@@ -35,7 +35,7 @@ export const instructors: Instructor[] = [
     title: "Sound Healer & Retreat Facilitator",
     bio: "Elena combines her background in music therapy and meditation to create transformative sound healing experiences. Her retreats are known for their deep emotional healing properties and ability to help participants release long-held tensions.",
     specialties: ["Sound Healing", "Music Therapy", "Emotional Release"],
-    image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fHBvcnRyYWl0fGVufDB8fDB8fHww",
+    image: "/lovable-uploads/fa3f6f2b-dad3-4ff9-a13f-a7753609b9f1.png",
     yearsExperience: 8
   }
 ];
@@ -89,8 +89,8 @@ export const fetchSanghosRetreats = async (): Promise<Retreat[]> => {
         id: "sanghos-retreat-1",
         title: "Forest Meditation Weekend",
         description: "Immerse yourself in the serene beauty of nature with our forest meditation weekend. Practice mindfulness among ancient trees and gentle streams.",
-        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070&auto=format&fit=crop",
-        additionalImages: [],
+        image: "/lovable-uploads/17bc5976-d935-434d-807f-a14574abd422.png",
+        additionalImages: ["/lovable-uploads/af823cb5-4260-4ec4-bbb4-d1a8cf2185ad.png", "/lovable-uploads/9f0938ba-7408-4146-aa4f-fc5a780ef721.png"],
         location: {
           name: "Redwood Sanctuary",
           address: "123 Forest Path",
@@ -114,8 +114,8 @@ export const fetchSanghosRetreats = async (): Promise<Retreat[]> => {
         id: "sanghos-retreat-2",
         title: "Urban Mindfulness Day",
         description: "Find peace in the midst of city life. This one-day retreat offers tools for bringing mindfulness into your everyday urban environment.",
-        image: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=2064&auto=format&fit=crop",
-        additionalImages: [],
+        image: "/lovable-uploads/f0037ad0-9984-49e7-8f7f-cdb9a489329b.png",
+        additionalImages: ["/lovable-uploads/63278e9b-148b-472f-8a90-0b044d4c7aad.png", "/lovable-uploads/c9aa8f45-54df-452f-85e5-4ced4b56e21a.png"],
         location: {
           name: "Downtown Zen Center",
           address: "456 Calm Street",
@@ -133,6 +133,31 @@ export const fetchSanghosRetreats = async (): Promise<Retreat[]> => {
         category: ["Mindfulness", "Workshop"],
         amenities: ["Lunch included", "Journal materials"],
         featured: false, // Changed to false so the new retreats can be featured
+        isSanghos: true
+      },
+      {
+        id: "sanghos-retreat-3",
+        title: "Transformative Movement Practice",
+        description: "Experience the power of conscious movement in this transformative retreat that combines dance, yoga, and expressive arts therapy.",
+        image: "/lovable-uploads/9f0938ba-7408-4146-aa4f-fc5a780ef721.png",
+        additionalImages: ["/lovable-uploads/fa3f6f2b-dad3-4ff9-a13f-a7753609b9f1.png"],
+        location: {
+          name: "Movement Studio Sanctuary",
+          address: "789 Flow Avenue",
+          city: "Berkeley",
+          state: "CA",
+          description: "A spacious studio designed for movement and expression",
+        },
+        instructor: instructors[1],
+        date: new Date(Date.now() + 21*24*60*60*1000).toISOString().split('T')[0], // 3 weeks from now
+        time: "2:00 PM",
+        duration: "Half day",
+        price: 125,
+        capacity: 25,
+        remaining: 12,
+        category: ["Movement", "Expressive Arts", "Healing"],
+        amenities: ["Movement props provided", "Refreshments"],
+        featured: true,
         isSanghos: true
       }
     ];
