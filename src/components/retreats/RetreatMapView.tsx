@@ -5,9 +5,9 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { Retreat } from '@/lib/data';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { MapPin, Navigation } from 'lucide-react';
+import { MapPin, Navigation, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 interface RetreatMapViewProps {
   retreats: Retreat[];
@@ -17,48 +17,80 @@ interface RetreatMapViewProps {
 const RetreatMapView: React.FC<RetreatMapViewProps> = ({ retreats, onRetreatSelect }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [mapboxToken, setMapboxToken] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [isTokenSet, setIsTokenSet] = useState(false);
 
-  const initializeMap = () => {
-    if (!mapContainer.current || !mapboxToken) return;
-
-    mapboxgl.accessToken = mapboxToken;
-    
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/light-v11',
-      center: [-98.5795, 39.8283], // Center of US
-      zoom: 4
-    });
-
-    // Add navigation controls
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
-
-    // Add retreat markers
-    retreats.forEach((retreat) => {
-      if (retreat.location.coordinates) {
-        const marker = new mapboxgl.Marker({
-          color: '#6B7280'
-        })
-          .setLngLat([retreat.location.coordinates.lng, retreat.location.coordinates.lat])
-          .setPopup(new mapboxgl.Popup().setHTML(`
-            <div class="p-2">
-              <h3 class="font-semibold">${retreat.title}</h3>
-              <p class="text-sm text-gray-600">${retreat.location.city}, ${retreat.location.state}</p>
-              <p class="text-sm font-medium">$${retreat.price}</p>
-            </div>
-          `))
-          .addTo(map.current!);
-
-        marker.getElement().addEventListener('click', () => {
-          onRetreatSelect?.(retreat);
-        });
+  const fetchMapboxToken = async () => {
+    try {
+      console.log('Fetching Mapbox token...');
+      const { data, error } = await supabase.functions.invoke('get-mapbox-token');
+      
+      if (error) {
+        console.error('Error fetching Mapbox token:', error);
+        throw new Error('Failed to fetch Mapbox token');
       }
-    });
+      
+      if (!data?.token) {
+        throw new Error('No token received from server');
+      }
+      
+      console.log('Successfully fetched Mapbox token');
+      return data.token;
+    } catch (error) {
+      console.error('Error in fetchMapboxToken:', error);
+      throw error;
+    }
+  };
 
-    setIsTokenSet(true);
+  const initializeMap = async () => {
+    if (!mapContainer.current) return;
+
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      const token = await fetchMapboxToken();
+      mapboxgl.accessToken = token;
+      
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/light-v11',
+        center: [-98.5795, 39.8283], // Center of US
+        zoom: 4
+      });
+
+      // Add navigation controls
+      map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+      // Add retreat markers
+      retreats.forEach((retreat) => {
+        if (retreat.location.coordinates) {
+          const marker = new mapboxgl.Marker({
+            color: '#6B7280'
+          })
+            .setLngLat([retreat.location.coordinates.lng, retreat.location.coordinates.lat])
+            .setPopup(new mapboxgl.Popup().setHTML(`
+              <div class="p-2">
+                <h3 class="font-semibold">${retreat.title}</h3>
+                <p class="text-sm text-gray-600">${retreat.location.city}, ${retreat.location.state}</p>
+                <p class="text-sm font-medium">$${retreat.price}</p>
+              </div>
+            `))
+            .addTo(map.current!);
+
+          marker.getElement().addEventListener('click', () => {
+            onRetreatSelect?.(retreat);
+          });
+        }
+      });
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error initializing map:', error);
+      setError('Failed to load map. Please try again later.');
+      setIsLoading(false);
+    }
   };
 
   const getUserLocation = () => {
@@ -95,36 +127,34 @@ const RetreatMapView: React.FC<RetreatMapViewProps> = ({ retreats, onRetreatSele
   };
 
   useEffect(() => {
-    if (mapboxToken && !isTokenSet) {
-      initializeMap();
-    }
-  }, [mapboxToken, retreats]);
-
-  useEffect(() => {
+    initializeMap();
+    
     return () => {
       map.current?.remove();
     };
-  }, []);
+  }, [retreats]);
 
-  if (!mapboxToken) {
+  if (error) {
     return (
       <Card className="p-6 text-center">
-        <MapPin className="w-16 h-16 text-sage-400 mx-auto mb-4" />
-        <h3 className="text-xl font-medium mb-2">Map View</h3>
-        <p className="text-muted-foreground mb-4">
-          Enter your Mapbox token to view retreats on an interactive map
+        <MapPin className="w-16 h-16 text-red-400 mx-auto mb-4" />
+        <h3 className="text-xl font-medium mb-2">Map Unavailable</h3>
+        <p className="text-muted-foreground mb-4">{error}</p>
+        <Button onClick={initializeMap} variant="outline">
+          Try Again
+        </Button>
+      </Card>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <Card className="p-6 text-center">
+        <Loader2 className="w-16 h-16 text-sage-400 mx-auto mb-4 animate-spin" />
+        <h3 className="text-xl font-medium mb-2">Loading Map</h3>
+        <p className="text-muted-foreground">
+          Initializing interactive map view...
         </p>
-        <div className="max-w-md mx-auto space-y-3">
-          <Input
-            type="password"
-            placeholder="Enter Mapbox public token"
-            value={mapboxToken}
-            onChange={(e) => setMapboxToken(e.target.value)}
-          />
-          <p className="text-xs text-muted-foreground">
-            Get your free token at <a href="https://mapbox.com/" target="_blank" rel="noopener noreferrer" className="text-sage-600 hover:underline">mapbox.com</a>
-          </p>
-        </div>
       </Card>
     );
   }
