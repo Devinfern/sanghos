@@ -61,13 +61,27 @@ export const EnhancedMobileMenu = ({
   ];
 
   const handleSectionClick = (sectionId: string) => {
+    console.log("Section clicked:", sectionId);
     setExpandedSection(expandedSection === sectionId ? null : sectionId);
   };
 
   const handleCommunityItemClick = (e: React.MouseEvent, href: string) => {
+    console.log("Community item clicked:", href);
     if (href === "/community") {
       onCommunityClick(e);
     }
+    onClose();
+  };
+
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      console.log("Backdrop clicked, closing menu");
+      onClose();
+    }
+  };
+
+  const handleCloseClick = () => {
+    console.log("Close button clicked");
     onClose();
   };
 
@@ -80,8 +94,8 @@ export const EnhancedMobileMenu = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[1000] lg:hidden"
-            onClick={onClose}
+            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[1999] lg:hidden"
+            onClick={handleBackdropClick}
           />
           
           {/* Full Screen Menu */}
@@ -90,7 +104,7 @@ export const EnhancedMobileMenu = ({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ type: "spring", damping: 20, stiffness: 300 }}
-            className="fixed inset-0 z-[1001] lg:hidden bg-gradient-to-br from-white via-white to-brand-subtle/20"
+            className="fixed inset-0 z-[2000] lg:hidden bg-gradient-to-br from-white via-white to-brand-subtle/20"
           >
             <div className="flex flex-col h-full">
               {/* Header */}
@@ -100,8 +114,8 @@ export const EnhancedMobileMenu = ({
                   <span className="text-xl font-bold text-brand-dark">Menu</span>
                 </div>
                 <button
-                  onClick={onClose}
-                  className="p-2 hover:bg-brand-subtle/20 rounded-full transition-colors"
+                  onClick={handleCloseClick}
+                  className="p-2 hover:bg-brand-subtle/20 rounded-full transition-colors touch-manipulation"
                 >
                   <X className="h-6 w-6 text-brand-slate" />
                 </button>
@@ -114,7 +128,7 @@ export const EnhancedMobileMenu = ({
                     <div key={section.id} className="space-y-3">
                       <button
                         onClick={() => handleSectionClick(section.id)}
-                        className="w-full flex items-center justify-between p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-white/20 shadow-sm hover:shadow-md transition-all duration-200"
+                        className="w-full flex items-center justify-between p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-white/20 shadow-sm hover:shadow-md transition-all duration-200 touch-manipulation"
                       >
                         <span className="text-lg font-medium text-brand-dark">
                           {section.title}
@@ -141,7 +155,7 @@ export const EnhancedMobileMenu = ({
                                   key={index}
                                   to={item.href}
                                   onClick={(e) => handleCommunityItemClick(e, item.href)}
-                                  className="block p-3 text-brand-slate hover:text-brand-primary hover:bg-brand-primary/5 rounded-lg transition-colors"
+                                  className="block p-3 text-brand-slate hover:text-brand-primary hover:bg-brand-primary/5 rounded-lg transition-colors touch-manipulation"
                                 >
                                   {item.title}
                                 </Link>
@@ -161,18 +175,19 @@ export const EnhancedMobileMenu = ({
                   <>
                     <Button 
                       variant="outline" 
-                      className="w-full bg-white/80 backdrop-blur-sm border-brand-subtle/30"
+                      className="w-full bg-white/80 backdrop-blur-sm border-brand-subtle/30 touch-manipulation"
                       asChild
                     >
                       <Link to="/dashboard" onClick={onClose}>Dashboard</Link>
                     </Button>
                     <Button 
                       onClick={() => {
+                        console.log("Sign out clicked");
                         onSignOut();
                         onClose();
                       }}
                       variant="outline"
-                      className="w-full bg-white/80 backdrop-blur-sm border-brand-subtle/30"
+                      className="w-full bg-white/80 backdrop-blur-sm border-brand-subtle/30 touch-manipulation"
                     >
                       Sign Out
                     </Button>
@@ -181,13 +196,13 @@ export const EnhancedMobileMenu = ({
                   <>
                     <Button 
                       variant="outline" 
-                      className="w-full bg-white/80 backdrop-blur-sm border-brand-subtle/30"
+                      className="w-full bg-white/80 backdrop-blur-sm border-brand-subtle/30 touch-manipulation"
                       asChild
                     >
                       <Link to="/login" onClick={onClose}>Sign In</Link>
                     </Button>
                     <Button 
-                      className="w-full bg-gradient-to-r from-brand-primary to-brand-primary/90"
+                      className="w-full bg-gradient-to-r from-brand-primary to-brand-primary/90 touch-manipulation"
                       asChild
                     >
                       <Link to="/signup" onClick={onClose}>Join Sanghos</Link>

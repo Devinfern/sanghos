@@ -18,6 +18,7 @@ const Header = () => {
   
   // Reset menu state on route change
   useEffect(() => {
+    console.log("Route changed, closing mobile menu");
     setMobileMenuOpen(false);
     document.body.style.removeProperty('overflow');
   }, [location.pathname]);
@@ -30,13 +31,17 @@ const Header = () => {
   }, []);
 
   const toggleMobileMenu = () => {
+    console.log("toggleMobileMenu called, current state:", mobileMenuOpen);
     const newMenuState = !mobileMenuOpen;
     setMobileMenuOpen(newMenuState);
+    console.log("Setting mobile menu to:", newMenuState);
     
     if (newMenuState) {
       document.body.style.overflow = 'hidden';
+      console.log("Body overflow set to hidden");
     } else {
       document.body.style.removeProperty('overflow');
+      console.log("Body overflow removed");
     }
   };
 
@@ -53,6 +58,11 @@ const Header = () => {
       navigate('/community-teaser');
     }
   };
+
+  // Debug logging for mobile menu state
+  useEffect(() => {
+    console.log("Mobile menu state changed:", mobileMenuOpen);
+  }, [mobileMenuOpen]);
 
   return (
     <>
@@ -102,7 +112,10 @@ const Header = () => {
       {/* Enhanced Mobile Menu */}
       <EnhancedMobileMenu 
         isOpen={mobileMenuOpen}
-        onClose={() => setMobileMenuOpen(false)}
+        onClose={() => {
+          console.log("Mobile menu onClose called");
+          setMobileMenuOpen(false);
+        }}
         isLoggedIn={isLoggedIn}
         onSignOut={handleSignOut}
         onCommunityClick={handleCommunityClick}
