@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -12,7 +11,7 @@ import Footer from '@/components/Footer';
 import BeehiivNewsletterSignup from '@/components/BeehiivNewsletterSignup';
 
 const BlogPost = () => {
-  const { slug } = useParams();
+  const { id } = useParams();
 
   // Enhanced blog post data with wellness focus
   const blogPosts = {
@@ -592,7 +591,7 @@ const BlogPost = () => {
     }
   };
 
-  const post = blogPosts[slug as keyof typeof blogPosts];
+  const post = blogPosts[id as keyof typeof blogPosts];
 
   if (!post) {
     return (
