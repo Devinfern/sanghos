@@ -18,6 +18,7 @@ import RetreatDetails from "./pages/RetreatDetails";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import BlogPostMindfulnessNews from "./pages/BlogPostMindfulnessNews";
+import CommunityTeaser from "./pages/CommunityTeaser";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ const App = () => (
               <Route path="/retreats" element={<Retreats />} />
               <Route path="/retreats/:id" element={<Retreat />} />
               <Route path="/retreat/:id" element={<RetreatDetails />} />
+              <Route path="/community-teaser" element={<CommunityTeaser />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:id" element={<BlogPost />} />
               <Route path="/blog/mindfulness-news-june-2025" element={<BlogPostMindfulnessNews />} />
