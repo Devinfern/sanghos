@@ -23,15 +23,19 @@ const RetreatMapView: React.FC<RetreatMapViewProps> = ({ retreats, onRetreatSele
 
   const fetchMapboxToken = async () => {
     try {
-      console.log('Fetching Mapbox token...');
+      console.log('Starting to fetch Mapbox token...');
+      
       const { data, error } = await supabase.functions.invoke('get-mapbox-token');
       
+      console.log('Supabase function response:', { data, error });
+      
       if (error) {
-        console.error('Error fetching Mapbox token:', error);
-        throw new Error('Failed to fetch Mapbox token');
+        console.error('Supabase function error:', error);
+        throw new Error(`Failed to fetch Mapbox token: ${error.message}`);
       }
       
       if (!data?.token) {
+        console.error('No token in response:', data);
         throw new Error('No token received from server');
       }
       
@@ -44,15 +48,22 @@ const RetreatMapView: React.FC<RetreatMapViewProps> = ({ retreats, onRetreatSele
   };
 
   const initializeMap = async () => {
-    if (!mapContainer.current) return;
+    if (!mapContainer.current) {
+      console.error('Map container not found');
+      return;
+    }
 
     try {
+      console.log('Starting map initialization...');
       setIsLoading(true);
       setError(null);
       
       const token = await fetchMapboxToken();
+      console.log('Got token, setting mapboxgl.accessToken');
+      
       mapboxgl.accessToken = token;
       
+      console.log('Creating new Mapbox map...');
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/light-v11',
@@ -60,12 +71,27 @@ const RetreatMapView: React.FC<RetreatMapViewProps> = ({ retreats, onRetreatSele
         zoom: 4
       });
 
+      console.log('Map created, adding event listeners...');
+
+      map.current.on('load', () => {
+        console.log('Map loaded successfully');
+        setIsLoading(false);
+      });
+
+      map.current.on('error', (e) => {
+        console.error('Map error:', e);
+        setError('Failed to load map');
+        setIsLoading(false);
+      });
+
       // Add navigation controls
       map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
+      console.log(`Adding ${retreats.length} retreat markers...`);
       // Add retreat markers
-      retreats.forEach((retreat) => {
-        if (retreat.location.coordinates) {
+      retreats.forEach((retreat, index) => {
+        if (retreat.location?.coordinates) {
+          console.log(`Adding marker ${index + 1} for ${retreat.title}`);
           const marker = new mapboxgl.Marker({
             color: '#6B7280'
           })
@@ -82,13 +108,14 @@ const RetreatMapView: React.FC<RetreatMapViewProps> = ({ retreats, onRetreatSele
           marker.getElement().addEventListener('click', () => {
             onRetreatSelect?.(retreat);
           });
+        } else {
+          console.warn(`Retreat ${retreat.title} has no coordinates`);
         }
       });
 
-      setIsLoading(false);
     } catch (error) {
       console.error('Error initializing map:', error);
-      setError('Failed to load map. Please try again later.');
+      setError(`Failed to load map: ${error.message}`);
       setIsLoading(false);
     }
   };
@@ -127,9 +154,11 @@ const RetreatMapView: React.FC<RetreatMapViewProps> = ({ retreats, onRetreatSele
   };
 
   useEffect(() => {
+    console.log('RetreatMapView mounted, initializing map...');
     initializeMap();
     
     return () => {
+      console.log('Cleaning up map...');
       map.current?.remove();
     };
   }, [retreats]);
