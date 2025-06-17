@@ -13,18 +13,28 @@ const Blog = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const featuredArticle = {
-    id: 'mindful-breathing-techniques',
-    title: 'Mindful Breathing Techniques: Your Gateway to Inner Peace',
-    excerpt: 'Transform your daily stress into moments of calm and clarity with these powerful, evidence-based breathing practices.',
+    id: 'mindfulness-news-june-2025',
+    title: 'Mindfulness in the News: June 2025',
+    excerpt: 'A comprehensive roundup of the most significant mindfulness and meditation developments from around the world this month, from breakthrough apps to educational initiatives.',
     author: 'Devin Fernandez',
-    date: 'December 15, 2024',
-    readTime: '8 min read',
+    date: 'June 17, 2025',
+    readTime: '12 min read',
     image: '/lovable-uploads/cf8fc774-aba1-4ccc-a684-8a94a89150ce.jpg',
-    category: 'Breathwork',
+    category: 'News & Trends',
     featured: true
   };
 
   const articles = [
+    {
+      id: 'mindful-breathing-techniques',
+      title: 'Mindful Breathing Techniques: Your Gateway to Inner Peace',
+      excerpt: 'Transform your daily stress into moments of calm and clarity with these powerful, evidence-based breathing practices.',
+      author: 'Devin Fernandez',
+      date: 'December 15, 2024',
+      readTime: '8 min read',
+      image: '/lovable-uploads/cf8fc774-aba1-4ccc-a684-8a94a89150ce.jpg',
+      category: 'Breathwork'
+    },
     {
       id: 'forest-bathing-guide',
       title: 'The Science Behind Forest Bathing: Why Nature Heals',
@@ -87,7 +97,7 @@ const Blog = () => {
     }
   ];
 
-  const categories = ['All', 'Meditation', 'Breathwork', 'Yoga', 'Nature Therapy', 'Wellness', 'Mindfulness', 'Sound Therapy'];
+  const categories = ['All', 'News & Trends', 'Meditation', 'Breathwork', 'Yoga', 'Nature Therapy', 'Wellness', 'Mindfulness', 'Sound Therapy'];
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   const filteredArticles = articles.filter(article => 
