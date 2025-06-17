@@ -24,6 +24,8 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import UserDashboard from "./pages/UserDashboard";
 import Community from "./pages/Community";
+import BecomeHost from "./pages/BecomeHost";
+import TeachWithUs from "./pages/TeachWithUs";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -49,6 +51,8 @@ const App = () => (
               <Route path="/blog/mindfulness-news-june-2025" element={<BlogPostMindfulnessNews />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
+              <Route path="/become-host" element={<BecomeHost />} />
+              <Route path="/teach-with-us" element={<TeachWithUs />} />
               <Route path="/dashboard" element={
                 <ProtectedRoute>
                   <UserDashboard />
