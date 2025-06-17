@@ -222,11 +222,11 @@ export const FloatingNavigation = ({ isLoggedIn, onCommunityClick }: FloatingNav
         <AnimatePresence>
           {activeMenu && megaMenuData[activeMenu] && (
             <motion.div
-              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              initial={{ opacity: 0, y: 5, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-40"
+              exit={{ opacity: 0, y: 5, scale: 0.98 }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
+              className="absolute top-full left-1/2 -translate-x-1/2 mt-1 z-40"
               onMouseEnter={() => handleMouseEnter(activeMenu)}
               onMouseLeave={handleMouseLeave}
             >
