@@ -1,4 +1,3 @@
-
 import { Instructor, Location, Retreat } from "@/lib/data";
 
 export const fetchInsightLAEvents = async (): Promise<any[]> => {
@@ -10,10 +9,10 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
         id: "insight-retreat-1",
         title: "Cultivating Emotional Balance",
         description: "This retreat explores the relationship between thoughts, emotions, and behavior, offering practical tools for cultivating emotional balance and resilience.",
-        image: "https://images.unsplash.com/photo-1543827980-4cb8992b773d?q=80&w=2070&auto=format&fit=crop",
+        image: "/lovable-uploads/9f0938ba-7408-4146-aa4f-fc5a780ef721.png",
         additionalImages: [
-          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=2070&auto=format&fit=crop"
+          "/lovable-uploads/af823cb5-4260-4ec4-bbb4-d1a8cf2185ad.png",
+          "/lovable-uploads/fa3f6f2b-dad3-4ff9-a13f-a7753609b9f1.png"
         ],
         location: {
           name: "InsightLA Retreat Center",
@@ -26,7 +25,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
           id: "instructor-4",
           name: "Dr. Emily Carter",
           title: "Clinical Psychologist",
-          image: "https://images.unsplash.com/photo-1589156190881-ebff532156bb?w=500&auto=format&fit=crop&q=60",
+          image: "/lovable-uploads/9f0938ba-7408-4146-aa4f-fc5a780ef721.png",
           bio: "Dr. Carter is a clinical psychologist specializing in emotional regulation and mindfulness-based therapies.",
           specialties: ["Emotional Balance", "Mindfulness", "Cognitive Therapy"],
           yearsExperience: 15
@@ -53,10 +52,10 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
         id: "insight-retreat-2",
         title: "Mindful Communication Retreat",
         description: "Learn to communicate with clarity, compassion, and presence in this transformative retreat. Develop skills for resolving conflicts and building stronger relationships.",
-        image: "https://images.unsplash.com/photo-1504328345606-1892cb659a49?q=80&w=2070&auto=format&fit=crop",
+        image: "/lovable-uploads/f0037ad0-9984-49e7-8f7f-cdb9a489329b.png",
         additionalImages: [
-          "https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=2070&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop"
+          "/lovable-uploads/17bc5976-d935-434d-807f-a14574abd422.png",
+          "/lovable-uploads/af823cb5-4260-4ec4-bbb4-d1a8cf2185ad.png"
         ],
         location: {
           name: "InsightLA Retreat Center",
@@ -69,7 +68,7 @@ export const fetchInsightLAEvents = async (): Promise<any[]> => {
           id: "instructor-5",
           name: "Laura Rodriguez",
           title: "Communication Expert",
-          image: "https://images.unsplash.com/photo-1599507363083-9448849596fd?w=500&auto=format&fit=crop&q=60",
+          image: "/lovable-uploads/af823cb5-4260-4ec4-bbb4-d1a8cf2185ad.png",
           bio: "Laura is a communication expert with over 20 years of experience in helping individuals and organizations improve their communication skills.",
           specialties: ["Mindful Communication", "Conflict Resolution", "Relationship Building"],
           yearsExperience: 20
