@@ -1,3 +1,4 @@
+
 export type Instructor = {
   id: string;
   name: string;
@@ -188,7 +189,7 @@ export const fetchSanghosRetreats = async (): Promise<Retreat[]> => {
         id: "sanghos-retreat-5",
         title: "Mindful Communication Retreat",
         description: "Transform your relationships through conscious communication, deep listening, and compassionate dialogue techniques.",
-        image: "/lovable-uploads/b973c9f7-cb84-42f3-b8fc-9403ebb08975.png",
+        image: "/lovable-uploads/63278e9b-148b-472f-8a90-0b044d4c7aad.png",
         additionalImages: ["/lovable-uploads/6bab8880-8765-4e83-9a38-d482633fdc95.png", "/lovable-uploads/6cfc97b1-427f-4ebf-a716-8fe99ee5694a.png", "/lovable-uploads/6d18343c-7100-4964-a39e-2a3215536423.png"],
         location: {
           name: "Connection Center",
