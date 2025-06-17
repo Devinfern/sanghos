@@ -29,6 +29,9 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const { addToFavorites, removeFromFavorites, isFavorite, addToRecentlyViewed } = useRetreatContext();
 
+  // Debug logging for retreat data
+  console.log(`RetreatCard: Rendering ${retreat.title} with image: ${retreat.image}`);
+
   const handleCardClick = () => {
     addToRecentlyViewed(retreat);
   };
@@ -79,7 +82,10 @@ const RetreatCard: React.FC<RetreatCardProps> = ({
             "w-full h-full object-cover transition-all duration-700 group-hover:scale-105",
             isImageLoaded ? "opacity-100" : "opacity-0"
           )}
-          onLoad={() => setIsImageLoaded(true)}
+          onLoad={() => {
+            console.log(`RetreatCard: Image loaded for ${retreat.title}`);
+            setIsImageLoaded(true);
+          }}
         />
         
         {/* Favorite button */}
