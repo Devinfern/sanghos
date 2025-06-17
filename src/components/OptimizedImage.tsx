@@ -1,5 +1,4 @@
-
-import { useState, useEffect, CSSProperties } from "react";
+import { useState, useEffect, CSSProperties, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 interface OptimizedImageProps {
@@ -33,35 +32,54 @@ const OptimizedImage = ({
   onLoad
 }: OptimizedImageProps) => {
   const [loadingState, setLoadingState] = useState<'loading' | 'loaded' | 'error'>('loading');
+  const imgRef = useRef<HTMLImageElement>(null);
 
-  // For priority images, preload them
+  // Reset loading state when src changes
+  useEffect(() => {
+    console.log(`OptimizedImage: (Effect) Initiating load for ${src} (Alt: ${alt})`);
+    setLoadingState('loading');
+    // Clear any previous error state when src changes
+    // This helps with re-attempts if an image previously failed
+    if (imgRef.current) {
+      imgRef.current.src = src; // Force re-render/re-load if src changes
+    }
+  }, [src, alt]);
+
+  // Handle preloading for priority images
   useEffect(() => {
     if (priority && src) {
       const img = new Image();
       img.src = src;
-      console.log(`Preloading priority image: ${src}`);
+      img.onload = () => console.log(`Preloaded priority image success: ${src}`);
+      img.onerror = (e) => console.error(`Preloaded priority image failed: ${src}`, e);
     }
   }, [priority, src]);
 
-  // Reset loading state when src changes
-  useEffect(() => {
-    console.log(`OptimizedImage: Loading image ${src} for ${alt}`);
-    setLoadingState('loading');
-  }, [src, alt]);
-
   const handleLoad = () => {
-    console.log(`OptimizedImage: Successfully loaded ${src}`);
-    setLoadingState('loaded');
-    if (onLoad) onLoad();
+    // Only set to loaded if not already in an error state
+    // This prevents a delayed load event from overriding a legitimate error
+    if (loadingState !== 'error') {
+      console.log(`OptimizedImage: (Event) Successfully loaded ${src}`);
+      setLoadingState('loaded');
+      if (onLoad) {
+        onLoad();
+      }
+    }
   };
 
-  const handleError = (e: any) => {
-    const errorMsg = e?.target?.error || e?.message || 'Unknown error';
-    console.error(`OptimizedImage: Failed to load image: ${src}`, {
+  const handleError = (e: Event | string) => {
+    // Check for specific error types or messages if needed,
+    // but generally, if onerror fires, we assume it's a failure.
+    const errorMsg =
+      typeof e === "string"
+        ? e
+        : (e as any)?.target?.error?.message || (e as any)?.message || "Unknown error";
+
+    console.error(`OptimizedImage: (Event) Failed to load image: ${src}`, {
       error: errorMsg,
-      naturalWidth: e?.target?.naturalWidth,
-      naturalHeight: e?.target?.naturalHeight,
-      complete: e?.target?.complete
+      naturalWidth: (e as any)?.target?.naturalWidth,
+      naturalHeight: (e as any)?.target?.naturalHeight,
+      complete: (e as any)?.target?.complete,
     });
     setLoadingState('error');
   };
@@ -91,17 +109,20 @@ const OptimizedImage = ({
       "overflow-hidden relative",
       className
     )}>
-      {/* Show loading state */}
+      {/* Show loading state until image is actually loaded */}
       {loadingState === 'loading' && (
         <div className={cn(
           "absolute inset-0 flex items-center justify-center",
           loadingClassName
         )}>
-          <div className="text-gray-400 text-xs">Loading {src.split('/').pop()}...</div>
+          <div className="text-gray-400 text-xs">
+            Loading {src.split('/').pop()}...
+          </div>
         </div>
       )}
       
       <img
+        ref={imgRef} // Assign ref to the actual img element
         src={src}
         alt={alt}
         style={style}
@@ -112,7 +133,8 @@ const OptimizedImage = ({
           objectFit === "fill" && "object-fill",
           objectFit === "none" && "object-none",
           objectFit === "scale-down" && "object-scale-down",
-          loadingState === 'loading' ? "opacity-0" : "opacity-100"
+          // Only show the image when it's loaded, otherwise keep it transparent
+          loadingState === 'loaded' ? "opacity-100" : "opacity-0"
         )}
         loading={priority ? "eager" : "lazy"}
         onLoad={handleLoad}
