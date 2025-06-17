@@ -1,5 +1,4 @@
 
-
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -15,6 +14,7 @@ import HostProtectedRoute from "./components/HostProtectedRoute";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
 import Retreats from "./pages/Retreats";
 import Retreat from "./pages/Retreat";
+import RetreatDetails from "./pages/RetreatDetails";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import BlogPostMindfulnessNews from "./pages/BlogPostMindfulnessNews";
@@ -34,6 +34,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/retreats" element={<Retreats />} />
               <Route path="/retreats/:id" element={<Retreat />} />
+              <Route path="/retreat/:id" element={<RetreatDetails />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:id" element={<BlogPost />} />
               <Route path="/blog/mindfulness-news-june-2025" element={<BlogPostMindfulnessNews />} />
@@ -46,4 +47,3 @@ const App = () => (
 );
 
 export default App;
-
