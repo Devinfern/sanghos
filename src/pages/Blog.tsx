@@ -111,8 +111,8 @@ const Blog = () => {
 
       <main className="bg-white">
         {/* Hero Section */}
-        <section className="bg-gradient-to-b from-brand-subtle/10 to-white my-0 py-[100px]">
-          <div className="container mx-auto max-w-6xl px-4 md:px-6 my-[100px] py-[100px]">
+        <section className="bg-gradient-to-b from-brand-subtle/10 to-white my-0 py-[40px]">
+          <div className="container mx-auto max-w-6xl px-4 md:px-6 my-[0px] py-[0px]">
             <motion.div initial="hidden" animate="visible" variants={fadeUp} className="text-center max-w-3xl mx-auto">
               <h1 className="text-5xl md:text-6xl font-bold mb-6 text-brand-dark">
                 Wellness Insights
@@ -132,7 +132,7 @@ const Blog = () => {
         </section>
 
         {/* Featured Article */}
-        <section className="py-16">
+        <section className="py-[40px]">
           <div className="container mx-auto max-w-6xl px-4 md:px-6">
             <motion.div initial="hidden" animate="visible" variants={fadeUp} className="bg-gradient-to-r from-brand-primary/5 to-brand-subtle/10 rounded-3xl overflow-hidden">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
