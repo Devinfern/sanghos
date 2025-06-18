@@ -4,11 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { Shield } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-
-// URL and key constants for Supabase from the project's configuration
-const SUPABASE_URL = "https://raijubzrdhwizxtupguy.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhaWp1YnpyZGh3aXp4dHVwZ3V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI3MDEyMzcsImV4cCI6MjA0ODI3NzIzN30.2hO4hhqYdcUhpZLqGSfJo7lgS4d5qVj7nVROzRaNdJM";
+import { supabase, SUPABASE_PROJECT_URL, SUPABASE_PROJECT_KEY } from "@/integrations/supabase/client";
 
 const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
@@ -30,12 +26,12 @@ const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
         setIsLoading(true);
         console.log("Admin check for:", user.email);
         
-        // Use Edge Function for more reliable admin check with direct URL and key
-        const response = await fetch(`${SUPABASE_URL}/functions/v1/is_user_admin`, {
+        // Use Edge Function for more reliable admin check with correct URL and key
+        const response = await fetch(`${SUPABASE_PROJECT_URL}/functions/v1/is_user_admin`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+            'Authorization': `Bearer ${SUPABASE_PROJECT_KEY}`
           },
           body: JSON.stringify({ email: user.email })
         });
