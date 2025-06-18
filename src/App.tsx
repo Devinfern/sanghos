@@ -26,6 +26,7 @@ import UserDashboard from "./pages/UserDashboard";
 import Community from "./pages/Community";
 import BecomeHost from "./pages/BecomeHost";
 import TeachWithUs from "./pages/TeachWithUs";
+import WellnessStudios from "./pages/WellnessStudios";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,6 +45,7 @@ const App = () => (
               <Route path="/retreats" element={<Retreats />} />
               <Route path="/retreats/:id" element={<Retreat />} />
               <Route path="/retreat/:id" element={<RetreatDetails />} />
+              <Route path="/wellness-studios" element={<WellnessStudios />} />
               <Route path="/community-teaser" element={<CommunityTeaser />} />
               <Route path="/about-us" element={<About />} />
               <Route path="/blog" element={<Blog />} />
