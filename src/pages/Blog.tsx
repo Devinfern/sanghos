@@ -112,7 +112,7 @@ const Blog = () => {
       <main className="bg-white">
         {/* Hero Section */}
         <section className="bg-gradient-to-b from-brand-subtle/10 to-white my-0 py-[40px]">
-          <div className="container mx-auto max-w-6xl px-4 md:px-6 my-[0px] py-[0px]">
+          <div className="container mx-auto max-w-6xl px-4 md:px-6 my-[0px] py-[140px]">
             <motion.div initial="hidden" animate="visible" variants={fadeUp} className="text-center max-w-3xl mx-auto">
               <h1 className="text-5xl md:text-6xl font-bold mb-6 text-brand-dark">
                 Wellness Insights
