@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import Header from '@/components/Header';
@@ -25,6 +24,15 @@ const Blog = () => {
   };
 
   const articles = [{
+    id: 'wellness-retreats-modern-burnout-solution',
+    title: 'Why Wellness Retreats Are the Modern Solution to Burnout',
+    excerpt: 'As burnout reaches epidemic levels and Gen Z reshapes wellness culture, discover how luxury wellness retreats are evolving to meet the needs of a stressed-out generation.',
+    author: 'Devin Fernandez',
+    date: 'June 20, 2025',
+    readTime: '9 min read',
+    image: '/lovable-uploads/1bb523ae-38ed-4377-8a20-53ad930f2cba.png',
+    category: 'Wellness'
+  }, {
     id: 'mindful-breathing-techniques',
     title: 'Mindful Breathing Techniques: Your Gateway to Inner Peace',
     excerpt: 'Transform your daily stress into moments of calm and clarity with these powerful, evidence-based breathing practices.',
