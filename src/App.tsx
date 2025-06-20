@@ -20,6 +20,9 @@ import BlogPost from "./pages/BlogPost";
 import BlogPostMindfulnessNews from "./pages/BlogPostMindfulnessNews";
 import BlogPostWellnessRetreats from "./pages/BlogPostWellnessRetreats";
 import BlogPostBreathingTechniques from "./pages/BlogPostBreathingTechniques";
+import BlogPostForestBathing from "./pages/BlogPostForestBathing";
+import BlogPostMeditationPrep from "./pages/BlogPostMeditationPrep";
+import BlogPostMorningRituals from "./pages/BlogPostMorningRituals";
 import CommunityTeaser from "./pages/CommunityTeaser";
 import About from "./pages/About";
 import Login from "./pages/Login";
@@ -55,6 +58,9 @@ const App = () => (
               <Route path="/blog/mindfulness-news-june-2025" element={<BlogPostMindfulnessNews />} />
               <Route path="/blog/wellness-retreats-modern-burnout-solution" element={<BlogPostWellnessRetreats />} />
               <Route path="/blog/mindful-breathing-techniques" element={<BlogPostBreathingTechniques />} />
+              <Route path="/blog/forest-bathing-guide" element={<BlogPostForestBathing />} />
+              <Route path="/blog/meditation-retreat-preparation" element={<BlogPostMeditationPrep />} />
+              <Route path="/blog/morning-wellness-rituals" element={<BlogPostMorningRituals />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/become-host" element={<BecomeHost />} />
