@@ -1,18 +1,34 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
-import { Calendar, User, Clock, ArrowLeft, ExternalLink, TrendingUp, Globe, GraduationCap, Award, Brain, School } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { TrendingUp, Globe, GraduationCap, Award, Brain, School } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BeehiivNewsletterSignup from '@/components/BeehiivNewsletterSignup';
+import BlogPostHero from '@/components/blog/BlogPostHero';
+import BlogPostStory from '@/components/blog/BlogPostStory';
+import BlogPostConclusion from '@/components/blog/BlogPostConclusion';
+import BlogPostCTA from '@/components/blog/BlogPostCTA';
+import RelatedReading from '@/components/blog/RelatedReading';
 
 const BlogPostMindfulnessNews = () => {
   const fadeUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  };
+
+  const relatedLinks = {
+    internalLinks: [
+      { title: "Mindful Breathing Techniques: Your Gateway to Inner Peace", href: "/blog/mindful-breathing-techniques" },
+      { title: "Preparing for Your First Meditation Retreat", href: "/blog/meditation-retreat-preparation" },
+      { title: "The Art of Digital Detox: Reclaiming Your Mental Space", href: "/blog/digital-detox-retreat" }
+    ],
+    exploreLinks: [
+      { title: "Browse Mindfulness Retreats", href: "/retreats" },
+      { title: "Find Qualified Instructors", href: "/instructors" },
+      { title: "Discover Wellness Studios", href: "/wellness-studios" }
+    ]
   };
 
   return (
@@ -25,46 +41,14 @@ const BlogPostMindfulnessNews = () => {
       <Header />
 
       <main className="bg-white pt-20">
-        {/* Hero Section */}
-        <section className="py-16 bg-gradient-to-b from-brand-subtle/10 to-white">
-          <div className="container mx-auto max-w-4xl px-4 md:px-6">
-            <motion.div initial="hidden" animate="visible" variants={fadeUp}>
-              <Link to="/blog" className="inline-flex items-center text-brand-primary hover:text-brand-primary/80 mb-8 group">
-                <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
-                Back to Blog
-              </Link>
-              
-              <div className="mb-6">
-                <span className="bg-brand-primary/10 text-brand-primary px-4 py-2 rounded-full text-sm font-medium">
-                  Featured Article
-                </span>
-              </div>
-              
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 text-brand-dark">
-                Mindfulness in the News: June 2025
-              </h1>
-              
-              <p className="text-xl text-brand-slate mb-8 leading-relaxed">
-                A comprehensive roundup of the most significant mindfulness and meditation developments from around the world this month, showcasing the growing global embrace of contemplative practices.
-              </p>
-              
-              <div className="flex flex-wrap items-center gap-6 text-brand-slate">
-                <div className="flex items-center gap-2">
-                  <User className="h-5 w-5" />
-                  <span>Devin Fernandez</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5" />
-                  <span>June 17, 2025</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="h-5 w-5" />
-                  <span>12 min read</span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
+        <BlogPostHero
+          title="Mindfulness in the News: June 2025"
+          excerpt="A comprehensive roundup of the most significant mindfulness and meditation developments from around the world this month, showcasing the growing global embrace of contemplative practices."
+          author="Devin Fernandez"
+          date="June 17, 2025"
+          readTime="12 min read"
+          category="Featured Article"
+        />
 
         {/* Article Content */}
         <section className="py-16">
@@ -82,17 +66,13 @@ const BlogPostMindfulnessNews = () => {
               </div>
 
               {/* Story 1 */}
-              <div className="mb-16">
-                <div className="flex items-center gap-3 mb-6">
-                  <TrendingUp className="h-6 w-6 text-brand-primary" />
-                  <h2 className="text-3xl font-bold text-brand-dark">Digital Revolution: Isha Foundation's "Miracle of Mind" Breaks Download Records</h2>
-                </div>
-                
-                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 mb-6">
-                  <p className="text-sm text-gray-600 mb-2 font-medium">BREAKING: June 6, 2025 - GlobeNewswire</p>
-                  <p className="font-semibold text-lg">Over 1 million downloads in just 15 hours - surpassing ChatGPT's initial adoption rate</p>
-                </div>
-
+              <BlogPostStory
+                icon={TrendingUp}
+                title="Digital Revolution: Isha Foundation's 'Miracle of Mind' Breaks Download Records"
+                subtitle="Over 1 million downloads in just 15 hours - surpassing ChatGPT's initial adoption rate"
+                date="June 6, 2025"
+                source="GlobeNewswire"
+              >
                 <p className="text-lg leading-relaxed mb-6">
                   In what can only be described as a watershed moment for digital wellness, the <a href="https://isha.sadhguru.org/" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">Isha Foundation's</a> newly launched "Miracle of Mind" app has shattered download records, achieving over 1 million downloads in an unprecedented 15 hours. To put this in perspective, this adoption rate exceeds even ChatGPT's explosive initial launch, signaling a profound shift in how society prioritizes <a href="https://www.who.int/news-room/feature-stories/detail/mental-disorders-key-facts" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">mental well-being</a>.
                 </p>
@@ -120,20 +100,16 @@ const BlogPostMindfulnessNews = () => {
                     <li>• Completely free access to all core features</li>
                   </ul>
                 </div>
-              </div>
+              </BlogPostStory>
 
               {/* Story 2 */}
-              <div className="mb-16">
-                <div className="flex items-center gap-3 mb-6">
-                  <Globe className="h-6 w-6 text-brand-primary" />
-                  <h2 className="text-3xl font-bold text-brand-dark">Global Education Initiative: CHIME Program Expands to Ghana</h2>
-                </div>
-
-                <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6 mb-6">
-                  <p className="text-sm text-gray-600 mb-2 font-medium">June 2, 2025 - Nebraska Today</p>
-                  <p className="font-semibold text-lg">University of Nebraska-Lincoln's mindfulness program crosses continents to support African educators</p>
-                </div>
-
+              <BlogPostStory
+                icon={Globe}
+                title="Global Education Initiative: CHIME Program Expands to Ghana"
+                subtitle="University of Nebraska-Lincoln's mindfulness program crosses continents to support African educators"
+                date="June 2, 2025"
+                source="Nebraska Today"
+              >
                 <p className="text-lg leading-relaxed mb-6">
                   In a powerful demonstration of mindfulness education's global relevance, the <a href="https://www.unl.edu/" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">University of Nebraska-Lincoln's</a> CHIME (Cultivating Healthy Intentional Mindful Educators) program has officially expanded to Ghana. This groundbreaking initiative represents the first major cross-continental mindfulness education partnership, highlighting the universal need for <a href="https://www.edutopia.org/article/teacher-burnout-real-solutions/" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">educator well-being support</a>.
                 </p>
@@ -166,20 +142,16 @@ const BlogPostMindfulnessNews = () => {
                 <p className="text-lg leading-relaxed mb-6">
                   Dr. Sarah Williams, CHIME's lead researcher, emphasizes that this expansion isn't about exporting Western mindfulness concepts but rather creating a collaborative framework where universal principles of awareness and compassion can flourish within local contexts. "We're learning as much from Ghanaian educators as we're sharing," she notes. Find similar <Link to="/retreats" className="text-brand-primary hover:underline">mindfulness retreat experiences</Link> that honor cultural diversity.
                 </p>
-              </div>
+              </BlogPostStory>
 
               {/* Story 3 */}
-              <div className="mb-16">
-                <div className="flex items-center gap-3 mb-6">
-                  <Award className="h-6 w-6 text-brand-primary" />
-                  <h2 className="text-3xl font-bold text-brand-dark">Conscious Commerce: Mindful Awards Recognize Industry Leaders</h2>
-                </div>
-
-                <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-6 mb-6">
-                  <p className="text-sm text-gray-600 mb-2 font-medium">June 12, 2025 - GlobeNewswire</p>
-                  <p className="font-semibold text-lg">7th Annual Mindful Awards Program honors companies "mindfully making waves"</p>
-                </div>
-
+              <BlogPostStory
+                icon={Award}
+                title="Conscious Commerce: Mindful Awards Recognize Industry Leaders"
+                subtitle="7th Annual Mindful Awards Program honors companies 'mindfully making waves'"
+                date="June 12, 2025"
+                source="GlobeNewswire"
+              >
                 <p className="text-lg leading-relaxed mb-6">
                   The 7th Annual Mindful Awards Program has announced its 2025 winners, recognizing conscious companies and products that are "mindfully making waves" in the consumer-packaged goods industry. While not directly focused on meditation practice, this recognition signals a profound shift toward <a href="https://www.sustainablebrands.com/news_and_views/business_models/sustainable_brands/what_conscious_consumerism_really_means_2021" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">mindful consumption and production</a> across all sectors of the economy.
                 </p>
@@ -202,20 +174,16 @@ const BlogPostMindfulnessNews = () => {
                 <p className="text-lg leading-relaxed mb-6">
                   The program's growth reflects increasing consumer demand for products and services that align with their values. Companies are discovering that mindful business practices not only contribute to social and environmental well-being but also drive innovation, employee satisfaction, and long-term profitability. Learn about <Link to="/wellness-studios" className="text-brand-primary hover:underline">wellness businesses</Link> leading the conscious commerce movement.
                 </p>
-              </div>
+              </BlogPostStory>
 
               {/* Story 4 */}
-              <div className="mb-16">
-                <div className="flex items-center gap-3 mb-6">
-                  <GraduationCap className="h-6 w-6 text-brand-primary" />
-                  <h2 className="text-3xl font-bold text-brand-dark">Academic Excellence: Johns Hopkins Continues Evidence-Based Mindfulness</h2>
-                </div>
-
-                <div className="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-xl p-6 mb-6">
-                  <p className="text-sm text-gray-600 mb-2 font-medium">June 3-24, 2025 - Hopkins Groups</p>
-                  <p className="font-semibold text-lg">MIEA Mindfulness Course offers 4-week online program for stress reduction and well-being</p>
-                </div>
-
+              <BlogPostStory
+                icon={GraduationCap}
+                title="Academic Excellence: Johns Hopkins Continues Evidence-Based Mindfulness"
+                subtitle="MIEA Mindfulness Course offers 4-week online program for stress reduction and well-being"
+                date="June 3-24, 2025"
+                source="Hopkins Groups"
+              >
                 <p className="text-lg leading-relaxed mb-6">
                   <a href="https://www.hopkinsmedicine.org/" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">Johns Hopkins University's</a> Health Promotion and Well-Being department continues to lead in evidence-based mindfulness education with their ongoing "MIEA Mindfulness Course" throughout June 2025. This 4-week online program exemplifies the institutionalization of mindfulness within prestigious academic medical centers.
                 </p>
@@ -238,20 +206,16 @@ const BlogPostMindfulnessNews = () => {
                 <p className="text-lg leading-relaxed mb-6">
                   The program's continued availability and popularity demonstrate the sustained demand for scientifically-validated mindfulness training. Participants report not only immediate stress relief but also long-term improvements in emotional regulation, relationship quality, and overall life satisfaction. Explore our <Link to="/retreats" className="text-brand-primary hover:underline">mindfulness retreats</Link> for immersive learning experiences.
                 </p>
-              </div>
+              </BlogPostStory>
 
               {/* Story 5 */}
-              <div className="mb-16">
-                <div className="flex items-center gap-3 mb-6">
-                  <School className="h-6 w-6 text-brand-primary" />
-                  <h2 className="text-3xl font-bold text-brand-dark">Educational Innovation: Michigan's Youth Mindfulness Initiative</h2>
-                </div>
-
-                <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-6 mb-6">
-                  <p className="text-sm text-gray-600 mb-2 font-medium">June 17-18, 2025 - MC4ME</p>
-                  <p className="font-semibold text-lg">"Learn to Teach Mindfulness to Youth 2.0" summer institute addresses growing demand</p>
-                </div>
-
+              <BlogPostStory
+                icon={School}
+                title="Educational Innovation: Michigan's Youth Mindfulness Initiative"
+                subtitle="'Learn to Teach Mindfulness to Youth 2.0' summer institute addresses growing demand"
+                date="June 17-18, 2025"
+                source="MC4ME"
+              >
                 <p className="text-lg leading-relaxed mb-6">
                   The Michigan Collaborative for Mindfulness in Education (MC4ME) is hosting a transformative "Learn to Teach Mindfulness to Youth 2.0" summer institute, specifically designed for educators whose schools are embracing mindfulness as a core component of <a href="https://www.edutopia.org/social-emotional-learning" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">student well-being</a> and academic success.
                 </p>
@@ -279,20 +243,16 @@ const BlogPostMindfulnessNews = () => {
                 <p className="text-lg leading-relaxed mb-6">
                   The institute's "2.0" designation reflects the evolution of youth mindfulness education based on years of research and practical implementation. Participants learn not only what to teach but how to adapt practices for diverse learning styles, cultural backgrounds, and developmental stages. Discover <Link to="/instructors" className="text-brand-primary hover:underline">qualified mindfulness instructors</Link> who specialize in youth education.
                 </p>
-              </div>
+              </BlogPostStory>
 
               {/* Story 6 */}
-              <div className="mb-16">
-                <div className="flex items-center gap-3 mb-6">
-                  <Brain className="h-6 w-6 text-brand-primary" />
-                  <h2 className="text-3xl font-bold text-brand-dark">Personal Transformation: The Ongoing Science of Meditation's Impact</h2>
-                </div>
-
-                <div className="bg-gradient-to-r from-rose-50 to-red-50 rounded-xl p-6 mb-6">
-                  <p className="text-sm text-gray-600 mb-2 font-medium">Ongoing Discussion - Recent Feature in Newsweek, May 10, 2025</p>
-                  <p className="font-semibold text-lg">Human-interest stories continue to fuel scientific inquiry into meditation's transformative effects</p>
-                </div>
-
+              <BlogPostStory
+                icon={Brain}
+                title="Personal Transformation: The Ongoing Science of Meditation's Impact"
+                subtitle="Human-interest stories continue to fuel scientific inquiry into meditation's transformative effects"
+                date="Ongoing Discussion"
+                source="Recent Feature in Newsweek, May 10, 2025"
+              >
                 <p className="text-lg leading-relaxed mb-6">
                   While not representing new research from June 2025, a recent compelling human-interest story in <a href="https://www.newsweek.com/" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">Newsweek</a> has reignited public discourse about <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6971819/" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">meditation's profound impact on brain function</a> and life trajectory. The article follows an individual's dramatic career transition from high-stress corporate life to monastic practice, highlighting the deep neurological and psychological transformations possible through sustained contemplative practice.
                 </p>
@@ -319,12 +279,10 @@ const BlogPostMindfulnessNews = () => {
                 <p className="text-lg leading-relaxed mb-6">
                   The continued circulation of such stories, combined with ongoing research at institutions like <a href="https://www.health.harvard.edu/staying-healthy/why-you-should-try-meditation" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">Harvard</a>, <a href="https://med.stanford.edu/news/all-news/2017/07/meditation-improves-memory-may-reduce-alzheimers.html" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">Stanford</a>, and Johns Hopkins, maintains meditation's position at the forefront of conversations about mental health, human potential, and the future of well-being. Experience these transformations firsthand through our <Link to="/retreats" className="text-brand-primary hover:underline">meditation retreats</Link>.
                 </p>
-              </div>
+              </BlogPostStory>
 
               {/* Conclusion */}
-              <div className="bg-gradient-to-r from-sage-50 to-brand-subtle/10 rounded-2xl p-8 mb-12">
-                <h3 className="text-2xl font-bold text-brand-dark mb-6">Looking Forward: The Mindfulness Movement's Momentum</h3>
-                
+              <BlogPostConclusion title="Looking Forward: The Mindfulness Movement's Momentum">
                 <p className="text-lg leading-relaxed mb-6">
                   June 2025 has demonstrated that mindfulness and meditation are no longer alternative practices but essential components of modern life. From record-breaking app downloads to international educational collaborations, from corporate consciousness to academic integration, the <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6142584/" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">contemplative sciences</a> are reshaping how humanity approaches well-being.
                 </p>
@@ -340,46 +298,23 @@ const BlogPostMindfulnessNews = () => {
                 <p className="text-lg leading-relaxed">
                   As we continue through 2025, these developments promise to create a world where contemplative wisdom and scientific insight work together to address our most pressing challenges—from individual stress and anxiety to collective issues like <a href="https://www.who.int/news-room/fact-sheets/detail/climate-change-and-health" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">environmental sustainability</a> and social justice. The mindfulness movement is no longer moving—it has arrived.
                 </p>
-              </div>
+              </BlogPostConclusion>
 
               {/* Related Reading Section */}
-              <div className="bg-white border border-sage-200 rounded-xl p-8 mb-12">
-                <h3 className="text-xl font-bold text-brand-dark mb-6">Related Reading</h3>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <h4 className="font-semibold mb-3">From Our Blog:</h4>
-                    <ul className="space-y-2">
-                      <li>• <Link to="/blog/mindful-breathing-techniques" className="text-brand-primary hover:underline">Mindful Breathing Techniques: Your Gateway to Inner Peace</Link></li>
-                      <li>• <Link to="/blog/meditation-retreat-preparation" className="text-brand-primary hover:underline">Preparing for Your First Meditation Retreat</Link></li>
-                      <li>• <Link to="/blog/digital-detox-retreat" className="text-brand-primary hover:underline">The Art of Digital Detox: Reclaiming Your Mental Space</Link></li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-3">Explore Further:</h4>
-                    <ul className="space-y-2">
-                      <li>• <Link to="/retreats" className="text-brand-primary hover:underline">Browse Mindfulness Retreats</Link></li>
-                      <li>• <Link to="/instructors" className="text-brand-primary hover:underline">Find Qualified Instructors</Link></li>
-                      <li>• <Link to="/wellness-studios" className="text-brand-primary hover:underline">Discover Wellness Studios</Link></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+              <RelatedReading 
+                internalLinks={relatedLinks.internalLinks}
+                exploreLinks={relatedLinks.exploreLinks}
+              />
 
               {/* Call to Action */}
-              <div className="text-center bg-white border border-sage-200 rounded-xl p-8">
-                <h3 className="text-xl font-bold text-brand-dark mb-4">Ready to Join the Movement?</h3>
-                <p className="text-brand-slate mb-6">
-                  Discover how you can integrate mindfulness into your daily life with our curated retreat experiences and wellness resources.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button asChild className="bg-brand-primary hover:bg-brand-primary/90">
-                    <Link to="/retreats">Explore Retreats</Link>
-                  </Button>
-                  <Button variant="outline" asChild>
-                    <Link to="/blog">Read More Articles</Link>
-                  </Button>
-                </div>
-              </div>
+              <BlogPostCTA
+                title="Ready to Join the Movement?"
+                description="Discover how you can integrate mindfulness into your daily life with our curated retreat experiences and wellness resources."
+                primaryButtonText="Explore Retreats"
+                primaryButtonLink="/retreats"
+                secondaryButtonText="Read More Articles"
+                secondaryButtonLink="/blog"
+              />
 
             </motion.div>
           </div>
