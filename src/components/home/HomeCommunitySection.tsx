@@ -1,10 +1,13 @@
+
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
 const HomeCommunitySection = () => {
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem("sanghos_user") !== null;
+
   const handleCommunityClick = () => {
     if (isLoggedIn) {
       navigate('/community');
@@ -12,7 +15,13 @@ const HomeCommunitySection = () => {
       navigate('/join');
     }
   };
-  return <section className="py-24 bg-brand-dark relative overflow-hidden">
+
+  const handleBecomeHostClick = () => {
+    navigate('/become-host');
+  };
+
+  return (
+    <section className="py-24 bg-brand-dark relative overflow-hidden">
       {/* Background subtle shapes */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <div className="absolute h-96 w-96 rounded-full bg-brand-primary/20 top-20 right-20 blur-3xl"></div>
@@ -70,7 +79,11 @@ const HomeCommunitySection = () => {
                 <p className="text-white/80 mb-6">
                   Share your space and join our community of hosts offering transformative retreat venues.
                 </p>
-                <Button variant="outline" className="border-white font-medium group text-[#4b4b4b] bg-slate-50">
+                <Button 
+                  variant="outline" 
+                  className="border-white font-medium group text-[#4b4b4b] bg-slate-50"
+                  onClick={handleBecomeHostClick}
+                >
                   Apply Now
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
@@ -110,6 +123,8 @@ const HomeCommunitySection = () => {
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default HomeCommunitySection;
