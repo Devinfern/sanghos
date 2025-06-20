@@ -36,6 +36,40 @@ export const seoConfig = {
     about: '/about'
   },
   
+  // Topic-specific external link databases
+  topicLinks: {
+    breathwork: {
+      research: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7367555/',
+      techniques: 'https://www.healthline.com/health/breathing-exercise',
+      benefits: 'https://www.mayoclinic.org/healthy-lifestyle/stress-management/in-depth/decrease-stress-by-using-your-breath/art-20267197'
+    },
+    meditation: {
+      science: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6971819/',
+      mindfulness: 'https://www.mindful.org/meditation/mindfulness-getting-started/',
+      retreats: 'https://www.health.harvard.edu/blog/meditation-offers-significant-heart-benefits-2013050616007'
+    },
+    yoga: {
+      benefits: 'https://www.mayoclinic.org/healthy-lifestyle/fitness/in-depth/yoga/art-20044733',
+      beginner: 'https://www.healthline.com/health/fitness/yoga-for-beginners',
+      styles: 'https://www.yogajournal.com/yoga-101/types-of-yoga/'
+    },
+    wellness: {
+      burnout: 'https://www.who.int/news/item/28-05-2019-burn-out-an-occupational-phenomenon-international-classification-of-diseases',
+      mentalHealth: 'https://www.apa.org/topics/stress/manage',
+      workplace: 'https://www.cdc.gov/workplacehealthpromotion/tools-resources/workplace-health/mental-health/index.html'
+    },
+    natureTherapy: {
+      forestBathing: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6225498/',
+      benefits: 'https://www.healthline.com/health/forest-bathing',
+      research: 'https://www.nature.com/articles/s41598-019-44097-3'
+    },
+    soundTherapy: {
+      science: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4672022/',
+      benefits: 'https://www.healthline.com/health/sound-healing',
+      instruments: 'https://www.mindful.org/what-is-sound-healing/'
+    }
+  },
+  
   // SEO-optimized anchor text patterns
   anchorTextPatterns: {
     meditation: ['meditation practices', 'contemplative practices', 'mindfulness meditation'],
@@ -52,7 +86,9 @@ export const seoConfig = {
     retreats: 'Comprehensive guides to meditation retreats and transformative wellness experiences.',
     breathwork: 'Master powerful breathing techniques for stress reduction and inner peace.',
     yoga: 'Explore yoga practices, philosophy, and their integration into modern wellness.',
-    news: 'Latest developments in mindfulness, meditation, and wellness from around the world.'
+    news: 'Latest developments in mindfulness, meditation, and wellness from around the world.',
+    natureTherapy: 'Discover the healing power of nature and forest bathing practices.',
+    soundTherapy: 'Explore the therapeutic benefits of sound healing and vibrational medicine.'
   }
 };
 
