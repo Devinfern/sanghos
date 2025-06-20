@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
@@ -18,6 +17,10 @@ const HomeCommunitySection = () => {
 
   const handleBecomeHostClick = () => {
     navigate('/become-host');
+  };
+
+  const handleTeachWithUsClick = () => {
+    navigate('/teach-with-us');
   };
 
   return (
@@ -107,7 +110,11 @@ const HomeCommunitySection = () => {
                 <p className="text-white/80 mb-6">
                   Are you a wellness practitioner? Join our instructor community and share your expertise.
                 </p>
-                <Button variant="outline" className="border-white font-medium group text-[#4b4b4b] bg-slate-50">
+                <Button 
+                  variant="outline" 
+                  className="border-white font-medium group text-[#4b4b4b] bg-slate-50"
+                  onClick={handleTeachWithUsClick}
+                >
                   Apply Now
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
