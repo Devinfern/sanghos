@@ -35,6 +35,8 @@ import Community from "./pages/Community";
 import BecomeHost from "./pages/BecomeHost";
 import TeachWithUs from "./pages/TeachWithUs";
 import WellnessStudios from "./pages/WellnessStudios";
+import Pricing from "./pages/Pricing";
+import Onboarding from "./pages/Onboarding";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -64,6 +66,11 @@ const App = () => (
               <Route path="/blog/forest-bathing-guide" element={<BlogPostForestBathing />} />
               <Route path="/blog/meditation-retreat-preparation" element={<BlogPostMeditationPrep />} />
               <Route path="/blog/morning-wellness-rituals" element={<BlogPostMorningRituals />} />
+              <Route path="/blog/yoga-beginners-guide" element={<BlogPostYogaBeginners />} />
+              <Route path="/blog/digital-detox-guide" element={<BlogPostDigitalDetox />} />
+              <Route path="/blog/sound-healing-benefits" element={<BlogPostSoundHealing />} />
+              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/onboarding" element={<Onboarding />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/become-host" element={<BecomeHost />} />
