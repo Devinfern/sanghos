@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -38,6 +37,7 @@ import WellnessStudios from "./pages/WellnessStudios";
 import Pricing from "./pages/Pricing";
 import Onboarding from "./pages/Onboarding";
 import NotFound from "./pages/NotFound";
+import WellnessJournalPage from "./pages/WellnessJournalPage";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +52,7 @@ const App = () => (
             <ScrollToTop />
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/ai-retreat-finder" element={<WellnessJournalPage />} />
               <Route path="/retreats" element={<Retreats />} />
               <Route path="/retreats/:id" element={<Retreat />} />
               <Route path="/retreat/:id" element={<RetreatDetails />} />

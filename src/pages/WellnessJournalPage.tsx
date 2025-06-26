@@ -1,20 +1,49 @@
-
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WellnessJournal from "@/components/WellnessJournal";
 import { motion } from "framer-motion";
+import ConversationalRetreatFinder from "@/components/ai/ConversationalRetreatFinder";
 
 const WellnessJournalPage = () => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [userLocation, setUserLocation] = useState<string>("San Francisco, CA");
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(true);
     }, 100);
+
+    // Get user location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async position => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=14&addressdetails=1`
+          );
+          if (response.ok) {
+            const data = await response.json();
+            const city = data.address.city || data.address.town || data.address.village || data.address.county;
+            const state = data.address.state;
+            const country = data.address.country;
+            const locationString = city ? `${city}, ${state || country}` : `${state}, ${country}`;
+            setUserLocation(locationString);
+          }
+        } catch (error) {
+          console.error("Error getting location details:", error);
+        }
+      });
+    }
+
     return () => clearTimeout(timer);
   }, []);
+
+  const handleRetreatSelect = (retreatId: string) => {
+    // Navigate to retreat details
+    window.open(`/retreat/${retreatId}`, '_blank');
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -38,7 +67,7 @@ const WellnessJournalPage = () => {
         <title>AI Retreat Finder | Sanghos</title>
         <meta
           name="description"
-          content="Express yourself through journaling and discover personalized retreats and events tailored to your wellness needs."
+          content="Discover personalized wellness retreats with our AI-powered conversation interface. Find the perfect retreat experience tailored to your needs."
         />
       </Helmet>
 
@@ -70,12 +99,16 @@ const WellnessJournalPage = () => {
                 AI Retreat Finder
               </h1>
               <p className="text-sage-700 max-w-2xl mx-auto">
-                Express yourself through journaling and discover personalized retreat recommendations tailored to your wellness needs.
+                Have a conversation with our AI to discover personalized wellness retreats. 
+                Tell us about your needs, preferences, and goals, and we'll find the perfect retreat experience for you.
               </p>
             </motion.div>
 
             <motion.div variants={itemVariants} className="mb-16">
-              <WellnessJournal />
+              <ConversationalRetreatFinder 
+                userLocation={userLocation}
+                onRetreatSelect={handleRetreatSelect}
+              />
             </motion.div>
           </motion.div>
         </div>
