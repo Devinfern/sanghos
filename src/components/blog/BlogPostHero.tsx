@@ -20,7 +20,7 @@ const BlogPostHero = ({ title, excerpt, author, date, readTime, category }: Blog
   };
 
   return (
-    <section className="py-8 md:py-12 bg-gradient-to-b from-brand-subtle/10 to-white">
+    <section className="pt-24 pb-8 md:pt-28 md:pb-12 bg-gradient-to-b from-brand-subtle/10 to-white">
       <div className="container mx-auto max-w-4xl px-4 md:px-6">
         <motion.div initial="hidden" animate="visible" variants={fadeUp}>
           <Link to="/blog" className="inline-flex items-center text-brand-primary hover:text-brand-primary/80 mb-6 group">
