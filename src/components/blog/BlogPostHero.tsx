@@ -20,16 +20,16 @@ const BlogPostHero = ({ title, excerpt, author, date, readTime, category }: Blog
   };
 
   return (
-    <section className="py-16 bg-gradient-to-b from-brand-subtle/10 to-white">
+    <section className="py-8 md:py-12 bg-gradient-to-b from-brand-subtle/10 to-white">
       <div className="container mx-auto max-w-4xl px-4 md:px-6">
         <motion.div initial="hidden" animate="visible" variants={fadeUp}>
-          <Link to="/blog" className="inline-flex items-center text-brand-primary hover:text-brand-primary/80 mb-8 group">
+          <Link to="/blog" className="inline-flex items-center text-brand-primary hover:text-brand-primary/80 mb-6 group">
             <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
             Back to Blog
           </Link>
           
           {category && (
-            <div className="mb-6">
+            <div className="mb-4">
               <span className="bg-brand-primary/10 text-brand-primary px-4 py-2 rounded-full text-sm font-medium">
                 {category}
               </span>
@@ -40,7 +40,7 @@ const BlogPostHero = ({ title, excerpt, author, date, readTime, category }: Blog
             {title}
           </h1>
           
-          <p className="text-xl text-brand-slate mb-8 leading-relaxed">
+          <p className="text-xl text-brand-slate mb-6 leading-relaxed">
             {excerpt}
           </p>
           

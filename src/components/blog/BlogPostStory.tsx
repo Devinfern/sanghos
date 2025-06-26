@@ -13,7 +13,7 @@ interface BlogPostStoryProps {
 
 const BlogPostStory = ({ icon: Icon, title, subtitle, date, source, children }: BlogPostStoryProps) => {
   return (
-    <div className="mb-16">
+    <div className="mb-12">
       <div className="flex items-center gap-3 mb-6">
         <Icon className="h-6 w-6 text-brand-primary" />
         <h2 className="text-3xl font-bold text-brand-dark">{title}</h2>
