@@ -13,6 +13,18 @@ const Blog = () => {
   const [searchQuery, setSearchQuery] = useState("");
   
   const featuredArticle = {
+    id: 'spirituality-wellness-science',
+    title: 'The Science of Spiritual Wellness: Why Connection Matters More Than Ever',
+    excerpt: 'Emerging research reveals how spiritual health—from finding purpose to fostering connection—directly impacts our physical and mental well-being, especially for younger generations seeking meaning.',
+    author: 'Devin Fernandez',
+    date: 'June 26, 2025',
+    readTime: '8 min read',
+    image: '/lovable-uploads/cf8fc774-aba1-4ccc-a684-8a94a89150ce.jpg',
+    category: 'Wellness Research',
+    featured: true
+  };
+
+  const articles = [{
     id: 'mindfulness-news-june-2025',
     title: 'Mindfulness in the News: June 2025',
     excerpt: 'A comprehensive roundup of the most significant mindfulness and meditation developments from around the world this month, from breakthrough apps to educational initiatives.',
@@ -20,11 +32,8 @@ const Blog = () => {
     date: 'June 17, 2025',
     readTime: '12 min read',
     image: '/lovable-uploads/cf8fc774-aba1-4ccc-a684-8a94a89150ce.jpg',
-    category: 'News & Trends',
-    featured: true
-  };
-
-  const articles = [{
+    category: 'News & Trends'
+  }, {
     id: 'wellness-retreats-modern-burnout-solution',
     title: 'Why Wellness Retreats Are the Modern Solution to Burnout',
     excerpt: 'As burnout reaches epidemic levels and Gen Z reshapes wellness culture, discover how luxury wellness retreats are evolving to meet the needs of a stressed-out generation.',
@@ -98,7 +107,7 @@ const Blog = () => {
     category: 'Sound Therapy'
   }];
 
-  const categories = ['All', 'News & Trends', 'Meditation', 'Breathwork', 'Yoga', 'Nature Therapy', 'Wellness', 'Mindfulness', 'Sound Therapy'];
+  const categories = ['All', 'Wellness Research', 'News & Trends', 'Meditation', 'Breathwork', 'Yoga', 'Nature Therapy', 'Wellness', 'Mindfulness', 'Sound Therapy'];
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   const filteredArticles = articles.filter(article => 

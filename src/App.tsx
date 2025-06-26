@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -25,6 +26,7 @@ import BlogPostMorningRituals from "./pages/BlogPostMorningRituals";
 import BlogPostYogaBeginners from "./pages/BlogPostYogaBeginners";
 import BlogPostDigitalDetox from "./pages/BlogPostDigitalDetox";
 import BlogPostSoundHealing from "./pages/BlogPostSoundHealing";
+import BlogPostSpiritualityWellness from "./pages/BlogPostSpiritualityWellness";
 import CommunityTeaser from "./pages/CommunityTeaser";
 import About from "./pages/About";
 import Login from "./pages/Login";
@@ -70,6 +72,7 @@ const App = () => (
               <Route path="/blog/yoga-beginners-guide" element={<BlogPostYogaBeginners />} />
               <Route path="/blog/digital-detox-guide" element={<BlogPostDigitalDetox />} />
               <Route path="/blog/sound-healing-benefits" element={<BlogPostSoundHealing />} />
+              <Route path="/blog/spirituality-wellness-science" element={<BlogPostSpiritualityWellness />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/onboarding" element={<Onboarding />} />
               <Route path="/login" element={<Login />} />
