@@ -59,6 +59,8 @@ Response format: JSON with message, recommendations array, followUpQuestions arr
       userPrompt = `Based on this conversation and current preferences, what questions should I ask next?\nConversation: ${JSON.stringify(messages)}\nPreferences: ${JSON.stringify(preferences)}`;
     }
 
+    console.log('Sending request to OpenAI with model: gpt-4o-mini');
+    
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -76,7 +78,20 @@ Response format: JSON with message, recommendations array, followUpQuestions arr
       }),
     });
 
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('OpenAI API error:', response.status, errorData);
+      throw new Error(`OpenAI API error: ${response.status}`);
+    }
+
     const data = await response.json();
+    console.log('OpenAI response received:', data);
+
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      console.error('Invalid OpenAI response structure:', data);
+      throw new Error('Invalid response from OpenAI API');
+    }
+
     let content = data.choices[0].message.content;
 
     // Try to parse as JSON, fallback to structured response
@@ -92,6 +107,8 @@ Response format: JSON with message, recommendations array, followUpQuestions arr
         extractedPreferences: {}
       };
     }
+
+    console.log('Sending result:', result);
 
     return new Response(JSON.stringify(result), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
