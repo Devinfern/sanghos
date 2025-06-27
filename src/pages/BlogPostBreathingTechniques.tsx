@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
@@ -11,9 +10,13 @@ import BlogPostStory from '@/components/blog/BlogPostStory';
 import BlogPostConclusion from '@/components/blog/BlogPostConclusion';
 import BlogPostCTA from '@/components/blog/BlogPostCTA';
 import RelatedReading from '@/components/blog/RelatedReading';
+import ContentGate from '@/components/blog/ContentGate';
+import { useScrollGate } from '@/hooks/useScrollGate';
 import { Link } from 'react-router-dom';
 
 const BlogPostBreathingTechniques = () => {
+  const { shouldShowGate, dismissGate } = useScrollGate({ threshold: 0.4 });
+
   const fadeUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
@@ -100,6 +103,7 @@ const BlogPostBreathingTechniques = () => {
                 icon={Wind}
                 title="Essential Breathing Techniques for Daily Practice"
                 subtitle="Master these foundational practices for immediate stress relief and long-term well-being"
+                isGated={true}
               >
                 <div className="bg-green-50 rounded-lg p-6 mb-8">
                   <h4 className="font-semibold text-lg mb-4">1. Box Breathing (4-4-4-4 Technique)</h4>
@@ -145,6 +149,7 @@ const BlogPostBreathingTechniques = () => {
                 icon={Heart}
                 title="Advanced Breathwork for Emotional Regulation"
                 subtitle="Deepen your practice with techniques for processing difficult emotions and trauma"
+                isGated={true}
               >
                 <p className="text-lg leading-relaxed mb-6">
                   Beyond basic stress relief, advanced breathwork can be a powerful tool for emotional healing and <a href="https://www.traumainformedoregon.org/understanding-trauma/" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">trauma processing</a>. These practices should be approached gradually and ideally under the guidance of experienced <Link to="/instructors" className="text-brand-primary hover:underline">breathwork facilitators</Link>.
@@ -188,6 +193,7 @@ const BlogPostBreathingTechniques = () => {
                 icon={Clock}
                 title="Integrating Breathwork into Modern Life"
                 subtitle="Practical strategies for maintaining consistent practice in busy schedules"
+                isGated={true}
               >
                 <p className="text-lg leading-relaxed mb-6">
                   The most effective breathwork practice is the one you actually do consistently. Rather than aiming for lengthy sessions, focus on integrating short practices throughout your day at natural transition points and stress triggers.
@@ -233,7 +239,7 @@ const BlogPostBreathingTechniques = () => {
                 </div>
               </BlogPostStory>
 
-              <BlogPostConclusion title="Your Breath as a Lifelong Companion">
+              <BlogPostConclusion title="Your Breath as a Lifelong Companion" isGated={true}>
                 <p className="text-lg leading-relaxed mb-6">
                   Breathwork is perhaps the most accessible and immediately effective tool we have for managing stress, regulating emotions, and cultivating inner peace. Unlike other wellness practices that require special equipment or settings, your breath is always with you, ready to serve as an anchor in life's storms.
                 </p>
@@ -267,6 +273,12 @@ const BlogPostBreathingTechniques = () => {
 
         <BeehiivNewsletterSignup />
       </main>
+
+      <ContentGate 
+        isVisible={shouldShowGate}
+        onDismiss={dismissGate}
+        articleTitle="Mindful Breathing Techniques: Your Gateway to Inner Peace"
+      />
 
       <Footer />
     </>

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
@@ -11,9 +10,13 @@ import BlogPostStory from '@/components/blog/BlogPostStory';
 import BlogPostConclusion from '@/components/blog/BlogPostConclusion';
 import BlogPostCTA from '@/components/blog/BlogPostCTA';
 import RelatedReading from '@/components/blog/RelatedReading';
+import ContentGate from '@/components/blog/ContentGate';
+import { useScrollGate } from '@/hooks/useScrollGate';
 import { Link } from 'react-router-dom';
 
 const BlogPostDigitalDetox = () => {
+  const { shouldShowGate, dismissGate } = useScrollGate({ threshold: 0.4 });
+
   const fadeUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
@@ -107,6 +110,7 @@ const BlogPostDigitalDetox = () => {
                 icon={Brain}
                 title="The Neuroscience of Digital Detox: Rewiring Your Brain for Presence"
                 subtitle="How strategic breaks from technology restore cognitive function and emotional balance"
+                isGated={true}
               >
                 <p className="text-lg leading-relaxed mb-6">
                   When we step away from digital stimulation, our brains begin to restore what neuroscientists call the "default mode network"—a state of neural activity that enables introspection, creativity, and emotional processing. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4692319/" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">Research demonstrates</a> that regular periods of digital silence allow the prefrontal cortex to recover from overstimulation and return to more sustainable patterns of attention.
@@ -156,6 +160,7 @@ const BlogPostDigitalDetox = () => {
                 icon={Leaf}
                 title="Practical Digital Detox Strategies: From Micro-Breaks to Extended Retreats"
                 subtitle="Sustainable approaches to creating healthy boundaries with technology in daily life"
+                isGated={true}
               >
                 <p className="text-lg leading-relaxed mb-6">
                   Effective digital detox doesn't require dramatic gestures or complete disconnection. The most sustainable approaches involve creating structured boundaries that can be maintained long-term. Start with small, manageable changes that gradually build into more significant transformations in your relationship with technology.
@@ -211,6 +216,7 @@ const BlogPostDigitalDetox = () => {
                 icon={Shield}
                 title="Maintaining Digital Wellness: Long-term Strategies for Healthy Tech Habits"
                 subtitle="Creating sustainable practices that support both digital literacy and mental well-being"
+                isGated={true}
               >
                 <p className="text-lg leading-relaxed mb-6">
                   Long-term digital wellness requires moving beyond periodic detoxes toward sustainable daily practices that honor both technology's benefits and our need for presence. This involves developing what researchers call "digital wisdom"—the ability to use technology in ways that support rather than undermine our well-being and goals.
@@ -260,7 +266,7 @@ const BlogPostDigitalDetox = () => {
                 </p>
               </BlogPostStory>
 
-              <BlogPostConclusion title="Reclaiming Your Authentic Presence in a Digital World">
+              <BlogPostConclusion title="Reclaiming Your Authentic Presence in a Digital World" isGated={true}>
                 <p className="text-lg leading-relaxed mb-6">
                   Digital detox represents more than a temporary break from technology—it's a practice of reclaiming agency over your attention, time, and mental space. In a world designed to capture and monetize your focus, choosing presence becomes an act of self-respect and authentic living. <a href="https://www.apa.org/science/about/psa/2017/04/digital-wellness" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">Research consistently shows</a> that individuals who maintain healthy digital boundaries report higher life satisfaction, stronger relationships, and greater sense of purpose.
                 </p>
@@ -294,6 +300,12 @@ const BlogPostDigitalDetox = () => {
 
         <BeehiivNewsletterSignup />
       </main>
+
+      <ContentGate 
+        isVisible={shouldShowGate}
+        onDismiss={dismissGate}
+        articleTitle="The Art of Digital Detox: Reclaiming Your Mental Space"
+      />
 
       <Footer />
     </>
