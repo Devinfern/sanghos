@@ -12,6 +12,8 @@ interface ContentGateProps {
 }
 
 const ContentGate = ({ isVisible, onDismiss, articleTitle }: ContentGateProps) => {
+  console.log('ContentGate render - isVisible:', isVisible);
+
   const benefits = [
     "Access to premium wellness insights and guides",
     "Personalized retreat recommendations",

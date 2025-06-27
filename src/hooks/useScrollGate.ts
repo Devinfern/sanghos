@@ -32,16 +32,17 @@ export const useScrollGate = ({ threshold = 0.3, enabled = true }: UseScrollGate
     const handleScroll = () => {
       if (!contentRef.current || hasTriggeredGate) return;
 
-      const element = contentRef.current;
-      const rect = element.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       const windowHeight = window.innerHeight;
-      const elementHeight = element.scrollHeight;
+      const documentHeight = document.documentElement.scrollHeight;
       
-      // Calculate how much of the content has been scrolled past
-      const scrolled = Math.max(0, -rect.top);
-      const scrollPercentage = scrolled / (elementHeight - windowHeight);
+      // Calculate scroll percentage of the entire page
+      const scrollPercentage = scrollTop / (documentHeight - windowHeight);
+      
+      console.log('Scroll percentage:', scrollPercentage, 'Threshold:', threshold);
       
       if (scrollPercentage >= threshold) {
+        console.log('Triggering gate');
         setShouldShowGate(true);
         setHasTriggeredGate(true);
         // Store that gate was shown today
@@ -49,7 +50,12 @@ export const useScrollGate = ({ threshold = 0.3, enabled = true }: UseScrollGate
       }
     };
 
+    // Add scroll listener
     window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Check initial scroll position
+    handleScroll();
+    
     return () => window.removeEventListener('scroll', handleScroll);
   }, [user, enabled, threshold, hasTriggeredGate]);
 
