@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import Header from '@/components/Header';
@@ -11,6 +10,8 @@ import RelatedReading from '@/components/blog/RelatedReading';
 import SEOLink from '@/components/blog/SEOLink';
 import OptimizedImage from '@/components/OptimizedImage';
 import BeehiivNewsletterSignup from '@/components/BeehiivNewsletterSignup';
+import ContentGate from '@/components/blog/ContentGate';
+import { useScrollGate } from '@/hooks/useScrollGate';
 import { Heart, Brain, Users, Compass, Mountain, Star } from 'lucide-react';
 import { generateBlogStructuredData } from '@/lib/seoConfig';
 
@@ -23,6 +24,11 @@ const BlogPostSpiritualityWellness = () => {
     image: '/lovable-uploads/cf8fc774-aba1-4ccc-a684-8a94a89150ce.jpg',
     category: 'Wellness Research'
   };
+
+  const { shouldShowGate, contentRef, dismissGate } = useScrollGate({ 
+    threshold: 0.35,
+    enabled: true 
+  });
 
   const structuredData = generateBlogStructuredData(articleData);
 
@@ -46,7 +52,7 @@ const BlogPostSpiritualityWellness = () => {
 
       <Header />
 
-      <main className="bg-white">
+      <main className="bg-white" ref={contentRef}>
         <BlogPostHero
           title={articleData.title}
           excerpt={articleData.excerpt}
@@ -95,6 +101,7 @@ const BlogPostSpiritualityWellness = () => {
           <BlogPostStory
             icon={Brain}
             title="The Generation Gap: Why Young People Are Struggling"
+            isGated={true}
           >
             <p className="mb-6">
               While the science supports spirituality's importance, cultivating spiritual health is becoming increasingly challenging—especially for younger generations. The data reveals a concerning trend that affects not just individual well-being, but our collective future.
@@ -129,6 +136,7 @@ const BlogPostSpiritualityWellness = () => {
           <BlogPostStory
             icon={Mountain}
             title="The Wellness Renaissance: Finding Faith in New Forms"
+            isGated={true}
           >
             <p className="mb-6">
               As concepts like <SEOLink href="/blog/forest-bathing-guide" isExternal={false}>forest bathing</SEOLink>, <SEOLink href="/blog/sound-healing-benefits" isExternal={false}>sound healing</SEOLink>, and <SEOLink href="/blog/mindful-breathing-techniques" isExternal={false}>breathwork</SEOLink> enter the mainstream, we're witnessing a spiritual renaissance. Young people are rediscovering ancient wisdom through modern wellness practices.
@@ -165,7 +173,10 @@ const BlogPostSpiritualityWellness = () => {
             </div>
           </BlogPostStory>
 
-          <BlogPostConclusion title="Coming Full Circle: The Future of Holistic Health">
+          <BlogPostConclusion 
+            title="Coming Full Circle: The Future of Holistic Health"
+            isGated={true}
+          >
             <p className="mb-6">
               We're witnessing a remarkable convergence. Post-Enlightenment thinking understandably separated organized religion from health science, creating necessary boundaries between faith and evidence-based medicine. Now, centuries later, we're coming full circle with a more nuanced understanding.
             </p>
@@ -207,6 +218,13 @@ const BlogPostSpiritualityWellness = () => {
         </div>
 
         <BeehiivNewsletterSignup />
+
+        {/* Content Gate */}
+        <ContentGate
+          isVisible={shouldShowGate}
+          onDismiss={dismissGate}
+          articleTitle={articleData.title}
+        />
       </main>
 
       <Footer />

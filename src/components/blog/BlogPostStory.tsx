@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { LucideIcon } from 'lucide-react';
+import GatedContent from './GatedContent';
 
 interface BlogPostStoryProps {
   icon: LucideIcon;
@@ -9,9 +10,10 @@ interface BlogPostStoryProps {
   date?: string;
   source?: string;
   children: React.ReactNode;
+  isGated?: boolean;
 }
 
-const BlogPostStory = ({ icon: Icon, title, subtitle, date, source, children }: BlogPostStoryProps) => {
+const BlogPostStory = ({ icon: Icon, title, subtitle, date, source, children, isGated = false }: BlogPostStoryProps) => {
   return (
     <div className="mb-12">
       <div className="flex items-center gap-3 mb-6">
@@ -30,9 +32,9 @@ const BlogPostStory = ({ icon: Icon, title, subtitle, date, source, children }: 
         </div>
       )}
 
-      <div className="prose prose-lg max-w-none">
+      <GatedContent isGated={isGated} className="prose prose-lg max-w-none">
         {children}
-      </div>
+      </GatedContent>
     </div>
   );
 };
