@@ -30,19 +30,34 @@ export const useScrollGate = ({ threshold = 0.3, enabled = true }: UseScrollGate
     }
 
     const handleScroll = () => {
-      if (!contentRef.current || hasTriggeredGate) return;
+      if (hasTriggeredGate) return;
 
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
       
-      // Calculate scroll percentage of the entire page
-      const scrollPercentage = scrollTop / (documentHeight - windowHeight);
+      // Ensure we have valid measurements
+      if (documentHeight <= windowHeight) {
+        console.log('Document height too small for gating');
+        return;
+      }
       
-      console.log('Scroll percentage:', scrollPercentage, 'Threshold:', threshold);
+      // Calculate scroll percentage more reliably
+      const maxScrollTop = documentHeight - windowHeight;
+      const scrollPercentage = Math.min(scrollTop / maxScrollTop, 1);
+      
+      console.log('Scroll data:', {
+        scrollTop,
+        windowHeight,
+        documentHeight,
+        maxScrollTop,
+        scrollPercentage,
+        threshold,
+        shouldTrigger: scrollPercentage >= threshold
+      });
       
       if (scrollPercentage >= threshold) {
-        console.log('Triggering gate');
+        console.log('Triggering gate at scroll percentage:', scrollPercentage);
         setShouldShowGate(true);
         setHasTriggeredGate(true);
         // Store that gate was shown today
@@ -50,13 +65,26 @@ export const useScrollGate = ({ threshold = 0.3, enabled = true }: UseScrollGate
       }
     };
 
-    // Add scroll listener
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Add scroll listener with throttling for better performance
+    let ticking = false;
+    const throttledHandleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', throttledHandleScroll, { passive: true });
     
-    // Check initial scroll position
-    handleScroll();
+    // Check initial scroll position after a brief delay
+    setTimeout(() => {
+      handleScroll();
+    }, 100);
     
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', throttledHandleScroll);
   }, [user, enabled, threshold, hasTriggeredGate]);
 
   const dismissGate = () => {
