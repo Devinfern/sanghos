@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
@@ -11,9 +10,13 @@ import BlogPostStory from '@/components/blog/BlogPostStory';
 import BlogPostConclusion from '@/components/blog/BlogPostConclusion';
 import BlogPostCTA from '@/components/blog/BlogPostCTA';
 import RelatedReading from '@/components/blog/RelatedReading';
+import ContentGate from '@/components/blog/ContentGate';
+import { useScrollGate } from '@/hooks/useScrollGate';
 import { Link } from 'react-router-dom';
 
 const BlogPostWellnessRetreats = () => {
+  const { shouldShowGate, dismissGate } = useScrollGate({ threshold: 0.4 });
+
   const fadeUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
@@ -98,6 +101,7 @@ const BlogPostWellnessRetreats = () => {
                 icon={Heart}
                 title="The Science Behind Retreat-Based Recovery"
                 subtitle="How immersive wellness experiences create lasting change"
+                isGated={true}
               >
                 <p className="text-lg leading-relaxed mb-6">
                   <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6142584/" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">Scientific research</a> demonstrates that wellness retreats create measurable changes in stress hormones, brain function, and overall health markers. Unlike brief interventions, the multi-day immersive format allows for deep neuroplastic changes that support long-term well-being.
@@ -137,6 +141,7 @@ const BlogPostWellnessRetreats = () => {
                 icon={Users}
                 title="Gen Z's Wellness Revolution: Redefining Self-Care"
                 subtitle="How younger generations are driving demand for authentic wellness experiences"
+                isGated={true}
               >
                 <p className="text-lg leading-relaxed mb-6">
                   Generation Z approaches wellness differently than previous generations. Having grown up with <Link to="/blog/digital-detox-retreat" className="text-brand-primary hover:underline">constant digital connectivity</Link>, they intuitively understand the need for intentional disconnection and authentic experiences that go beyond surface-level relaxation.
@@ -167,6 +172,7 @@ const BlogPostWellnessRetreats = () => {
                 icon={Globe}
                 title="The Evolution of Modern Retreat Programming"
                 subtitle="How retreat centers are adapting to meet contemporary wellness needs"
+                isGated={true}
               >
                 <p className="text-lg leading-relaxed mb-6">
                   Today's <Link to="/retreats" className="text-brand-primary hover:underline">wellness retreats</Link> have evolved far beyond traditional spa experiences. Leading retreat centers now offer comprehensive programs that address the specific stressors of modern life, from <a href="https://www.healthline.com/health/mental-health/digital-detox" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">digital overwhelm</a> to work-life integration challenges.
@@ -193,7 +199,7 @@ const BlogPostWellnessRetreats = () => {
                 </p>
               </BlogPostStory>
 
-              <BlogPostConclusion title="The Future of Work-Life Integration">
+              <BlogPostConclusion title="The Future of Work-Life Integration" isGated={true}>
                 <p className="text-lg leading-relaxed mb-6">
                   As the lines between work and personal life continue to blur, wellness retreats represent more than a temporary escape—they're becoming essential tools for developing the skills needed to thrive in our rapidly changing world. The <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6971819/" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">scientific evidence</a> is clear: immersive wellness experiences create lasting changes in how we handle stress, relate to others, and find meaning in our work.
                 </p>
@@ -227,6 +233,12 @@ const BlogPostWellnessRetreats = () => {
 
         <BeehiivNewsletterSignup />
       </main>
+
+      <ContentGate 
+        isVisible={shouldShowGate}
+        onDismiss={dismissGate}
+        articleTitle="Why Wellness Retreats Are the Modern Solution to Burnout"
+      />
 
       <Footer />
     </>
