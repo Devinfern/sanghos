@@ -41,7 +41,7 @@ const ContentGate = ({ isVisible, onDismiss, articleTitle }: ContentGateProps) =
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 50 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg mx-4 bg-white rounded-3xl shadow-2xl z-[1000] overflow-hidden"
+            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg mx-4 bg-white rounded-3xl shadow-2xl z-[1000] overflow-hidden max-h-[90vh] overflow-y-auto"
           >
             {/* Close Button */}
             <button
@@ -52,61 +52,61 @@ const ContentGate = ({ isVisible, onDismiss, articleTitle }: ContentGateProps) =
             </button>
 
             {/* Content */}
-            <div className="p-8">
+            <div className="p-6 sm:p-8">
               {/* Header with Icon */}
-              <div className="text-center mb-8">
-                <div className="w-20 h-20 bg-gradient-to-br from-brand-primary to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <Sparkles className="h-10 w-10 text-white" />
+              <div className="text-center mb-6 sm:mb-8">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-brand-primary to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-lg">
+                  <Sparkles className="h-8 w-8 sm:h-10 sm:w-10 text-white" />
                 </div>
                 
-                <h2 className="text-3xl font-bold text-brand-dark mb-4">
+                <h2 className="text-2xl sm:text-3xl font-bold text-brand-dark mb-3 sm:mb-4">
                   Continue Reading
                 </h2>
-                <p className="text-gray-600 text-lg leading-relaxed">
+                <p className="text-gray-600 text-base sm:text-lg leading-relaxed px-2">
                   Join thousands discovering wellness insights and personalized retreat recommendations
                 </p>
               </div>
 
               {/* Social Proof */}
-              <div className="flex items-center justify-center gap-3 mb-8 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl">
-                <Users className="h-6 w-6 text-brand-primary" />
-                <span className="font-semibold text-brand-dark">10,000+ wellness enthusiasts</span>
+              <div className="flex items-center justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 p-3 sm:p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl">
+                <Users className="h-5 w-5 sm:h-6 sm:w-6 text-brand-primary flex-shrink-0" />
+                <span className="font-semibold text-brand-dark text-sm sm:text-base">10,000+ wellness enthusiasts</span>
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
+                    <Star key={i} className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-400 fill-current" />
                   ))}
                 </div>
               </div>
 
               {/* Benefits */}
-              <div className="mb-8">
-                <ul className="space-y-4">
+              <div className="mb-6 sm:mb-8">
+                <ul className="space-y-3 sm:space-y-4">
                   {benefits.map((benefit, index) => (
                     <li key={index} className="flex items-start gap-3">
-                      <CheckCircle className="h-6 w-6 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700 font-medium">{benefit}</span>
+                      <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-gray-700 font-medium text-sm sm:text-base">{benefit}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
               {/* CTA Buttons */}
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <Link to="/signup" className="block w-full">
-                  <Button className="w-full bg-gradient-to-r from-brand-primary to-purple-600 hover:from-brand-primary/90 hover:to-purple-600/90 text-white font-bold py-4 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]">
+                  <Button className="w-full bg-gradient-to-r from-brand-primary to-purple-600 hover:from-brand-primary/90 hover:to-purple-600/90 text-white font-bold py-3 sm:py-4 text-base sm:text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]">
                     Join Sanghos Free
                   </Button>
                 </Link>
                 
                 <div className="text-center">
-                  <Link to="/login" className="text-brand-primary hover:underline font-semibold">
+                  <Link to="/login" className="text-brand-primary hover:underline font-semibold text-sm sm:text-base">
                     Already have an account? Sign in
                   </Link>
                 </div>
               </div>
 
               {/* Fine Print */}
-              <p className="text-sm text-gray-500 text-center mt-6">
+              <p className="text-xs sm:text-sm text-gray-500 text-center mt-4 sm:mt-6">
                 Free to join • No credit card required • Unsubscribe anytime
               </p>
             </div>
