@@ -20,15 +20,7 @@ export const useScrollGate = ({ threshold = 0.3, enabled = true }: UseScrollGate
       return;
     }
 
-    // Check if user has already seen the gate today (localStorage)
-    const gateKey = `sanghos_gate_${window.location.pathname}`;
-    const lastGateTime = localStorage.getItem(gateKey);
-    const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
-    
-    if (lastGateTime && parseInt(lastGateTime) > oneDayAgo) {
-      return;
-    }
-
+    // Simple scroll handler
     const handleScroll = () => {
       if (hasTriggeredGate) return;
 
@@ -36,55 +28,31 @@ export const useScrollGate = ({ threshold = 0.3, enabled = true }: UseScrollGate
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
       
-      // Ensure we have valid measurements
-      if (documentHeight <= windowHeight) {
-        console.log('Document height too small for gating');
-        return;
-      }
+      // Calculate how far user has scrolled as percentage
+      const scrolled = scrollTop / (documentHeight - windowHeight);
       
-      // Calculate scroll percentage more reliably
-      const maxScrollTop = documentHeight - windowHeight;
-      const scrollPercentage = Math.min(scrollTop / maxScrollTop, 1);
-      
-      console.log('Scroll data:', {
+      console.log('Scroll check:', {
         scrollTop,
-        windowHeight,
-        documentHeight,
-        maxScrollTop,
-        scrollPercentage,
-        threshold,
-        shouldTrigger: scrollPercentage >= threshold
+        scrolled: Math.round(scrolled * 100) + '%',
+        threshold: Math.round(threshold * 100) + '%',
+        shouldTrigger: scrolled >= threshold
       });
       
-      if (scrollPercentage >= threshold) {
-        console.log('Triggering gate at scroll percentage:', scrollPercentage);
+      // Trigger gate when user has scrolled past threshold
+      if (scrolled >= threshold) {
+        console.log('🚀 Triggering content gate!');
         setShouldShowGate(true);
         setHasTriggeredGate(true);
-        // Store that gate was shown today
-        localStorage.setItem(gateKey, Date.now().toString());
       }
     };
 
-    // Add scroll listener with throttling for better performance
-    let ticking = false;
-    const throttledHandleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          handleScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', throttledHandleScroll, { passive: true });
+    // Add scroll listener
+    window.addEventListener('scroll', handleScroll, { passive: true });
     
-    // Check initial scroll position after a brief delay
-    setTimeout(() => {
-      handleScroll();
-    }, 100);
+    // Check initial position
+    handleScroll();
     
-    return () => window.removeEventListener('scroll', throttledHandleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [user, enabled, threshold, hasTriggeredGate]);
 
   const dismissGate = () => {
