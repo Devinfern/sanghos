@@ -27,6 +27,134 @@ export type Database = {
         }
         Relationships: []
       }
+      community_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          post_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          post_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          post_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_posts: {
+        Row: {
+          category: string | null
+          content: string
+          created_at: string
+          id: string
+          likes: number | null
+          retreat_id: string | null
+          retreat_phase: string | null
+          title: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          category?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          likes?: number | null
+          retreat_id?: string | null
+          retreat_phase?: string | null
+          title: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          category?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          likes?: number | null
+          retreat_id?: string | null
+          retreat_phase?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      forum_posts: {
+        Row: {
+          author_avatar: string
+          author_id: string | null
+          author_name: string
+          author_role: string
+          author_tag: string | null
+          bookmarked: boolean | null
+          comments: number | null
+          content: string
+          created_at: string
+          id: string
+          is_pinned: boolean | null
+          likes: number | null
+          posted_in: string
+          title: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          author_avatar: string
+          author_id?: string | null
+          author_name: string
+          author_role: string
+          author_tag?: string | null
+          bookmarked?: boolean | null
+          comments?: number | null
+          content: string
+          created_at?: string
+          id?: string
+          is_pinned?: boolean | null
+          likes?: number | null
+          posted_in: string
+          title: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          author_avatar?: string
+          author_id?: string | null
+          author_name?: string
+          author_role?: string
+          author_tag?: string | null
+          bookmarked?: boolean | null
+          comments?: number | null
+          content?: string
+          created_at?: string
+          id?: string
+          is_pinned?: boolean | null
+          likes?: number | null
+          posted_in?: string
+          title?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       retreats: {
         Row: {
           amenities: string[] | null
@@ -93,6 +221,93 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          is_wellness_practitioner: boolean | null
+          updated_at: string
+          user_id: string | null
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          is_wellness_practitioner?: boolean | null
+          updated_at?: string
+          user_id?: string | null
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          is_wellness_practitioner?: boolean | null
+          updated_at?: string
+          user_id?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
+      wellness_courses: {
+        Row: {
+          certificate_template: string | null
+          created_at: string
+          description: string | null
+          difficulty_level: string | null
+          duration_hours: number | null
+          id: string
+          instructor_id: string | null
+          is_premium: boolean | null
+          materials_url: string | null
+          price: number | null
+          published: boolean | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          certificate_template?: string | null
+          created_at?: string
+          description?: string | null
+          difficulty_level?: string | null
+          duration_hours?: number | null
+          id?: string
+          instructor_id?: string | null
+          is_premium?: boolean | null
+          materials_url?: string | null
+          price?: number | null
+          published?: boolean | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          certificate_template?: string | null
+          created_at?: string
+          description?: string | null
+          difficulty_level?: string | null
+          duration_hours?: number | null
+          id?: string
+          instructor_id?: string | null
+          is_premium?: boolean | null
+          materials_url?: string | null
+          price?: number | null
+          published?: boolean | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          video_url?: string | null
         }
         Relationships: []
       }

@@ -53,7 +53,8 @@ const CommunityPost = ({ post, currentUserId, onPostUpdate }: CommunityPostProps
     }
 
     try {
-      const { data, error } = await supabase
+      // Use type assertion to work around the type issue temporarily
+      const { error } = await (supabase as any)
         .from('community_posts')
         .update({ likes: post.likes + 1 })
         .eq('id', post.id);
@@ -81,7 +82,8 @@ const CommunityPost = ({ post, currentUserId, onPostUpdate }: CommunityPostProps
 
     setIsSubmitting(true);
     try {
-      const { error } = await supabase
+      // Use type assertion to work around the type issue temporarily
+      const { error } = await (supabase as any)
         .from('community_comments')
         .insert([
           {

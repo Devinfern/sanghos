@@ -1,20 +1,41 @@
 
 import { useState, useEffect } from 'react';
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from '@/integrations/supabase/client';
 
-export const useCommunityPosts = (searchQuery: string, categoryFilter: string) => {
-  const [posts, setPosts] = useState([]);
+interface Post {
+  id: string;
+  title: string;
+  content: string;
+  user_id: string;
+  created_at: string;
+  likes: number;
+  category: string;
+  user_profiles?: {
+    username: string;
+    avatar_url: string;
+    is_wellness_practitioner: boolean;
+  } | null;
+}
+
+export const useCommunityPosts = (searchQuery = '', categoryFilter = 'all') => {
+  const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   const fetchPosts = async () => {
-    setIsLoading(true);
     try {
-      let query = supabase
+      setIsLoading(true);
+      
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      setCurrentUserId(user?.id || null);
+
+      // Build query with type assertion
+      let query = (supabase as any)
         .from('community_posts')
         .select(`
           *,
-          user_profiles(
+          user_profiles!community_posts_user_id_fkey (
             username,
             avatar_url,
             is_wellness_practitioner
@@ -22,52 +43,38 @@ export const useCommunityPosts = (searchQuery: string, categoryFilter: string) =
         `)
         .order('created_at', { ascending: false });
 
+      // Apply filters
       if (searchQuery) {
         query = query.or(`title.ilike.%${searchQuery}%,content.ilike.%${searchQuery}%`);
       }
-
-      if (categoryFilter && categoryFilter !== "all") {
+      
+      if (categoryFilter !== 'all') {
         query = query.eq('category', categoryFilter);
       }
 
       const { data, error } = await query;
-      if (error) throw error;
+
+      if (error) {
+        console.error('Error fetching posts:', error);
+        return;
+      }
+
       setPosts(data || []);
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      console.error('Error in fetchPosts:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setCurrentUserId(session?.user.id || null);
-    };
-
-    checkUser();
     fetchPosts();
-
-    // Set up real-time subscription
-    const channel = supabase
-      .channel('public:community_posts')
-      .on('postgres_changes', {
-        event: '*', // Listen to all events
-        schema: 'public',
-        table: 'community_posts',
-      }, () => {
-        // Refetch posts when any changes occur
-        // This approach ensures we get the related user_profiles data too
-        console.log('Real-time community post update detected, refetching...');
-        fetchPosts();
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
   }, [searchQuery, categoryFilter]);
 
-  return { posts, isLoading, currentUserId, fetchPosts };
+  return {
+    posts,
+    isLoading,
+    currentUserId,
+    fetchPosts
+  };
 };

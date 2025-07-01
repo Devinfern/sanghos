@@ -1,110 +1,78 @@
 
-import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
-// Define simpler types without circular references
-export type Post = {
+interface RetreatPost {
   id: string;
   title: string;
   content: string;
+  user_id: string;
   author_name: string;
-  author_id: string;
   created_at: string;
+  category: string;
   likes: number;
   comments: number;
-  author_avatar?: string;
-  author_role?: string;
-  category?: string;
-  user_id?: string;
-  tags?: string[];
-  phase_type?: string;
-  retreat_id?: string;
-};
+  tags: string[];
+  phase_type: string;
+  retreat_id: string;
+}
 
-export type RetreatPostsResult = {
-  posts: Post[];
-  isLoading: boolean;
-  error: string | null;
-  refetch: () => Promise<void>;
-};
-
-export const useRetreatPosts = (retreatId: string): RetreatPostsResult => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+export const useRetreatPosts = (retreatId: string) => {
+  const [posts, setPosts] = useState<RetreatPost[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchPosts = async () => {
-    setIsLoading(true);
-    setError(null);
-
+  const refetch = async () => {
     try {
-      // Here we would normally fetch posts related to a specific retreat
-      // Since we don't have actual data, we're simulating with forum_posts
-      const { data, error: fetchError } = await supabase
-        .from('forum_posts')
+      setIsLoading(true);
+      setError(null);
+
+      // Use type assertion to work around type issues temporarily
+      const { data, error: fetchError } = await (supabase as any)
+        .from('community_posts')
         .select('*')
-        .eq('posted_in', `retreat-${retreatId}`)
+        .eq('retreat_id', retreatId)
         .order('created_at', { ascending: false });
 
-      if (fetchError) throw new Error(fetchError.message);
-      
-      // Cast the data to our simplified Post type
-      setPosts(data as Post[] || []);
+      if (fetchError) {
+        throw fetchError;
+      }
+
+      // Transform the data to match expected format
+      const transformedPosts: RetreatPost[] = (data || []).map((post: any) => ({
+        id: post.id,
+        title: post.title,
+        content: post.content,
+        user_id: post.user_id,
+        author_name: 'Anonymous', // Will be populated from user profiles later
+        created_at: post.created_at,
+        category: post.category || 'general',
+        likes: post.likes || 0,
+        comments: 0, // Will be populated from comments count later
+        tags: [], // Will be added when we implement tags
+        phase_type: post.retreat_phase || 'pre',
+        retreat_id: post.retreat_id || retreatId
+      }));
+
+      setPosts(transformedPosts);
     } catch (err) {
-      console.error("Error fetching retreat posts:", err);
-      setError(err instanceof Error ? err.message : "Failed to fetch retreat posts");
-      
-      // Fallback to empty array
-      setPosts([]);
+      console.error('Error fetching retreat posts:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch posts');
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchPosts();
-
-    // Set up real-time subscription for this retreat's posts
-    const channel = supabase
-      .channel('public:forum_posts')
-      .on('postgres_changes', {
-        event: '*', // Listen to all events (INSERT, UPDATE, DELETE)
-        schema: 'public',
-        table: 'forum_posts',
-        filter: `posted_in=eq.retreat-${retreatId}` // Only listen to this retreat's posts
-      }, (payload) => {
-        console.log('Real-time update received:', payload);
-        
-        // Handle different types of changes
-        if (payload.eventType === 'INSERT') {
-          // Add the new post to the list
-          setPosts(currentPosts => [payload.new as Post, ...currentPosts]);
-        } else if (payload.eventType === 'UPDATE') {
-          // Update the existing post
-          setPosts(currentPosts => 
-            currentPosts.map(post => 
-              post.id === payload.new.id ? payload.new as Post : post
-            )
-          );
-        } else if (payload.eventType === 'DELETE') {
-          // Remove the deleted post
-          setPosts(currentPosts => 
-            currentPosts.filter(post => post.id !== payload.old.id)
-          );
-        }
-      })
-      .subscribe();
-
-    // Clean up subscription when component unmounts
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    if (retreatId) {
+      refetch();
+    }
   }, [retreatId]);
 
   return {
     posts,
     isLoading,
     error,
-    refetch: fetchPosts
+    refetch
   };
 };
