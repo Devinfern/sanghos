@@ -98,6 +98,101 @@ export type Database = {
         }
         Relationships: []
       }
+      course_enrollments: {
+        Row: {
+          certificate_issued: boolean | null
+          completed: boolean | null
+          completed_at: string | null
+          course_id: string | null
+          created_at: string
+          id: string
+          progress: number | null
+          user_id: string | null
+        }
+        Insert: {
+          certificate_issued?: boolean | null
+          completed?: boolean | null
+          completed_at?: string | null
+          course_id?: string | null
+          created_at?: string
+          id?: string
+          progress?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          certificate_issued?: boolean | null
+          completed?: boolean | null
+          completed_at?: string | null
+          course_id?: string | null
+          created_at?: string
+          id?: string
+          progress?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_enrollments_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "wellness_courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_bookings: {
+        Row: {
+          attendees: number
+          created_at: string
+          email: string
+          event_id: string
+          first_name: string
+          id: string
+          last_name: string
+          payment_status: string | null
+          phone: string | null
+          special_requests: string | null
+          status: string
+          stripe_session_id: string | null
+          total_amount: number
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          attendees?: number
+          created_at?: string
+          email: string
+          event_id: string
+          first_name: string
+          id?: string
+          last_name: string
+          payment_status?: string | null
+          phone?: string | null
+          special_requests?: string | null
+          status?: string
+          stripe_session_id?: string | null
+          total_amount: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          attendees?: number
+          created_at?: string
+          email?: string
+          event_id?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          payment_status?: string | null
+          phone?: string | null
+          special_requests?: string | null
+          status?: string
+          stripe_session_id?: string | null
+          total_amount?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       forum_posts: {
         Row: {
           author_avatar: string
@@ -152,6 +247,128 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      host_earnings: {
+        Row: {
+          amount: number
+          booking_id: string | null
+          commission_amount: number
+          created_at: string
+          host_id: string | null
+          id: string
+          payout_date: string | null
+          status: Database["public"]["Enums"]["commission_status"]
+          stripe_transfer_id: string | null
+        }
+        Insert: {
+          amount: number
+          booking_id?: string | null
+          commission_amount: number
+          created_at?: string
+          host_id?: string | null
+          id?: string
+          payout_date?: string | null
+          status?: Database["public"]["Enums"]["commission_status"]
+          stripe_transfer_id?: string | null
+        }
+        Update: {
+          amount?: number
+          booking_id?: string | null
+          commission_amount?: number
+          created_at?: string
+          host_id?: string | null
+          id?: string
+          payout_date?: string | null
+          status?: Database["public"]["Enums"]["commission_status"]
+          stripe_transfer_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "host_earnings_host_id_fkey"
+            columns: ["host_id"]
+            isOneToOne: false
+            referencedRelation: "hosts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hosts: {
+        Row: {
+          bio: string | null
+          business_email: string
+          business_name: string
+          commission_rate: number | null
+          created_at: string
+          id: string
+          phone: string | null
+          specialties: string[] | null
+          status: Database["public"]["Enums"]["host_status"]
+          stripe_account_id: string | null
+          updated_at: string
+          user_id: string | null
+          verification_documents: string[] | null
+          years_experience: number | null
+        }
+        Insert: {
+          bio?: string | null
+          business_email: string
+          business_name: string
+          commission_rate?: number | null
+          created_at?: string
+          id?: string
+          phone?: string | null
+          specialties?: string[] | null
+          status?: Database["public"]["Enums"]["host_status"]
+          stripe_account_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+          verification_documents?: string[] | null
+          years_experience?: number | null
+        }
+        Update: {
+          bio?: string | null
+          business_email?: string
+          business_name?: string
+          commission_rate?: number | null
+          created_at?: string
+          id?: string
+          phone?: string | null
+          specialties?: string[] | null
+          status?: Database["public"]["Enums"]["host_status"]
+          stripe_account_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+          verification_documents?: string[] | null
+          years_experience?: number | null
+        }
+        Relationships: []
+      }
+      premium_content: {
+        Row: {
+          content_id: string | null
+          content_type: string
+          created_at: string
+          id: string
+          required_tier: Database["public"]["Enums"]["subscription_tier"]
+          title: string
+        }
+        Insert: {
+          content_id?: string | null
+          content_type: string
+          created_at?: string
+          id?: string
+          required_tier?: Database["public"]["Enums"]["subscription_tier"]
+          title: string
+        }
+        Update: {
+          content_id?: string | null
+          content_type?: string
+          created_at?: string
+          id?: string
+          required_tier?: Database["public"]["Enums"]["subscription_tier"]
+          title?: string
         }
         Relationships: []
       }
@@ -221,6 +438,45 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      subscribers: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          stripe_customer_id: string | null
+          subscribed: boolean
+          subscription_end: string | null
+          subscription_tier: Database["public"]["Enums"]["subscription_tier"]
+          trial_end: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          stripe_customer_id?: string | null
+          subscribed?: boolean
+          subscription_end?: string | null
+          subscription_tier?: Database["public"]["Enums"]["subscription_tier"]
+          trial_end?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          stripe_customer_id?: string | null
+          subscribed?: boolean
+          subscription_end?: string | null
+          subscription_tier?: Database["public"]["Enums"]["subscription_tier"]
+          trial_end?: string | null
+          updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -311,15 +567,64 @@ export type Database = {
         }
         Relationships: []
       }
+      wellness_modules: {
+        Row: {
+          category: string
+          content: string | null
+          created_at: string
+          description: string | null
+          difficulty_level: string | null
+          duration_minutes: number | null
+          id: string
+          materials: string[] | null
+          title: string
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          category: string
+          content?: string | null
+          created_at?: string
+          description?: string | null
+          difficulty_level?: string | null
+          duration_minutes?: number | null
+          id?: string
+          materials?: string[] | null
+          title: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          category?: string
+          content?: string | null
+          created_at?: string
+          description?: string | null
+          difficulty_level?: string | null
+          duration_minutes?: number | null
+          id?: string
+          materials?: string[] | null
+          title?: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      user_has_subscription_tier: {
+        Args: {
+          required_tier: Database["public"]["Enums"]["subscription_tier"]
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      commission_status: "pending" | "paid" | "cancelled"
+      host_status: "pending" | "approved" | "suspended" | "rejected"
+      subscription_tier: "free" | "basic" | "premium" | "enterprise"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -434,6 +739,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      commission_status: ["pending", "paid", "cancelled"],
+      host_status: ["pending", "approved", "suspended", "rejected"],
+      subscription_tier: ["free", "basic", "premium", "enterprise"],
+    },
   },
 } as const

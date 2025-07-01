@@ -4,9 +4,9 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Lock, Crown, Sparkles } from 'lucide-react';
 import { useSubscription } from '@/hooks/useSubscription';
-import { Database } from '@/integrations/supabase/types';
 
-type SubscriptionTier = Database['public']['Enums']['subscription_tier'];
+// Temporary type until Supabase types regenerate
+type SubscriptionTier = 'free' | 'basic' | 'premium' | 'enterprise';
 
 interface PremiumFeatureCardProps {
   title: string;

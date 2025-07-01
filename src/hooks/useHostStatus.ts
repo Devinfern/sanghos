@@ -2,10 +2,26 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { Database } from '@/integrations/supabase/types';
 
-type HostStatus = Database['public']['Enums']['host_status'];
-type Host = Database['public']['Tables']['hosts']['Row'];
+// Temporary types until Supabase types regenerate
+type HostStatus = 'pending' | 'approved' | 'suspended' | 'rejected';
+
+interface Host {
+  id: string;
+  user_id: string;
+  business_name: string;
+  business_email: string;
+  phone?: string;
+  bio?: string;
+  specialties?: string[];
+  years_experience?: number;
+  verification_documents?: string[];
+  status: HostStatus;
+  commission_rate?: number;
+  stripe_account_id?: string;
+  created_at: string;
+  updated_at: string;
+}
 
 export const useHostStatus = () => {
   const { user } = useAuth();
@@ -23,7 +39,8 @@ export const useHostStatus = () => {
 
   const fetchHostProfile = async () => {
     try {
-      const { data, error } = await supabase
+      // Use type assertion temporarily until types regenerate
+      const { data, error } = await (supabase as any)
         .from('hosts')
         .select('*')
         .eq('user_id', user?.id)

@@ -2,10 +2,22 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { Database } from '@/integrations/supabase/types';
 
-type SubscriptionTier = Database['public']['Enums']['subscription_tier'];
-type Subscriber = Database['public']['Tables']['subscribers']['Row'];
+// Temporary types until Supabase types regenerate
+type SubscriptionTier = 'free' | 'basic' | 'premium' | 'enterprise';
+
+interface Subscriber {
+  id: string;
+  user_id?: string;
+  email: string;
+  stripe_customer_id?: string;
+  subscribed: boolean;
+  subscription_tier: SubscriptionTier;
+  subscription_end?: string;
+  trial_end?: string;
+  created_at: string;
+  updated_at: string;
+}
 
 export const useSubscription = () => {
   const { user } = useAuth();
@@ -23,7 +35,8 @@ export const useSubscription = () => {
 
   const fetchSubscription = async () => {
     try {
-      const { data, error } = await supabase
+      // Use type assertion temporarily until types regenerate
+      const { data, error } = await (supabase as any)
         .from('subscribers')
         .select('*')
         .eq('user_id', user?.id)
@@ -47,7 +60,7 @@ export const useSubscription = () => {
       return requiredTier === 'free';
     }
 
-    const tierHierarchy = ['free', 'basic', 'premium', 'enterprise'];
+    const tierHierarchy: SubscriptionTier[] = ['free', 'basic', 'premium', 'enterprise'];
     const userTierIndex = tierHierarchy.indexOf(subscription.subscription_tier);
     const requiredTierIndex = tierHierarchy.indexOf(requiredTier);
 
@@ -56,7 +69,8 @@ export const useSubscription = () => {
 
   const createSubscription = async (email: string, tier: SubscriptionTier) => {
     try {
-      const { data, error } = await supabase
+      // Use type assertion temporarily until types regenerate
+      const { data, error } = await (supabase as any)
         .from('subscribers')
         .insert([
           {

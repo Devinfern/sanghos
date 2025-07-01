@@ -39,8 +39,8 @@ export function useEventBooking() {
 
       console.log("Creating booking for event:", event.id, "Total amount:", totalAmount);
 
-      // Create a booking record in the Supabase table
-      const { data: bookingData, error: bookingError } = await supabase
+      // Create a booking record in the Supabase table - use type assertion temporarily
+      const { data: bookingData, error: bookingError } = await (supabase as any)
         .from("event_bookings")
         .insert({
           event_id: event.id,

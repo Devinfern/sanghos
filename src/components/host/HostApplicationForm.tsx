@@ -47,7 +47,8 @@ const HostApplicationForm = ({ onSuccess }: { onSuccess: () => void }) => {
 
     setIsSubmitting(true);
     try {
-      const { error } = await supabase
+      // Use type assertion temporarily until types regenerate
+      const { error } = await (supabase as any)
         .from('hosts')
         .insert([
           {

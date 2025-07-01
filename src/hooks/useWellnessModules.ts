@@ -1,8 +1,25 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { WellnessModule, ModuleCategory, DifficultyLevel, convertToWellnessModule } from '@/types/wellness';
 import { toast } from 'sonner';
+
+// Temporary types until Supabase types regenerate
+export type ModuleCategory = 'meditation' | 'yoga' | 'breathwork' | 'mindfulness' | 'movement' | 'nutrition' | 'all';
+export type DifficultyLevel = 'beginner' | 'intermediate' | 'advanced' | 'all';
+
+export interface WellnessModule {
+  id: string;
+  title: string;
+  description?: string;
+  category: string;
+  difficulty_level: string;
+  duration_minutes: number;
+  content?: string;
+  video_url?: string;
+  materials?: string[];
+  created_at: string;
+  updated_at: string;
+}
 
 export const useWellnessModules = () => {
   const [modules, setModules] = useState<WellnessModule[]>([]);
@@ -12,7 +29,8 @@ export const useWellnessModules = () => {
   const fetchModules = async (category?: ModuleCategory, difficulty?: DifficultyLevel) => {
     try {
       setLoading(true);
-      let query = supabase.from('wellness_modules').select('*');
+      // Use type assertion temporarily until types regenerate
+      let query = (supabase as any).from('wellness_modules').select('*');
       
       if (category && category !== 'all') {
         query = query.eq('category', category);
@@ -26,9 +44,7 @@ export const useWellnessModules = () => {
       
       if (error) throw error;
       
-      // Convert Supabase rows to WellnessModule interface
-      const convertedModules = (data || []).map(convertToWellnessModule);
-      setModules(convertedModules);
+      setModules(data || []);
       setError(null);
     } catch (err) {
       console.error('Error fetching wellness modules:', err);
