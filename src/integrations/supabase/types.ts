@@ -27,6 +27,75 @@ export type Database = {
         }
         Relationships: []
       }
+      retreats: {
+        Row: {
+          amenities: string[] | null
+          capacity: number
+          category: string[] | null
+          created_at: string
+          date: string
+          description: string
+          duration: string
+          featured: boolean | null
+          id: string
+          image: string
+          location_address: string | null
+          location_city: string
+          location_name: string
+          location_state: string
+          price: number
+          remaining: number
+          time: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amenities?: string[] | null
+          capacity: number
+          category?: string[] | null
+          created_at?: string
+          date: string
+          description: string
+          duration: string
+          featured?: boolean | null
+          id?: string
+          image: string
+          location_address?: string | null
+          location_city: string
+          location_name: string
+          location_state: string
+          price: number
+          remaining: number
+          time: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amenities?: string[] | null
+          capacity?: number
+          category?: string[] | null
+          created_at?: string
+          date?: string
+          description?: string
+          duration?: string
+          featured?: boolean | null
+          id?: string
+          image?: string
+          location_address?: string | null
+          location_city?: string
+          location_name?: string
+          location_state?: string
+          price?: number
+          remaining?: number
+          time?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

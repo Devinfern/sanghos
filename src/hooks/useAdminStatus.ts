@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { supabase, SUPABASE_PROJECT_URL, SUPABASE_PROJECT_KEY } from '@/integrations/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 
 export function useAdminStatus() {
@@ -23,11 +23,11 @@ export function useAdminStatus() {
         console.log("Checking admin status for email:", user.email);
         
         // Use the Edge Function for admin verification
-        const response = await fetch(`${SUPABASE_PROJECT_URL}/functions/v1/is_user_admin`, {
+        const response = await fetch(`https://raijubzrdhwizxtupguy.supabase.co/functions/v1/is_user_admin`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${SUPABASE_PROJECT_KEY}`
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhaWp1YnpyZGh3aXp4dHVwZ3V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ2NjkxODgsImV4cCI6MjA2MDI0NTE4OH0.vx5h9SHjv5XQ29kYi9sKjNNHc2f6_Nv-3wV27nHh2K8`
           },
           body: JSON.stringify({ email: user.email })
         });
