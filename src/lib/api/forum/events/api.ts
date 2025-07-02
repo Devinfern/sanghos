@@ -8,7 +8,7 @@ import { EventDatabaseSchema } from "./types";
 // Function to load forum events from Supabase
 export const loadForumEvents = async (): Promise<ForumEvent[]> => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('forum_events')
       .select('*')
       .order('created_at', { ascending: true });
@@ -20,7 +20,7 @@ export const loadForumEvents = async (): Promise<ForumEvent[]> => {
     
     if (data && data.length > 0) {
       // Transform data to match our format
-      const transformedEvents = data.map(event => 
+      const transformedEvents = data.map((event: any) => 
         transformDatabaseEvent(event as EventDatabaseSchema)
       );
       
@@ -47,7 +47,7 @@ export const seedForumEvents = async (): Promise<void> => {
     
     // Insert each event individually
     for (const eventData of eventsToInsert) {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('forum_events')
         .insert(eventData);
         
@@ -64,7 +64,7 @@ export const seedForumEvents = async (): Promise<void> => {
 export const updateForumEvents = async (newEvents: ForumEvent[]): Promise<void> => {
   try {
     // First, delete all existing events - fixed method that avoids using neq('id', 'dummy')
-    const { error: deleteError } = await supabase
+    const { error: deleteError } = await (supabase as any)
       .from('forum_events')
       .delete()
       .gte('id', '00000000-0000-0000-0000-000000000000');
@@ -81,7 +81,7 @@ export const updateForumEvents = async (newEvents: ForumEvent[]): Promise<void> 
     
     // Insert events one by one
     for (const eventData of eventsToInsert) {
-      const { error: insertError } = await supabase
+      const { error: insertError } = await (supabase as any)
         .from('forum_events')
         .insert(eventData);
         

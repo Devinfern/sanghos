@@ -193,6 +193,57 @@ export type Database = {
         }
         Relationships: []
       }
+      forum_events: {
+        Row: {
+          capacity: number | null
+          created_at: string
+          date_day: number
+          date_month: string
+          description: string | null
+          id: string
+          instructor_name: string | null
+          location: string | null
+          price: number | null
+          remaining: number | null
+          retreat_id: string | null
+          time: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          capacity?: number | null
+          created_at?: string
+          date_day: number
+          date_month: string
+          description?: string | null
+          id?: string
+          instructor_name?: string | null
+          location?: string | null
+          price?: number | null
+          remaining?: number | null
+          retreat_id?: string | null
+          time: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          capacity?: number | null
+          created_at?: string
+          date_day?: number
+          date_month?: string
+          description?: string | null
+          id?: string
+          instructor_name?: string | null
+          location?: string | null
+          price?: number | null
+          remaining?: number | null
+          retreat_id?: string | null
+          time?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       forum_posts: {
         Row: {
           author_avatar: string
@@ -247,6 +298,36 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      forum_spaces: {
+        Row: {
+          category: string
+          count: number | null
+          created_at: string
+          icon: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          count?: number | null
+          created_at?: string
+          icon: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          count?: number | null
+          created_at?: string
+          icon?: string
+          id?: string
+          name?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -477,6 +558,33 @@ export type Database = {
           trial_end?: string | null
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      trending_posts: {
+        Row: {
+          author: string
+          avatar: string
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author: string
+          avatar: string
+          created_at?: string
+          id?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string
+          avatar?: string
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }

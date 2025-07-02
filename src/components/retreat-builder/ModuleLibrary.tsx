@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Search, Filter } from 'lucide-react';
-import { useWellnessModules } from '@/hooks/useWellnessModules';
-import { WellnessModule, SelectedModule, ModuleCategory, DifficultyLevel } from '@/types/wellness';
+import { useWellnessModules, WellnessModule, ModuleCategory, DifficultyLevel } from '@/hooks/useWellnessModules';
+import { SelectedModule } from '@/types/wellness';
 import WellnessModuleCard from './WellnessModuleCard';
 
 interface ModuleLibraryProps {
@@ -21,9 +21,8 @@ const ModuleLibrary: React.FC<ModuleLibraryProps> = ({ selectedModules, onAddMod
   const [difficultyFilter, setDifficultyFilter] = useState<DifficultyLevel>('all');
 
   const filteredModules = modules.filter(module => {
-    const matchesSearch = module.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         module.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         module.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesSearch = module.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (module.description && module.description.toLowerCase().includes(searchTerm.toLowerCase()));
     
     const matchesCategory = categoryFilter === 'all' || module.category === categoryFilter;
     const matchesDifficulty = difficultyFilter === 'all' || module.difficulty_level === difficultyFilter;
@@ -72,7 +71,7 @@ const ModuleLibrary: React.FC<ModuleLibraryProps> = ({ selectedModules, onAddMod
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
             <Input
-              placeholder="Search modules by name, description, or tags..."
+              placeholder="Search modules by title or description..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"

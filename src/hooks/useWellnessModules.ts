@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 // Temporary types until Supabase types regenerate
-export type ModuleCategory = 'meditation' | 'yoga' | 'breathwork' | 'mindfulness' | 'movement' | 'nutrition' | 'all';
+export type ModuleCategory = 'meditation' | 'yoga' | 'breathwork' | 'mindfulness' | 'movement' | 'nutrition' | 'sound_healing' | 'cooking' | 'nature' | 'all';
 export type DifficultyLevel = 'beginner' | 'intermediate' | 'advanced' | 'all';
 
 export interface WellnessModule {

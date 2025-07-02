@@ -8,7 +8,7 @@ import { TrendingPostDatabaseSchema } from "./types";
 // Function to load trending posts from Supabase
 export const loadTrendingPosts = async (): Promise<TrendingPost[]> => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('trending_posts')
       .select('*')
       .order('created_at', { ascending: true });
@@ -20,7 +20,7 @@ export const loadTrendingPosts = async (): Promise<TrendingPost[]> => {
     
     if (data && data.length > 0) {
       // Transform data to match our format
-      const transformedPosts = data.map(post => 
+      const transformedPosts = data.map((post: any) => 
         transformDatabaseTrendingPost(post as TrendingPostDatabaseSchema)
       );
       
@@ -44,7 +44,7 @@ export const seedTrendingPosts = async (): Promise<void> => {
       transformTrendingPostToDatabase(post)
     );
     
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('trending_posts')
       .insert(postsToInsert);
       
@@ -60,7 +60,7 @@ export const seedTrendingPosts = async (): Promise<void> => {
 export const updateTrendingPosts = async (newTrendingPosts: TrendingPost[]): Promise<void> => {
   try {
     // First, delete all existing trending posts - fixed method that avoids using neq('id', 'dummy')
-    const { error: deleteError } = await supabase
+    const { error: deleteError } = await (supabase as any)
       .from('trending_posts')
       .delete()
       .gte('id', '00000000-0000-0000-0000-000000000000');
@@ -75,7 +75,7 @@ export const updateTrendingPosts = async (newTrendingPosts: TrendingPost[]): Pro
       transformTrendingPostToDatabase(post)
     );
     
-    const { error: insertError } = await supabase
+    const { error: insertError } = await (supabase as any)
       .from('trending_posts')
       .insert(postsToInsert);
       
