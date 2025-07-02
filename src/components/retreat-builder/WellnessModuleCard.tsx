@@ -4,7 +4,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Clock, Users, DollarSign, Plus } from 'lucide-react';
-import { WellnessModule } from '@/types/wellness';
+import { WellnessModule } from '@/hooks/useWellnessModules';
 
 interface WellnessModuleCardProps {
   module: WellnessModule;
@@ -17,7 +17,8 @@ const WellnessModuleCard: React.FC<WellnessModuleCardProps> = ({
   onAdd, 
   isSelected = false 
 }) => {
-  const formatDuration = (minutes: number) => {
+  const formatDuration = (minutes: number | null) => {
+    if (!minutes) return 'N/A';
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     if (hours > 0) {
@@ -37,19 +38,9 @@ const WellnessModuleCard: React.FC<WellnessModuleCardProps> = ({
 
   return (
     <Card className={`h-full transition-all hover:shadow-md ${isSelected ? 'ring-2 ring-primary' : ''}`}>
-      {module.image_url && (
-        <div className="aspect-video overflow-hidden rounded-t-lg">
-          <img 
-            src={module.image_url} 
-            alt={module.name}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      )}
-      
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-2">
-          <CardTitle className="text-lg leading-tight">{module.name}</CardTitle>
+          <CardTitle className="text-lg leading-tight">{module.title}</CardTitle>
           <Badge 
             variant="secondary" 
             className={`shrink-0 ${categoryColors[module.category] || 'bg-gray-100 text-gray-800'}`}
@@ -61,31 +52,19 @@ const WellnessModuleCard: React.FC<WellnessModuleCardProps> = ({
 
       <CardContent className="pt-0 pb-4">
         <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
-          {module.description}
+          {module.description || 'No description available'}
         </p>
         
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-sm">
             <Clock className="w-4 h-4 text-muted-foreground" />
-            <span>{formatDuration(module.default_duration)} (flexible: {formatDuration(module.min_duration)}-{formatDuration(module.max_duration)})</span>
-          </div>
-          
-          {module.max_participants && (
-            <div className="flex items-center gap-2 text-sm">
-              <Users className="w-4 h-4 text-muted-foreground" />
-              <span>Max {module.max_participants} participants</span>
-            </div>
-          )}
-          
-          <div className="flex items-center gap-2 text-sm">
-            <DollarSign className="w-4 h-4 text-muted-foreground" />
-            <span>${module.base_price}/person</span>
+            <span>{formatDuration(module.duration_minutes)}</span>
           </div>
         </div>
 
         <div className="mt-3">
           <Badge variant="outline" className="text-xs">
-            {module.difficulty_level}
+            {module.difficulty_level || 'beginner'}
           </Badge>
         </div>
       </CardContent>

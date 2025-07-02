@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -113,7 +112,14 @@ const ModuleLibrary: React.FC<ModuleLibraryProps> = ({ selectedModules, onAddMod
         </div>
 
         {/* Modules Grid */}
-        {filteredModules.length === 0 ? (
+        {loading ? (
+          <div className="flex items-center justify-center py-8">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+              <p className="text-muted-foreground">Loading modules...</p>
+            </div>
+          </div>
+        ) : filteredModules.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-muted-foreground">No modules found matching your criteria.</p>
           </div>

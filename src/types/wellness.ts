@@ -4,23 +4,17 @@ import { Tables } from '@/integrations/supabase/types';
 // Base Supabase type for wellness modules
 export type WellnessModuleRow = Tables<'wellness_modules'>;
 
-// Wellness module and retreat builder types
+// Use the actual database schema for WellnessModule
 export interface WellnessModule {
   id: string;
-  name: string;
+  title: string;
+  description?: string | null;
   category: string;
-  description: string;
-  default_duration: number;
-  min_duration: number;
-  max_duration: number;
-  difficulty_level: 'beginner' | 'intermediate' | 'advanced';
-  equipment_needed: string[];
-  space_requirements: string;
-  max_participants: number | null;
-  base_price: number;
-  instructor_specialties: string[];
-  tags: string[];
-  image_url: string | null;
+  difficulty_level: string | null;
+  duration_minutes: number | null;
+  content?: string | null;
+  video_url?: string | null;
+  materials?: string[] | null;
   created_at: string;
   updated_at: string;
 }
@@ -86,20 +80,14 @@ export function isValidDifficultyLevel(level: string): level is 'beginner' | 'in
 export function convertToWellnessModule(row: WellnessModuleRow): WellnessModule {
   return {
     id: row.id,
-    name: row.name,
+    title: row.title,
     category: row.category,
     description: row.description,
-    default_duration: row.default_duration,
-    min_duration: row.min_duration,
-    max_duration: row.max_duration,
-    difficulty_level: isValidDifficultyLevel(row.difficulty_level) ? row.difficulty_level : 'beginner',
-    equipment_needed: row.equipment_needed || [],
-    space_requirements: row.space_requirements || '',
-    max_participants: row.max_participants,
-    base_price: row.base_price,
-    instructor_specialties: row.instructor_specialties || [],
-    tags: row.tags || [],
-    image_url: row.image_url,
+    difficulty_level: row.difficulty_level,
+    duration_minutes: row.duration_minutes,
+    content: row.content,
+    video_url: row.video_url,
+    materials: row.materials,
     created_at: row.created_at,
     updated_at: row.updated_at,
   };

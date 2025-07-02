@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,10 +7,8 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DatePicker } from '@/components/ui/date-picker';
 import { toast } from 'sonner';
-import { WellnessModule, SelectedModule } from '@/types/wellness';
-import ModuleLibrary from './ModuleLibrary';
-import RetreatSchedule from './RetreatSchedule';
-import PricingCalculator from './PricingCalculator';
+import { WellnessModule } from '@/hooks/useWellnessModules';
+import { SelectedModule } from '@/types/wellness';
 
 interface RetreatBuilderProps {
   onSave: (retreatData: any) => void;
@@ -44,12 +41,12 @@ const RetreatBuilder: React.FC<RetreatBuilderProps> = ({ onSave, onCancel }) => 
 
     const selectedModule: SelectedModule = {
       ...module,
-      customDuration: module.default_duration,
+      customDuration: module.duration_minutes || 60,
       sortOrder: selectedModules.length
     };
 
     setSelectedModules(prev => [...prev, selectedModule]);
-    toast.success(`${module.name} added to retreat`);
+    toast.success(`${module.title} added to retreat`);
     
     // Auto-advance to schedule tab after adding first module
     if (selectedModules.length === 0) {
@@ -76,8 +73,11 @@ const RetreatBuilder: React.FC<RetreatBuilderProps> = ({ onSave, onCancel }) => 
 
   const calculateTotalPrice = () => {
     return selectedModules.reduce((total, module) => {
-      const durationRatio = module.customDuration / module.default_duration;
-      return total + (module.base_price * durationRatio);
+      const duration = module.customDuration || module.duration_minutes || 60;
+      const baseDuration = module.duration_minutes || 60;
+      const durationRatio = duration / baseDuration;
+      // Use a base price of 50 since it's not in the database
+      return total + (50 * durationRatio);
     }, 0);
   };
 
@@ -107,7 +107,7 @@ const RetreatBuilder: React.FC<RetreatBuilderProps> = ({ onSave, onCancel }) => 
       return;
     }
 
-    const totalDuration = selectedModules.reduce((total, module) => total + module.customDuration, 0);
+    const totalDuration = selectedModules.reduce((total, module) => total + (module.customDuration || module.duration_minutes || 60), 0);
     const totalPrice = calculateTotalPrice();
 
     const retreatData = {
@@ -128,7 +128,7 @@ const RetreatBuilder: React.FC<RetreatBuilderProps> = ({ onSave, onCancel }) => 
       },
       category: [...new Set(selectedModules.map(m => m.category))],
       amenities: [
-        ...new Set(selectedModules.flatMap(m => m.equipment_needed)),
+        ...new Set(selectedModules.flatMap(m => m.materials || [])),
         "Professional instruction",
         "All materials included"
       ],

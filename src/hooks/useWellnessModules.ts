@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
-// Temporary types until Supabase types regenerate
+// Types that match the actual database schema
 export type ModuleCategory = 'meditation' | 'yoga' | 'breathwork' | 'mindfulness' | 'movement' | 'nutrition' | 'sound_healing' | 'cooking' | 'nature' | 'all';
 export type DifficultyLevel = 'beginner' | 'intermediate' | 'advanced' | 'all';
 
