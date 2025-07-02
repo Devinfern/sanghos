@@ -74,7 +74,7 @@ const RetreatSchedule: React.FC<RetreatScheduleProps> = ({
                 
                 <div className="flex-1 space-y-3">
                   <div className="flex items-center justify-between">
-                    <h4 className="font-medium">{module.name}</h4>
+                    <h4 className="font-medium">{module.title}</h4>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -91,16 +91,16 @@ const RetreatSchedule: React.FC<RetreatScheduleProps> = ({
                       <Input
                         id={`duration-${module.id}`}
                         type="number"
-                        min={module.min_duration}
-                        max={module.max_duration}
+                        min={module.min_duration || 15}
+                        max={module.max_duration || 180}
                         value={module.customDuration}
                         onChange={(e) => onUpdateModule(module.id, { 
-                          customDuration: parseInt(e.target.value) || module.default_duration 
+                          customDuration: parseInt(e.target.value) || (module.default_duration || module.duration_minutes || 60)
                         })}
                         className="w-full"
                       />
                       <p className="text-xs text-muted-foreground">
-                        Range: {module.min_duration}-{module.max_duration} min
+                        Range: {module.min_duration || 15}-{module.max_duration || 180} min
                       </p>
                     </div>
                     
@@ -131,10 +131,10 @@ const RetreatSchedule: React.FC<RetreatScheduleProps> = ({
                     <Clock className="w-4 h-4" />
                     <span>{formatDuration(module.customDuration)}</span>
                     <Badge variant="outline" className="text-xs">
-                      {module.difficulty_level}
+                      {module.difficulty_level || 'beginner'}
                     </Badge>
                     <Badge variant="outline" className="text-xs">
-                      ${module.base_price}/person
+                      ${module.base_price || 50}/person
                     </Badge>
                   </div>
                 </div>

@@ -17,8 +17,10 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({
   const calculateTotalPrice = () => {
     return selectedModules.reduce((total, module) => {
       // Calculate price based on duration ratio if different from default
-      const durationRatio = module.customDuration / module.default_duration;
-      const adjustedPrice = module.base_price * durationRatio;
+      const defaultDuration = module.default_duration || module.duration_minutes || 60;
+      const durationRatio = module.customDuration / defaultDuration;
+      const basePrice = module.base_price || 50;
+      const adjustedPrice = basePrice * durationRatio;
       return total + adjustedPrice;
     }, 0);
   };
@@ -77,13 +79,15 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({
             Module Breakdown
           </h4>
           {selectedModules.map((module) => {
-            const durationRatio = module.customDuration / module.default_duration;
-            const adjustedPrice = module.base_price * durationRatio;
+            const defaultDuration = module.default_duration || module.duration_minutes || 60;
+            const durationRatio = module.customDuration / defaultDuration;
+            const basePrice = module.base_price || 50;
+            const adjustedPrice = basePrice * durationRatio;
             
             return (
               <div key={module.id} className="flex items-center justify-between py-2 border-b">
                 <div className="flex-1">
-                  <p className="font-medium text-sm">{module.name}</p>
+                  <p className="font-medium text-sm">{module.title}</p>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Clock className="w-3 h-3" />
                     <span>{formatDuration(module.customDuration)}</span>

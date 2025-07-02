@@ -8,7 +8,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DatePicker } from '@/components/ui/date-picker';
 import { toast } from 'sonner';
 import { WellnessModule } from '@/hooks/useWellnessModules';
-import { SelectedModule } from '@/types/wellness';
+import { SelectedModule, convertToSelectedModule } from '@/types/wellness';
+import ModuleLibrary from './ModuleLibrary';
+import RetreatSchedule from './RetreatSchedule';
+import PricingCalculator from './PricingCalculator';
 
 interface RetreatBuilderProps {
   onSave: (retreatData: any) => void;
@@ -39,12 +42,7 @@ const RetreatBuilder: React.FC<RetreatBuilderProps> = ({ onSave, onCancel }) => 
       return;
     }
 
-    const selectedModule: SelectedModule = {
-      ...module,
-      customDuration: module.duration_minutes || 60,
-      sortOrder: selectedModules.length
-    };
-
+    const selectedModule = convertToSelectedModule(module, selectedModules.length);
     setSelectedModules(prev => [...prev, selectedModule]);
     toast.success(`${module.title} added to retreat`);
     

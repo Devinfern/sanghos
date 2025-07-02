@@ -19,6 +19,19 @@ export interface WellnessModule {
   updated_at: string;
 }
 
+export interface SelectedModule extends WellnessModule {
+  customDuration: number;
+  startTime?: string;
+  date?: string;
+  sortOrder: number;
+  // Add missing properties that components expect
+  name?: string; // For display purposes, can fall back to title
+  default_duration?: number; // Default duration for calculations
+  min_duration?: number; // Minimum allowed duration
+  max_duration?: number; // Maximum allowed duration
+  base_price?: number; // Base price for pricing calculations
+}
+
 export interface RetreatModule {
   id: string;
   retreat_id: string;
@@ -61,13 +74,6 @@ export interface RetreatTemplateModule {
   wellness_module?: WellnessModule;
 }
 
-export interface SelectedModule extends WellnessModule {
-  customDuration: number;
-  startTime?: string;
-  date?: string;
-  sortOrder: number;
-}
-
 export type ModuleCategory = 'yoga' | 'meditation' | 'sound_healing' | 'breathwork' | 'cooking' | 'nature' | 'all';
 export type DifficultyLevel = 'beginner' | 'intermediate' | 'advanced' | 'all';
 
@@ -90,5 +96,19 @@ export function convertToWellnessModule(row: WellnessModuleRow): WellnessModule 
     materials: row.materials,
     created_at: row.created_at,
     updated_at: row.updated_at,
+  };
+}
+
+// Helper function to convert WellnessModule to SelectedModule with defaults
+export function convertToSelectedModule(module: WellnessModule, sortOrder: number = 0): SelectedModule {
+  return {
+    ...module,
+    customDuration: module.duration_minutes || 60,
+    sortOrder,
+    name: module.title, // Use title as name
+    default_duration: module.duration_minutes || 60,
+    min_duration: Math.max((module.duration_minutes || 60) - 30, 15), // 30 minutes less, minimum 15
+    max_duration: (module.duration_minutes || 60) + 60, // 60 minutes more
+    base_price: 50, // Default base price since it's not in the database
   };
 }
