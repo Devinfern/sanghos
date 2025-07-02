@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
@@ -35,21 +36,6 @@ const About = () => {
       }
     }
   };
-
-  // Values data
-  const values = [{
-    icon: "❤️",
-    title: "Compassion",
-    description: "We approach our work with empathy, kindness, and genuine care for everyone's wellbeing."
-  }, {
-    icon: "🧭",
-    title: "Authenticity",
-    description: "We create spaces where people can show up as their true selves and experience genuine connection."
-  }, {
-    icon: "🎯",
-    title: "Intentionality",
-    description: "Every retreat, space and interaction is crafted with purpose and mindfulness."
-  }];
 
   // Enhanced retreat types with detailed content
   const retreatTypes = [{
@@ -121,7 +107,7 @@ const About = () => {
         "Restores nervous system balance",
         "Develops healthy boundaries"
       ],
-      whatToExpect: [
+      whatToExpected: [
         "Somatic experiencing exercises",
         "Trauma-informed movement practices",
         "Breathwork and grounding techniques",
@@ -268,41 +254,6 @@ const About = () => {
           </div>
         </section>
 
-        {/* Values Section */}
-        <section className="py-24 bg-brand-subtle/10">
-          <div className="container mx-auto max-w-6xl px-4 md:px-6">
-            <motion.div initial="hidden" animate={isLoaded ? "visible" : "hidden"} variants={fadeIn} className="text-center mb-16">
-              <span className="text-sm uppercase tracking-wider text-brand-primary font-semibold">Our Values</span>
-              <h2 className="text-4xl md:text-6xl font-bold mt-4 mb-8 text-brand-dark">
-                Core Principles
-              </h2>
-              <p className="text-xl text-brand-slate max-w-3xl mx-auto">
-                These core principles guide everything we do at Sanghos
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {values.map((value, index) => <motion.div key={index} initial={{
-              opacity: 0,
-              y: 20
-            }} animate={isLoaded ? {
-              opacity: 1,
-              y: 0
-            } : {
-              opacity: 0,
-              y: 20
-            }} transition={{
-              delay: 0.2 + index * 0.1,
-              duration: 0.6
-            }} className="bg-white p-8 rounded-3xl shadow-sm hover:shadow-md transition-shadow">
-                  <div className="text-4xl mb-6">{value.icon}</div>
-                  <h3 className="text-2xl font-bold mb-4 text-brand-dark">{value.title}</h3>
-                  <p className="text-brand-slate text-lg">{value.description}</p>
-                </motion.div>)}
-            </div>
-          </div>
-        </section>
-
         {/* Retreat Types Section */}
         <section className="py-24 bg-white">
           <div className="container mx-auto max-w-6xl px-4 md:px-6">
@@ -433,7 +384,7 @@ const About = () => {
                       What to Expect
                     </h3>
                     <ul className="space-y-3">
-                      {selectedRetreat.detailedContent.whatToExpect.map((item, index) => (
+                      {selectedRetreat.detailedContent.whatToExpected.map((item, index) => (
                         <li key={index} className="flex items-start gap-3 text-gray-700">
                           <div className="w-2 h-2 rounded-full bg-brand-peach mt-2 flex-shrink-0"></div>
                           <span>{item}</span>
