@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
@@ -510,37 +509,126 @@ To Wellness</h2>
           </div>
         </section>
 
-        {/* Join CTA Section */}
-        <section className="py-24 bg-brand-dark relative overflow-hidden">
-          {/* Decorative elements */}
-          <div className="absolute w-full h-full overflow-hidden z-0">
-            <div className="absolute -right-20 top-20 w-72 h-72 bg-brand-primary/30 rounded-full blur-xl"></div>
-            <div className="absolute -left-20 bottom-20 w-80 h-80 bg-brand-peach/20 rounded-full blur-xl"></div>
+        {/* Join CTA Section - New Gradient Paradise Design */}
+        <section className="py-32 relative overflow-hidden">
+          {/* Multi-layer Gradient Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/20 via-brand-peach/15 to-brand-sky/25"></div>
+          <div className="absolute inset-0 bg-gradient-to-tr from-brand-subtle/30 via-transparent to-brand-primary/10"></div>
+          <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-white/5 to-brand-dark/5"></div>
+          
+          {/* Floating Geometric Elements */}
+          <div className="absolute w-full h-full overflow-hidden pointer-events-none">
+            <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-brand-primary/30 to-brand-peach/20 rounded-full blur-xl animate-float"></div>
+            <div className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-brand-sky/40 to-brand-primary/20 rounded-full blur-lg animate-float" style={{ animationDelay: '1s' }}></div>
+            <div className="absolute bottom-32 left-1/4 w-20 h-20 bg-gradient-to-br from-brand-peach/30 to-brand-subtle/25 rounded-full blur-lg animate-float" style={{ animationDelay: '2s' }}></div>
+            <div className="absolute bottom-20 right-1/3 w-28 h-28 bg-gradient-to-br from-brand-primary/25 to-brand-sky/20 rounded-full blur-xl animate-float" style={{ animationDelay: '0.5s' }}></div>
+            
+            {/* Decorative Dots */}
+            <div className="absolute top-1/3 left-1/2 w-2 h-2 bg-brand-primary/60 rounded-full animate-pulse"></div>
+            <div className="absolute top-1/4 right-1/4 w-1.5 h-1.5 bg-brand-peach/70 rounded-full animate-pulse" style={{ animationDelay: '1.5s' }}></div>
+            <div className="absolute bottom-1/3 left-1/3 w-1 h-1 bg-brand-sky/80 rounded-full animate-pulse" style={{ animationDelay: '0.7s' }}></div>
           </div>
           
-          <div className="container relative z-10 mx-auto max-w-6xl px-4 md:px-6">
-            <motion.div initial="hidden" animate={isLoaded ? "visible" : "hidden"} variants={fadeIn} className="max-w-3xl mx-auto text-center">
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">Join Our Community</h2>
-              <p className="text-xl mb-10 text-white/80">
-                Whether you're seeking mindful experiences, looking to share your expertise as an instructor, or have a unique space to host retreats, we'd love to welcome you to the Sanghos community.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-white text-brand-dark hover:bg-white/90 group rounded-full" asChild>
+          <div className="container relative z-10 mx-auto max-w-5xl px-4 md:px-6">
+            {/* Glass-morphism Container */}
+            <motion.div
+              initial="hidden"
+              animate={isLoaded ? "visible" : "hidden"}
+              variants={fadeIn}
+              className="glass-morphism rounded-3xl p-12 md:p-16 shadow-2xl border border-white/20"
+              style={{
+                background: 'rgba(255, 255, 255, 0.15)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+              }}
+            >
+              {/* Enhanced Typography */}
+              <div className="text-center mb-12">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-primary to-brand-peach rounded-2xl mb-8 shadow-lg">
+                  <Heart className="h-8 w-8 text-white" />
+                </div>
+                
+                <h2 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-brand-dark via-brand-primary to-brand-dark bg-clip-text text-transparent leading-tight">
+                  Join Our Community
+                </h2>
+                
+                <p className="text-xl md:text-2xl mb-12 text-brand-dark/80 max-w-4xl mx-auto leading-relaxed">
+                  Whether you're seeking mindful experiences, looking to share your expertise as an instructor, or have a unique space to host retreats, we'd love to welcome you to the Sanghos community.
+                </p>
+              </div>
+
+              {/* Feature Highlights */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  transition={{ delay: 0.3, duration: 0.6 }}
+                  className="text-center"
+                >
+                  <div className="w-12 h-12 bg-gradient-to-br from-brand-primary/20 to-brand-peach/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <Users className="h-6 w-6 text-brand-primary" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-brand-dark mb-2">Vibrant Community</h3>
+                  <p className="text-brand-slate text-sm">Connect with like-minded individuals on their wellness journey</p>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                  className="text-center"
+                >
+                  <div className="w-12 h-12 bg-gradient-to-br from-brand-peach/20 to-brand-sky/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <Star className="h-6 w-6 text-brand-peach" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-brand-dark mb-2">Expert Guidance</h3>
+                  <p className="text-brand-slate text-sm">Learn from experienced practitioners and certified instructors</p>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  transition={{ delay: 0.5, duration: 0.6 }}
+                  className="text-center"
+                >
+                  <div className="w-12 h-12 bg-gradient-to-br from-brand-sky/20 to-brand-primary/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <ArrowRight className="h-6 w-6 text-brand-sky" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-brand-dark mb-2">Growth Opportunities</h3>
+                  <p className="text-brand-slate text-sm">Expand your practice and share your unique gifts with others</p>
+                </motion.div>
+              </div>
+
+              {/* Enhanced CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-to-r from-brand-primary to-brand-peach hover:from-brand-primary/90 hover:to-brand-peach/90 text-white px-10 py-6 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group border-0"
+                  asChild
+                >
                   <a href="/signup">
                     Join as a Member
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    <ArrowRight className="ml-3 h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </a>
                 </Button>
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/10 group rounded-full" asChild>
+                
+                <Button 
+                  size="lg" 
+                  className="bg-white/20 backdrop-blur-sm border-2 border-white/30 text-brand-dark hover:bg-white/30 hover:border-white/40 px-10 py-6 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
+                  asChild
+                >
                   <a href="/host/register">
                     Become a Host
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    <ArrowRight className="ml-3 h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </a>
                 </Button>
               </div>
             </motion.div>
           </div>
         </section>
+
+        {/* Join CTA Section */}
+        
       </main>
 
       <Footer />
