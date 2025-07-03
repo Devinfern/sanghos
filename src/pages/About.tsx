@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
@@ -5,7 +6,7 @@ import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, X, Clock, Users, Star, Heart } from "lucide-react";
+import { ArrowRight, X, Clock, Users, Star, Heart, MessageCircle, Calendar, Trophy } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import OptimizedImage from "@/components/OptimizedImage";
@@ -509,126 +510,155 @@ To Wellness</h2>
           </div>
         </section>
 
-        {/* Join CTA Section - New Gradient Paradise Design */}
-        <section className="py-32 relative overflow-hidden">
-          {/* Multi-layer Gradient Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/20 via-brand-peach/15 to-brand-sky/25"></div>
-          <div className="absolute inset-0 bg-gradient-to-tr from-brand-subtle/30 via-transparent to-brand-primary/10"></div>
-          <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-white/5 to-brand-dark/5"></div>
-          
-          {/* Floating Geometric Elements */}
-          <div className="absolute w-full h-full overflow-hidden pointer-events-none">
-            <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-brand-primary/30 to-brand-peach/20 rounded-full blur-xl animate-float"></div>
-            <div className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-brand-sky/40 to-brand-primary/20 rounded-full blur-lg animate-float" style={{ animationDelay: '1s' }}></div>
-            <div className="absolute bottom-32 left-1/4 w-20 h-20 bg-gradient-to-br from-brand-peach/30 to-brand-subtle/25 rounded-full blur-lg animate-float" style={{ animationDelay: '2s' }}></div>
-            <div className="absolute bottom-20 right-1/3 w-28 h-28 bg-gradient-to-br from-brand-primary/25 to-brand-sky/20 rounded-full blur-xl animate-float" style={{ animationDelay: '0.5s' }}></div>
-            
-            {/* Decorative Dots */}
-            <div className="absolute top-1/3 left-1/2 w-2 h-2 bg-brand-primary/60 rounded-full animate-pulse"></div>
-            <div className="absolute top-1/4 right-1/4 w-1.5 h-1.5 bg-brand-peach/70 rounded-full animate-pulse" style={{ animationDelay: '1.5s' }}></div>
-            <div className="absolute bottom-1/3 left-1/3 w-1 h-1 bg-brand-sky/80 rounded-full animate-pulse" style={{ animationDelay: '0.7s' }}></div>
-          </div>
-          
-          <div className="container relative z-10 mx-auto max-w-5xl px-4 md:px-6">
-            {/* Glass-morphism Container */}
+        {/* Interactive Community Grid - New Section */}
+        <section className="py-24 bg-white relative overflow-hidden">
+          <div className="container mx-auto max-w-7xl px-4 md:px-6">
+            {/* Header */}
             <motion.div
               initial="hidden"
               animate={isLoaded ? "visible" : "hidden"}
               variants={fadeIn}
-              className="glass-morphism rounded-3xl p-12 md:p-16 shadow-2xl border border-white/20"
-              style={{
-                background: 'rgba(255, 255, 255, 0.15)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-              }}
+              className="text-center mb-16"
             >
-              {/* Enhanced Typography */}
-              <div className="text-center mb-12">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-primary to-brand-peach rounded-2xl mb-8 shadow-lg">
-                  <Heart className="h-8 w-8 text-white" />
+              <span className="text-sm uppercase tracking-wider text-brand-primary font-semibold">Community</span>
+              <h2 className="text-4xl md:text-6xl font-bold mt-4 mb-8 text-brand-dark">
+                Join Our Wellness Community
+              </h2>
+              <p className="text-xl text-brand-slate max-w-3xl mx-auto">
+                Connect with like-minded individuals, share experiences, and grow together on your wellness journey
+              </p>
+            </motion.div>
+
+            {/* Interactive Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+              {/* Community Stats Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="bg-gradient-to-br from-brand-primary/10 to-brand-peach/10 rounded-3xl p-8 hover:shadow-lg transition-all duration-300 group hover:scale-105"
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <Users className="h-12 w-12 text-brand-primary group-hover:scale-110 transition-transform duration-300" />
+                  <span className="text-3xl font-bold text-brand-dark">2.5K+</span>
                 </div>
-                
-                <h2 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-brand-dark via-brand-primary to-brand-dark bg-clip-text text-transparent leading-tight">
+                <h3 className="text-xl font-semibold mb-2 text-brand-dark">Active Members</h3>
+                <p className="text-brand-slate">Join thousands of wellness enthusiasts sharing their journey</p>
+              </motion.div>
+
+              {/* Events Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                className="bg-gradient-to-br from-brand-peach/10 to-brand-sky/10 rounded-3xl p-8 hover:shadow-lg transition-all duration-300 group hover:scale-105"
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <Calendar className="h-12 w-12 text-brand-peach group-hover:scale-110 transition-transform duration-300" />
+                  <span className="text-3xl font-bold text-brand-dark">150+</span>
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-brand-dark">Monthly Events</h3>
+                <p className="text-brand-slate">Participate in workshops, meetups, and virtual sessions</p>
+              </motion.div>
+
+              {/* Success Stories Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+                className="bg-gradient-to-br from-brand-sky/10 to-brand-primary/10 rounded-3xl p-8 hover:shadow-lg transition-all duration-300 group hover:scale-105"
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <Trophy className="h-12 w-12 text-brand-sky group-hover:scale-110 transition-transform duration-300" />
+                  <span className="text-3xl font-bold text-brand-dark">98%</span>
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-brand-dark">Success Rate</h3>
+                <p className="text-brand-slate">Members report improved well-being within 30 days</p>
+              </motion.div>
+
+              {/* Discussion Forum Card - Spans 2 columns */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ delay: 0.5, duration: 0.6 }}
+                className="md:col-span-2 bg-gradient-to-r from-brand-primary/5 to-brand-peach/5 rounded-3xl p-8 hover:shadow-lg transition-all duration-300 group"
+              >
+                <div className="flex items-start gap-6">
+                  <MessageCircle className="h-16 w-16 text-brand-primary group-hover:scale-110 transition-transform duration-300 mt-2" />
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-semibold mb-3 text-brand-dark">Community Discussions</h3>
+                    <p className="text-brand-slate text-lg mb-4">
+                      Share insights, ask questions, and connect with fellow practitioners in our supportive forum
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <span className="px-3 py-1 bg-brand-primary/10 text-brand-primary rounded-full text-sm font-medium">
+                        Daily Check-ins
+                      </span>
+                      <span className="px-3 py-1 bg-brand-peach/10 text-brand-peach rounded-full text-sm font-medium">
+                        Expert Q&A
+                      </span>
+                      <span className="px-3 py-1 bg-brand-sky/10 text-brand-sky rounded-full text-sm font-medium">
+                        Success Stories
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Mentorship Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ delay: 0.6, duration: 0.6 }}
+                className="bg-gradient-to-br from-brand-peach/10 to-brand-primary/10 rounded-3xl p-8 hover:shadow-lg transition-all duration-300 group hover:scale-105"
+              >
+                <div className="text-center">
+                  <Heart className="h-12 w-12 text-brand-peach mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
+                  <h3 className="text-xl font-semibold mb-2 text-brand-dark">1:1 Mentorship</h3>
+                  <p className="text-brand-slate mb-4">Get personalized guidance from certified wellness coaches</p>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="border-brand-peach text-brand-peach hover:bg-brand-peach/5 rounded-full"
+                  >
+                    Learn More
+                  </Button>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* CTA Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ delay: 0.7, duration: 0.6 }}
+              className="flex flex-col sm:flex-row gap-6 justify-center"
+            >
+              <Button 
+                size="lg" 
+                className="bg-brand-primary hover:bg-brand-primary/90 text-white px-10 py-6 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
+                asChild
+              >
+                <a href="/signup">
                   Join Our Community
-                </h2>
-                
-                <p className="text-xl md:text-2xl mb-12 text-brand-dark/80 max-w-4xl mx-auto leading-relaxed">
-                  Whether you're seeking mindful experiences, looking to share your expertise as an instructor, or have a unique space to host retreats, we'd love to welcome you to the Sanghos community.
-                </p>
-              </div>
-
-              {/* Feature Highlights */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ delay: 0.3, duration: 0.6 }}
-                  className="text-center"
-                >
-                  <div className="w-12 h-12 bg-gradient-to-br from-brand-primary/20 to-brand-peach/20 rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <Users className="h-6 w-6 text-brand-primary" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-brand-dark mb-2">Vibrant Community</h3>
-                  <p className="text-brand-slate text-sm">Connect with like-minded individuals on their wellness journey</p>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ delay: 0.4, duration: 0.6 }}
-                  className="text-center"
-                >
-                  <div className="w-12 h-12 bg-gradient-to-br from-brand-peach/20 to-brand-sky/20 rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <Star className="h-6 w-6 text-brand-peach" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-brand-dark mb-2">Expert Guidance</h3>
-                  <p className="text-brand-slate text-sm">Learn from experienced practitioners and certified instructors</p>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ delay: 0.5, duration: 0.6 }}
-                  className="text-center"
-                >
-                  <div className="w-12 h-12 bg-gradient-to-br from-brand-sky/20 to-brand-primary/20 rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <ArrowRight className="h-6 w-6 text-brand-sky" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-brand-dark mb-2">Growth Opportunities</h3>
-                  <p className="text-brand-slate text-sm">Expand your practice and share your unique gifts with others</p>
-                </motion.div>
-              </div>
-
-              {/* Enhanced CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                <Button 
-                  size="lg" 
-                  className="bg-gradient-to-r from-brand-primary to-brand-peach hover:from-brand-primary/90 hover:to-brand-peach/90 text-white px-10 py-6 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group border-0"
-                  asChild
-                >
-                  <a href="/signup">
-                    Join as a Member
-                    <ArrowRight className="ml-3 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                  </a>
-                </Button>
-                
-                <Button 
-                  size="lg" 
-                  className="bg-white/20 backdrop-blur-sm border-2 border-white/30 text-brand-dark hover:bg-white/30 hover:border-white/40 px-10 py-6 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
-                  asChild
-                >
-                  <a href="/host/register">
-                    Become a Host
-                    <ArrowRight className="ml-3 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                  </a>
-                </Button>
-              </div>
+                  <ArrowRight className="ml-3 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </a>
+              </Button>
+              
+              <Button 
+                size="lg" 
+                variant="outline"
+                className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary/5 px-10 py-6 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
+                asChild
+              >
+                <a href="/community">
+                  Explore Community
+                  <ArrowRight className="ml-3 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </a>
+              </Button>
             </motion.div>
           </div>
         </section>
-
-        {/* Join CTA Section */}
-        
       </main>
 
       <Footer />
