@@ -1,5 +1,4 @@
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -13,6 +12,7 @@ import OptimizedImage from "@/components/OptimizedImage";
 const About = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [expandedRetreat, setExpandedRetreat] = useState(null);
+  const cardRefs = useRef({});
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -121,7 +121,31 @@ const About = () => {
   }];
 
   const toggleExpanded = (retreatId) => {
-    setExpandedRetreat(expandedRetreat === retreatId ? null : retreatId);
+    // Store current card position before toggling
+    const currentCard = cardRefs.current[retreatId];
+    const wasExpanded = expandedRetreat === retreatId;
+    
+    if (currentCard && !wasExpanded) {
+      // Store the card's current position
+      const cardRect = currentCard.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const cardTopPosition = cardRect.top + scrollTop;
+      
+      // Toggle the expansion
+      setExpandedRetreat(expandedRetreat === retreatId ? null : retreatId);
+      
+      // After expansion animation, scroll to maintain position
+      setTimeout(() => {
+        const offsetFromTop = 100; // Add some padding from top
+        window.scrollTo({
+          top: cardTopPosition - offsetFromTop,
+          behavior: 'smooth'
+        });
+      }, 300); // Match the animation duration
+    } else {
+      // Just toggle if collapsing
+      setExpandedRetreat(expandedRetreat === retreatId ? null : retreatId);
+    }
   };
 
   return <>
@@ -278,6 +302,7 @@ const About = () => {
                 return (
                   <MotionCard 
                     key={type.id} 
+                    ref={(el) => cardRefs.current[type.id] = el}
                     initial={{
                       opacity: 0,
                       y: 20
