@@ -1,18 +1,18 @@
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import OptimizedImage from "@/components/OptimizedImage";
-import { Clock, Users, Star, Heart, ChevronDown, ChevronUp, ArrowRight } from "lucide-react";
+import { Clock, Users, Star, Heart, ArrowRight, X } from "lucide-react";
 
 interface ExpandableRetreatCardsProps {
   isLoaded: boolean;
 }
 
 const ExpandableRetreatCards = ({ isLoaded }: ExpandableRetreatCardsProps) => {
-  const [expandedRetreat, setExpandedRetreat] = useState(null);
-  const cardRefs = useRef({});
+  const [selectedRetreat, setSelectedRetreat] = useState(null);
 
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
@@ -62,7 +62,7 @@ const ExpandableRetreatCards = ({ isLoaded }: ExpandableRetreatCardsProps) => {
         "Deepens spiritual connection",
         "Improves overall well-being"
       ],
-      whatToExpected: [
+      whatToExpect: [
         "Periods of silent sitting meditation",
         "Walking meditation in nature",
         "Gentle yoga and stretching",
@@ -89,7 +89,7 @@ const ExpandableRetreatCards = ({ isLoaded }: ExpandableRetreatCardsProps) => {
         "Restores nervous system balance",
         "Develops healthy boundaries"
       ],
-      whatToExpected: [
+      whatToExpect: [
         "Somatic experiencing exercises",
         "Trauma-informed movement practices",
         "Breathwork and grounding techniques",
@@ -103,37 +103,9 @@ const ExpandableRetreatCards = ({ isLoaded }: ExpandableRetreatCardsProps) => {
     }
   }];
 
-  const toggleExpanded = (retreatId) => {
-    // Store current card position before toggling
-    const currentCard = cardRefs.current[retreatId];
-    const wasExpanded = expandedRetreat === retreatId;
-    
-    if (currentCard && !wasExpanded) {
-      // Store the card's current position
-      const cardRect = currentCard.getBoundingClientRect();
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const cardTopPosition = cardRect.top + scrollTop;
-      
-      // Toggle the expansion
-      setExpandedRetreat(expandedRetreat === retreatId ? null : retreatId);
-      
-      // After expansion animation, scroll to maintain position
-      setTimeout(() => {
-        const offsetFromTop = 100; // Add some padding from top
-        window.scrollTo({
-          top: cardTopPosition - offsetFromTop,
-          behavior: 'smooth'
-        });
-      }, 300); // Match the animation duration
-    } else {
-      // Just toggle if collapsing
-      setExpandedRetreat(expandedRetreat === retreatId ? null : retreatId);
-    }
-  };
-
   return (
     <section className="py-24 bg-white">
-      <div className="container mx-auto max-w-6xl px-4 md:px-6">
+      <div className="container mx-auto max-w-7xl px-4 md:px-6">
         <motion.div initial="hidden" animate={isLoaded ? "visible" : "hidden"} variants={fadeIn} className="text-center mb-16">
           <span className="text-sm uppercase tracking-wider text-brand-primary font-semibold">Explore</span>
           <h2 className="text-4xl md:text-6xl font-bold mt-4 mb-8 text-brand-dark">
@@ -144,28 +116,22 @@ const ExpandableRetreatCards = ({ isLoaded }: ExpandableRetreatCardsProps) => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {retreatTypes.map((type, index) => {
-            const MotionCard = motion(Card);
-            const isExpanded = expandedRetreat === type.id;
-            
-            return (
-              <MotionCard 
-                key={type.id} 
-                ref={(el) => cardRefs.current[type.id] = el}
-                initial={{ opacity: 0, y: 20 }} 
-                animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} 
-                transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }} 
-                className={`overflow-hidden bg-white border-0 rounded-3xl shadow-md hover:shadow-lg transition-all duration-500 ${
-                  isExpanded ? 'md:col-span-3' : ''
-                }`}
-              >
-                <motion.div
-                  layout
-                  className={`${isExpanded ? 'grid grid-cols-1 md:grid-cols-2 gap-8' : ''}`}
-                >
-                  <div className={`${isExpanded ? '' : 'flex flex-col'}`}>
-                    <div className="relative h-64 overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Panel - Retreat Cards */}
+          <div className="lg:col-span-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {retreatTypes.map((type, index) => {
+                const MotionCard = motion(Card);
+                
+                return (
+                  <MotionCard 
+                    key={type.id} 
+                    initial={{ opacity: 0, y: 20 }} 
+                    animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} 
+                    transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }} 
+                    className="overflow-hidden bg-white border-0 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300"
+                  >
+                    <div className="relative h-48 overflow-hidden">
                       <OptimizedImage 
                         src={type.image} 
                         alt={type.title} 
@@ -173,123 +139,149 @@ const ExpandableRetreatCards = ({ isLoaded }: ExpandableRetreatCardsProps) => {
                       />
                     </div>
                     
-                    <CardContent className="p-8">
-                      <h3 className="text-2xl font-bold mb-2 text-brand-dark">{type.title}</h3>
-                      <p className="text-brand-slate text-lg mb-6">{type.description}</p>
+                    <CardContent className="p-6">
+                      <h3 className="text-xl font-bold mb-2 text-brand-dark">{type.title}</h3>
+                      <p className="text-brand-slate text-sm mb-4 line-clamp-3">{type.description}</p>
                       
                       <Button 
                         variant="outline" 
                         className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white transition-all duration-300 font-medium rounded-full w-full"
-                        onClick={() => toggleExpanded(type.id)}
+                        onClick={() => setSelectedRetreat(type)}
                       >
-                        {isExpanded ? (
-                          <>
-                            Show Less
-                            <ChevronUp className="h-4 w-4 ml-2" />
-                          </>
-                        ) : (
-                          <>
-                            Learn More
-                            <ChevronDown className="h-4 w-4 ml-2" />
-                          </>
-                        )}
+                        Learn More
+                        <ArrowRight className="h-4 w-4 ml-2" />
                       </Button>
                     </CardContent>
+                  </MotionCard>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Right Panel - Detail View */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-8">
+              {selectedRetreat ? (
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="bg-white rounded-3xl shadow-lg border p-6 h-fit"
+                >
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-2xl font-bold text-brand-dark">{selectedRetreat.title}</h3>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setSelectedRetreat(null)}
+                      className="h-8 w-8 p-0 hover:bg-brand-primary/10"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
                   </div>
 
-                  {/* Expanded Content */}
-                  {isExpanded && (
-                    <motion.div
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 20 }}
-                      transition={{ duration: 0.5 }}
-                      className="p-8 bg-brand-subtle/5"
-                    >
-                      {/* Header with stats */}
-                      <div className="mb-6">
-                        <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
-                            <span>{type.detailedContent.duration}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Users className="h-4 w-4" />
-                            <span>{type.detailedContent.groupSize}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Star className="h-4 w-4" />
-                            <span>{type.detailedContent.difficulty}</span>
-                          </div>
-                        </div>
-                      </div>
+                  {/* Stats */}
+                  <div className="flex items-center gap-4 text-sm text-gray-600 mb-6">
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-4 w-4" />
+                      <span>{selectedRetreat.detailedContent.duration}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Users className="h-4 w-4" />
+                      <span>{selectedRetreat.detailedContent.groupSize}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Star className="h-4 w-4" />
+                      <span>{selectedRetreat.detailedContent.difficulty}</span>
+                    </div>
+                  </div>
 
-                      {/* Overview */}
-                      <div className="mb-6">
-                        <h4 className="text-lg font-semibold mb-3 text-gray-900">About This Experience</h4>
-                        <p className="text-gray-700 leading-relaxed text-sm">
-                          {type.detailedContent.overview}
+                  {/* Tabbed Content */}
+                  <Tabs defaultValue="overview" className="w-full">
+                    <TabsList className="grid w-full grid-cols-3 mb-6">
+                      <TabsTrigger value="overview" className="text-xs">Overview</TabsTrigger>
+                      <TabsTrigger value="benefits" className="text-xs">Benefits</TabsTrigger>
+                      <TabsTrigger value="expect" className="text-xs">What to Expect</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="overview" className="space-y-4">
+                      <div>
+                        <h4 className="font-semibold mb-2 text-gray-900">About This Experience</h4>
+                        <p className="text-gray-700 text-sm leading-relaxed">
+                          {selectedRetreat.detailedContent.overview}
                         </p>
                       </div>
-
-                      {/* Benefits and What to Expect */}
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                        {/* Benefits */}
-                        <div className="bg-brand-primary/5 rounded-xl p-4 border border-brand-primary/10">
-                          <h4 className="text-md font-semibold mb-3 text-gray-900 flex items-center gap-2">
-                            <Heart className="h-4 w-4 text-brand-primary" />
-                            Key Benefits
-                          </h4>
-                          <ul className="space-y-2">
-                            {type.detailedContent.benefits.map((benefit, index) => (
-                              <li key={index} className="flex items-start gap-2 text-gray-700 text-sm">
-                                <div className="w-1.5 h-1.5 rounded-full bg-brand-primary mt-1.5 flex-shrink-0"></div>
-                                <span>{benefit}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        {/* What to Expect */}
-                        <div className="bg-brand-peach/5 rounded-xl p-4 border border-brand-peach/10">
-                          <h4 className="text-md font-semibold mb-3 text-gray-900 flex items-center gap-2">
-                            <Star className="h-4 w-4 text-brand-peach" />
-                            What to Expect
-                          </h4>
-                          <ul className="space-y-2">
-                            {type.detailedContent.whatToExpect?.map((item, index) => (
-                              <li key={index} className="flex items-start gap-2 text-gray-700 text-sm">
-                                <div className="w-1.5 h-1.5 rounded-full bg-brand-peach mt-1.5 flex-shrink-0"></div>
-                                <span>{item}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="benefits" className="space-y-4">
+                      <div>
+                        <h4 className="font-semibold mb-3 text-gray-900 flex items-center gap-2">
+                          <Heart className="h-4 w-4 text-brand-primary" />
+                          Key Benefits
+                        </h4>
+                        <ul className="space-y-2">
+                          {selectedRetreat.detailedContent.benefits.map((benefit, index) => (
+                            <li key={index} className="flex items-start gap-2 text-gray-700 text-sm">
+                              <div className="w-1.5 h-1.5 rounded-full bg-brand-primary mt-1.5 flex-shrink-0"></div>
+                              <span>{benefit}</span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
-
-                      {/* CTA Buttons */}
-                      <div className="flex flex-col sm:flex-row gap-3">
-                        <Button 
-                          size="sm" 
-                          className="bg-brand-primary hover:bg-brand-primary/90 text-white px-6 py-2 rounded-full font-medium"
-                        >
-                          Book Your Retreat
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
-                          className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary/5 px-6 py-2 rounded-full font-medium"
-                        >
-                          View Schedule
-                        </Button>
+                    </TabsContent>
+                    
+                    <TabsContent value="expect" className="space-y-4">
+                      <div>
+                        <h4 className="font-semibold mb-3 text-gray-900 flex items-center gap-2">
+                          <Star className="h-4 w-4 text-brand-peach" />
+                          What to Expect
+                        </h4>
+                        <ul className="space-y-2">
+                          {selectedRetreat.detailedContent.whatToExpect.map((item, index) => (
+                            <li key={index} className="flex items-start gap-2 text-gray-700 text-sm">
+                              <div className="w-1.5 h-1.5 rounded-full bg-brand-peach mt-1.5 flex-shrink-0"></div>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
-                    </motion.div>
-                  )}
+                    </TabsContent>
+                  </Tabs>
+
+                  {/* CTA Buttons */}
+                  <div className="flex flex-col gap-3 mt-6 pt-6 border-t border-gray-100">
+                    <Button 
+                      size="sm" 
+                      className="bg-brand-primary hover:bg-brand-primary/90 text-white px-6 py-2 rounded-full font-medium"
+                    >
+                      Book Your Retreat
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary/5 px-6 py-2 rounded-full font-medium"
+                    >
+                      View Schedule
+                    </Button>
+                  </div>
                 </motion.div>
-              </MotionCard>
-            );
-          })}
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="bg-gray-50 rounded-3xl p-8 text-center h-96 flex items-center justify-center"
+                >
+                  <div>
+                    <Heart className="h-12 w-12 text-brand-primary mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-brand-dark mb-2">Select a Retreat</h3>
+                    <p className="text-brand-slate">Click "Learn More" on any retreat card to view detailed information here.</p>
+                  </div>
+                </motion.div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </section>
