@@ -6,14 +6,13 @@ import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, X, Clock, Users, Star, Heart, MessageCircle, Calendar, Trophy } from "lucide-react";
+import { ArrowRight, Clock, Users, Star, Heart, MessageCircle, Calendar, Trophy, ChevronDown, ChevronUp } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import OptimizedImage from "@/components/OptimizedImage";
 
 const About = () => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [selectedRetreat, setSelectedRetreat] = useState(null);
+  const [expandedRetreat, setExpandedRetreat] = useState(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -107,7 +106,7 @@ const About = () => {
         "Restores nervous system balance",
         "Develops healthy boundaries"
       ],
-      whatToExpected: [
+      whatToExpect: [
         "Somatic experiencing exercises",
         "Trauma-informed movement practices",
         "Breathwork and grounding techniques",
@@ -120,6 +119,10 @@ const About = () => {
       difficulty: "All levels, trauma-sensitive"
     }
   }];
+
+  const toggleExpanded = (retreatId) => {
+    setExpandedRetreat(expandedRetreat === retreatId ? null : retreatId);
+  };
 
   return <>
       <Helmet>
@@ -269,152 +272,164 @@ const About = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {retreatTypes.map((type, index) => {
-              const MotionCard = motion(Card);
-              return <MotionCard key={type.id} initial={{
-                opacity: 0,
-                y: 20
-              }} animate={isLoaded ? {
-                opacity: 1,
-                y: 0
-              } : {
-                opacity: 0,
-                y: 20
-              }} transition={{
-                delay: 0.2 + index * 0.1,
-                duration: 0.6
-              }} className="overflow-hidden bg-white border-0 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300">
-                    <div className="relative h-64 overflow-hidden">
-                      <OptimizedImage src={type.image} alt={type.title} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
-                    </div>
-                    <CardContent className="p-8">
-                      <h3 className="text-2xl font-bold mb-2 text-brand-dark">{type.title}</h3>
-                      <p className="text-brand-slate text-lg mb-6">{type.description}</p>
-                      <Button 
-                        variant="outline" 
-                        className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-medium rounded-full"
-                        onClick={() => setSelectedRetreat(type)}
-                      >
-                        Learn More
-                      </Button>
-                    </CardContent>
-                  </MotionCard>;
-            })}
+                const MotionCard = motion(Card);
+                const isExpanded = expandedRetreat === type.id;
+                
+                return (
+                  <MotionCard 
+                    key={type.id} 
+                    initial={{
+                      opacity: 0,
+                      y: 20
+                    }} 
+                    animate={isLoaded ? {
+                      opacity: 1,
+                      y: 0
+                    } : {
+                      opacity: 0,
+                      y: 20
+                    }} 
+                    transition={{
+                      delay: 0.2 + index * 0.1,
+                      duration: 0.6
+                    }} 
+                    className={`overflow-hidden bg-white border-0 rounded-3xl shadow-md hover:shadow-lg transition-all duration-500 ${
+                      isExpanded ? 'md:col-span-3' : ''
+                    }`}
+                  >
+                    <motion.div
+                      layout
+                      className={`${isExpanded ? 'grid grid-cols-1 md:grid-cols-2 gap-8' : ''}`}
+                    >
+                      <div className={`${isExpanded ? '' : 'flex flex-col'}`}>
+                        <div className="relative h-64 overflow-hidden">
+                          <OptimizedImage 
+                            src={type.image} 
+                            alt={type.title} 
+                            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" 
+                          />
+                        </div>
+                        
+                        <CardContent className="p-8">
+                          <h3 className="text-2xl font-bold mb-2 text-brand-dark">{type.title}</h3>
+                          <p className="text-brand-slate text-lg mb-6">{type.description}</p>
+                          
+                          <Button 
+                            variant="outline" 
+                            className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white transition-all duration-300 font-medium rounded-full w-full"
+                            onClick={() => toggleExpanded(type.id)}
+                          >
+                            {isExpanded ? (
+                              <>
+                                Show Less
+                                <ChevronUp className="h-4 w-4 ml-2" />
+                              </>
+                            ) : (
+                              <>
+                                Learn More
+                                <ChevronDown className="h-4 w-4 ml-2" />
+                              </>
+                            )}
+                          </Button>
+                        </CardContent>
+                      </div>
+
+                      {/* Expanded Content */}
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 20 }}
+                          transition={{ duration: 0.5 }}
+                          className="p-8 bg-brand-subtle/5"
+                        >
+                          {/* Header with stats */}
+                          <div className="mb-6">
+                            <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
+                              <div className="flex items-center gap-1">
+                                <Clock className="h-4 w-4" />
+                                <span>{type.detailedContent.duration}</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Users className="h-4 w-4" />
+                                <span>{type.detailedContent.groupSize}</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Star className="h-4 w-4" />
+                                <span>{type.detailedContent.difficulty}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Overview */}
+                          <div className="mb-6">
+                            <h4 className="text-lg font-semibold mb-3 text-gray-900">About This Experience</h4>
+                            <p className="text-gray-700 leading-relaxed text-sm">
+                              {type.detailedContent.overview}
+                            </p>
+                          </div>
+
+                          {/* Benefits and What to Expect */}
+                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                            {/* Benefits */}
+                            <div className="bg-brand-primary/5 rounded-xl p-4 border border-brand-primary/10">
+                              <h4 className="text-md font-semibold mb-3 text-gray-900 flex items-center gap-2">
+                                <Heart className="h-4 w-4 text-brand-primary" />
+                                Key Benefits
+                              </h4>
+                              <ul className="space-y-2">
+                                {type.detailedContent.benefits.map((benefit, index) => (
+                                  <li key={index} className="flex items-start gap-2 text-gray-700 text-sm">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-brand-primary mt-1.5 flex-shrink-0"></div>
+                                    <span>{benefit}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+
+                            {/* What to Expect */}
+                            <div className="bg-brand-peach/5 rounded-xl p-4 border border-brand-peach/10">
+                              <h4 className="text-md font-semibold mb-3 text-gray-900 flex items-center gap-2">
+                                <Star className="h-4 w-4 text-brand-peach" />
+                                What to Expect
+                              </h4>
+                              <ul className="space-y-2">
+                                {type.detailedContent.whatToExpect.map((item, index) => (
+                                  <li key={index} className="flex items-start gap-2 text-gray-700 text-sm">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-brand-peach mt-1.5 flex-shrink-0"></div>
+                                    <span>{item}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+
+                          {/* CTA Buttons */}
+                          <div className="flex flex-col sm:flex-row gap-3">
+                            <Button 
+                              size="sm" 
+                              className="bg-brand-primary hover:bg-brand-primary/90 text-white px-6 py-2 rounded-full font-medium"
+                            >
+                              Book Your Retreat
+                              <ArrowRight className="ml-2 h-4 w-4" />
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary/5 px-6 py-2 rounded-full font-medium"
+                            >
+                              View Schedule
+                            </Button>
+                          </div>
+                        </motion.div>
+                      )}
+                    </motion.div>
+                  </MotionCard>
+                );
+              })}
             </div>
           </div>
         </section>
-
-        {/* Retreat Detail Modal */}
-        <Dialog open={!!selectedRetreat} onOpenChange={() => setSelectedRetreat(null)}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 bg-white border border-gray-200 rounded-3xl shadow-2xl [&>button]:hidden">
-            <DialogTitle className="sr-only">
-              {selectedRetreat?.title} Retreat Details
-            </DialogTitle>
-            {selectedRetreat && (
-              <div className="relative p-8 md:p-12">
-                {/* Close button */}
-                <button
-                  onClick={() => setSelectedRetreat(null)}
-                  className="absolute top-6 right-6 w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all"
-                >
-                  <X className="h-5 w-5 text-gray-600" />
-                </button>
-
-                {/* Header */}
-                <div className="mb-8">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-16 h-16 rounded-2xl overflow-hidden">
-                      <OptimizedImage 
-                        src={selectedRetreat.image} 
-                        alt={selectedRetreat.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div>
-                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-                        {selectedRetreat.title}
-                      </h2>
-                      <div className="flex items-center gap-4 text-sm text-gray-600">
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-4 w-4" />
-                          <span>{selectedRetreat.detailedContent.duration}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Users className="h-4 w-4" />
-                          <span>{selectedRetreat.detailedContent.groupSize}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Star className="h-4 w-4" />
-                          <span>{selectedRetreat.detailedContent.difficulty}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Overview */}
-                <div className="mb-8">
-                  <h3 className="text-xl font-semibold mb-4 text-gray-900">About This Experience</h3>
-                  <p className="text-gray-700 leading-relaxed">
-                    {selectedRetreat.detailedContent.overview}
-                  </p>
-                </div>
-
-                {/* Benefits and What to Expect Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                  {/* Benefits */}
-                  <div className="bg-brand-primary/5 rounded-2xl p-6 border border-brand-primary/10">
-                    <h3 className="text-xl font-semibold mb-4 text-gray-900 flex items-center gap-2">
-                      <Heart className="h-5 w-5 text-brand-primary" />
-                      Key Benefits
-                    </h3>
-                    <ul className="space-y-3">
-                      {selectedRetreat.detailedContent.benefits.map((benefit, index) => (
-                        <li key={index} className="flex items-start gap-3 text-gray-700">
-                          <div className="w-2 h-2 rounded-full bg-brand-primary mt-2 flex-shrink-0"></div>
-                          <span>{benefit}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* What to Expect */}
-                  <div className="bg-brand-peach/5 rounded-2xl p-6 border border-brand-peach/10">
-                    <h3 className="text-xl font-semibold mb-4 text-gray-900 flex items-center gap-2">
-                      <Star className="h-5 w-5 text-brand-peach" />
-                      What to Expect
-                    </h3>
-                    <ul className="space-y-3">
-                      {selectedRetreat.detailedContent.whatToExpected.map((item, index) => (
-                        <li key={index} className="flex items-start gap-3 text-gray-700">
-                          <div className="w-2 h-2 rounded-full bg-brand-peach mt-2 flex-shrink-0"></div>
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                {/* CTA Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button 
-                    size="lg" 
-                    className="bg-brand-primary hover:bg-brand-primary/90 text-white px-8 py-4 rounded-full font-medium"
-                  >
-                    Book Your Retreat
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                  <Button 
-                    size="lg" 
-                    variant="outline" 
-                    className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary/5 px-8 py-4 rounded-full font-medium"
-                  >
-                    View Schedule
-                  </Button>
-                </div>
-              </div>
-            )}
-          </DialogContent>
-        </Dialog>
 
         {/* Get Involved CTA Section */}
         <section className="py-24 bg-brand-primary/5">
