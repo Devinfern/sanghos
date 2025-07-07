@@ -103,14 +103,14 @@ const CarouselCard: React.FC<CarouselCardProps> = ({
           className="w-full h-full object-cover"
           style={{ height: '110%', transform: 'translateY(-5%)' }}
         />
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
+        {/* Enhanced darker overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/60 to-black/40" />
       </div>
 
       {/* Content */}
       <div className="relative h-full flex flex-col justify-between p-6">
         {/* Top Section - Category Badge and Close Button */}
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between mb-6">
           <div className="inline-flex items-center gap-x-2.5 px-4 py-3 md:px-6 md:py-4 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20">
             <div className="text-white w-5 h-5 flex items-center justify-center">
               {item.icon}
@@ -137,7 +137,7 @@ const CarouselCard: React.FC<CarouselCardProps> = ({
         </div>
 
         {/* Bottom Section - Title and Content */}
-        <div className="space-y-4">
+        <div className="space-y-4 mt-auto">
           <h3 className="text-2xl md:text-3xl lg:text-4xl text-white font-sans leading-tight font-light max-w-[400px]">
             {item.title}
           </h3>
