@@ -43,7 +43,7 @@ const FeatureTabs = ({
         description:
           "Our AI analyzes your preferences, goals, and lifestyle to match you with retreats that align perfectly with your wellness journey.",
         buttonText: "Try AI Matching",
-        imageSrc: "/lovable-uploads/90bff10d-eebc-4fb3-9757-78e7db110623.png",
+        imageSrc: "/lovable-uploads/96b3ade1-573a-4ad1-982b-e36418466313.png",
         imageAlt: "AI-powered retreat matching",
       },
     },
@@ -57,7 +57,7 @@ const FeatureTabs = ({
         description:
           "Every retreat is carefully vetted by wellness experts to ensure you receive transformative, high-quality experiences that deliver real results.",
         buttonText: "Explore Retreats",
-        imageSrc: "/lovable-uploads/bd3043ff-55d5-4b55-9bf2-b01ad0b3a0a1.png",
+        imageSrc: "/lovable-uploads/6f3e15d7-ded9-44d1-b616-98e32efd7326.png",
         imageAlt: "Curated wellness experiences",
       },
     },
@@ -71,7 +71,7 @@ const FeatureTabs = ({
         description:
           "Connect with like-minded individuals, share your journey, and find ongoing support in our vibrant wellness community.",
         buttonText: "Join Community",
-        imageSrc: "/lovable-uploads/67eb6b8e-8f83-4d05-abf8-7fbf6f04927e.png",
+        imageSrc: "/lovable-uploads/a049189f-8c74-4fdc-882b-aae9abe5ddad.png",
         imageAlt: "Wellness community support",
       },
     },
