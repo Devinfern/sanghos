@@ -30,7 +30,7 @@ const HomePurpose = () => {
 Through carefully curated group experiences, we foster meaningful relationships that extend far beyond a single retreat day. Each gathering becomes a foundation for lasting friendships and ongoing support in your wellness journey.
 
 We've seen participants form book clubs, hiking groups, and even business partnerships after connecting at our retreats. This is the power of authentic community - it ripples out into every aspect of life.`,
-      backgroundImage: "/lovable-uploads/e6b80ef4-9068-44e2-bfa5-40be26ac5a2a.png",
+      backgroundImage: "/lovable-uploads/897c2070-49f2-40a6-bcee-4db226e52f04.png",
       icon: <Home className="w-4 h-4" />,
       category: "Building Community"
     },
@@ -43,7 +43,7 @@ We've seen participants form book clubs, hiking groups, and even business partne
 We've partnered with unique venues and expert practitioners in your local area, making premium wellness experiences accessible right in your community. Our streamlined booking system handles all the details, from instructor coordination to space preparation.
 
 Whether you're a busy parent, working professional, or anyone seeking wellness without the hassle, we've designed every aspect of our platform to make your journey as smooth as possible.`,
-      backgroundImage: "/lovable-uploads/7c1bcd1c-2858-4e48-94a1-8100af35555c.png",
+      backgroundImage: "/lovable-uploads/1c5f4e3a-49c9-466e-9b87-7af196c7c650.png",
       icon: <Users className="w-4 h-4" />,
       category: "Expanding Access"
     },
@@ -56,7 +56,7 @@ Whether you're a busy parent, working professional, or anyone seeking wellness w
 Our expert instructors are carefully selected not just for their skills, but for their ability to guide meaningful personal insights. Combined with the power of group energy and beautiful spaces, each retreat becomes a turning point.
 
 Participants regularly tell us about breakthroughs they've experienced - from overcoming anxiety to discovering new passions, building confidence, or simply finding the peace they'd been searching for. These aren't just temporary escapes; they're foundations for lasting transformation.`,
-      backgroundImage: "/lovable-uploads/d0153ee6-35ad-4cef-b315-db54a7be4644.png",
+      backgroundImage: "/lovable-uploads/4a90c8f7-cbe4-439b-9759-77b6090dfa9b.png",
       icon: <Sparkles className="w-4 h-4" />,
       category: "Transforming Lives"
     }
