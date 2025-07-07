@@ -31,7 +31,7 @@ Through carefully curated group experiences, we foster meaningful relationships 
 
 We've seen participants form book clubs, hiking groups, and even business partnerships after connecting at our retreats. This is the power of authentic community - it ripples out into every aspect of life.`,
       backgroundImage: "/lovable-uploads/e6b80ef4-9068-44e2-bfa5-40be26ac5a2a.png",
-      icon: <Home className="w-6 h-6" />,
+      icon: <Home className="w-4 h-4" />,
       category: "Building Community"
     },
     {
@@ -44,7 +44,7 @@ We've partnered with unique venues and expert practitioners in your local area, 
 
 Whether you're a busy parent, working professional, or anyone seeking wellness without the hassle, we've designed every aspect of our platform to make your journey as smooth as possible.`,
       backgroundImage: "/lovable-uploads/7c1bcd1c-2858-4e48-94a1-8100af35555c.png",
-      icon: <Users className="w-6 h-6" />,
+      icon: <Users className="w-4 h-4" />,
       category: "Expanding Access"
     },
     {
@@ -57,7 +57,7 @@ Our expert instructors are carefully selected not just for their skills, but for
 
 Participants regularly tell us about breakthroughs they've experienced - from overcoming anxiety to discovering new passions, building confidence, or simply finding the peace they'd been searching for. These aren't just temporary escapes; they're foundations for lasting transformation.`,
       backgroundImage: "/lovable-uploads/d0153ee6-35ad-4cef-b315-db54a7be4644.png",
-      icon: <Sparkles className="w-6 h-6" />,
+      icon: <Sparkles className="w-4 h-4" />,
       category: "Transforming Lives"
     }
   ];

@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { Home, Users, ArrowUpRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Home, Users, Sparkles, Plus, X } from "lucide-react";
 
 interface CarouselItem {
   id: string;
@@ -40,18 +40,18 @@ const HorizontalCarousel: React.FC<HorizontalCarouselProps> = ({ items }) => {
 
       {/* Mobile/Tablet Horizontal Scroll */}
       <div className="lg:hidden">
-        <ul className="flex snap-x snap-mandatory overflow-x-auto gap-6 pb-8 no-scrollbar">
+        <div className="flex snap-x snap-mandatory overflow-x-auto gap-6 pb-8 no-scrollbar">
           {items.map((item) => (
-            <li key={item.id} className="snap-start flex-shrink-0">
+            <div key={item.id} className="snap-start flex-shrink-0">
               <CarouselCard
                 item={item}
                 isExpanded={expandedCard === item.id}
                 onToggleExpand={() => toggleExpand(item.id)}
                 isMobile={true}
               />
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   );
@@ -88,11 +88,11 @@ const CarouselCard: React.FC<CarouselCardProps> = ({
       <div className="h-full w-full overflow-hidden rounded-xl">
         <div className="grid h-full grid-cols-4 grid-rows-4 gap-4 relative">
           {/* Background Image Layer */}
-          <div className="col-start-1 col-end-5 row-start-1 row-end-5 relative">
+          <div className="col-start-1 col-end-5 row-start-1 row-end-5 absolute inset-0">
             <motion.div
-              className="relative"
+              className="relative w-full h-full"
               style={{ height: "110%" }}
-              animate={{ transform: "translateY(-11.006%)" }}
+              animate={{ transform: "translateY(-5%)" }}
               transition={{ duration: 0.6, ease: "easeOut" }}
             >
               <img
@@ -100,23 +100,25 @@ const CarouselCard: React.FC<CarouselCardProps> = ({
                 draggable="false"
                 loading="lazy"
                 decoding="async"
-                className="object-cover absolute inset-0 w-full h-full"
+                className="object-cover w-full h-full"
                 src={item.backgroundImage}
               />
+              {/* Dark overlay for better text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
             </motion.div>
           </div>
 
           {/* Category Badge */}
-          <div className="col-start-1 col-end-4 row-start-1 row-end-2 pt-6 pl-6 z-10">
+          <div className="col-start-1 col-end-4 row-start-1 row-end-2 pt-6 pl-6 z-10 relative">
             <div className="relative inline-flex items-center gap-x-2.5 overflow-hidden px-4 py-3 md:px-6 md:py-4">
               <div 
-                className="absolute inset-0 rounded-3xl bg-white/10 backdrop-blur-xl"
+                className="absolute inset-0 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20"
                 aria-hidden="true"
               />
-              <div className="relative text-white w-6 h-6 flex items-center justify-center">
+              <div className="relative text-white w-5 h-5 flex items-center justify-center">
                 {item.icon}
               </div>
-              <span className="text-[0.75rem] text-white font-sans leading-normal font-normal relative">
+              <span className="text-xs text-white font-sans leading-normal font-normal relative">
                 {item.category}
               </span>
             </div>
@@ -126,7 +128,7 @@ const CarouselCard: React.FC<CarouselCardProps> = ({
           <div className="col-start-4 col-end-5 row-start-1 row-end-2 relative flex flex-col items-end pt-6 pr-6 z-10">
             <motion.button
               onClick={onToggleExpand}
-              className="rounded-full text-center inline-block transition bg-white/20 backdrop-blur-sm text-white p-4 md:p-5 hover:bg-white/30"
+              className="rounded-full text-center inline-block transition bg-white/20 backdrop-blur-sm text-white p-4 md:p-5 hover:bg-white/30 border border-white/20"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${item.title} card`}
@@ -136,66 +138,56 @@ const CarouselCard: React.FC<CarouselCardProps> = ({
                 animate={{ rotate: isExpanded ? 45 : 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <svg
-                  aria-hidden="true"
-                  fill="none"
-                  height="13"
-                  viewBox="0 0 13 13"
-                  width="13"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <rect fill="currentColor" height="13" width="2" x="5.5" y="0" />
-                  <rect fill="currentColor" height="13" transform="rotate(90 13 5)" width="2" x="13" y="5" />
-                </svg>
+                <Plus className="w-4 h-4" />
               </motion.div>
             </motion.button>
           </div>
 
           {/* Title */}
           <div className="col-start-1 col-end-4 row-start-4 row-end-5 relative max-w-[400px] self-end px-6 pb-6 z-10">
-            <h3 className="text-[1.75rem] tracking-normal md:text-[2rem] lg:text-[2.5rem] text-white font-sans leading-none font-light">
+            <h3 className="text-2xl md:text-3xl lg:text-4xl text-white font-sans leading-tight font-light">
               {item.title}
             </h3>
           </div>
 
           {/* Expanded Content */}
-          <motion.div
-            className="col-start-1 col-end-5 row-start-5 row-end-6 relative z-10"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{
-              height: isExpanded ? "auto" : 0,
-              opacity: isExpanded ? 1 : 0
-            }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            style={{ overflow: "hidden" }}
-          >
+          <AnimatePresence>
             {isExpanded && (
-              <div className="p-6 bg-white/95 backdrop-blur-sm rounded-t-xl">
-                <p className="text-brand-slate text-lg leading-relaxed mb-4">
-                  {item.description}
-                </p>
-                <div className="text-brand-slate leading-relaxed">
-                  {item.detailedContent.split('\n').map((paragraph, index) => (
-                    paragraph.trim() && (
-                      <p key={index} className="mb-4">
-                        {paragraph}
-                      </p>
-                    )
-                  ))}
+              <motion.div
+                className="col-start-1 col-end-5 row-start-5 row-end-6 relative z-10"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                style={{ overflow: "hidden" }}
+              >
+                <div className="p-6 bg-white/95 backdrop-blur-sm rounded-t-xl">
+                  <p className="text-gray-800 text-lg leading-relaxed mb-4">
+                    {item.description}
+                  </p>
+                  <div className="text-gray-700 leading-relaxed">
+                    {item.detailedContent.split('\n').map((paragraph, index) => (
+                      paragraph.trim() && (
+                        <p key={index} className="mb-4">
+                          {paragraph}
+                        </p>
+                      )
+                    ))}
+                  </div>
+                  <div className="mt-6 pt-4 border-t border-gray-200">
+                    <motion.button
+                      onClick={onToggleExpand}
+                      className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                      whileHover={{ x: 5 }}
+                    >
+                      <span>Continue Exploring</span>
+                      <X className="w-4 h-4" />
+                    </motion.button>
+                  </div>
                 </div>
-                <div className="mt-6 pt-4 border-t border-brand-subtle/20">
-                  <motion.button
-                    onClick={onToggleExpand}
-                    className="inline-flex items-center gap-2 text-brand-primary hover:text-brand-primary/80 font-medium transition-colors"
-                    whileHover={{ x: 5 }}
-                  >
-                    <span>Continue Exploring</span>
-                    <ArrowUpRight className="w-4 h-4" />
-                  </motion.button>
-                </div>
-              </div>
+              </motion.div>
             )}
-          </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </motion.div>
