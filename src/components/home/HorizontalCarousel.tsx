@@ -96,7 +96,13 @@ const CarouselCard: React.FC<CarouselCardProps> = ({
       onClick={!isExpanded ? onExpand : undefined}
     >
       {/* Background Image Layer */}
-      <div className="absolute inset-0">
+      <motion.div 
+        className="absolute inset-0"
+        animate={{
+          opacity: isExpanded ? 0 : 1
+        }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+      >
         <img
           src={item.backgroundImage}
           alt={item.title}
@@ -105,7 +111,17 @@ const CarouselCard: React.FC<CarouselCardProps> = ({
         />
         {/* Enhanced darker overlay for better text readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/60 to-black/40" />
-      </div>
+      </motion.div>
+
+      {/* Solid Background for Expanded State */}
+      <motion.div
+        className="absolute inset-0 bg-gray-900"
+        initial={{ opacity: 0 }}
+        animate={{
+          opacity: isExpanded ? 1 : 0
+        }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+      />
 
       {/* Content */}
       <div className="relative h-full flex flex-col justify-between p-6">
