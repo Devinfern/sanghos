@@ -1,6 +1,5 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
-import { Layout, Pointer, Zap } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -35,7 +34,7 @@ const FeatureTabs = ({
   tabs = [
     {
       value: "tab-1",
-      icon: <Zap className="h-auto w-4 shrink-0" />,
+      icon: <img src="/lovable-uploads/342af1f6-1886-41cf-b619-6f9c08458d73.png" alt="Colorful tree" className="h-auto w-4 shrink-0" />,
       label: "AI-Powered Matching",
       content: {
         badge: "Smart Technology",
@@ -49,7 +48,7 @@ const FeatureTabs = ({
     },
     {
       value: "tab-2",
-      icon: <Pointer className="h-auto w-4 shrink-0" />,
+      icon: <img src="/lovable-uploads/90ddc753-615e-4a8f-aee6-716752a83f46.png" alt="Meditation figure" className="h-auto w-4 shrink-0" />,
       label: "Curated Experiences",
       content: {
         badge: "Expert Curation",
@@ -63,7 +62,7 @@ const FeatureTabs = ({
     },
     {
       value: "tab-3",
-      icon: <Layout className="h-auto w-4 shrink-0" />,
+      icon: <img src="/lovable-uploads/06c688c7-5e0b-4fbb-ac4b-78eb8706b405.png" alt="Wellness retreat house" className="h-auto w-4 shrink-0" />,
       label: "Community Support",
       content: {
         badge: "Connected Wellness",
