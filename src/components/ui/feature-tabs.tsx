@@ -1,6 +1,5 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
-import { Layout, Pointer, Zap } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,7 +15,8 @@ interface TabContent {
 
 interface Tab {
   value: string;
-  icon: React.ReactNode;
+  iconSrc: string;
+  iconAlt: string;
   label: string;
   content: TabContent;
 }
@@ -35,7 +35,8 @@ const FeatureTabs = ({
   tabs = [
     {
       value: "tab-1",
-      icon: <Zap className="h-auto w-4 shrink-0" />,
+      iconSrc: "/lovable-uploads/e2204d14-4fd3-44b6-bfcb-81c7da68014e.png",
+      iconAlt: "Meditation figure",
       label: "AI-Powered Matching",
       content: {
         badge: "Smart Technology",
@@ -49,7 +50,8 @@ const FeatureTabs = ({
     },
     {
       value: "tab-2",
-      icon: <Pointer className="h-auto w-4 shrink-0" />,
+      iconSrc: "/lovable-uploads/b2417483-fe96-4bc6-9d2e-023b8c3665c9.png",
+      iconAlt: "Colorful tree",
       label: "Curated Experiences",
       content: {
         badge: "Expert Curation",
@@ -63,7 +65,8 @@ const FeatureTabs = ({
     },
     {
       value: "tab-3",
-      icon: <Layout className="h-auto w-4 shrink-0" />,
+      iconSrc: "/lovable-uploads/aa4a0f34-0fa0-4a57-bd54-df366e974df8.png",
+      iconAlt: "Wellness retreat house",
       label: "Community Support",
       content: {
         badge: "Connected Wellness",
@@ -95,7 +98,12 @@ const FeatureTabs = ({
                 value={tab.value}
                 className="flex items-center gap-2 rounded-xl px-6 py-4 text-sm font-semibold text-brand-slate data-[state=active]:bg-white data-[state=active]:text-brand-primary data-[state=active]:shadow-md transition-all duration-300"
               >
-                {tab.icon} {tab.label}
+                <img 
+                  src={tab.iconSrc} 
+                  alt={tab.iconAlt}
+                  className="h-4 w-4 shrink-0 object-cover rounded"
+                />
+                {tab.label}
               </TabsTrigger>
             ))}
           </TabsList>
