@@ -2,12 +2,20 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Home, Users, Sparkles, Plus, X } from "lucide-react";
+import ExpandedCardContent from "./ExpandedCardContent";
+
+interface ContentSection {
+  summary: string;
+  howItWorks: string;
+  impact: string;
+  examples: string;
+}
 
 interface CarouselItem {
   id: string;
   title: string;
   description: string;
-  detailedContent: string;
+  detailedContent: ContentSection;
   backgroundImage: string;
   icon: React.ReactNode;
   category: string;
@@ -171,20 +179,11 @@ const CarouselCard: React.FC<CarouselCardProps> = ({
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
-                className="space-y-4"
               >
-                <div className="text-white/85 text-sm md:text-base leading-relaxed space-y-3">
-                  {item.detailedContent.split('\n\n').map((paragraph, index) => (
-                    <motion.p 
-                      key={index}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.1 + (index * 0.1), duration: 0.3 }}
-                    >
-                      {paragraph}
-                    </motion.p>
-                  ))}
-                </div>
+                <ExpandedCardContent 
+                  title={item.title}
+                  content={item.detailedContent}
+                />
               </motion.div>
             )}
           </AnimatePresence>
