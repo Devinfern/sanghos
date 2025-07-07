@@ -39,13 +39,21 @@ const HorizontalCarousel: React.FC<HorizontalCarouselProps> = ({ items }) => {
   return (
     <div className="relative">
       {/* Desktop Grid */}
-      <div className="hidden lg:grid lg:grid-cols-3 gap-8">
+      <div 
+        className="hidden lg:grid gap-8 transition-all duration-700 ease-in-out"
+        style={{
+          gridTemplateColumns: expandedCard 
+            ? items.map(item => item.id === expandedCard ? '2fr' : '1fr').join(' ')
+            : 'repeat(3, 1fr)'
+        }}
+      >
         {items.map((item) => (
           <CarouselCard
             key={item.id}
             item={item}
             isMobile={false}
             isExpanded={expandedCard === item.id}
+            isTruncated={expandedCard !== null && expandedCard !== item.id}
             onExpand={() => handleExpand(item.id)}
             onClose={handleClose}
           />
@@ -61,6 +69,7 @@ const HorizontalCarousel: React.FC<HorizontalCarouselProps> = ({ items }) => {
                 item={item}
                 isMobile={true}
                 isExpanded={expandedCard === item.id}
+                isTruncated={false}
                 onExpand={() => handleExpand(item.id)}
                 onClose={handleClose}
               />
@@ -76,6 +85,7 @@ interface CarouselCardProps {
   item: CarouselItem;
   isMobile?: boolean;
   isExpanded: boolean;
+  isTruncated?: boolean;
   onExpand: () => void;
   onClose: () => void;
 }
@@ -84,6 +94,7 @@ const CarouselCard: React.FC<CarouselCardProps> = ({
   item,
   isMobile = false,
   isExpanded,
+  isTruncated = false,
   onExpand,
   onClose
 }) => {
@@ -166,10 +177,12 @@ const CarouselCard: React.FC<CarouselCardProps> = ({
             {item.title}
           </h3>
           
-          {/* Description - always visible */}
-          <p className="text-white/90 text-base md:text-lg leading-relaxed">
-            {item.description}
-          </p>
+          {/* Description - conditional based on truncation */}
+          {!isTruncated && (
+            <p className="text-white/90 text-base md:text-lg leading-relaxed">
+              {item.description}
+            </p>
+          )}
           
           {/* Expanded Content */}
           <AnimatePresence>
@@ -189,7 +202,7 @@ const CarouselCard: React.FC<CarouselCardProps> = ({
           </AnimatePresence>
           
           {/* Expand Button */}
-          {!isExpanded && (
+          {!isExpanded && !isTruncated && (
             <div className="flex items-center text-white/80 group-hover:text-white transition-colors">
               <span className="text-sm font-medium mr-2">Learn More</span>
               <motion.div
@@ -198,6 +211,13 @@ const CarouselCard: React.FC<CarouselCardProps> = ({
               >
                 <Plus className="w-4 h-4" />
               </motion.div>
+            </div>
+          )}
+          
+          {/* Truncated state indicator */}
+          {isTruncated && (
+            <div className="flex items-center text-white/60">
+              <span className="text-xs">Click to expand</span>
             </div>
           )}
         </div>

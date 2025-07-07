@@ -122,32 +122,6 @@ const ExpandedCardContent: React.FC<ExpandedCardContentProps> = ({ title, conten
         </Card>
       </motion.div>
 
-      {/* Action Card */}
-      <motion.div
-        custom={4}
-        initial="hidden"
-        animate="visible"
-        variants={cardVariants}
-      >
-        <Card className="bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-md border-white/20 hover:from-white/15 hover:to-white/10 transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="text-lg font-semibold text-white mb-1">Ready to Experience This?</h4>
-                <p className="text-white/80 text-sm">Join our community and start your wellness journey</p>
-              </div>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 text-white/90 hover:text-white transition-colors cursor-pointer"
-              >
-                <span className="text-sm font-medium">Explore</span>
-                <ArrowRight className="w-4 h-4" />
-              </motion.div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
     </div>
   );
 };
