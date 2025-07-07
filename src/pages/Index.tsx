@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
@@ -73,7 +74,7 @@ const Index = () => {
           </motion.div>
           
           <motion.div variants={itemVariants}>
-            <HomeFeatures />
+            <HomeFeatures isLoaded={isVisible} />
           </motion.div>
           
           <motion.div variants={itemVariants}>
