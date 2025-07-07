@@ -219,6 +219,16 @@
     @apply transition-colors duration-200;
   }
 
+  /* Custom scrollbar for horizontal carousel */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
   ::-webkit-scrollbar {
     @apply w-1.5;
   }
