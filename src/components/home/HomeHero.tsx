@@ -179,7 +179,7 @@ const HomeHero = () => {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="group bg-gradient-to-r from-brand-peach/10 to-brand-peach/20 hover:from-brand-peach/20 hover:to-brand-peach/30 border-2 border-brand-peach/30 hover:border-brand-peach/50 text-brand-peach hover:text-white px-8 py-6 rounded-2xl backdrop-blur-md shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+                  className="group bg-gradient-to-r from-brand-peach/10 to-brand-peach/20 hover:from-brand-peach/20 hover:to-brand-peach/30 border-2 border-brand-peach/30 hover:border-brand-peach/50 text-white hover:text-white px-8 py-6 rounded-2xl backdrop-blur-md shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
                   onClick={() => navigate("/community-teaser")}
                 >
                   <Play className="mr-3 h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
