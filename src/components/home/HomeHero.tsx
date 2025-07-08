@@ -189,17 +189,31 @@ const HomeHero = () => {
 
               {/* Floating Stats */}
               <motion.div 
-                className="flex flex-col gap-4 mt-12 pt-8 border-t border-white/20"
+                className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/20"
                 variants={fadeInUp}
               >
-                <div className="text-white/90 text-lg">
-                  Day-long retreats & more
+                <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-2 h-2 bg-brand-peach rounded-full"></div>
+                    <h3 className="text-white font-semibold text-lg">Day-long retreats</h3>
+                  </div>
+                  <p className="text-white/80 text-sm">& more wellness experiences</p>
                 </div>
-                <div className="text-white/90 text-lg">
-                  Services screened by experienced instructors
+                
+                <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-2 h-2 bg-brand-peach rounded-full"></div>
+                    <h3 className="text-white font-semibold text-lg">Expert instructors</h3>
+                  </div>
+                  <p className="text-white/80 text-sm">Services screened by experienced professionals</p>
                 </div>
-                <div className="text-white/90 text-lg">
-                  Filter by retreat type, price, location, and more
+                
+                <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-2 h-2 bg-brand-peach rounded-full"></div>
+                    <h3 className="text-white font-semibold text-lg">Smart filtering</h3>
+                  </div>
+                  <p className="text-white/80 text-sm">Filter by retreat type, price, location, and more</p>
                 </div>
               </motion.div>
             </motion.div>
