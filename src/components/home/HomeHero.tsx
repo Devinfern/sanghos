@@ -112,16 +112,6 @@ const HomeHero = () => {
               animate={isLoaded ? "visible" : "hidden"}
               variants={slideInLeft}
             >
-              {/* Elegant Badge */}
-              <motion.div 
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8"
-                variants={fadeInUp}
-              >
-                <Sparkles className="w-4 h-4 text-brand-peach" />
-                <span className="text-sm font-medium text-white/90 tracking-wide">
-                  DISCOVER YOUR SANCTUARY
-                </span>
-              </motion.div>
 
               {/* Hero Title with Serif Accents */}
               <motion.h1 
