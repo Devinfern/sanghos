@@ -260,7 +260,7 @@ const HomeHero = () => {
                   }}
                 >
                   <img 
-                    src="/lovable-uploads/eb5e3a10-e1d3-49a7-9bd6-f9cfd8a697fc.jpg" 
+                    src="/https://sanghos.com/lovable-uploads/96b3ade1-573a-4ad1-982b-e36418466313.png" 
                     alt="Meditation space" 
                     className="w-full h-full object-cover"
                   />
