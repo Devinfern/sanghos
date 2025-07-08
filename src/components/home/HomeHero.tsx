@@ -57,7 +57,7 @@ const HomeHero = () => {
     }
   };
   return (
-    <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 pb-32 md:pb-40">
       {/* Cinematic Background with Overlays */}
       <div className="absolute inset-0">
         {/* Main Background Image */}
@@ -189,14 +189,14 @@ const HomeHero = () => {
             </motion.div>
           </div>
           
-          {/* Feature Cards - Horizontal from Left Column */}
+          {/* Feature Cards - Responsive Positioning */}
           <motion.div 
-            className="absolute bottom-8 left-6 lg:left-8 right-6 lg:right-8"
+            className="absolute bottom-4 md:bottom-8 left-4 md:left-6 lg:left-8 right-4 md:right-6 lg:right-8"
             initial={{ opacity: 0, y: 40 }}
             animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
               <motion.div 
                 className="group relative overflow-hidden rounded-2xl bg-white/8 backdrop-blur-sm border border-white/12 p-6 hover:bg-white/12 hover:border-white/20 transition-all duration-300 hover:-translate-y-1"
                 initial={{ opacity: 0, y: 20 }}
