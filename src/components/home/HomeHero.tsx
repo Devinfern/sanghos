@@ -196,7 +196,7 @@ const HomeHero = () => {
             animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="hidden md:grid md:grid-cols-3 gap-6">
               <motion.div 
                 className="group relative overflow-hidden rounded-2xl bg-white/8 backdrop-blur-sm border border-white/12 p-6 hover:bg-white/12 hover:border-white/20 transition-all duration-300 hover:-translate-y-1"
                 initial={{ opacity: 0, y: 20 }}
