@@ -169,20 +169,20 @@ const HomeHero = () => {
               >
                 <Button 
                   size="lg" 
-                  className="group bg-gradient-to-r from-brand-primary via-brand-primary to-brand-primary/80 hover:from-brand-primary/90 hover:via-brand-primary/90 hover:to-brand-primary text-white px-8 py-6 rounded-2xl shadow-2xl hover:shadow-brand-primary/25 transition-all duration-500 transform hover:scale-105"
+                  className="group bg-gradient-to-r from-brand-primary via-brand-primary to-brand-primary/80 hover:from-brand-primary/90 hover:via-brand-primary/90 hover:to-brand-primary text-white px-8 py-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
                   onClick={() => navigate("/retreats")}
                 >
                   <span className="text-lg font-semibold">Browse Retreats</span>
-                  <ArrowRight className="ml-3 h-5 w-5 transition-transform group-hover:translate-x-2" />
+                  <ArrowRight className="ml-3 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
                 </Button>
                 
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="group bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 text-white px-8 py-6 rounded-2xl backdrop-blur-md transition-all duration-500 transform hover:scale-105"
+                  className="group bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 text-white px-8 py-6 rounded-2xl backdrop-blur-md transition-all duration-300 transform hover:scale-[1.02]"
                   onClick={() => navigate("/community-teaser")}
                 >
-                  <Play className="mr-3 h-5 w-5" />
+                  <Play className="mr-3 h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
                   <span className="text-lg font-medium">Join Community</span>
                 </Button>
               </motion.div>
