@@ -273,59 +273,159 @@ const VendorsMarketplaceTeaser = () => {
         </div>
       </section>
 
-      {/* Benefits for Hosts */}
-      <section className="py-16">
-        <div className="container mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+      {/* Enhanced Benefits for Hosts */}
+      <section className="py-20 bg-gradient-to-br from-brand-subtle/30 to-background relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute top-10 right-10 w-72 h-72 bg-gradient-radial from-brand-primary/5 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-10 left-10 w-96 h-96 bg-gradient-radial from-brand-sand/10 to-transparent rounded-full blur-3xl" />
+        
+        <div className="container mx-auto px-6 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center space-x-2 bg-brand-primary/10 text-brand-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
+              <Sparkles className="w-4 h-4" />
+              <span>Built for Retreat Hosts</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-brand-dark">
+              From Hours of Research to
+              <br />
+              <span className="text-brand-primary">Minutes of Discovery</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Join 500+ retreat hosts who've transformed their planning process with our curated vendor marketplace
+            </p>
+          </motion.div>
+
+          {/* Statistics Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            {[
+              { number: "500+", label: "Vetted Vendors", icon: Users, color: "from-brand-primary/20 to-brand-primary/40" },
+              { number: "98%", label: "Host Satisfaction", icon: Star, color: "from-brand-sand/20 to-brand-sand/40" },
+              { number: "20+", label: "Hours Saved", icon: Clock, color: "from-brand-rose/20 to-brand-rose/40" },
+              { number: "100%", label: "Quality Assured", icon: Shield, color: "from-brand-sky/20 to-brand-sky/40" }
+            ].map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Card className="p-6 text-center hover:shadow-lg transition-all duration-300 border-brand-primary/10 hover:border-brand-primary/20 group">
+                  <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
+                    <stat.icon className="h-8 w-8 text-brand-primary" />
+                  </div>
+                  <div className="text-3xl font-bold text-brand-primary mb-2">{stat.number}</div>
+                  <div className="text-sm font-medium text-brand-dark">{stat.label}</div>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Features Grid */}
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
+              className="space-y-8"
             >
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                Built for Retreat Hosts
-              </h2>
-              <p className="text-lg text-muted-foreground mb-8">
-                Spend less time searching and more time creating transformative experiences
-              </p>
-              
-              <div className="space-y-6">
-                {hostBenefits.map((benefit, index) => (
-                  <motion.div
-                    key={benefit.title}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                    className="flex items-start space-x-4"
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-brand-primary/10 flex items-center justify-center flex-shrink-0">
-                      <benefit.icon className="h-5 w-5 text-brand-primary" />
+              {hostBenefits.map((benefit, index) => (
+                <motion.div
+                  key={benefit.title}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="group"
+                >
+                  <Card className="p-6 hover:shadow-lg transition-all duration-300 border-brand-primary/10 hover:border-brand-primary/20">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-12 h-12 rounded-xl bg-brand-primary/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                        <benefit.icon className="h-6 w-6 text-brand-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold mb-2 text-brand-dark">{benefit.title}</h3>
+                        <p className="text-muted-foreground leading-relaxed">{benefit.description}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-semibold mb-1 text-brand-dark">{benefit.title}</h3>
-                      <p className="text-sm text-muted-foreground">{benefit.description}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+                  </Card>
+                </motion.div>
+              ))}
             </motion.div>
             
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
               viewport={{ once: true }}
               className="relative"
             >
-              <div className="aspect-square rounded-2xl bg-gradient-to-br from-brand-primary/20 to-brand-sand/20 p-8 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-brand-primary mb-2">20+</div>
-                  <div className="text-lg font-medium mb-4 text-brand-dark">Hours Saved</div>
-                  <div className="text-sm text-muted-foreground">Per retreat planned</div>
+              {/* Interactive Mockup */}
+              <div className="bg-white rounded-2xl shadow-2xl p-6 border border-brand-primary/10">
+                <div className="flex items-center space-x-3 mb-6">
+                  <div className="w-3 h-3 rounded-full bg-brand-rose"></div>
+                  <div className="w-3 h-3 rounded-full bg-brand-sand"></div>
+                  <div className="w-3 h-3 rounded-full bg-brand-primary"></div>
+                  <div className="flex-1 text-center text-sm font-medium text-muted-foreground">
+                    Sanghos Vendor Marketplace
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="bg-brand-subtle/30 rounded-lg p-4">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <Home className="h-5 w-5 text-brand-primary" />
+                      <span className="font-medium text-brand-dark">Mountain View Retreat Center</span>
+                      <Badge className="ml-auto bg-brand-primary/10 text-brand-primary">⭐ 4.9</Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground">Luxury property • 20 guests • Yoga studio included</p>
+                  </div>
+                  
+                  <div className="bg-brand-subtle/30 rounded-lg p-4">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <ChefHat className="h-5 w-5 text-brand-primary" />
+                      <span className="font-medium text-brand-dark">Chef Maya - Plant-Based Specialist</span>
+                      <Badge className="ml-auto bg-brand-primary/10 text-brand-primary">⭐ 5.0</Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground">Wellness cuisine • Group catering • Dietary accommodations</p>
+                  </div>
+                  
+                  <div className="bg-brand-subtle/30 rounded-lg p-4">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <Car className="h-5 w-5 text-brand-primary" />
+                      <span className="font-medium text-brand-dark">Eco Transport Solutions</span>
+                      <Badge className="ml-auto bg-brand-primary/10 text-brand-primary">⭐ 4.8</Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground">Electric shuttles • Airport pickup • Carbon neutral</p>
+                  </div>
+                </div>
+                
+                <div className="mt-6 p-4 bg-gradient-to-r from-brand-primary/10 to-brand-sand/10 rounded-lg">
+                  <div className="text-center">
+                    <div className="text-sm font-medium text-brand-dark mb-1">Total Planning Time</div>
+                    <div className="text-2xl font-bold text-brand-primary">2.5 hours</div>
+                    <div className="text-xs text-muted-foreground">vs. 23+ hours traditional way</div>
+                  </div>
                 </div>
               </div>
+              
+              {/* Floating Elements */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
+                viewport={{ once: true }}
+                className="absolute -top-4 -right-4 bg-brand-primary text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg"
+              >
+                Real Marketplace Preview
+              </motion.div>
             </motion.div>
           </div>
         </div>
@@ -373,71 +473,6 @@ const VendorsMarketplaceTeaser = () => {
         </div>
       </section>
 
-      {/* Timeline */}
-      <section className="py-16">
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Launch Timeline
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Our roadmap to creating the ultimate vendors marketplace
-            </p>
-          </motion.div>
-          
-          <div className="max-w-4xl mx-auto">
-            <div className="space-y-8">
-              {timelinePhases.map((phase, index) => (
-                <motion.div
-                  key={phase.phase}
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                  viewport={{ once: true }}
-                  className="relative"
-                >
-                  <div className="flex items-center space-x-6">
-                    <div className="flex-shrink-0">
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                        phase.status === 'upcoming' ? 'bg-brand-primary text-white' : 'bg-muted text-muted-foreground'
-                      }`}>
-                        <span className="text-sm font-semibold">{index + 1}</span>
-                      </div>
-                    </div>
-                    
-                    <Card className="flex-1">
-                      <CardContent className="p-6">
-                        <div className="flex items-start justify-between mb-2">
-                          <div>
-                            <div className="flex items-center space-x-3 mb-1">
-                              <h3 className="text-lg font-semibold text-brand-dark">{phase.title}</h3>
-                              <Badge variant={phase.status === 'upcoming' ? 'default' : 'secondary'} className={phase.status === 'upcoming' ? 'bg-brand-primary text-white' : ''}>
-                                {phase.phase}
-                              </Badge>
-                            </div>
-                            <p className="text-sm text-muted-foreground mb-2">{phase.description}</p>
-                          </div>
-                          <div className="text-sm font-medium text-brand-primary">{phase.date}</div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                  
-                  {index < timelinePhases.length - 1 && (
-                    <div className="absolute left-6 top-12 w-px h-8 bg-border" />
-                  )}
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Waitlist Signup */}
       <section className="py-16 bg-brand-primary text-white">
