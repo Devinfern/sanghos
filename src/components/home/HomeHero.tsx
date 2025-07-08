@@ -189,20 +189,17 @@ const HomeHero = () => {
 
               {/* Floating Stats */}
               <motion.div 
-                className="flex items-center gap-8 mt-12 pt-8 border-t border-white/20"
+                className="flex flex-col gap-4 mt-12 pt-8 border-t border-white/20"
                 variants={fadeInUp}
               >
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-white">500+</div>
-                  <div className="text-sm text-white/60">Retreats</div>
+                <div className="text-white/90 text-lg">
+                  Day-long retreats & more
                 </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-white">Services screened by experienced instructors </div>
-                  <div className="text-sm text-white/60">Locations</div>
+                <div className="text-white/90 text-lg">
+                  Services screened by experienced instructors
                 </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-white">10k+</div>
-                  <div className="text-sm text-white/60">Happy Guests</div>
+                <div className="text-white/90 text-lg">
+                  Filter by retreat type, price, location, and more
                 </div>
               </motion.div>
             </motion.div>
