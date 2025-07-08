@@ -101,9 +101,9 @@ const HomeHero = () => {
       </motion.div>
 
       {/* Main Content - Split Screen Layout */}
-      <div className="relative z-20 min-h-screen flex items-center">
+      <div className="relative z-20 flex flex-col justify-center min-h-screen">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-16 items-center mb-16 lg:mb-24">
             
             {/* Left Column - Hero Content */}
             <motion.div 
@@ -189,14 +189,14 @@ const HomeHero = () => {
             </motion.div>
           </div>
           
-          {/* Feature Cards - Responsive Positioning */}
+          {/* Feature Cards - In Normal Flow */}
           <motion.div 
-            className="absolute bottom-4 md:bottom-8 left-4 md:left-6 lg:left-8 right-4 md:right-6 lg:right-8"
+            className="relative z-30"
             initial={{ opacity: 0, y: 40 }}
             animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               <motion.div 
                 className="group relative overflow-hidden rounded-2xl bg-white/8 backdrop-blur-sm border border-white/12 p-6 hover:bg-white/12 hover:border-white/20 transition-all duration-300 hover:-translate-y-1"
                 initial={{ opacity: 0, y: 20 }}
@@ -205,7 +205,7 @@ const HomeHero = () => {
               >
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary/20 to-brand-primary/40 backdrop-blur-sm border border-brand-primary/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Calendar className="w-5 h-5 text-brand-primary" />
+                    <Calendar className="w-5 h-5 text-white" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-white font-semibold text-lg mb-2 leading-tight">Day-long experiences</h3>
@@ -222,7 +222,7 @@ const HomeHero = () => {
               >
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary/20 to-brand-primary/40 backdrop-blur-sm border border-brand-primary/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Users className="w-5 h-5 text-brand-primary" />
+                    <Users className="w-5 h-5 text-white" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-white font-semibold text-lg mb-2 leading-tight">Expert instructors</h3>
@@ -239,7 +239,7 @@ const HomeHero = () => {
               >
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary/20 to-brand-primary/40 backdrop-blur-sm border border-brand-primary/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Filter className="w-5 h-5 text-brand-primary" />
+                    <Filter className="w-5 h-5 text-white" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-white font-semibold text-lg mb-2 leading-tight">Smart discovery</h3>
