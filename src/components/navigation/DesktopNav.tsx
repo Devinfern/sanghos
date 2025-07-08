@@ -22,6 +22,7 @@ export const DesktopNav = ({ isLoggedIn, onSignOut, onCommunityClick }: DesktopN
           Community
         </NavLink>
         <NavLink to="/about-us">About</NavLink>
+        <NavLink to="/vendors-marketplace-teaser">Vendors</NavLink>
       </nav>
       
       <div className="flex items-center space-x-4">

@@ -28,6 +28,7 @@ import BlogPostDigitalDetox from "./pages/BlogPostDigitalDetox";
 import BlogPostSoundHealing from "./pages/BlogPostSoundHealing";
 import BlogPostSpiritualityWellness from "./pages/BlogPostSpiritualityWellness";
 import CommunityTeaser from "./pages/CommunityTeaser";
+import VendorsMarketplaceTeaser from "./pages/VendorsMarketplaceTeaser";
 import About from "./pages/About";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
@@ -60,6 +61,7 @@ const App = () => (
               <Route path="/retreat/:id" element={<RetreatDetails />} />
               <Route path="/wellness-studios" element={<WellnessStudios />} />
               <Route path="/community-teaser" element={<CommunityTeaser />} />
+              <Route path="/vendors-marketplace-teaser" element={<VendorsMarketplaceTeaser />} />
               <Route path="/about-us" element={<About />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:id" element={<BlogPost />} />
