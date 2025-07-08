@@ -68,8 +68,8 @@ const VendorsMarketplaceSection = () => {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button variant="outline" size="lg" className="border-brand-primary/20 text-brand-primary hover:bg-brand-primary/5">
-                Learn More
+              <Button variant="outline" size="lg" className="border-brand-primary/20 text-brand-primary hover:bg-brand-primary/5" asChild>
+                <Link to="/vendors-marketplace-teaser">Learn More</Link>
               </Button>
             </div>
           </motion.div>
