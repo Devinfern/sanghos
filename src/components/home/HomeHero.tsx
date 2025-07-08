@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search, ArrowRight, Sparkles, Play, Star, Leaf } from "lucide-react";
+import { Search, ArrowRight, Sparkles, Play, Star, Leaf, Calendar, Users, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 const HomeHero = () => {
@@ -187,51 +187,60 @@ const HomeHero = () => {
                 </Button>
               </motion.div>
 
-              {/* Enhanced Stats Cards */}
+              {/* Modern Feature Cards */}
               <motion.div 
-                className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/20"
+                className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-16"
                 variants={fadeInUp}
               >
                 <motion.div 
-                  className="group relative bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl border border-white/30 rounded-2xl p-6 hover:from-white/20 hover:to-white/10 hover:border-white/40 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-brand-primary/10"
-                  whileHover={{ y: -2 }}
-                  transition={{ duration: 0.3 }}
+                  className="group relative overflow-hidden rounded-2xl bg-white/8 backdrop-blur-sm border border-white/12 p-5 hover:bg-white/12 hover:border-white/20 transition-all duration-300 hover:-translate-y-1"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
                 >
-                  <div className="flex items-center gap-4 mb-3">
-                    <div className="w-10 h-10 bg-gradient-to-r from-brand-peach to-brand-primary/80 rounded-xl flex items-center justify-center shadow-lg">
-                      <span className="text-white font-bold text-lg">📅</span>
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-gradient-to-br from-brand-primary/20 to-brand-primary/40 backdrop-blur-sm border border-brand-primary/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <Calendar className="w-5 h-5 text-brand-primary" />
                     </div>
-                    <h3 className="text-white font-bold text-lg tracking-tight">Day-long retreats</h3>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-white font-semibold text-base mb-2 leading-tight">Day-long experiences</h3>
+                      <p className="text-white/70 text-sm leading-relaxed">Immersive wellness journeys designed for transformation</p>
+                    </div>
                   </div>
-                  <p className="text-white/90 text-sm leading-relaxed">& more wellness experiences</p>
                 </motion.div>
                 
                 <motion.div 
-                  className="group relative bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl border border-white/30 rounded-2xl p-6 hover:from-white/20 hover:to-white/10 hover:border-white/40 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-brand-primary/10"
-                  whileHover={{ y: -2 }}
-                  transition={{ duration: 0.3, delay: 0.1 }}
+                  className="group relative overflow-hidden rounded-2xl bg-white/8 backdrop-blur-sm border border-white/12 p-5 hover:bg-white/12 hover:border-white/20 transition-all duration-300 hover:-translate-y-1"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
                 >
-                  <div className="flex items-center gap-4 mb-3">
-                    <div className="w-10 h-10 bg-gradient-to-r from-brand-peach to-brand-primary/80 rounded-xl flex items-center justify-center shadow-lg">
-                      <span className="text-white font-bold text-lg">👥</span>
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-gradient-to-br from-brand-primary/20 to-brand-primary/40 backdrop-blur-sm border border-brand-primary/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <Users className="w-5 h-5 text-brand-primary" />
                     </div>
-                    <h3 className="text-white font-bold text-lg tracking-tight">Expert instructors</h3>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-white font-semibold text-base mb-2 leading-tight">Expert instructors</h3>
+                      <p className="text-white/70 text-sm leading-relaxed">Carefully vetted professionals with proven expertise</p>
+                    </div>
                   </div>
-                  <p className="text-white/90 text-sm leading-relaxed">Services screened by experienced professionals</p>
                 </motion.div>
                 
                 <motion.div 
-                  className="group relative bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl border border-white/30 rounded-2xl p-6 hover:from-white/20 hover:to-white/10 hover:border-white/40 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-brand-primary/10"
-                  whileHover={{ y: -2 }}
-                  transition={{ duration: 0.3, delay: 0.2 }}
+                  className="group relative overflow-hidden rounded-2xl bg-white/8 backdrop-blur-sm border border-white/12 p-5 hover:bg-white/12 hover:border-white/20 transition-all duration-300 hover:-translate-y-1"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
                 >
-                  <div className="flex items-center gap-4 mb-3">
-                    <div className="w-10 h-10 bg-gradient-to-r from-brand-peach to-brand-primary/80 rounded-xl flex items-center justify-center shadow-lg">
-                      <span className="text-white font-bold text-lg">🎯</span>
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-gradient-to-br from-brand-primary/20 to-brand-primary/40 backdrop-blur-sm border border-brand-primary/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <Filter className="w-5 h-5 text-brand-primary" />
                     </div>
-                    <h3 className="text-white font-bold text-lg tracking-tight">Smart filtering</h3>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-white font-semibold text-base mb-2 leading-tight">Smart discovery</h3>
+                      <p className="text-white/70 text-sm leading-relaxed">Advanced filtering to find your perfect retreat match</p>
+                    </div>
                   </div>
-                  <p className="text-white/90 text-sm leading-relaxed">Filter by retreat type, price, location, and more</p>
                 </motion.div>
               </motion.div>
             </motion.div>
