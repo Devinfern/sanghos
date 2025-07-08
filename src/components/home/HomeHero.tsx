@@ -178,8 +178,8 @@ const HomeHero = () => {
                 
                 <Button 
                   size="lg" 
-                  variant="outline" 
-                  className="group bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 text-white px-8 py-6 rounded-2xl backdrop-blur-md transition-all duration-500 transform hover:scale-105"
+                  variant="secondary" 
+                  className="group bg-brand-sand/20 hover:bg-brand-sand/30 border-2 border-brand-sand/40 hover:border-brand-sand/60 text-white px-8 py-6 rounded-2xl backdrop-blur-md transition-all duration-500 transform hover:scale-105 shadow-lg hover:shadow-brand-sand/20"
                   onClick={() => navigate("/community-teaser")}
                 >
                   <Play className="mr-3 h-5 w-5" />
