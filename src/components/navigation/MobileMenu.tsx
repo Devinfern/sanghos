@@ -1,9 +1,10 @@
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { X, ChevronDown } from "lucide-react";
 import { NavLink } from "./NavLink";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -13,6 +14,8 @@ interface MobileMenuProps {
 }
 
 export const MobileMenu = ({ isOpen, onClose, isLoggedIn, onSignOut }: MobileMenuProps) => {
+  const [retreatsExpanded, setRetreatsExpanded] = useState(false);
+  
   const handleCommunityClick = (e: React.MouseEvent) => {
     if (!isLoggedIn) {
       e.preventDefault();
@@ -58,9 +61,37 @@ export const MobileMenu = ({ isOpen, onClose, isLoggedIn, onSignOut }: MobileMen
               {/* Navigation Links */}
               <nav className="flex-1 px-6 py-8">
                 <div className="space-y-6">
-                  <NavLink to="/retreats" onClick={onClose} className="block text-lg">
-                    Retreats
-                  </NavLink>
+                  {/* Retreats Dropdown */}
+                  <div>
+                    <button 
+                      onClick={() => setRetreatsExpanded(!retreatsExpanded)}
+                      className="flex items-center justify-between w-full text-lg font-medium text-brand-dark"
+                    >
+                      <span>Retreats</span>
+                      <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${retreatsExpanded ? 'rotate-180' : ''}`} />
+                    </button>
+                    <AnimatePresence>
+                      {retreatsExpanded && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="mt-3 pl-4 space-y-3"
+                        >
+                          <Link to="/retreats" onClick={onClose} className="block text-base text-muted-foreground hover:text-brand-primary">
+                            Browse All Retreats
+                          </Link>
+                          <Link to="/vendors-marketplace-teaser" onClick={onClose} className="block text-base text-muted-foreground hover:text-brand-primary">
+                            Find Vendors
+                          </Link>
+                          <Link to="/become-host" onClick={onClose} className="block text-base text-muted-foreground hover:text-brand-primary">
+                            Host a Retreat
+                          </Link>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                  
                   <NavLink to="/blog" onClick={onClose} className="block text-lg">
                     Insights
                   </NavLink>
@@ -73,9 +104,6 @@ export const MobileMenu = ({ isOpen, onClose, isLoggedIn, onSignOut }: MobileMen
                   </NavLink>
                   <NavLink to="/about-us" onClick={onClose} className="block text-lg">
                     About
-                  </NavLink>
-                  <NavLink to="/vendors-marketplace-teaser" onClick={onClose} className="block text-lg">
-                    Vendors
                   </NavLink>
                 </div>
               </nav>

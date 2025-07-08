@@ -13,6 +13,7 @@ import HomeFeatures from "@/components/home/HomeFeatures";
 import HomeRetreatTypes from "@/components/home/HomeRetreatTypes";
 import HomeWellnessProperties from "@/components/home/HomeWellnessProperties";
 import HomeCommunitySection from "@/components/home/HomeCommunitySection";
+import VendorsMarketplaceSection from "@/components/home/VendorsMarketplaceSection";
 import EventsSection from "@/components/sections/EventsSection";
 import Footer from "@/components/Footer";
 import { useEvents } from "@/hooks/useEvents";
@@ -79,6 +80,10 @@ const Index = () => {
           
           <motion.div variants={itemVariants}>
             <HomeRetreatTypes />
+          </motion.div>
+          
+          <motion.div variants={itemVariants}>
+            <VendorsMarketplaceSection />
           </motion.div>
           
           <motion.div variants={itemVariants}>

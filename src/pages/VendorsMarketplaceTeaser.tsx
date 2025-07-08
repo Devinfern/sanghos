@@ -41,42 +41,42 @@ const VendorsMarketplaceTeaser = () => {
       title: "Retreat-Ready Properties",
       description: "Handpicked Airbnbs, private estates, and wellness centers designed for transformative experiences",
       highlight: "Vetted for group stays",
-      color: "from-blue-500/20 to-blue-600/20"
+      color: "from-brand-primary/20 to-brand-primary/40"
     },
     {
       icon: ChefHat,
       title: "Private Chefs & Catering",
       description: "Plant-based specialists, dietary experts, and culinary artists who understand wellness cuisine",
       highlight: "Wellness-focused menus",
-      color: "from-green-500/20 to-green-600/20"
+      color: "from-brand-sand/20 to-brand-sand/40"
     },
     {
       icon: Car,
       title: "Premium Transportation",
       description: "Group shuttles, luxury transfers, and eco-friendly transport solutions for seamless logistics",
       highlight: "Group-ready vehicles",
-      color: "from-purple-500/20 to-purple-600/20"
+      color: "from-brand-rose/20 to-brand-rose/40"
     },
     {
       icon: Camera,
       title: "Content & Documentation",
       description: "Photographers and videographers specializing in wellness, mindfulness, and retreat storytelling",
       highlight: "Retreat storytellers",
-      color: "from-pink-500/20 to-pink-600/20"
+      color: "from-brand-sky/20 to-brand-sky/40"
     },
     {
       icon: Users,
       title: "Additional Practitioners",
       description: "Guest teachers, therapists, and wellness professionals to enhance your retreat offerings",
       highlight: "Certified experts",
-      color: "from-orange-500/20 to-orange-600/20"
+      color: "from-brand-slate/20 to-brand-slate/40"
     },
     {
       icon: Target,
       title: "Experience Enhancers",
       description: "Sound healers, adventure guides, and specialized facilitators for unique retreat moments",
       highlight: "Transformative add-ons",
-      color: "from-teal-500/20 to-teal-600/20"
+      color: "from-brand-subtle/20 to-brand-subtle/40"
     }
   ];
 
@@ -155,50 +155,77 @@ const VendorsMarketplaceTeaser = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative pt-24 pb-16 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-secondary/5" />
-        <div className="absolute inset-0 bg-[url('/lovable-uploads/eb5e3a10-e1d3-49a7-9bd6-f9cfd8a697fc.jpg')] bg-cover bg-center opacity-5" />
+      <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        {/* Cinematic Background with Overlays */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/60 to-transparent z-10" />
+          <motion.div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: "url('/lovable-uploads/eb5e3a10-e1d3-49a7-9bd6-f9cfd8a697fc.jpg')"
+            }}
+            animate={{ scale: 1.05 }}
+            transition={{ duration: 20, ease: "easeOut" }}
+          />
+          
+          {/* Ambient Lighting Effects */}
+          <div className="absolute top-20 right-20 w-96 h-96 bg-gradient-radial from-brand-primary/20 to-transparent rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-32 left-32 w-80 h-80 bg-gradient-radial from-brand-rose/15 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+        </div>
         
-        <div className="container mx-auto px-6 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center max-w-4xl mx-auto"
-          >
-            <Badge className="mb-6 bg-primary/10 text-primary border-primary/20">
-              Coming Soon
-            </Badge>
-            
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-foreground via-primary to-secondary bg-clip-text text-transparent">
-              Vetted Vendors
-              <br />
-              <span className="font-light">Marketplace</span>
-            </h1>
-            
-            <p className="text-xl md:text-2xl text-muted-foreground mb-8 leading-relaxed">
-              Find trusted vendors for your perfect retreat - handpicked by our community of wellness professionals
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-              <Button size="lg" className="px-8 py-6 text-lg">
-                Join the Waitlist
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button variant="outline" size="lg" className="px-8 py-6 text-lg">
-                Nominate a Vendor
-              </Button>
-            </div>
-            
-            <p className="text-sm text-muted-foreground">
-              🎯 Phase 1 launching Q2 2025 • Invitation-only beta access
-            </p>
-          </motion.div>
+        {/* Main Content */}
+        <div className="relative z-20 min-h-screen flex items-center">
+          <div className="container mx-auto px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="max-w-4xl mx-auto text-center"
+            >
+              <Badge className="mb-6 bg-brand-primary/10 text-white border-brand-primary/30 backdrop-blur-sm">
+                Coming Soon
+              </Badge>
+              
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[0.9] mb-8">
+                <span className="font-light">Vetted</span>
+                <br />
+                <span className="font-serif italic text-brand-rose">Vendors</span>
+                <br />
+                <span className="font-bold">Marketplace</span>
+              </h1>
+              
+              <p className="text-xl text-white/80 leading-relaxed mb-10 max-w-3xl mx-auto">
+                Find trusted vendors for your perfect retreat - handpicked by our community of wellness professionals
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
+                <Button 
+                  size="lg" 
+                  className="group bg-gradient-to-r from-brand-primary via-brand-primary to-brand-primary/80 hover:from-brand-primary/90 hover:via-brand-primary/90 hover:to-brand-primary text-white px-8 py-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+                >
+                  <span className="text-lg font-semibold">Join the Waitlist</span>
+                  <ArrowRight className="ml-3 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="group bg-gradient-to-r from-brand-rose/10 to-brand-rose/20 hover:from-brand-rose/20 hover:to-brand-rose/30 border-2 border-brand-rose/30 hover:border-brand-rose/50 text-white hover:text-white px-8 py-6 rounded-2xl backdrop-blur-md shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+                >
+                  <Sparkles className="mr-3 h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
+                  <span className="text-lg font-medium">Nominate a Vendor</span>
+                </Button>
+              </div>
+              
+              <p className="text-sm text-white/60">
+                🎯 Phase 1 launching Q2 2025 • Invitation-only beta access
+              </p>
+            </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Vendor Categories */}
-      <section className="py-16 bg-muted/30">
+      <section className="py-16 bg-brand-subtle/20">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -224,17 +251,17 @@ const VendorsMarketplaceTeaser = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="h-full hover:shadow-lg transition-all duration-300 group cursor-pointer">
+                <Card className="h-full hover:shadow-lg transition-all duration-300 group cursor-pointer border-brand-primary/10 hover:border-brand-primary/20">
                   <CardContent className="p-6">
                     <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                      <category.icon className="h-6 w-6 text-primary" />
+                      <category.icon className="h-6 w-6 text-brand-primary" />
                     </div>
                     
                     <Badge variant="secondary" className="mb-3 text-xs">
                       {category.highlight}
                     </Badge>
                     
-                    <h3 className="text-lg font-semibold mb-2">{category.title}</h3>
+                    <h3 className="text-lg font-semibold mb-2 text-brand-dark">{category.title}</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">
                       {category.description}
                     </p>
@@ -273,11 +300,11 @@ const VendorsMarketplaceTeaser = () => {
                     viewport={{ once: true }}
                     className="flex items-start space-x-4"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <benefit.icon className="h-5 w-5 text-primary" />
+                    <div className="w-10 h-10 rounded-lg bg-brand-primary/10 flex items-center justify-center flex-shrink-0">
+                      <benefit.icon className="h-5 w-5 text-brand-primary" />
                     </div>
                     <div>
-                      <h3 className="font-semibold mb-1">{benefit.title}</h3>
+                      <h3 className="font-semibold mb-1 text-brand-dark">{benefit.title}</h3>
                       <p className="text-sm text-muted-foreground">{benefit.description}</p>
                     </div>
                   </motion.div>
@@ -292,10 +319,10 @@ const VendorsMarketplaceTeaser = () => {
               viewport={{ once: true }}
               className="relative"
             >
-              <div className="aspect-square rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 p-8 flex items-center justify-center">
+              <div className="aspect-square rounded-2xl bg-gradient-to-br from-brand-primary/20 to-brand-sand/20 p-8 flex items-center justify-center">
                 <div className="text-center">
-                  <div className="text-4xl font-bold text-primary mb-2">20+</div>
-                  <div className="text-lg font-medium mb-4">Hours Saved</div>
+                  <div className="text-4xl font-bold text-brand-primary mb-2">20+</div>
+                  <div className="text-lg font-medium mb-4 text-brand-dark">Hours Saved</div>
                   <div className="text-sm text-muted-foreground">Per retreat planned</div>
                 </div>
               </div>
@@ -305,7 +332,7 @@ const VendorsMarketplaceTeaser = () => {
       </section>
 
       {/* Benefits for Vendors */}
-      <section className="py-16 bg-muted/30">
+      <section className="py-16 bg-brand-subtle/20">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -331,12 +358,12 @@ const VendorsMarketplaceTeaser = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="h-full text-center hover:shadow-lg transition-all duration-300">
+                <Card className="h-full text-center hover:shadow-lg transition-all duration-300 border-brand-primary/10 hover:border-brand-primary/20">
                   <CardContent className="p-6">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                      <benefit.icon className="h-6 w-6 text-primary" />
+                    <div className="w-12 h-12 rounded-full bg-brand-primary/10 flex items-center justify-center mx-auto mb-4">
+                      <benefit.icon className="h-6 w-6 text-brand-primary" />
                     </div>
-                    <h3 className="font-semibold mb-2">{benefit.title}</h3>
+                    <h3 className="font-semibold mb-2 text-brand-dark">{benefit.title}</h3>
                     <p className="text-sm text-muted-foreground">{benefit.description}</p>
                   </CardContent>
                 </Card>
@@ -378,7 +405,7 @@ const VendorsMarketplaceTeaser = () => {
                   <div className="flex items-center space-x-6">
                     <div className="flex-shrink-0">
                       <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                        phase.status === 'upcoming' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+                        phase.status === 'upcoming' ? 'bg-brand-primary text-white' : 'bg-muted text-muted-foreground'
                       }`}>
                         <span className="text-sm font-semibold">{index + 1}</span>
                       </div>
@@ -389,14 +416,14 @@ const VendorsMarketplaceTeaser = () => {
                         <div className="flex items-start justify-between mb-2">
                           <div>
                             <div className="flex items-center space-x-3 mb-1">
-                              <h3 className="text-lg font-semibold">{phase.title}</h3>
-                              <Badge variant={phase.status === 'upcoming' ? 'default' : 'secondary'}>
+                              <h3 className="text-lg font-semibold text-brand-dark">{phase.title}</h3>
+                              <Badge variant={phase.status === 'upcoming' ? 'default' : 'secondary'} className={phase.status === 'upcoming' ? 'bg-brand-primary text-white' : ''}>
                                 {phase.phase}
                               </Badge>
                             </div>
                             <p className="text-sm text-muted-foreground mb-2">{phase.description}</p>
                           </div>
-                          <div className="text-sm font-medium text-primary">{phase.date}</div>
+                          <div className="text-sm font-medium text-brand-primary">{phase.date}</div>
                         </div>
                       </CardContent>
                     </Card>
@@ -413,7 +440,7 @@ const VendorsMarketplaceTeaser = () => {
       </section>
 
       {/* Waitlist Signup */}
-      <section className="py-16 bg-primary text-primary-foreground">
+      <section className="py-16 bg-brand-primary text-white">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -427,7 +454,7 @@ const VendorsMarketplaceTeaser = () => {
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
                   Join the Waitlist
                 </h2>
-                <p className="text-lg text-primary-foreground/80 mb-8">
+                <p className="text-lg text-white/80 mb-8">
                   Be the first to access our vetted vendors marketplace and help shape the future of retreat planning
                 </p>
                 
@@ -439,7 +466,7 @@ const VendorsMarketplaceTeaser = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="flex-1 bg-white/10 border-white/20 text-primary-foreground placeholder:text-primary-foreground/60"
+                      className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-white/60"
                     />
                     <Button 
                       type="submit"
@@ -459,7 +486,7 @@ const VendorsMarketplaceTeaser = () => {
                         value="host"
                         checked={role === "host"}
                         onChange={(e) => setRole(e.target.value as "host")}
-                        className="text-primary-foreground"
+                        className="text-white"
                       />
                       <span>I'm a Retreat Host</span>
                     </label>
@@ -470,7 +497,7 @@ const VendorsMarketplaceTeaser = () => {
                         value="vendor"
                         checked={role === "vendor"}
                         onChange={(e) => setRole(e.target.value as "vendor")}
-                        className="text-primary-foreground"
+                        className="text-white"
                       />
                       <span>I'm a Vendor</span>
                     </label>
@@ -481,7 +508,7 @@ const VendorsMarketplaceTeaser = () => {
                         value="both"
                         checked={role === "both"}
                         onChange={(e) => setRole(e.target.value as "both")}
-                        className="text-primary-foreground"
+                        className="text-white"
                       />
                       <span>Both</span>
                     </label>
@@ -492,7 +519,7 @@ const VendorsMarketplaceTeaser = () => {
               <div className="text-center">
                 <CheckCircle className="h-16 w-16 mx-auto mb-4" />
                 <h2 className="text-2xl font-bold mb-2">You're on the list!</h2>
-                <p className="text-primary-foreground/80">
+                <p className="text-white/80">
                   We'll notify you as soon as the vendors marketplace launches.
                 </p>
               </div>
