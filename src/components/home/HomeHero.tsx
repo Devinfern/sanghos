@@ -101,9 +101,9 @@ const HomeHero = () => {
       </motion.div>
 
       {/* Main Content - Split Screen Layout */}
-      <div className="relative z-20 flex flex-col justify-center min-h-screen">
+      <div className="relative z-20 flex flex-col min-h-screen pt-20 md:pt-24 lg:pt-0 lg:justify-center">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center mb-16 lg:mb-24">
+          <div className="grid lg:grid-cols-2 gap-16 items-center mb-12 md:mb-16 lg:mb-20">
             
             {/* Left Column - Hero Content */}
             <motion.div 
