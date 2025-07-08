@@ -224,7 +224,50 @@ const HomeHero = () => {
               animate={isLoaded ? "visible" : "hidden"}
               variants={slideInRight}
             >
-             
+              {/* Floating Image Cards */}
+              <div className="relative">
+                <motion.div 
+                  className="absolute -top-8 -right-8 w-64 h-80 rounded-3xl overflow-hidden shadow-2xl border border-white/20 backdrop-blur-sm"
+                  animate={{ 
+                    y: [-10, 10, -10],
+                    rotate: [2, -2, 2]
+                  }}
+                  transition={{ 
+                    duration: 8, 
+                    repeat: Infinity, 
+                    ease: "easeInOut" 
+                  }}
+                >
+                  <img 
+                    src="/https://sanghos.com/lovable-uploads/96b3ade1-573a-4ad1-982b-e36418466313.png" 
+                    alt="Wellness retreat moment" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                </motion.div>
+
+                <motion.div 
+                  className="relative w-72 h-96 rounded-3xl overflow-hidden shadow-2xl border border-white/30"
+                  animate={{ 
+                    y: [10, -10, 10],
+                    rotate: [-1, 1, -1]
+                  }}
+                  transition={{ 
+                    duration: 10, 
+                    repeat: Infinity, 
+                    ease: "easeInOut",
+                    delay: 2
+                  }}
+                >
+                  <img 
+                    src="/https://sanghos.com/lovable-uploads/96b3ade1-573a-4ad1-982b-e36418466313.png" 
+                    alt="Meditation space" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-primary/20 to-transparent" />
+                </motion.div>
+              </div>
+            </motion.div>
 
           </div>
         </div>
