@@ -101,13 +101,13 @@ const HomeHero = () => {
       </motion.div>
 
       {/* Main Content - Split Screen Layout */}
-      <div className="relative z-20 min-h-screen flex items-center">
+      <div className="relative z-20 min-h-screen flex items-center justify-center">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="flex items-center justify-center">
             
-            {/* Left Column - Hero Content */}
+            {/* Hero Content */}
             <motion.div 
-              className="max-w-2xl"
+              className="max-w-2xl text-center lg:text-left"
               initial="hidden"
               animate={isLoaded ? "visible" : "hidden"}
               variants={slideInLeft}
