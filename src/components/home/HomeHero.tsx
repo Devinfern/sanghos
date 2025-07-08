@@ -101,9 +101,9 @@ const HomeHero = () => {
       </motion.div>
 
       {/* Main Content - Split Screen Layout */}
-      <div className="relative z-20 h-screen flex items-center justify-center">
+      <div className="relative z-20 min-h-screen flex items-center">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center justify-center">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
             
             {/* Left Column - Hero Content */}
             <motion.div 
@@ -112,6 +112,16 @@ const HomeHero = () => {
               animate={isLoaded ? "visible" : "hidden"}
               variants={slideInLeft}
             >
+              {/* Elegant Badge */}
+              <motion.div 
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8"
+                variants={fadeInUp}
+              >
+                <Sparkles className="w-4 h-4 text-brand-peach" />
+                <span className="text-sm font-medium text-white/90 tracking-wide">
+                  DISCOVER YOUR SANCTUARY
+                </span>
+              </motion.div>
 
               {/* Hero Title with Serif Accents */}
               <motion.h1 
@@ -129,8 +139,10 @@ const HomeHero = () => {
               <motion.p 
                 className="text-xl text-white/80 leading-relaxed mb-10 max-w-lg"
                 variants={fadeInUp}
-              >
-                Immerse yourself in transformative daylong retreats with expert instructors in breathtaking, intimate settings.
+              > Day-long retreats & more
+                •Services screened by experienced instructors
+                •Filter by retreat type, price, location, and more
+
               </motion.p>
 
               {/* Glassmorphism Search Bar */}
@@ -178,8 +190,8 @@ const HomeHero = () => {
                 
                 <Button 
                   size="lg" 
-                  variant="secondary" 
-                  className="group bg-brand-sand/20 hover:bg-brand-sand/30 border-2 border-brand-sand/40 hover:border-brand-sand/60 text-white px-8 py-6 rounded-2xl backdrop-blur-md transition-all duration-500 transform hover:scale-105 shadow-lg hover:shadow-brand-sand/20"
+                  variant="outline" 
+                  className="group bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 text-white px-8 py-6 rounded-2xl backdrop-blur-md transition-all duration-500 transform hover:scale-105"
                   onClick={() => navigate("/community-teaser")}
                 >
                   <Play className="mr-3 h-5 w-5" />
