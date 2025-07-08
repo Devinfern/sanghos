@@ -187,34 +187,52 @@ const HomeHero = () => {
                 </Button>
               </motion.div>
 
-              {/* Floating Stats */}
+              {/* Enhanced Stats Cards */}
               <motion.div 
                 className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/20"
                 variants={fadeInUp}
               >
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-2 h-2 bg-brand-peach rounded-full"></div>
-                    <h3 className="text-white font-semibold text-lg">Day-long retreats</h3>
+                <motion.div 
+                  className="group relative bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl border border-white/30 rounded-2xl p-6 hover:from-white/20 hover:to-white/10 hover:border-white/40 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-brand-primary/10"
+                  whileHover={{ y: -2 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="flex items-center gap-4 mb-3">
+                    <div className="w-10 h-10 bg-gradient-to-r from-brand-peach to-brand-primary/80 rounded-xl flex items-center justify-center shadow-lg">
+                      <span className="text-white font-bold text-lg">📅</span>
+                    </div>
+                    <h3 className="text-white font-bold text-lg tracking-tight">Day-long retreats</h3>
                   </div>
-                  <p className="text-white/80 text-sm">& more wellness experiences</p>
-                </div>
+                  <p className="text-white/90 text-sm leading-relaxed">& more wellness experiences</p>
+                </motion.div>
                 
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-2 h-2 bg-brand-peach rounded-full"></div>
-                    <h3 className="text-white font-semibold text-lg">Expert instructors</h3>
+                <motion.div 
+                  className="group relative bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl border border-white/30 rounded-2xl p-6 hover:from-white/20 hover:to-white/10 hover:border-white/40 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-brand-primary/10"
+                  whileHover={{ y: -2 }}
+                  transition={{ duration: 0.3, delay: 0.1 }}
+                >
+                  <div className="flex items-center gap-4 mb-3">
+                    <div className="w-10 h-10 bg-gradient-to-r from-brand-peach to-brand-primary/80 rounded-xl flex items-center justify-center shadow-lg">
+                      <span className="text-white font-bold text-lg">👥</span>
+                    </div>
+                    <h3 className="text-white font-bold text-lg tracking-tight">Expert instructors</h3>
                   </div>
-                  <p className="text-white/80 text-sm">Services screened by experienced professionals</p>
-                </div>
+                  <p className="text-white/90 text-sm leading-relaxed">Services screened by experienced professionals</p>
+                </motion.div>
                 
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-2 h-2 bg-brand-peach rounded-full"></div>
-                    <h3 className="text-white font-semibold text-lg">Smart filtering</h3>
+                <motion.div 
+                  className="group relative bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl border border-white/30 rounded-2xl p-6 hover:from-white/20 hover:to-white/10 hover:border-white/40 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-brand-primary/10"
+                  whileHover={{ y: -2 }}
+                  transition={{ duration: 0.3, delay: 0.2 }}
+                >
+                  <div className="flex items-center gap-4 mb-3">
+                    <div className="w-10 h-10 bg-gradient-to-r from-brand-peach to-brand-primary/80 rounded-xl flex items-center justify-center shadow-lg">
+                      <span className="text-white font-bold text-lg">🎯</span>
+                    </div>
+                    <h3 className="text-white font-bold text-lg tracking-tight">Smart filtering</h3>
                   </div>
-                  <p className="text-white/80 text-sm">Filter by retreat type, price, location, and more</p>
-                </div>
+                  <p className="text-white/90 text-sm leading-relaxed">Filter by retreat type, price, location, and more</p>
+                </motion.div>
               </motion.div>
             </motion.div>
 
