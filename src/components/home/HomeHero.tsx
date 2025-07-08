@@ -57,7 +57,7 @@ const HomeHero = () => {
     }
   };
   return (
-    <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 pb-32 md:pb-40">
+    <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Cinematic Background with Overlays */}
       <div className="absolute inset-0">
         {/* Main Background Image */}
@@ -101,9 +101,9 @@ const HomeHero = () => {
       </motion.div>
 
       {/* Main Content - Split Screen Layout */}
-      <div className="relative z-20 flex flex-col min-h-screen pt-20 md:pt-24 lg:pt-0 lg:justify-center">
+      <div className="relative z-20 min-h-screen flex items-center">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center mb-12 md:mb-16 lg:mb-20">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
             
             {/* Left Column - Hero Content */}
             <motion.div 
@@ -189,14 +189,14 @@ const HomeHero = () => {
             </motion.div>
           </div>
           
-          {/* Feature Cards - In Normal Flow */}
+          {/* Feature Cards - Horizontal from Left Column */}
           <motion.div 
-            className="relative z-30"
+            className="absolute bottom-8 left-6 lg:left-8 right-6 lg:right-8"
             initial={{ opacity: 0, y: 40 }}
             animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <motion.div 
                 className="group relative overflow-hidden rounded-2xl bg-white/8 backdrop-blur-sm border border-white/12 p-6 hover:bg-white/12 hover:border-white/20 transition-all duration-300 hover:-translate-y-1"
                 initial={{ opacity: 0, y: 20 }}
@@ -205,7 +205,7 @@ const HomeHero = () => {
               >
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary/20 to-brand-primary/40 backdrop-blur-sm border border-brand-primary/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Calendar className="w-5 h-5 text-white" />
+                    <Calendar className="w-5 h-5 text-brand-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-white font-semibold text-lg mb-2 leading-tight">Day-long experiences</h3>
@@ -222,7 +222,7 @@ const HomeHero = () => {
               >
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary/20 to-brand-primary/40 backdrop-blur-sm border border-brand-primary/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Users className="w-5 h-5 text-white" />
+                    <Users className="w-5 h-5 text-brand-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-white font-semibold text-lg mb-2 leading-tight">Expert instructors</h3>
@@ -239,7 +239,7 @@ const HomeHero = () => {
               >
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary/20 to-brand-primary/40 backdrop-blur-sm border border-brand-primary/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Filter className="w-5 h-5 text-white" />
+                    <Filter className="w-5 h-5 text-brand-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-white font-semibold text-lg mb-2 leading-tight">Smart discovery</h3>
