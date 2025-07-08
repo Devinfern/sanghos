@@ -74,7 +74,7 @@ const VendorsMarketplaceSection = () => {
             </div>
           </motion.div>
           
-          {/* Right Column - Visual Categories Grid */}
+          {/* Right Column - Enhanced Vendor Showcase Cards */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -82,7 +82,7 @@ const VendorsMarketplaceSection = () => {
             viewport={{ once: true }}
             className="relative"
           >
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
               {quickCategories.map((category, index) => (
                 <motion.div
                   key={category.title}
@@ -91,14 +91,36 @@ const VendorsMarketplaceSection = () => {
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer border-brand-primary/10 hover:border-brand-primary/20">
-                    <CardContent className="p-6 text-center">
-                      <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-gradient-to-br from-brand-primary/10 to-brand-primary/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                        <category.icon className="h-6 w-6 text-brand-primary" />
+                  <Card className="group relative overflow-hidden backdrop-blur-sm bg-white/70 border-brand-primary/20 hover:border-brand-primary/40 shadow-lg hover:shadow-xl transition-all duration-500 cursor-pointer h-full">
+                    {/* Gradient Background Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/5 via-transparent to-brand-sand/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    
+                    <CardContent className="relative p-8 text-center flex flex-col justify-between h-full">
+                      {/* Icon Container */}
+                      <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-brand-primary/20 to-brand-primary/10 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg">
+                        <category.icon className="h-8 w-8 text-brand-primary group-hover:text-brand-primary transition-colors duration-300" />
                       </div>
-                      <h3 className="font-semibold text-brand-dark mb-1">{category.title}</h3>
-                      <p className="text-2xl font-bold text-brand-primary">{category.count}</p>
-                      <p className="text-xs text-muted-foreground">Coming Soon</p>
+                      
+                      {/* Content */}
+                      <div className="space-y-3">
+                        <h3 className="text-lg font-bold text-brand-dark group-hover:text-brand-primary transition-colors duration-300">
+                          {category.title}
+                        </h3>
+                        
+                        {/* Large Count Display */}
+                        <div className="space-y-1">
+                          <p className="text-3xl font-bold text-brand-primary group-hover:scale-105 transition-transform duration-300">
+                            {category.count}
+                          </p>
+                          <div className="inline-flex items-center space-x-2 bg-brand-primary/10 text-brand-primary px-3 py-1 rounded-full text-sm font-medium">
+                            <div className="w-2 h-2 bg-brand-primary rounded-full animate-pulse" />
+                            <span>Coming Soon</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Hover Glow Effect */}
+                      <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-brand-primary/10 via-transparent to-brand-sand/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                     </CardContent>
                   </Card>
                 </motion.div>
