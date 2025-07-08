@@ -186,67 +186,71 @@ const HomeHero = () => {
                   <span className="text-lg font-medium">Join Community</span>
                 </Button>
               </motion.div>
-
-              {/* Modern Feature Cards */}
-              <motion.div 
-                className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-16"
-                variants={fadeInUp}
-              >
+            </motion.div>
+          </div>
+          
+          {/* Feature Cards - Bottom Half Spanning Full Width */}
+          <motion.div 
+            className="absolute bottom-8 left-0 right-0 px-6 lg:px-8"
+            initial={{ opacity: 0, y: 40 }}
+            animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            <div className="container mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
                 <motion.div 
-                  className="group relative overflow-hidden rounded-2xl bg-white/8 backdrop-blur-sm border border-white/12 p-5 hover:bg-white/12 hover:border-white/20 transition-all duration-300 hover:-translate-y-1"
+                  className="group relative overflow-hidden rounded-2xl bg-white/8 backdrop-blur-sm border border-white/12 p-6 hover:bg-white/12 hover:border-white/20 transition-all duration-300 hover:-translate-y-1"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
+                  transition={{ duration: 0.6, delay: 0.8 }}
                 >
                   <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-gradient-to-br from-brand-primary/20 to-brand-primary/40 backdrop-blur-sm border border-brand-primary/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary/20 to-brand-primary/40 backdrop-blur-sm border border-brand-primary/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                       <Calendar className="w-5 h-5 text-brand-primary" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-white font-semibold text-base mb-2 leading-tight">Day-long experiences</h3>
+                      <h3 className="text-white font-semibold text-lg mb-2 leading-tight">Day-long experiences</h3>
                       <p className="text-white/70 text-sm leading-relaxed">Immersive wellness journeys designed for transformation</p>
                     </div>
                   </div>
                 </motion.div>
                 
                 <motion.div 
-                  className="group relative overflow-hidden rounded-2xl bg-white/8 backdrop-blur-sm border border-white/12 p-5 hover:bg-white/12 hover:border-white/20 transition-all duration-300 hover:-translate-y-1"
+                  className="group relative overflow-hidden rounded-2xl bg-white/8 backdrop-blur-sm border border-white/12 p-6 hover:bg-white/12 hover:border-white/20 transition-all duration-300 hover:-translate-y-1"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.3 }}
+                  transition={{ duration: 0.6, delay: 0.9 }}
                 >
                   <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-gradient-to-br from-brand-primary/20 to-brand-primary/40 backdrop-blur-sm border border-brand-primary/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary/20 to-brand-primary/40 backdrop-blur-sm border border-brand-primary/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                       <Users className="w-5 h-5 text-brand-primary" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-white font-semibold text-base mb-2 leading-tight">Expert instructors</h3>
+                      <h3 className="text-white font-semibold text-lg mb-2 leading-tight">Expert instructors</h3>
                       <p className="text-white/70 text-sm leading-relaxed">Carefully vetted professionals with proven expertise</p>
                     </div>
                   </div>
                 </motion.div>
                 
                 <motion.div 
-                  className="group relative overflow-hidden rounded-2xl bg-white/8 backdrop-blur-sm border border-white/12 p-5 hover:bg-white/12 hover:border-white/20 transition-all duration-300 hover:-translate-y-1"
+                  className="group relative overflow-hidden rounded-2xl bg-white/8 backdrop-blur-sm border border-white/12 p-6 hover:bg-white/12 hover:border-white/20 transition-all duration-300 hover:-translate-y-1"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.4 }}
+                  transition={{ duration: 0.6, delay: 1.0 }}
                 >
                   <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-gradient-to-br from-brand-primary/20 to-brand-primary/40 backdrop-blur-sm border border-brand-primary/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary/20 to-brand-primary/40 backdrop-blur-sm border border-brand-primary/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                       <Filter className="w-5 h-5 text-brand-primary" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-white font-semibold text-base mb-2 leading-tight">Smart discovery</h3>
+                      <h3 className="text-white font-semibold text-lg mb-2 leading-tight">Smart discovery</h3>
                       <p className="text-white/70 text-sm leading-relaxed">Advanced filtering to find your perfect retreat match</p>
                     </div>
                   </div>
                 </motion.div>
-              </motion.div>
-            </motion.div>
-
-
-          </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
 
