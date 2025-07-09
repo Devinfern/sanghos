@@ -47,7 +47,8 @@ const megaMenuData: Record<string, MegaMenuSection[]> = {
           title: "Find Vendors",
           description: "Discover vendors for your perfect retreat",
           href: "/vendors-marketplace-teaser",
-          icon: MapPin
+          icon: MapPin,
+          badge: "Coming Soon"
         }
       ]
     },

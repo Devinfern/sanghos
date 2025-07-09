@@ -39,8 +39,13 @@ export const DesktopNav = ({ isLoggedIn, onSignOut, onCommunityClick }: DesktopN
         </DropdownMenu>
         
         <NavLink to="/blog">Insights</NavLink>
-        <NavLink to="/vendors-marketplace-teaser">Vendors</NavLink>
-        <NavLink 
+        <div className="relative">
+          <NavLink to="/vendors-marketplace-teaser" className="flex items-center space-x-2">
+            <span>Vendors</span>
+            <span className="px-2 py-1 text-xs bg-brand-primary/10 text-brand-primary rounded-full font-medium">Coming Soon</span>
+          </NavLink>
+        </div>
+        <NavLink
           to="/community" 
           onClick={onCommunityClick}
         >

@@ -31,7 +31,7 @@ export const EnhancedMobileMenu = ({
         { title: "All Retreats", href: "/retreats" },
         { title: "Sanghos Retreats", href: "/retreats?tab=sanghos" },
         { title: "Partner Retreats", href: "/retreats?tab=thirdparty" },
-        { title: "Find Vendors", href: "/vendors-marketplace-teaser" },
+        { title: "Find Vendors", href: "/vendors-marketplace-teaser", badge: "Coming Soon" },
       ]
     },
     {
@@ -158,7 +158,14 @@ export const EnhancedMobileMenu = ({
                                   onClick={(e) => handleCommunityItemClick(e, item.href)}
                                   className="block p-3 text-brand-slate hover:text-brand-primary hover:bg-brand-primary/5 rounded-lg transition-colors touch-manipulation"
                                 >
-                                  {item.title}
+                                  <div className="flex items-center space-x-2">
+                                    <span>{item.title}</span>
+                                    {item.badge && (
+                                      <span className="px-2 py-1 text-xs bg-brand-primary/10 text-brand-primary rounded-full font-medium">
+                                        {item.badge}
+                                      </span>
+                                    )}
+                                  </div>
                                 </Link>
                               ))}
                             </div>
