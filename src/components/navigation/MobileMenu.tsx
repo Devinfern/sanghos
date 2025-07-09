@@ -95,6 +95,9 @@ export const MobileMenu = ({ isOpen, onClose, isLoggedIn, onSignOut }: MobileMen
                   <NavLink to="/blog" onClick={onClose} className="block text-lg">
                     Insights
                   </NavLink>
+                  <NavLink to="/vendors-marketplace-teaser" onClick={onClose} className="block text-lg">
+                    Vendors
+                  </NavLink>
                   <NavLink 
                     to="/community" 
                     onClick={handleCommunityClick} 

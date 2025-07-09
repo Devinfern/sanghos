@@ -39,6 +39,7 @@ export const DesktopNav = ({ isLoggedIn, onSignOut, onCommunityClick }: DesktopN
         </DropdownMenu>
         
         <NavLink to="/blog">Insights</NavLink>
+        <NavLink to="/vendors-marketplace-teaser">Vendors</NavLink>
         <NavLink 
           to="/community" 
           onClick={onCommunityClick}
