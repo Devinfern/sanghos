@@ -25,6 +25,15 @@ const Blog = () => {
   };
 
   const articles = [{
+    id: 'vendor-ecosystem-trust-first',
+    title: 'Behind the Scenes: Building a Trust-First Vendor Ecosystem for Wellness Retreats',
+    excerpt: 'An inside look at how Sanghos is revolutionizing retreat planning through community-driven vendor vetting, rigorous quality standards, and authentic relationships that put trust first.',
+    author: 'Devin Fernandez',
+    date: 'January 9, 2025',
+    readTime: '9 min read',
+    image: '/lovable-uploads/1bb523ae-38ed-4377-8a20-53ad930f2cba.png',
+    category: 'Behind the Scenes'
+  }, {
     id: 'mindfulness-news-june-2025',
     title: 'Mindfulness in the News: June 2025',
     excerpt: 'A comprehensive roundup of the most significant mindfulness and meditation developments from around the world this month, from breakthrough apps to educational initiatives.',
@@ -107,7 +116,7 @@ const Blog = () => {
     category: 'Sound Therapy'
   }];
 
-  const categories = ['All', 'Wellness Research', 'News & Trends', 'Meditation', 'Breathwork', 'Yoga', 'Nature Therapy', 'Wellness', 'Mindfulness', 'Sound Therapy'];
+  const categories = ['All', 'Wellness Research', 'Behind the Scenes', 'News & Trends', 'Meditation', 'Breathwork', 'Yoga', 'Nature Therapy', 'Wellness', 'Mindfulness', 'Sound Therapy'];
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   const filteredArticles = articles.filter(article => 

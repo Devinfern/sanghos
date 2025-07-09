@@ -26,6 +26,7 @@ import BlogPostMorningRituals from "./pages/BlogPostMorningRituals";
 import BlogPostYogaBeginners from "./pages/BlogPostYogaBeginners";
 import BlogPostDigitalDetox from "./pages/BlogPostDigitalDetox";
 import BlogPostSoundHealing from "./pages/BlogPostSoundHealing";
+import BlogPostVendorEcosystem from "./pages/BlogPostVendorEcosystem";
 import BlogPostSpiritualityWellness from "./pages/BlogPostSpiritualityWellness";
 import CommunityTeaser from "./pages/CommunityTeaser";
 import VendorsMarketplaceTeaser from "./pages/VendorsMarketplaceTeaser";
@@ -74,6 +75,7 @@ const App = () => (
               <Route path="/blog/yoga-beginners-guide" element={<BlogPostYogaBeginners />} />
               <Route path="/blog/digital-detox-guide" element={<BlogPostDigitalDetox />} />
               <Route path="/blog/sound-healing-benefits" element={<BlogPostSoundHealing />} />
+              <Route path="/blog/vendor-ecosystem-trust-first" element={<BlogPostVendorEcosystem />} />
               <Route path="/blog/spirituality-wellness-science" element={<BlogPostSpiritualityWellness />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/onboarding" element={<Onboarding />} />
