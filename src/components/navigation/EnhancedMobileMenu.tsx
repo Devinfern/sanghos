@@ -31,6 +31,7 @@ export const EnhancedMobileMenu = ({
         { title: "All Retreats", href: "/retreats" },
         { title: "Sanghos Retreats", href: "/retreats?tab=sanghos" },
         { title: "Partner Retreats", href: "/retreats?tab=thirdparty" },
+        { title: "Find Vendors", href: "/vendors-marketplace-teaser" },
       ]
     },
     {

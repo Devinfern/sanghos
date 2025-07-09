@@ -42,6 +42,12 @@ const megaMenuData: Record<string, MegaMenuSection[]> = {
           description: "Retreats from our trusted wellness partners",
           href: "/retreats?tab=thirdparty",
           icon: Heart
+        },
+        {
+          title: "Find Vendors",
+          description: "Discover vendors for your perfect retreat",
+          href: "/vendors-marketplace-teaser",
+          icon: MapPin
         }
       ]
     },
