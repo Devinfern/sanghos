@@ -3,11 +3,11 @@ import { motion } from "framer-motion";
 import "./BentoDashboard.css";
 import EnhancedWelcomeSection from "./dashboard/EnhancedWelcomeSection";
 import EnhancedSearchSection from "./dashboard/EnhancedSearchSection";
-import QuickStatsGrid from "./dashboard/QuickStatsGrid";
-import EnhancedTrendingTopicsCard from "./dashboard/EnhancedTrendingTopicsCard";
-import EnhancedQuickActionsCard from "./dashboard/EnhancedQuickActionsCard";
-import RecentActivityCard from "./dashboard/RecentActivityCard";
-import UserProgressWidget from "./dashboard/UserProgressWidget";
+import CleanStatsOverview from "./dashboard/CleanStatsOverview";
+import CourseProgressCards from "./dashboard/CourseProgressCards";
+import ActivityFeedCard from "./dashboard/ActivityFeedCard";
+import QuickAccessCard from "./dashboard/QuickAccessCard";
+import CommunityHighlights from "./dashboard/CommunityHighlights";
 
 interface CommunityDashboardProps {
   isLoggedIn: boolean;
@@ -27,40 +27,39 @@ const CommunityDashboard = ({
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
+        staggerChildren: 0.08,
+        delayChildren: 0.1
       }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20, scale: 0.95 },
+    hidden: { opacity: 0, y: 24 },
     visible: { 
       opacity: 1, 
-      y: 0, 
-      scale: 1,
+      y: 0,
       transition: { 
-        duration: 0.5,
+        duration: 0.6,
         ease: [0.25, 0.46, 0.45, 0.94]
       }
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-brand-light via-white to-brand-subtle/30 relative overflow-hidden">
-      {/* Enhanced Background Elements */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-brand-subtle/20 relative">
+      {/* Subtle background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-brand-primary/20 to-brand-sand/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute top-1/3 -left-32 w-80 h-80 bg-gradient-to-br from-brand-rose/15 to-brand-primary/15 rounded-full blur-2xl animate-float" />
-        <div className="absolute bottom-20 right-1/4 w-64 h-64 bg-gradient-to-br from-brand-sand/20 to-brand-subtle/20 rounded-full blur-xl animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute -top-32 -right-32 w-64 h-64 bg-brand-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-32 -left-32 w-80 h-80 bg-brand-sand/8 rounded-full blur-2xl" />
       </div>
 
-      <div className="relative z-10 space-y-8 p-6">
+      <div className="relative z-10 max-w-7xl mx-auto p-6 space-y-8">
         <motion.div
           initial="hidden"
           animate="visible"
           variants={containerVariants}
         >
+          {/* Header Section */}
           <motion.div variants={itemVariants}>
             <EnhancedWelcomeSection onSectionChange={onSectionChange} />
           </motion.div>
@@ -69,32 +68,34 @@ const CommunityDashboard = ({
             <EnhancedSearchSection />
           </motion.div>
 
-          {/* Enhanced Bento Grid Layout with Staggered Animation */}
-          <motion.div
+          {/* Main Dashboard Grid */}
+          <motion.div 
             variants={containerVariants}
-            className="bento-grid gap-6 mt-8"
+            className="grid grid-cols-12 gap-6 mt-8"
           >
-            <motion.div variants={itemVariants} className="bento-item">
-              <QuickStatsGrid currentEvents={currentEvents} />
+            {/* Stats Overview - Top Row */}
+            <motion.div variants={itemVariants} className="col-span-12">
+              <CleanStatsOverview currentEvents={currentEvents} />
             </motion.div>
-            
-            <motion.div variants={itemVariants} className="bento-item">
-              <EnhancedTrendingTopicsCard onSectionChange={onSectionChange} />
+
+            {/* Course Progress - Left Column */}
+            <motion.div variants={itemVariants} className="col-span-12 lg:col-span-8">
+              <CourseProgressCards onSectionChange={onSectionChange} />
             </motion.div>
-            
-            <motion.div variants={itemVariants} className="bento-item">
-              <EnhancedQuickActionsCard onSectionChange={onSectionChange} />
+
+            {/* Quick Actions - Right Column */}
+            <motion.div variants={itemVariants} className="col-span-12 lg:col-span-4">
+              <QuickAccessCard onSectionChange={onSectionChange} />
             </motion.div>
-            
-            <motion.div variants={itemVariants} className="bento-item">
-              <RecentActivityCard onSectionChange={onSectionChange} />
+
+            {/* Activity Feed - Left */}
+            <motion.div variants={itemVariants} className="col-span-12 lg:col-span-8">
+              <ActivityFeedCard onSectionChange={onSectionChange} />
             </motion.div>
-            
-            {/* Enhanced User Progress Widget */}
-            <motion.div variants={itemVariants} className="col-span-full">
-              <div className="glass-card p-6 rounded-2xl border border-white/20 bg-gradient-to-r from-white/80 to-white/60 backdrop-blur-xl shadow-xl">
-                <UserProgressWidget />
-              </div>
+
+            {/* Community Highlights - Right */}
+            <motion.div variants={itemVariants} className="col-span-12 lg:col-span-4">
+              <CommunityHighlights trendingPosts={trendingPosts} onSectionChange={onSectionChange} />
             </motion.div>
           </motion.div>
         </motion.div>
