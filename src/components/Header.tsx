@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 import { Logo } from "./navigation/Logo";
 import { FloatingNavigation } from "./navigation/FloatingNavigation";
 import { FloatingActionButtons } from "./navigation/FloatingActionButtons";
@@ -14,6 +15,7 @@ const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
   const isScrolled = useScrollDetection(20);
   
   // Reset menu state on route change
@@ -45,11 +47,11 @@ const Header = () => {
     }
   };
 
-  const isLoggedIn = localStorage.getItem("sanghos_user") !== null;
+  const isLoggedIn = !!user;
   
-  const handleSignOut = () => {
-    localStorage.removeItem("sanghos_user");
-    window.location.href = "/";
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
   };
 
   const handleCommunityClick = (e: React.MouseEvent) => {

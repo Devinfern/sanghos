@@ -42,6 +42,7 @@ import Pricing from "./pages/Pricing";
 import Onboarding from "./pages/Onboarding";
 import NotFound from "./pages/NotFound";
 import WellnessJournalPage from "./pages/WellnessJournalPage";
+import AuthTest from "./pages/AuthTest";
 
 const queryClient = new QueryClient();
 
@@ -81,6 +82,7 @@ const App = () => (
               <Route path="/onboarding" element={<Onboarding />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
+              <Route path="/auth-test" element={<AuthTest />} />
               <Route path="/become-host" element={<BecomeHost />} />
               <Route path="/teach-with-us" element={<TeachWithUs />} />
               <Route path="/dashboard" element={
