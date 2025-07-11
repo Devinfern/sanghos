@@ -74,45 +74,49 @@ const CommunityContent = ({
   };
 
   return (
-    <div className="bg-gradient-to-b from-white to-brand-subtle/10 min-h-screen pt-16 pb-16">
+    <div className="min-h-screen">
       {/* Header Section - Only show for non-dashboard sections */}
       {activeSection !== "dashboard" && (
-        <div className="container px-4 md:px-6 mx-auto mt-4">
-          <div className="flex justify-between items-start mb-4">
-            <div className="flex-1">
-              <CommunityBreadcrumb activeSection={activeSection} />
-              <h1 className="text-2xl font-bold text-brand-dark mt-1">
-                {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
-              </h1>
-            </div>
-            <div className="flex gap-2 items-center ml-4">
-              <NotificationBell />
-              {isAdmin && (
-                <Button 
-                  variant="outline" 
-                  onClick={onToggleCMS}
-                  className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 rounded-full px-3 py-2 text-sm"
-                >
-                  <Settings className="h-4 w-4 mr-1" />
-                  Manage
-                </Button>
-              )}
+        <div className="bg-gradient-to-b from-white to-brand-subtle/10 pt-6 pb-4">
+          <div className="container px-4 md:px-6 mx-auto">
+            <div className="flex justify-between items-start mb-4">
+              <div className="flex-1">
+                <CommunityBreadcrumb activeSection={activeSection} />
+                <h1 className="text-2xl font-bold text-brand-dark mt-1">
+                  {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
+                </h1>
+              </div>
+              <div className="flex gap-2 items-center ml-4">
+                <NotificationBell />
+                {isAdmin && (
+                  <Button 
+                    variant="outline" 
+                    onClick={onToggleCMS}
+                    className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 rounded-full px-3 py-2 text-sm"
+                  >
+                    <Settings className="h-4 w-4 mr-1" />
+                    Manage
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </div>
       )}
 
       {/* Main Content - Full width for dashboard, contained for others */}
-      <div className={activeSection === "dashboard" ? "" : "container px-4 md:px-6 mx-auto"}>
-        <motion.div 
-          key={activeSection}
-          initial="hidden" 
-          animate="visible" 
-          variants={fadeInUp}
-          className={activeSection === "dashboard" ? "" : "bg-white/95 backdrop-blur-md border border-brand-subtle/10 p-6 rounded-xl shadow-sm"}
-        >
-          {renderActiveSection()}
-        </motion.div>
+      <div className={activeSection === "dashboard" ? "" : "bg-gradient-to-b from-white to-brand-subtle/10 pb-16"}>
+        <div className={activeSection === "dashboard" ? "" : "container px-4 md:px-6 mx-auto"}>
+          <motion.div 
+            key={activeSection}
+            initial="hidden" 
+            animate="visible" 
+            variants={fadeInUp}
+            className={activeSection === "dashboard" ? "" : "bg-white/95 backdrop-blur-md border border-brand-subtle/10 p-6 rounded-xl shadow-sm"}
+          >
+            {renderActiveSection()}
+          </motion.div>
+        </div>
       </div>
     </div>
   );
