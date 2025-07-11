@@ -1,7 +1,6 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import EnhancedCommunityNavigation from "./enhanced/EnhancedCommunityNavigation";
 import CommunityDiscussions from "./CommunityDiscussions";
 import CommunityEventsPage from "./CommunityEventsPage";
 import CommunityResourcesPage from "./CommunityResourcesPage";
@@ -46,6 +45,7 @@ const CommunityContent = ({
             currentEvents={currentEvents}
             trendingPosts={trendingPosts}
             onSectionChange={onSectionChange}
+            activeSection={activeSection}
           />
         );
       case "discussions":
@@ -58,6 +58,8 @@ const CommunityContent = ({
         return <CommunityMembersPage />;
       case "retreats":
         return <RetreatCommunityList />;
+      case "retreat-centers":
+        return <CommunityResourcesPage />; // Placeholder for now
       default:
         return (
           <ModernCommunityDashboard
@@ -65,6 +67,7 @@ const CommunityContent = ({
             currentEvents={currentEvents}
             trendingPosts={trendingPosts}
             onSectionChange={onSectionChange}
+            activeSection={activeSection}
           />
         );
     }
@@ -72,14 +75,6 @@ const CommunityContent = ({
 
   return (
     <div className="bg-gradient-to-b from-white to-brand-subtle/10 min-h-screen pt-16 pb-16">
-      {/* Navigation */}
-      <div className="bg-white/98 backdrop-blur-lg sticky top-16 z-30 border-b border-brand-subtle/20 shadow-sm">
-        <EnhancedCommunityNavigation 
-          activeSection={activeSection} 
-          onSectionChange={onSectionChange} 
-        />
-      </div>
-      
       {/* Header Section - Only show for non-dashboard sections */}
       {activeSection !== "dashboard" && (
         <div className="container px-4 md:px-6 mx-auto mt-4">

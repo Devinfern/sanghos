@@ -9,13 +9,15 @@ interface ModernCommunityDashboardProps {
   currentEvents: any[];
   trendingPosts: any[];
   onSectionChange: (section: string) => void;
+  activeSection: string;
 }
 
 const ModernCommunityDashboard = ({
   isLoggedIn,
   currentEvents,
   trendingPosts,
-  onSectionChange
+  onSectionChange,
+  activeSection
 }: ModernCommunityDashboardProps) => {
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -48,7 +50,10 @@ const ModernCommunityDashboard = ({
             variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }}
             className="col-span-12 lg:col-span-3"
           >
-            <DashboardLeftSidebar onSectionChange={onSectionChange} />
+            <DashboardLeftSidebar 
+              onSectionChange={onSectionChange} 
+              activeSection={activeSection}
+            />
           </motion.div>
 
           {/* Main Content */}
