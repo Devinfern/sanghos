@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Calendar, Users, MessageCircle, TrendingUp, Plus } from "lucide-react";
+import { Calendar, Users, MessageCircle, TrendingUp, UserCheck, MapPin, Coffee } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface DashboardRightSidebarProps {
@@ -16,34 +16,75 @@ const DashboardRightSidebar = ({
   trendingPosts, 
   onSectionChange 
 }: DashboardRightSidebarProps) => {
-  const activeMembers = [
-    { name: "Sarah Chen", avatar: "", status: "online", lastSeen: "2 min ago" },
-    { name: "Mike Johnson", avatar: "", status: "online", lastSeen: "5 min ago" },
-    { name: "Emma Wilson", avatar: "", status: "away", lastSeen: "1 hour ago" },
-    { name: "David Kim", avatar: "", status: "online", lastSeen: "Just now" },
+  const retreatAlumni = [
+    { 
+      name: "Sarah Chen", 
+      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b1e0?w=64&h=64&fit=crop&crop=face", 
+      retreatName: "Mindful Mountains", 
+      location: "Colorado",
+      completedDate: "Dec 2024",
+      isOnline: true
+    },
+    { 
+      name: "Marcus Johnson", 
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face", 
+      retreatName: "Desert Awakening", 
+      location: "Arizona",
+      completedDate: "Nov 2024",
+      isOnline: true
+    },
+    { 
+      name: "Luna Rodriguez", 
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face", 
+      retreatName: "Ocean Serenity", 
+      location: "California",
+      completedDate: "Oct 2024",
+      isOnline: false
+    },
+  ];
+
+  const practiceGroups = [
+    {
+      name: "Morning Meditation Circle",
+      members: 24,
+      nextSession: "Tomorrow 7:00 AM",
+      type: "Daily Practice"
+    },
+    {
+      name: "Integration Support Group",
+      members: 16,
+      nextSession: "Friday 6:00 PM",
+      type: "Weekly Support"
+    },
+    {
+      name: "Nature Connection",
+      members: 12,
+      nextSession: "Saturday 9:00 AM",
+      type: "Outdoor Practice"
+    }
   ];
 
   const quickActions = [
     { 
-      icon: MessageCircle, 
-      label: "Start Discussion", 
+      icon: UserCheck, 
+      label: "Find Retreat Buddy", 
       color: "text-blue-600",
       bgColor: "bg-blue-50",
-      onClick: () => onSectionChange("discussions")
-    },
-    { 
-      icon: Calendar, 
-      label: "Book Session", 
-      color: "text-green-600",
-      bgColor: "bg-green-50",
-      onClick: () => onSectionChange("events")
+      onClick: () => onSectionChange("connections")
     },
     { 
       icon: Users, 
-      label: "Find Members", 
+      label: "Join Practice Group", 
+      color: "text-green-600",
+      bgColor: "bg-green-50",
+      onClick: () => onSectionChange("practice-groups")
+    },
+    { 
+      icon: Coffee, 
+      label: "Local Chapter Meetup", 
       color: "text-purple-600",
       bgColor: "bg-purple-50",
-      onClick: () => onSectionChange("members")
+      onClick: () => onSectionChange("local-chapters")
     },
   ];
 
@@ -101,7 +142,7 @@ const DashboardRightSidebar = ({
         </Card>
       </motion.div>
 
-      {/* Active Members */}
+      {/* Retreat Alumni */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -111,18 +152,18 @@ const DashboardRightSidebar = ({
           <CardHeader className="pb-4">
             <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
               <Users className="h-5 w-5 mr-2 text-brand-primary" />
-              Active Members
+              Retreat Alumni
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {activeMembers.map((member, index) => (
+            {retreatAlumni.map((member, index) => (
               <motion.div
                 key={member.name}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 * index }}
                 className="flex items-center p-2 rounded-lg hover:bg-brand-subtle/20 transition-colors cursor-pointer"
-                onClick={() => onSectionChange("members")}
+                onClick={() => onSectionChange("alumni")}
               >
                 <div className="relative mr-3">
                   <Avatar className="h-8 w-8">
@@ -131,15 +172,16 @@ const DashboardRightSidebar = ({
                       {member.name.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
-                  <div className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white ${
-                    member.status === 'online' ? 'bg-green-500' : 'bg-gray-400'
-                  }`} />
+                  {member.isOnline && (
+                    <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white bg-green-500" />
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-sm text-gray-900 truncate">
                     {member.name}
                   </p>
-                  <p className="text-xs text-gray-500">{member.lastSeen}</p>
+                  <p className="text-xs text-gray-600">{member.retreatName}</p>
+                  <p className="text-xs text-gray-500">{member.location} • {member.completedDate}</p>
                 </div>
               </motion.div>
             ))}
@@ -147,9 +189,56 @@ const DashboardRightSidebar = ({
               variant="ghost" 
               size="sm" 
               className="w-full mt-2 text-brand-primary hover:text-brand-primary/80"
-              onClick={() => onSectionChange("members")}
+              onClick={() => onSectionChange("alumni")}
             >
-              View All Members
+              View Alumni Network
+            </Button>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Practice Groups */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+      >
+        <Card className="border-0 shadow-sm bg-white/90 backdrop-blur-sm">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
+              <MessageCircle className="h-5 w-5 mr-2 text-brand-rose" />
+              Practice Groups
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {practiceGroups.map((group, index) => (
+              <motion.div
+                key={group.name}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 * index }}
+                className="p-3 rounded-lg hover:bg-brand-subtle/20 transition-colors cursor-pointer"
+                onClick={() => onSectionChange("practice-groups")}
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <h4 className="font-medium text-sm text-gray-900">
+                    {group.name}
+                  </h4>
+                  <span className="text-xs bg-brand-subtle/50 text-brand-primary px-2 py-1 rounded-full">
+                    {group.members}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-600 mb-1">{group.type}</p>
+                <p className="text-xs text-gray-500">{group.nextSession}</p>
+              </motion.div>
+            ))}
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="w-full mt-2 text-brand-primary hover:text-brand-primary/80"
+              onClick={() => onSectionChange("practice-groups")}
+            >
+              View All Groups
             </Button>
           </CardContent>
         </Card>
@@ -159,13 +248,13 @@ const DashboardRightSidebar = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
+        transition={{ delay: 0.8 }}
       >
         <Card className="border-0 shadow-sm bg-white/90 backdrop-blur-sm">
           <CardHeader className="pb-4">
             <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
               <TrendingUp className="h-5 w-5 mr-2 text-brand-rose" />
-              Quick Actions
+              Community Actions
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">

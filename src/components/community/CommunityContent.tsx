@@ -60,6 +60,20 @@ const CommunityContent = ({
         return <RetreatCommunityList />;
       case "retreat-centers":
         return <CommunityResourcesPage />; // Placeholder for now
+      case "preparation":
+        return <CommunityResourcesPage />; // Placeholder for retreat preparation
+      case "connections":
+        return <CommunityMembersPage />; // Placeholder for fellow retreaters
+      case "integration":
+        return <CommunityResourcesPage />; // Placeholder for integration support
+      case "share":
+        return <CommunityDiscussions isLoggedIn={isLoggedIn} />; // Placeholder for sharing journey
+      case "alumni":
+        return <CommunityMembersPage />; // Placeholder for alumni network
+      case "practice-groups":
+        return <CommunityMembersPage />; // Placeholder for practice groups
+      case "local-chapters":
+        return <CommunityMembersPage />; // Placeholder for local chapters
       default:
         return (
           <ModernCommunityDashboard
@@ -83,7 +97,7 @@ const CommunityContent = ({
               <div className="flex-1">
                 <CommunityBreadcrumb activeSection={activeSection} />
                 <h1 className="text-2xl font-bold text-brand-dark mt-1">
-                  {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
+                  {activeSection.charAt(0).toUpperCase() + activeSection.slice(1).replace('-', ' ')}
                 </h1>
               </div>
               <div className="flex gap-2 items-center ml-4">

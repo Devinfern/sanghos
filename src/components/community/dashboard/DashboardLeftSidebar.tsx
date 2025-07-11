@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, Calendar, Sparkles, Users, MessageCircle, MapPin } from "lucide-react";
+import { BookOpen, Calendar, Sparkles, Users, MessageCircle, MapPin, CheckSquare, Heart } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface DashboardLeftSidebarProps {
@@ -27,6 +27,22 @@ const DashboardLeftSidebar = ({ onSectionChange, activeSection }: DashboardLeftS
       section: "resources"
     },
     {
+      icon: CheckSquare,
+      title: "Retreat Preparation",
+      subtitle: "Checklists & guides",
+      color: "text-purple-600",
+      bgColor: "bg-purple-50",
+      section: "preparation"
+    },
+    {
+      icon: Heart,
+      title: "Connect with Fellow Retreaters",
+      subtitle: "Find your retreat companions",
+      color: "text-pink-600",
+      bgColor: "bg-pink-50",
+      section: "connections"
+    },
+    {
       icon: MapPin,
       title: "Retreat Centers",
       subtitle: "Find locations",
@@ -37,7 +53,7 @@ const DashboardLeftSidebar = ({ onSectionChange, activeSection }: DashboardLeftS
     {
       icon: Calendar,
       title: "Retreats",
-      subtitle: "Upcoming experiences",
+      subtitle: "Your retreat journey",
       color: "text-green-600",
       bgColor: "bg-green-50",
       section: "retreats"
@@ -57,7 +73,7 @@ const DashboardLeftSidebar = ({ onSectionChange, activeSection }: DashboardLeftS
       <CardHeader className="pb-4">
         <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
           <Sparkles className="h-5 w-5 mr-2 text-brand-primary" />
-          Start Here
+          Your Retreat Journey
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
