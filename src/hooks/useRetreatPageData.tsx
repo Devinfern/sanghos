@@ -3,6 +3,7 @@ import { toast } from 'sonner';
 import { fetchSanghosRetreats } from '@/lib/data';
 import { fetchInsightLAEvents } from '@/lib/insightEvents';
 import { getUserLocation, sortByDistance, type UserLocation } from '@/lib/utils/distanceUtils';
+import { filterPastRetreats } from '@/lib/utils/dateUtils';
 
 export type ViewMode = 'grid' | 'list' | 'map';
 export type { UserLocation };
@@ -52,8 +53,12 @@ export const useRetreatPageData = () => {
           setInsightLALoadingError(true);
         }
         
-        const combinedRetreats = [...sanghoRetreats, ...insightLARetreats];
-        console.log(`Retreats page: Loaded a total of ${combinedRetreats.length} retreats`);
+        // Filter out past retreats
+        const futureSanghoRetreats = filterPastRetreats(sanghoRetreats);
+        const futureInsightLARetreats = filterPastRetreats(insightLARetreats);
+        
+        const combinedRetreats = [...futureSanghoRetreats, ...futureInsightLARetreats];
+        console.log(`Retreats page: Combined ${combinedRetreats.length} total future retreats (filtered ${sanghoRetreats.length + insightLARetreats.length - combinedRetreats.length} past retreats)`);
         
         setAllRetreats(combinedRetreats);
         setIsLoaded(true);

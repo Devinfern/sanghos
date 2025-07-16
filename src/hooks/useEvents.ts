@@ -11,6 +11,7 @@ import {
   transformInsightLARetreatToEvent
 } from "@/lib/transformers/eventTransformers";
 import { isPast, startOfDay, isValid, isSameDay } from "date-fns";
+import { filterPastRetreats, filterPastEvents } from "@/lib/utils/dateUtils";
 
 /**
  * Hook to fetch events from multiple sources
@@ -73,8 +74,15 @@ export function useEvents(location: string = "San Francisco, CA") {
           console.error('useEvents: Failed to fetch InsightLA events:', results[2].reason);
         }
         
+        // Filter out past retreats before processing
+        const futureSanghoRetreats = filterPastRetreats(sanghoRetreats);
+        const futureInsightLARetreats = filterPastRetreats(insightLARetreats);
+        
+        console.log(`useEvents: Filtered ${sanghoRetreats.length - futureSanghoRetreats.length} past Sanghos retreats`);
+        console.log(`useEvents: Filtered ${insightLARetreats.length - futureInsightLARetreats.length} past InsightLA retreats`);
+        
         // 1. Process featured retreats - explicitly filter the actual loaded data
-        const featuredRetreats = sanghoRetreats.filter(retreat => retreat.featured);
+        const featuredRetreats = futureSanghoRetreats.filter(retreat => retreat.featured);
         console.log(`useEvents: Found ${featuredRetreats.length} featured retreats after filtering`);
         
         // Transform each data source to Event format
@@ -90,32 +98,20 @@ export function useEvents(location: string = "San Francisco, CA") {
         
         // 3. Process InsightLA events
         let transformedInsightLAEvents: Event[] = [];
-        if (insightLARetreats && insightLARetreats.length > 0) {
-          console.log('useEvents: Processing InsightLA events data', insightLARetreats);
-          transformedInsightLAEvents = insightLARetreats.map(transformInsightLARetreatToEvent);
+        if (futureInsightLARetreats && futureInsightLARetreats.length > 0) {
+          console.log('useEvents: Processing InsightLA events data', futureInsightLARetreats);
+          transformedInsightLAEvents = futureInsightLARetreats.map(transformInsightLARetreatToEvent);
           console.log(`useEvents: Transformed ${transformedInsightLAEvents.length} InsightLA events`);
         } else {
-          console.warn('useEvents: No InsightLA events were loaded');
+          console.warn('useEvents: No future InsightLA events were loaded');
         }
         
         // Combine all events
         const allEvents = [...transformedRetreats, ...transformedForumEvents, ...transformedInsightLAEvents];
         console.log(`useEvents: Total events loaded: ${allEvents.length}`);
         
-        // Filter out past events
-        const today = startOfDay(new Date());
-        console.log('useEvents: Filtering events. Today is:', today.toISOString());
-        
-        const futureEvents = allEvents.filter(event => {
-          // Ensure event.startDate is a valid Date object before comparison
-          if (!event.startDate || !isValid(event.startDate)) {
-            console.warn('useEvents: Invalid startDate found for event:', event.id, event.startDate);
-            return false; // Exclude events with invalid dates
-          }
-          
-          // Include events where startDate is today or in the future
-          return isSameDay(event.startDate, today) || !isPast(event.startDate);
-        });
+        // Filter out past events (for forum events which use startDate format)
+        const futureEvents = filterPastEvents(allEvents);
         
         console.log(`useEvents: Total future events after filtering: ${futureEvents.length} (filtered out ${allEvents.length - futureEvents.length} past events)`);
         
