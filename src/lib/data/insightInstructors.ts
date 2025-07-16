@@ -82,5 +82,14 @@ export const insightInstructors: Record<string, Instructor> = {
     bio: "Experienced yoga and meditation teachers specializing in movement and breath work.",
     specialties: ["Yoga", "Breathwork", "Movement Therapy"],
     yearsExperience: 10
+  },
+  "instructor-3": {
+    id: "instructor-3",
+    name: "Alex Thompson",
+    title: "Gender-Affirming Mindfulness Teacher",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=60",
+    bio: "Alex is a gender-affirming mindfulness teacher specializing in creating safe spaces for gender-expansive communities. They bring 12 years of experience in trauma-informed meditation practices and community building.",
+    specialties: ["Gender-Affirming Practices", "Trauma-Informed Meditation", "Community Building", "Safe Space Facilitation"],
+    yearsExperience: 12
   }
 };
