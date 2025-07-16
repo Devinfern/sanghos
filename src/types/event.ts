@@ -38,4 +38,5 @@ export interface Event {
   organizer: Organizer;
   capacity?: number;
   remaining?: number;
+  featured?: boolean;
 }

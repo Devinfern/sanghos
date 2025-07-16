@@ -5,15 +5,19 @@ import { Event } from "@/types/event";
 import EventList from "@/components/EventList";
 import DateFilter, { DateFilterOption } from "@/components/DateFilter";
 import { startOfDay, getDay, isSameDay, isThisWeek, isToday, isTomorrow, startOfWeek, endOfWeek } from "date-fns";
+import { useSharedRetreatData } from "@/hooks/useSharedRetreatData";
 
 interface EventsSectionProps {
-  events: Event[];
-  isLoading: boolean;
+  showFeaturedOnly?: boolean;
 }
 
-const EventsSection: React.FC<EventsSectionProps> = ({ events, isLoading }) => {
+const EventsSection: React.FC<EventsSectionProps> = ({ showFeaturedOnly = false }) => {
+  const { allEvents, featuredEvents, isLoading } = useSharedRetreatData();
   const [selectedDateFilter, setSelectedDateFilter] = useState<DateFilterOption>('all');
   const [customDate, setCustomDate] = useState<Date | undefined>(undefined);
+
+  // Use featured events or all events based on prop
+  const events = showFeaturedOnly ? featuredEvents : allEvents;
 
   function isDateInThisWeekend(date: Date) {
     const day = getDay(date);

@@ -1,19 +1,19 @@
 import { useState, useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
-import { fetchSanghosRetreats } from '@/lib/data';
-import { fetchInsightLAEvents } from '@/lib/insightEvents';
+import { useSharedRetreatData } from '@/hooks/useSharedRetreatData';
 import { getUserLocation, sortByDistance, type UserLocation } from '@/lib/utils/distanceUtils';
-import { filterPastRetreats } from '@/lib/utils/dateUtils';
 
 export type ViewMode = 'grid' | 'list' | 'map';
 export type { UserLocation };
 
 export const useRetreatPageData = () => {
-  // Data state
-  const [allRetreats, setAllRetreats] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [isLoadingEvents, setIsLoadingEvents] = useState(true);
-  const [insightLALoadingError, setInsightLALoadingError] = useState(false);
+  // Use shared retreat data
+  const { allRetreats, isLoading, error } = useSharedRetreatData();
+  
+  // Derive loading states from shared data
+  const isLoaded = !isLoading;
+  const isLoadingEvents = isLoading;
+  const insightLALoadingError = error !== null;
 
   // Filter state
   const [searchQuery, setSearchQuery] = useState("");
@@ -35,43 +35,7 @@ export const useRetreatPageData = () => {
   const [previewRetreat, setPreviewRetreat] = useState(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
-  // Load data on mount
-  useEffect(() => {
-    const loadAllEvents = async () => {
-      try {
-        console.log("Retreats page: Loading events from all sources...");
-        
-        const sanghoRetreats = await fetchSanghosRetreats();
-        console.log(`Retreats page: Loaded ${sanghoRetreats.length} Sanghos retreats`);
-        
-        let insightLARetreats = [];
-        try {
-          insightLARetreats = await fetchInsightLAEvents();
-          console.log(`Retreats page: Loaded ${insightLARetreats.length} InsightLA retreats`);
-        } catch (insightError) {
-          console.error("Retreats page: Failed to load InsightLA retreats", insightError);
-          setInsightLALoadingError(true);
-        }
-        
-        // Filter out past retreats
-        const futureSanghoRetreats = filterPastRetreats(sanghoRetreats);
-        const futureInsightLARetreats = filterPastRetreats(insightLARetreats);
-        
-        const combinedRetreats = [...futureSanghoRetreats, ...futureInsightLARetreats];
-        console.log(`Retreats page: Combined ${combinedRetreats.length} total future retreats (filtered ${sanghoRetreats.length + insightLARetreats.length - combinedRetreats.length} past retreats)`);
-        
-        setAllRetreats(combinedRetreats);
-        setIsLoaded(true);
-        setIsLoadingEvents(false);
-      } catch (error) {
-        console.error("Retreats page: Error loading events", error);
-        setIsLoaded(true);
-        setIsLoadingEvents(false);
-      }
-    };
-    
-    loadAllEvents();
-  }, []);
+  // Data is now loaded from shared hook, no need for useEffect
 
   // Computed values
   const allCategories = Array.from(

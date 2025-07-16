@@ -16,10 +16,8 @@ import HomeCommunitySection from "@/components/home/HomeCommunitySection";
 import VendorsMarketplaceSection from "@/components/home/VendorsMarketplaceSection";
 import EventsSection from "@/components/sections/EventsSection";
 import Footer from "@/components/Footer";
-import { useEvents } from "@/hooks/useEvents";
 
 const Index = () => {
-  const { events, isLoading } = useEvents();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -67,7 +65,7 @@ const Index = () => {
           variants={containerVariants}
         >
           <motion.div variants={itemVariants}>
-            <EventsSection events={events} isLoading={isLoading} />
+            <EventsSection showFeaturedOnly={true} />
           </motion.div>
           
           <motion.div variants={itemVariants}>

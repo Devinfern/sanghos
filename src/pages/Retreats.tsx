@@ -2,7 +2,7 @@
 import { Helmet } from "react-helmet";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import FeaturedRetreatCenters from "@/components/FeaturedRetreatCenters";
+import FeaturedRetreats from "@/components/FeaturedRetreats";
 import { RetreatProvider } from "@/contexts/RetreatContext";
 import ComparisonBar from "@/components/retreats/ComparisonBar";
 import RetreatQuickPreview from "@/components/retreats/RetreatQuickPreview";
@@ -129,7 +129,7 @@ const Retreats = () => {
           />
         </div>
         
-        <FeaturedRetreatCenters />
+        <FeaturedRetreats />
         
         <ComparisonBar />
       </main>
