@@ -83,13 +83,31 @@ export const insightInstructors: Record<string, Instructor> = {
     specialties: ["Yoga", "Breathwork", "Movement Therapy"],
     yearsExperience: 10
   },
-  "instructor-3": {
-    id: "instructor-3",
-    name: "Alex Thompson",
-    title: "Gender-Affirming Mindfulness Teacher",
+  "fresh-lev-white": {
+    id: "fresh-lev-white",
+    name: "Fresh \"Lev\" White",
+    title: "Mindfulness Teacher",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=60",
-    bio: "Alex is a gender-affirming mindfulness teacher specializing in creating safe spaces for gender-expansive communities. They bring 12 years of experience in trauma-informed meditation practices and community building.",
-    specialties: ["Gender-Affirming Practices", "Trauma-Informed Meditation", "Community Building", "Safe Space Facilitation"],
+    bio: "Fresh \"Lev\" White is an experienced mindfulness teacher specializing in creating inclusive and affirming spaces for all communities.",
+    specialties: ["Mindfulness", "Community Building", "Inclusive Practices"],
+    yearsExperience: 10
+  },
+  "jd-doyle": {
+    id: "jd-doyle",
+    name: "JD Doyle, MA",
+    title: "Visiting Teacher",
+    image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500&auto=format&fit=crop&q=60",
+    bio: "JD Doyle, MA is a visiting teacher with extensive experience in mindfulness and community-centered practices.",
+    specialties: ["Mindfulness", "Community Work", "Visiting Teacher"],
     yearsExperience: 12
+  },
+  "rene-rivera": {
+    id: "rene-rivera",
+    name: "René Rivera",
+    title: "Mindfulness Instructor",
+    image: "https://images.unsplash.com/photo-1494790108755-2616c96344ce?w=500&auto=format&fit=crop&q=60",
+    bio: "René Rivera is a dedicated mindfulness instructor with a passion for creating safe and welcoming spaces for diverse communities.",
+    specialties: ["Mindfulness", "Safe Space Creation", "Community Support"],
+    yearsExperience: 8
   }
 };

@@ -43,5 +43,12 @@ export const insightLocations: Record<string, Location> = {
     city: "Venice",
     state: "CA",
     description: "A welcoming recovery and meditation center in Venice, Los Angeles"
+  },
+  "big-bear-retreat-center": {
+    name: "Big Bear Retreat Center",
+    address: "Big Bear Retreat Center",
+    city: "Big Bear Lake",
+    state: "CA",
+    description: "A tranquil mountain retreat center nestled in the San Bernardino Mountains"
   }
 };
