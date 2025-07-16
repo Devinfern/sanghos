@@ -234,5 +234,41 @@ export const insightRetreatData = [
       website: "https://trinitychurchnyc.org"
     },
     source: "InsightLA"
+  },
+  {
+    id: "insightla-creating-refuge-gender-expansive-july-2025",
+    title: "Creating Refuge in Community: A Retreat for Gender-Expansive Communities",
+    description: "This retreat offers a safe and affirming space for gender-expansive individuals to explore mindfulness, self-compassion, and community connection. We'll practice meditation, engage in gentle movement, and cultivate practices that support identity affirmation and healing within a supportive community environment.",
+    image: "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?q=80&w=2070&auto=format&fit=crop",
+    additionalImages: [
+      "https://images.unsplash.com/photo-1521543387187-abbfacb0bb17?q=80&w=2070&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2070&auto=format&fit=crop"
+    ],
+    location: insightLocations["insightla-retreat-center"],
+    instructor: insightInstructors["instructor-3"],
+    date: "2025-07-16",
+    time: "2:00 PM",
+    duration: "4 hours",
+    price: 65,
+    capacity: 20,
+    remaining: 16,
+    category: ["Community", "Gender-Expansive", "Mindfulness", "Safe Space"],
+    amenities: [
+      "All-gender restrooms",
+      "Affirming community space",
+      "Trauma-informed practices",
+      "Sliding scale pricing available",
+      "Light refreshments",
+      "Resource materials"
+    ],
+    featured: true,
+    isSanghos: false,
+    sourceUrl: "https://insightla.org/event/in-person-creating-refuge-in-community-a-retreat-for-gender-expansive-communities/2025-07-16-14-00/",
+    bookingUrl: "https://insightla.org/event/in-person-creating-refuge-in-community-a-retreat-for-gender-expansive-communities/2025-07-16-14-00/",
+    organizer: {
+      name: "InsightLA",
+      website: "https://insightla.org"
+    },
+    source: "InsightLA"
   }
 ];
