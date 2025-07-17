@@ -1,6 +1,7 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -20,6 +21,77 @@ serve(async (req) => {
       throw new Error("OpenAI API key is not configured");
     }
 
+    // Initialize Supabase client
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+    // Fetch live retreat data
+    const { data: liveRetreats, error: retreatsError } = await supabase
+      .from('retreats')
+      .select('*')
+      .gte('date', new Date().toISOString().split('T')[0]) // Only future retreats
+      .order('date', { ascending: true });
+
+    if (retreatsError) {
+      console.error('Error fetching retreats:', retreatsError);
+    }
+
+    // Include partner retreat data (InsightLA)
+    const partnerRetreats = [
+      {
+        id: "nyimc-day-of-insight-july-2025",
+        title: "Day of Insight – A Daylong Meditation Retreat",
+        description: "A special in-person or online daylong silent meditation retreat for those who want to reconnect and deepen their practice",
+        location_city: "New York",
+        location_state: "NY",
+        date: "2025-07-19",
+        time: "10:00 AM ET",
+        duration: "7 hours",
+        price: 50,
+        category: ["Meditation", "Silent Retreat", "Mindfulness"],
+        source: "InsightLA"
+      },
+      {
+        id: "ada-yoga-mindfulness-movement-august-2025",
+        title: "Daylong Mindfulness + Movement Retreat",
+        description: "A day dedicated to self-care, reflection, and rejuvenation including yoga practices and myofascial release",
+        location_city: "Mill Valley",
+        location_state: "CA",
+        date: "2025-08-31",
+        time: "9:00 AM PT",
+        duration: "8.5 hours",
+        price: 180,
+        category: ["Yoga", "Mindfulness", "Movement"],
+        source: "InsightLA"
+      },
+      {
+        id: "insightla-creating-refuge-gender-expansive-july-2025",
+        title: "Creating Refuge in Community: A Retreat for Gender-Expansive Communities",
+        description: "A safe and affirming space for gender-expansive individuals to explore mindfulness and self-compassion",
+        location_city: "Big Bear",
+        location_state: "CA", 
+        date: "2025-07-16",
+        time: "Check-in Wednesday",
+        duration: "4 nights (Wed-Sun)",
+        price: 450,
+        category: ["Community", "Gender-Expansive", "Mindfulness"],
+        source: "InsightLA"
+      }
+    ];
+
+    // Combine all retreats
+    const allRetreats = [...(liveRetreats || []), ...partnerRetreats];
+    
+    // Format retreat data for AI
+    const retreatDatabase = allRetreats.map((retreat, index) => {
+      const categories = Array.isArray(retreat.category) ? retreat.category.join(', ') : (retreat.category || 'Wellness');
+      const locationStr = `${retreat.location_city}, ${retreat.location_state}`;
+      const priceStr = retreat.price ? `$${retreat.price}` : 'Contact for pricing';
+      
+      return `${index + 1}. ${retreat.title} (${retreat.id}): ${retreat.description}. Location: ${locationStr}. Date: ${retreat.date}. Duration: ${retreat.duration}. Price: ${priceStr}. Categories: ${categories}`;
+    }).join('\n');
+
     let systemPrompt = '';
     let userPrompt = '';
 
@@ -28,35 +100,44 @@ serve(async (req) => {
 
 Your capabilities:
 - Understand user wellness needs, preferences, and constraints
-- Recommend retreats from our database and partner networks
+- Recommend retreats from our database and partner networks (including InsightLA)
 - Ask clarifying questions to better understand user requirements
 - Extract structured preferences from natural conversation
-- Provide personalized match scores and explanations
+- Provide personalized match scores (1-100) and explanations
+- Consider location, budget, dates, interests, and experience level
 
-Retreat Database:
-1. Weekend Mindfulness Immersion (ret-1): Meditation, mindfulness, stress reduction
-2. Sound Healing Journey (ret-2): Sound therapy, breathwork, relaxation
-3. Forest Qigong Retreat (ret-3): Nature connection, gentle movement, forest settings
-4. Mountain Yoga Escape (ret-4): Yoga, meditation, mountain settings
+Current Retreat Database:
+${retreatDatabase}
 
 Conversation Style:
 - Warm, knowledgeable, and helpful
 - Ask 1-2 follow-up questions per response
-- Focus on understanding: budget, location preferences, duration, group size, experience level
+- Focus on understanding: budget, location preferences, duration, group size, experience level, specific interests
 - Suggest specific retreats when you have enough information
+- Always include match scores (1-100) and clear reasons for recommendations
+- Consider real-time availability and current pricing
 
 Location context: User is near ${userLocation}
 
-Response format: JSON with message, recommendations array, followUpQuestions array, and extractedPreferences object.`;
+Response format: JSON with message, recommendations array (with retreatId, title, matchScore, reason, location, date, time, description, price, duration, category), followUpQuestions array, and extractedPreferences object.`;
 
       const conversationContext = messages.map((msg: any) => 
         `${msg.role}: ${msg.content}`
       ).join('\n');
 
-      userPrompt = `Conversation so far:\n${conversationContext}\n\nProvide a helpful response with retreat recommendations if appropriate, follow-up questions, and extracted preferences.`;
+      userPrompt = `Conversation so far:\n${conversationContext}\n\nBased on the retreat database above and this conversation, provide a helpful response with specific retreat recommendations if you have enough information about the user's preferences. Include match scores and clear reasoning. If you need more information, ask relevant follow-up questions.`;
     } else if (requestType === 'followup') {
-      systemPrompt = `Generate 2-3 relevant follow-up questions to better understand the user's retreat preferences. Focus on aspects not yet covered in the conversation.`;
+      systemPrompt = `Generate 2-3 relevant follow-up questions to better understand the user's retreat preferences. Focus on aspects not yet covered in the conversation like budget, location preferences, experience level, specific interests, or scheduling.`;
       userPrompt = `Based on this conversation and current preferences, what questions should I ask next?\nConversation: ${JSON.stringify(messages)}\nPreferences: ${JSON.stringify(preferences)}`;
+    } else if (requestType === 'search') {
+      // Handle direct search requests
+      systemPrompt = `You are a retreat recommendation engine. Based on the user's preferences, recommend the most suitable retreats from the database with match scores and explanations.
+
+Current Retreat Database:
+${retreatDatabase}
+
+Provide recommendations in JSON format with detailed match scores and reasoning.`;
+      userPrompt = `User preferences: ${JSON.stringify(preferences)}\nUser location: ${userLocation}\n\nRecommend the best matching retreats with scores and explanations.`;
     }
 
     console.log('Sending request to OpenAI with model: gpt-4o-mini');

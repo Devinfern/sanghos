@@ -16,6 +16,8 @@ export interface RetreatRecommendation {
   category?: string[];
   price?: number;
   duration?: string;
+  source?: string;
+  bookingUrl?: string;
 }
 
 export interface AIResponse {
@@ -62,6 +64,11 @@ export class AIRetreatFinderService {
 
       if (error) throw error;
 
+      // Enhance recommendations with additional data if available
+      if (data.recommendations) {
+        data.recommendations = await this.enhanceRecommendations(data.recommendations);
+      }
+
       return data;
     } catch (error) {
       console.error('Error analyzing conversation:', error);
@@ -104,10 +111,45 @@ export class AIRetreatFinderService {
       });
 
       if (error) throw error;
-      return data.recommendations || [];
+      
+      const recommendations = data.recommendations || [];
+      return await this.enhanceRecommendations(recommendations);
     } catch (error) {
       console.error('Error finding similar retreats:', error);
       return [];
+    }
+  }
+
+  // New method to enhance recommendations with additional metadata
+  private async enhanceRecommendations(recommendations: RetreatRecommendation[]): Promise<RetreatRecommendation[]> {
+    return recommendations.map(rec => {
+      // Add booking URLs and images based on source
+      if (rec.source === 'InsightLA') {
+        rec.image = rec.image || this.getDefaultImageForCategory(rec.category);
+        rec.bookingUrl = rec.url || 'https://insightla.org';
+      } else {
+        // For Sanghos retreats, generate appropriate URLs
+        rec.bookingUrl = rec.url || `/retreat/${rec.retreatId}`;
+        rec.image = rec.image || this.getDefaultImageForCategory(rec.category);
+      }
+      
+      return rec;
+    });
+  }
+
+  private getDefaultImageForCategory(category?: string[]): string {
+    if (!category || category.length === 0) return '/lovable-uploads/17bc5976-d935-434d-807f-a14574abd422.png';
+    
+    const primaryCategory = category[0].toLowerCase();
+    
+    if (primaryCategory.includes('meditation') || primaryCategory.includes('mindfulness')) {
+      return '/lovable-uploads/17bc5976-d935-434d-807f-a14574abd422.png';
+    } else if (primaryCategory.includes('yoga') || primaryCategory.includes('movement')) {
+      return '/lovable-uploads/9f0938ba-7408-4146-aa4f-fc5a780ef721.png';
+    } else if (primaryCategory.includes('sound') || primaryCategory.includes('healing')) {
+      return '/lovable-uploads/fa3f6f2b-dad3-4ff9-a13f-a7753609b9f1.png';
+    } else {
+      return '/lovable-uploads/f0037ad0-9984-49e7-8f7f-cdb9a489329b.png';
     }
   }
 }
