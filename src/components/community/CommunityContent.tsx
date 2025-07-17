@@ -89,8 +89,8 @@ const CommunityContent = ({
 
   return (
     <div className="min-h-screen">
-      {/* Header Section - Only show for non-dashboard sections on desktop */}
-      {activeSection !== "dashboard" && (
+      {/* Header Section - Only show for non-dashboard and non-discussions sections on desktop */}
+      {activeSection !== "dashboard" && activeSection !== "discussions" && (
         <div className="bg-gradient-to-b from-white to-brand-subtle/10 pt-20 pb-4 hidden md:block">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="flex justify-between items-start mb-4">
@@ -118,15 +118,44 @@ const CommunityContent = ({
         </div>
       )}
 
-      {/* Main Content - Full width for dashboard on desktop, mobile-optimized for mobile */}
-      <div className={activeSection === "dashboard" ? "hidden md:block" : "bg-gradient-to-b from-white to-brand-subtle/10 pb-16 hidden md:block"}>
-        <div className={activeSection === "dashboard" ? "" : "container px-4 md:px-6 mx-auto"}>
+      {/* Admin Controls for Discussions */}
+      {activeSection === "discussions" && isAdmin && (
+        <div className="fixed top-24 right-8 z-50 hidden md:flex gap-2 items-center">
+          <NotificationBell />
+          <Button 
+            variant="outline" 
+            onClick={onToggleCMS}
+            className="border-brand-primary text-brand-primary hover:bg-brand-primary/5 rounded-full px-3 py-2 text-sm shadow-sm"
+          >
+            <Settings className="h-4 w-4 mr-1" />
+            Manage
+          </Button>
+        </div>
+      )}
+
+      {/* Main Content - Adjusted for discussions section */}
+      <div className={
+        activeSection === "dashboard" 
+          ? "hidden md:block" 
+          : activeSection === "discussions"
+            ? "md:block" 
+            : "bg-gradient-to-b from-white to-brand-subtle/10 pb-16 hidden md:block"
+      }>
+        <div className={
+          activeSection === "dashboard" || activeSection === "discussions" 
+            ? "" 
+            : "container px-4 md:px-6 mx-auto"
+        }>
           <motion.div 
             key={activeSection}
             initial="hidden" 
             animate="visible" 
             variants={fadeInUp}
-            className={activeSection === "dashboard" ? "" : "bg-white/95 backdrop-blur-md border border-brand-subtle/10 p-6 rounded-xl shadow-sm"}
+            className={
+              activeSection === "dashboard" || activeSection === "discussions" 
+                ? "" 
+                : "bg-white/95 backdrop-blur-md border border-brand-subtle/10 p-6 rounded-xl shadow-sm"
+            }
           >
             {renderActiveSection()}
           </motion.div>
@@ -140,7 +169,7 @@ const CommunityContent = ({
           initial="hidden" 
           animate="visible" 
           variants={fadeInUp}
-          className="p-4"
+          className={activeSection === "discussions" ? "" : "p-4"}
         >
           {renderActiveSection()}
         </motion.div>
