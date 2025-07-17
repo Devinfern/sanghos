@@ -15,6 +15,7 @@ import HomeWellnessProperties from "@/components/home/HomeWellnessProperties";
 import HomeCommunitySection from "@/components/home/HomeCommunitySection";
 import VendorsMarketplaceSection from "@/components/home/VendorsMarketplaceSection";
 import EventsSection from "@/components/sections/EventsSection";
+import AIRetreatFinderWidget from "@/components/ai/AIRetreatFinderWidget";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -57,6 +58,13 @@ const Index = () => {
       
       <main className="overflow-hidden">
         <HomeHero />
+        
+        {/* AI Retreat Finder - Featured Placement */}
+        <section className="py-16 bg-gradient-to-b from-white to-sage-50/30">
+          <div className="container px-4 md:px-6">
+            <AIRetreatFinderWidget variant="featured" />
+          </div>
+        </section>
         
         <motion.div 
           className="overflow-hidden"

@@ -4,6 +4,7 @@ import { Tag, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BookingSection from "./BookingSection";
 import InstructorSection from "./InstructorSection";
+import FindSimilarRetreats from "@/components/ai/FindSimilarRetreats";
 
 interface RetreatContentPanelProps {
   retreat: any;
@@ -53,6 +54,9 @@ const RetreatContentPanel = ({ retreat, isVisible }: RetreatContentPanelProps) =
         )}
 
         <InstructorSection instructor={retreat.instructor} />
+
+        {/* AI-Powered Similar Retreats */}
+        <FindSimilarRetreats currentRetreat={retreat} />
 
         {/* Original Event Link */}
         {retreat.sourceUrl && (

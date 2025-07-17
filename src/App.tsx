@@ -19,6 +19,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import BlogPostMindfulnessNews from "./pages/BlogPostMindfulnessNews";
 import BlogPostWellnessRetreats from "./pages/BlogPostWellnessRetreats";
+import AIRetreatFinderPage from "./pages/AIRetreatFinderPage";
 import BlogPostBreathingTechniques from "./pages/BlogPostBreathingTechniques";
 import BlogPostForestBathing from "./pages/BlogPostForestBathing";
 import BlogPostMeditationPrep from "./pages/BlogPostMeditationPrep";
@@ -57,7 +58,7 @@ const App = () => (
             <ScrollToTop />
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/ai-retreat-finder" element={<WellnessJournalPage />} />
+              <Route path="/ai-retreat-finder" element={<AIRetreatFinderPage />} />
               <Route path="/retreats" element={<Retreats />} />
               <Route path="/retreats/:id" element={<Retreat />} />
               <Route path="/retreat/:id" element={<RetreatDetails />} />
