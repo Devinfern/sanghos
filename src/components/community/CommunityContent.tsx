@@ -89,9 +89,9 @@ const CommunityContent = ({
 
   return (
     <div className="min-h-screen">
-      {/* Header Section - Only show for non-dashboard sections */}
+      {/* Header Section - Only show for non-dashboard sections on desktop */}
       {activeSection !== "dashboard" && (
-        <div className="bg-gradient-to-b from-white to-brand-subtle/10 pt-6 pb-4">
+        <div className="bg-gradient-to-b from-white to-brand-subtle/10 pt-6 pb-4 hidden md:block">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="flex justify-between items-start mb-4">
               <div className="flex-1">
@@ -118,8 +118,8 @@ const CommunityContent = ({
         </div>
       )}
 
-      {/* Main Content - Full width for dashboard, contained for others */}
-      <div className={activeSection === "dashboard" ? "" : "bg-gradient-to-b from-white to-brand-subtle/10 pb-16"}>
+      {/* Main Content - Full width for dashboard on desktop, mobile-optimized for mobile */}
+      <div className={activeSection === "dashboard" ? "hidden md:block" : "bg-gradient-to-b from-white to-brand-subtle/10 pb-16 hidden md:block"}>
         <div className={activeSection === "dashboard" ? "" : "container px-4 md:px-6 mx-auto"}>
           <motion.div 
             key={activeSection}
@@ -131,6 +131,19 @@ const CommunityContent = ({
             {renderActiveSection()}
           </motion.div>
         </div>
+      </div>
+
+      {/* Mobile Content - Full width, simplified */}
+      <div className="md:hidden">
+        <motion.div 
+          key={activeSection}
+          initial="hidden" 
+          animate="visible" 
+          variants={fadeInUp}
+          className="p-4"
+        >
+          {renderActiveSection()}
+        </motion.div>
       </div>
     </div>
   );

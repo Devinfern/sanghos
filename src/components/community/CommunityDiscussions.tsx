@@ -6,8 +6,9 @@ import CreatePost from "./CreatePost";
 import CommunityPost from "./CommunityPost";
 import CommunitySearchFilter from "./CommunitySearchFilter";
 import ForumTopics from "./ForumTopics";
+import UnifiedMessaging from "./UnifiedMessaging";
 import { useCommunityPosts } from "@/hooks/useCommunityPosts";
-import { Users, PanelLeft, Loader2 } from "lucide-react";
+import { Users, PanelLeft, Loader2, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface CommunityDiscussionsProps {
@@ -53,10 +54,17 @@ const CommunityDiscussions = ({ isLoggedIn }: CommunityDiscussionsProps) => {
               <Users className="h-4 w-4" />
               <span>Topics</span>
             </TabsTrigger>
+            <TabsTrigger 
+              value="chat" 
+              className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-brand-primary"
+            >
+              <MessageCircle className="h-4 w-4" />
+              <span>Chat</span>
+            </TabsTrigger>
           </TabsList>
 
           {isLoggedIn && (
-            <div className="w-auto">
+            <div className="w-auto hidden md:block">
               <CreatePost onPostCreated={fetchPosts} />
             </div>
           )}
@@ -111,6 +119,22 @@ const CommunityDiscussions = ({ isLoggedIn }: CommunityDiscussionsProps) => {
 
         <TabsContent value="topics">
           <ForumTopics />
+        </TabsContent>
+
+        <TabsContent value="chat">
+          <div className="space-y-4">
+            <Card className="p-4">
+              <h3 className="text-lg font-semibold mb-4">Community Chat</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Connect with fellow community members in real-time
+              </p>
+              <UnifiedMessaging
+                channelId="community-general"
+                placeholder="Share your thoughts with the community..."
+                className="h-96"
+              />
+            </Card>
+          </div>
         </TabsContent>
       </Tabs>
     </div>

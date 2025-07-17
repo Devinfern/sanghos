@@ -3,6 +3,7 @@ import { forumEvents, trendingPosts, loadForumEvents, loadTrendingPosts } from "
 import CommunityLayout from "@/components/layouts/CommunityLayout";
 import CommunityContent from "@/components/community/CommunityContent";
 import CommunityManagement from "@/components/community/CommunityManagement";
+import MobileCommunityLayout from "@/components/community/MobileCommunityLayout";
 import { useAdminStatus } from "@/hooks/useAdminStatus";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -111,17 +112,38 @@ const CommunityPage = () => {
   }
 
   return (
-    <CommunityLayout>
-      <CommunityContent
-        isAdmin={isAdmin}
-        isLoggedIn={isLoggedIn}
+    <>
+      {/* Desktop Layout */}
+      <CommunityLayout>
+        <CommunityContent
+          isAdmin={isAdmin}
+          isLoggedIn={isLoggedIn}
+          activeSection={activeSection}
+          currentEvents={currentEvents}
+          trendingPosts={currentTrendingPosts}
+          onSectionChange={setActiveSection}
+          onToggleCMS={toggleCMS}
+        />
+      </CommunityLayout>
+
+      {/* Mobile Layout */}
+      <MobileCommunityLayout
         activeSection={activeSection}
-        currentEvents={currentEvents}
-        trendingPosts={currentTrendingPosts}
         onSectionChange={setActiveSection}
-        onToggleCMS={toggleCMS}
-      />
-    </CommunityLayout>
+        showSearch={activeSection === 'discussions'}
+        showMessaging={activeSection === 'discussions'}
+      >
+        <CommunityContent
+          isAdmin={isAdmin}
+          isLoggedIn={isLoggedIn}
+          activeSection={activeSection}
+          currentEvents={currentEvents}
+          trendingPosts={currentTrendingPosts}
+          onSectionChange={setActiveSection}
+          onToggleCMS={toggleCMS}
+        />
+      </MobileCommunityLayout>
+    </>
   );
 };
 

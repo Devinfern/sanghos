@@ -24,13 +24,15 @@ const CommunityLayout = ({ children, title = "Community", showCMS = false }: Com
         <meta name="description" content="Join our wellness community for discussions, events, and more" />
       </Helmet>
 
-      <Header />
+      <div className="hidden md:block">
+        <Header />
+      </div>
 
       <motion.main 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="min-h-screen bg-white pt-16"
+        className="min-h-screen bg-white pt-16 hidden md:block"
       >
         {showCMS ? (
           <div className="pt-16">{children}</div>
@@ -39,7 +41,9 @@ const CommunityLayout = ({ children, title = "Community", showCMS = false }: Com
         )}
       </motion.main>
 
-      <Footer />
+      <div className="hidden md:block">
+        <Footer />
+      </div>
     </>
   );
 };
