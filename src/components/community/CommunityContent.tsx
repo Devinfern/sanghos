@@ -91,7 +91,7 @@ const CommunityContent = ({
     <div className="min-h-screen">
       {/* Header Section - Only show for non-dashboard sections on desktop */}
       {activeSection !== "dashboard" && (
-        <div className="bg-gradient-to-b from-white to-brand-subtle/10 pt-6 pb-4 hidden md:block">
+        <div className="bg-gradient-to-b from-white to-brand-subtle/10 pt-20 pb-4 hidden md:block">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="flex justify-between items-start mb-4">
               <div className="flex-1">
