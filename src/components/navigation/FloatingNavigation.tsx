@@ -22,50 +22,75 @@ interface MegaMenuSection {
 const megaMenuData: Record<string, MegaMenuSection[]> = {
   retreats: [
     {
-      title: "Find Retreats",
+      title: "Browse Retreats",
       items: [
         {
-          title: "AI Retreat Finder",
-          description: "Let AI match you with your perfect retreat",
-          href: "/ai-retreat-finder",
-          icon: Star,
-          badge: "New"
-        },
-        {
           title: "All Retreats",
-          description: "Browse our full collection of wellness retreats",
+          description: "Explore our full collection of wellness retreats",
           href: "/retreats",
           icon: Calendar
         },
         {
-          title: "Featured Retreats",
-          description: "Handpicked premium wellness experiences",
+          title: "Sanghos Retreats",
+          description: "Curated experiences in unique private spaces",
           href: "/retreats?tab=sanghos",
-          icon: Heart,
-          badge: "Curated"
+          icon: Star,
+          badge: "Featured"
+        },
+        {
+          title: "Partner Retreats",
+          description: "Retreats from our trusted wellness partners",
+          href: "/retreats?tab=thirdparty",
+          icon: Heart
+        },
+        {
+          title: "Find Vendors",
+          description: "Discover vendors for your perfect retreat",
+          href: "/vendors-marketplace-teaser",
+          icon: MapPin,
+          badge: "Coming Soon"
         }
       ]
     },
     {
-      title: "By Type",
+      title: "Popular Categories",
       items: [
         {
           title: "Mindfulness",
-          description: "Meditation and mindfulness practices",
+          description: "Find peace through guided meditation",
           href: "/retreats?category=Mindfulness",
           icon: Heart
         },
         {
           title: "Yoga",
-          description: "Movement and breath-focused retreats",
+          description: "Movement and breath practices",
           href: "/retreats?category=Yoga",
           icon: Users
         },
         {
           title: "Wellness",
-          description: "Holistic health and wellbeing experiences",
+          description: "Holistic health and wellbeing",
           href: "/retreats?category=Wellness",
           icon: Star
+        }
+      ]
+    }
+  ],
+  insights: [
+    {
+      title: "Learn & Grow",
+      items: [
+        {
+          title: "All Insights",
+          description: "Latest wellness articles and guides",
+          href: "/blog",
+          icon: BookOpen
+        },
+        {
+          title: "Mindfulness News",
+          description: "Stay updated with mindfulness trends",
+          href: "/blog/mindfulness-news",
+          icon: Heart
         }
       ]
     }
@@ -76,14 +101,14 @@ const megaMenuData: Record<string, MegaMenuSection[]> = {
       items: [
         {
           title: "Community Hub",
-          description: "Connect with wellness enthusiasts",
+          description: "Connect with like-minded wellness enthusiasts",
           href: "/community",
           icon: Users,
           badge: "Members Only"
         },
         {
           title: "Community Preview",
-          description: "See what our community offers",
+          description: "See what our community is all about",
           href: "/community-teaser",
           icon: Heart
         }
@@ -168,7 +193,8 @@ export const FloatingNavigation = ({ isLoggedIn, onCommunityClick }: FloatingNav
   }, []);
 
   const navItems = [
-    { id: "retreats", label: "Find Retreats", hasDropdown: true },
+    { id: "retreats", label: "Retreats", hasDropdown: true },
+    { id: "insights", label: "Insights", hasDropdown: true },
     { id: "community", label: "Community", hasDropdown: true, onClick: onCommunityClick },
     { id: "about", label: "About", hasDropdown: true }
   ];

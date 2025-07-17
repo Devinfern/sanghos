@@ -26,14 +26,20 @@ export const EnhancedMobileMenu = ({
   const menuSections = [
     {
       id: "retreats",
-      title: "Find Retreats",
+      title: "Retreats",
       items: [
-        { title: "AI Retreat Finder", href: "/ai-retreat-finder", badge: "New" },
         { title: "All Retreats", href: "/retreats" },
-        { title: "Featured Retreats", href: "/retreats?tab=sanghos" },
-        { title: "Mindfulness", href: "/retreats?category=Mindfulness" },
-        { title: "Yoga", href: "/retreats?category=Yoga" },
-        { title: "Wellness", href: "/retreats?category=Wellness" },
+        { title: "Sanghos Retreats", href: "/retreats?tab=sanghos" },
+        { title: "Partner Retreats", href: "/retreats?tab=thirdparty" },
+        { title: "Find Vendors", href: "/vendors-marketplace-teaser", badge: "Coming Soon" },
+      ]
+    },
+    {
+      id: "insights",
+      title: "Insights",
+      items: [
+        { title: "All Insights", href: "/blog" },
+        { title: "Mindfulness News", href: "/blog/mindfulness-news" },
       ]
     },
     {
