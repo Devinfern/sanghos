@@ -14,7 +14,7 @@ serve(async (req) => {
   }
 
   try {
-    const { messages, userLocation, requestType, preferences } = await req.json();
+    const { messages, userLocation, requestType, preferences, query, previousPreferences, conversationContext } = await req.json();
     
     const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
     if (!OPENAI_API_KEY) {
@@ -83,14 +83,57 @@ serve(async (req) => {
     // Combine all retreats
     const allRetreats = [...(liveRetreats || []), ...partnerRetreats];
     
-    // Format retreat data for AI
+    // Enhanced retreat data formatting for AI with semantic context
     const retreatDatabase = allRetreats.map((retreat, index) => {
       const categories = Array.isArray(retreat.category) ? retreat.category.join(', ') : (retreat.category || 'Wellness');
       const locationStr = `${retreat.location_city}, ${retreat.location_state}`;
       const priceStr = retreat.price ? `$${retreat.price}` : 'Contact for pricing';
+      const availabilityStr = retreat.remaining ? `${retreat.remaining} spots remaining` : 'Availability unknown';
       
-      return `${index + 1}. ${retreat.title} (${retreat.id}): ${retreat.description}. Location: ${locationStr}. Date: ${retreat.date}. Duration: ${retreat.duration}. Price: ${priceStr}. Categories: ${categories}`;
-    }).join('\n');
+      return `${index + 1}. ID: ${retreat.id}
+Title: ${retreat.title}
+Description: ${retreat.description}
+Location: ${locationStr}
+Date: ${retreat.date}
+Time: ${retreat.time}
+Duration: ${retreat.duration}
+Price: ${priceStr}
+Categories: ${categories}
+Availability: ${availabilityStr}
+Source: ${retreat.source || 'Sanghos'}`;
+    }).join('\n\n');
+
+    // Helper function to calculate distance score (simplified)
+    const calculateLocationScore = (userLocation: string, retreatLocation: string) => {
+      const userLower = userLocation.toLowerCase();
+      const retreatLower = retreatLocation.toLowerCase();
+      
+      // Extract state/region for matching
+      const userState = userLower.split(',').pop()?.trim();
+      const retreatState = retreatLower.split(',').pop()?.trim();
+      
+      if (userState === retreatState) return 90; // Same state
+      if (userLower.includes('ca') && retreatLower.includes('ca')) return 85;
+      if (userLower.includes('ny') && retreatLower.includes('ny')) return 85;
+      return 60; // Different regions
+    };
+
+    // Helper function to calculate price score
+    const calculatePriceScore = (price: number, budgetRange?: string) => {
+      if (!budgetRange) return 70; // Neutral if no budget specified
+      
+      const budget = budgetRange.toLowerCase();
+      if (budget.includes('under 100') && price <= 100) return 95;
+      if (budget.includes('100-300') && price >= 100 && price <= 300) return 95;
+      if (budget.includes('300-500') && price >= 300 && price <= 500) return 95;
+      if (budget.includes('over 500') && price > 500) return 95;
+      
+      // Penalty for being outside budget range
+      if (budget.includes('under 100') && price > 100) return 30;
+      if (budget.includes('100-300') && (price < 100 || price > 300)) return 40;
+      
+      return 60; // Default for unclear budget matching
+    };
 
     let systemPrompt = '';
     let userPrompt = '';
@@ -98,28 +141,59 @@ serve(async (req) => {
     if (requestType === 'conversation') {
       systemPrompt = `You are an expert AI retreat finder assistant for Sanghos, a wellness retreat platform. You help users discover personalized retreat experiences through natural conversation.
 
-Your capabilities:
-- Understand user wellness needs, preferences, and constraints
-- Recommend retreats from our database and partner networks (including InsightLA)
-- Ask clarifying questions to better understand user requirements
-- Extract structured preferences from natural conversation
-- Provide personalized match scores (1-100) and explanations
-- Consider location, budget, dates, interests, and experience level
+ENHANCED AI CAPABILITIES:
+
+1. MULTI-FACTOR SCORING ALGORITHM:
+   - Location proximity: Higher scores for retreats near user location
+   - Budget alignment: Score based on how well price matches stated budget
+   - Category relevance: Match user interests to retreat categories
+   - Experience level: Consider beginner vs advanced preferences
+   - Availability: Prioritize retreats with open spots
+   - Date proximity: Prefer retreats happening sooner (unless user specifies otherwise)
+
+2. CONVERSATION CONTEXT TRACKING:
+   - Remember all preferences mentioned throughout conversation
+   - Build cumulative understanding of user needs
+   - Reference previous conversation points naturally
+   - Avoid asking questions about information already provided
+
+3. INTENT RECOGNITION:
+   - Browsing: User exploring options, provide variety and ask questions
+   - Comparing: User has specific options, provide detailed comparisons
+   - Ready to book: User has clear preferences, provide top recommendations
+   - Urgent: User needs something soon, prioritize immediate availability
+
+4. SEMANTIC UNDERSTANDING:
+   - Understand synonyms (e.g., "quiet" = "peaceful", "budget-friendly" = "affordable")
+   - Recognize implicit preferences (e.g., "stressed at work" suggests need for relaxation)
+   - Connect related concepts (e.g., "meditation" relates to "mindfulness" and "stress relief")
 
 Current Retreat Database:
 ${retreatDatabase}
 
-Conversation Style:
-- Warm, knowledgeable, and helpful
-- Ask 1-2 follow-up questions per response
+ENHANCED CONVERSATION GUIDELINES:
+- Warm, knowledgeable, and helpful tone
+- Ask 1-2 strategic follow-up questions per response
 - Focus on understanding: budget, location preferences, duration, group size, experience level, specific interests
-- Suggest specific retreats when you have enough information
-- Always include match scores (1-100) and clear reasons for recommendations
+- Suggest specific retreats when you have enough information about user preferences
+- Always include match scores (1-100) with detailed reasoning
 - Consider real-time availability and current pricing
+- Detect user's intent (browsing, comparing, ready to book, urgent)
+- Reference previous conversation context naturally
+- Use semantic understanding to connect related concepts
 
 Location context: User is near ${userLocation}
 
-Response format: JSON with message, recommendations array (with retreatId, title, matchScore, reason, location, date, time, description, price, duration, category), followUpQuestions array, and extractedPreferences object.`;
+SCORING METHODOLOGY:
+Base score of 50, then adjust:
+- Location: +40 for same state, +30 for same region, +10 for reasonable distance
+- Budget: +30 for perfect match, +20 for close match, -20 for over budget
+- Category: +20 for exact match, +15 for related categories, +10 for general wellness
+- Experience: +10 for matching experience level
+- Availability: +10 for good availability, +5 for limited spots, -10 for waitlist only
+- Date: +5 for optimal timing
+
+Response format: JSON with message, recommendations array (with retreatId, title, matchScore, reason, location, date, time, description, price, duration, category), followUpQuestions array, extractedPreferences object, and userIntent string.`;
 
       const conversationContext = messages.map((msg: any) => 
         `${msg.role}: ${msg.content}`
@@ -138,9 +212,41 @@ ${retreatDatabase}
 
 Provide recommendations in JSON format with detailed match scores and reasoning.`;
       userPrompt = `User preferences: ${JSON.stringify(preferences)}\nUser location: ${userLocation}\n\nRecommend the best matching retreats with scores and explanations.`;
+    } else if (requestType === 'semantic_search') {
+      // Handle semantic search requests
+      systemPrompt = `You are a semantic search engine for wellness retreats. Understand the user's query and find the most relevant retreats based on meaning, not just keywords.
+
+Current Retreat Database:
+${retreatDatabase}
+
+SEMANTIC UNDERSTANDING:
+- Connect related concepts (meditation = mindfulness = stress relief)
+- Understand implicit needs (work stress = need for relaxation)
+- Match synonyms and related terms
+- Consider context and intent
+
+Provide recommendations in JSON format with semantic relevance scores and explanations.`;
+      userPrompt = `Search query: "${query}"\nUser preferences: ${JSON.stringify(preferences)}\nUser location: ${userLocation}\n\nFind semantically relevant retreats with detailed explanations.`;
+    } else if (requestType === 'intent_detection') {
+      // Handle intent detection requests
+      const conversationContext = messages.map((msg: any) => 
+        `${msg.role}: ${msg.content}`
+      ).join('\n');
+      
+      systemPrompt = `You are an intent detection system. Analyze the conversation to determine the user's intent.
+
+POSSIBLE INTENTS:
+- browsing: User is exploring options, asking general questions
+- comparing: User has specific retreats in mind and wants to compare
+- ready_to_book: User has clear preferences and is ready to make a decision
+- urgent: User needs something soon and has time constraints
+- planning_ahead: User is planning for future dates
+
+Analyze the conversation and return JSON with "intent" field.`;
+      userPrompt = `Conversation:\n${conversationContext}\n\nDetermine the user's intent based on their language patterns and questions.`;
     }
 
-    console.log('Sending request to OpenAI with model: gpt-4o-mini');
+    console.log('Sending request to OpenAI with model: gpt-4.1-2025-04-14');
     
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -149,7 +255,7 @@ Provide recommendations in JSON format with detailed match scores and reasoning.
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4.1-2025-04-14',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt }

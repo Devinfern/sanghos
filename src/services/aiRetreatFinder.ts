@@ -31,7 +31,11 @@ export interface AIResponse {
     duration?: string;
     groupSize?: string;
     experience?: string;
+    previousSearches?: string[];
+    conversationContext?: string;
   };
+  userIntent?: string;
+  conversationQuality?: number;
 }
 
 export class AIRetreatFinderService {
@@ -48,32 +52,8 @@ export class AIRetreatFinderService {
     messages: ConversationMessage[], 
     userLocation?: string
   ): Promise<AIResponse> {
-    try {
-      const conversationHistory = messages.map(msg => ({
-        role: msg.role,
-        content: msg.content
-      }));
-
-      const { data, error } = await supabase.functions.invoke('ai-retreat-finder', {
-        body: {
-          messages: conversationHistory,
-          userLocation: userLocation || 'San Francisco, CA',
-          requestType: 'conversation'
-        }
-      });
-
-      if (error) throw error;
-
-      // Enhance recommendations with additional data if available
-      if (data.recommendations) {
-        data.recommendations = await this.enhanceRecommendations(data.recommendations);
-      }
-
-      return data;
-    } catch (error) {
-      console.error('Error analyzing conversation:', error);
-      throw new Error('Failed to analyze conversation with AI');
-    }
+    // Use enhanced conversation analysis with empty previous preferences
+    return this.analyzeConversationWithContext(messages, {}, userLocation);
   }
 
   async generateFollowUpQuestions(
@@ -120,7 +100,146 @@ export class AIRetreatFinderService {
     }
   }
 
-  // New method to enhance recommendations with additional metadata
+  // Enhanced conversation analysis with context tracking
+  async analyzeConversationWithContext(
+    messages: ConversationMessage[], 
+    previousPreferences: any = {},
+    userLocation?: string
+  ): Promise<AIResponse> {
+    try {
+      const conversationHistory = messages.map(msg => ({
+        role: msg.role,
+        content: msg.content
+      }));
+
+      const { data, error } = await supabase.functions.invoke('ai-retreat-finder', {
+        body: {
+          messages: conversationHistory,
+          userLocation: userLocation || 'San Francisco, CA',
+          requestType: 'conversation',
+          previousPreferences,
+          conversationContext: this.extractConversationContext(messages)
+        }
+      });
+
+      if (error) throw error;
+
+      // Enhance recommendations with additional data
+      if (data.recommendations) {
+        data.recommendations = await this.enhanceRecommendations(data.recommendations);
+      }
+
+      // Track conversation quality based on user engagement
+      data.conversationQuality = this.calculateConversationQuality(messages, data);
+
+      return data;
+    } catch (error) {
+      console.error('Error analyzing conversation with context:', error);
+      throw new Error('Failed to analyze conversation with AI');
+    }
+  }
+
+  // Semantic search for retreats based on user preferences
+  async semanticSearch(
+    query: string,
+    preferences: any = {},
+    userLocation?: string
+  ): Promise<RetreatRecommendation[]> {
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-retreat-finder', {
+        body: {
+          query,
+          preferences,
+          userLocation: userLocation || 'San Francisco, CA',
+          requestType: 'semantic_search'
+        }
+      });
+
+      if (error) throw error;
+      
+      const recommendations = data.recommendations || [];
+      return await this.enhanceRecommendations(recommendations);
+    } catch (error) {
+      console.error('Error performing semantic search:', error);
+      return [];
+    }
+  }
+
+  // Intent detection for user messages
+  async detectUserIntent(messages: ConversationMessage[]): Promise<string> {
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-retreat-finder', {
+        body: {
+          messages: messages.map(msg => ({ role: msg.role, content: msg.content })),
+          requestType: 'intent_detection'
+        }
+      });
+
+      if (error) throw error;
+      return data.intent || 'browsing';
+    } catch (error) {
+      console.error('Error detecting user intent:', error);
+      return 'browsing';
+    }
+  }
+
+  // Extract conversation context for better understanding
+  private extractConversationContext(messages: ConversationMessage[]): string {
+    const recentMessages = messages.slice(-10); // Focus on recent conversation
+    const userMessages = recentMessages.filter(msg => msg.role === 'user');
+    
+    const extractedTopics = userMessages.map(msg => {
+      const content = msg.content.toLowerCase();
+      const topics = [];
+      
+      // Extract mentioned interests
+      if (content.includes('meditation') || content.includes('mindfulness')) topics.push('meditation');
+      if (content.includes('yoga')) topics.push('yoga');
+      if (content.includes('sound') || content.includes('healing')) topics.push('healing');
+      if (content.includes('stress') || content.includes('anxiety')) topics.push('stress_relief');
+      if (content.includes('beginner') || content.includes('new to')) topics.push('beginner_friendly');
+      if (content.includes('advanced') || content.includes('experienced')) topics.push('advanced_level');
+      
+      // Extract budget indicators
+      if (content.includes('budget') || content.includes('affordable') || content.includes('cheap')) topics.push('budget_conscious');
+      if (content.includes('premium') || content.includes('luxury')) topics.push('premium_experience');
+      
+      // Extract urgency indicators
+      if (content.includes('soon') || content.includes('asap') || content.includes('this week')) topics.push('urgent');
+      if (content.includes('planning') || content.includes('future') || content.includes('maybe')) topics.push('planning_ahead');
+      
+      return topics;
+    }).flat();
+    
+    return Array.from(new Set(extractedTopics)).join(', ');
+  }
+
+  // Calculate conversation quality based on engagement
+  private calculateConversationQuality(messages: ConversationMessage[], response: any): number {
+    let quality = 50; // Base quality
+    
+    // More messages indicate better engagement
+    if (messages.length > 5) quality += 20;
+    if (messages.length > 10) quality += 10;
+    
+    // User providing specific preferences indicates engagement
+    if (response.extractedPreferences) {
+      const prefCount = Object.keys(response.extractedPreferences).length;
+      quality += prefCount * 5;
+    }
+    
+    // Recommendations provided indicate good matching
+    if (response.recommendations && response.recommendations.length > 0) {
+      quality += 15;
+      // High match scores indicate good recommendations
+      const avgMatchScore = response.recommendations.reduce((sum: number, rec: any) => sum + rec.matchScore, 0) / response.recommendations.length;
+      if (avgMatchScore > 80) quality += 10;
+    }
+    
+    return Math.min(100, quality);
+  }
+
+  // Enhanced method to enhance recommendations with additional metadata
   private async enhanceRecommendations(recommendations: RetreatRecommendation[]): Promise<RetreatRecommendation[]> {
     return recommendations.map(rec => {
       // Add booking URLs and images based on source
