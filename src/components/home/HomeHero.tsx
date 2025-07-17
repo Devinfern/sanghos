@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Search, ArrowRight, Sparkles, Play, Star, Leaf, Calendar, Users, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { TrustSignals } from "@/components/ui/trust-signals";
 const HomeHero = () => {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
@@ -133,46 +134,39 @@ const HomeHero = () => {
                 Immerse yourself in transformative daylong retreats with expert instructors in breathtaking, intimate settings.
               </motion.p>
 
-              {/* Glassmorphism Search Bar */}
-              <motion.form 
-                onSubmit={handleSearch} 
+              {/* AI-Powered Search CTA */}
+              <motion.div 
                 className="relative mb-10"
                 variants={fadeInUp}
               >
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-white/10 rounded-2xl backdrop-blur-xl border border-white/30" />
-                  <div className="relative flex items-center p-2">
-                    <Search className="absolute left-6 h-5 w-5 text-white/70" />
-                    <Input 
-                      type="text" 
-                      placeholder="Yoga, meditation, breathwork..." 
-                      className="pl-14 pr-36 py-6 bg-transparent border-none text-white placeholder:text-white/60 focus:outline-none focus:ring-0 text-lg"
-                      value={query} 
-                      onChange={e => setQuery(e.target.value)} 
-                    />
-                    <Button 
-                      type="submit" 
-                      size="lg" 
-                      className="absolute right-2 px-8 py-4 rounded-xl bg-gradient-to-r from-brand-primary to-brand-primary/80 hover:from-brand-primary/90 hover:to-brand-primary text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-                    >
-                      <Sparkles className="mr-2 h-4 w-4" />
-                      Search
-                    </Button>
-                  </div>
+                <div className="text-center">
+                  <Button 
+                    size="lg" 
+                    className="group bg-gradient-to-r from-brand-primary via-brand-primary to-brand-primary/80 hover:from-brand-primary/90 hover:via-brand-primary/90 hover:to-brand-primary text-white px-12 py-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] text-xl font-semibold"
+                    onClick={() => navigate("/ai-retreat-finder")}
+                  >
+                    <Sparkles className="mr-3 h-6 w-6" />
+                    <span>Find Your Perfect Retreat with AI</span>
+                    <ArrowRight className="ml-3 h-6 w-6 transition-transform duration-300 group-hover:translate-x-1" />
+                  </Button>
+                  <p className="text-white/80 mt-4 text-lg">
+                    Answer a few questions and let our AI match you with the ideal wellness experience
+                  </p>
                 </div>
-              </motion.form>
+              </motion.div>
 
-              {/* Floating CTAs */}
+              {/* Secondary CTAs */}
               <motion.div 
                 className="flex flex-col sm:flex-row gap-6"
                 variants={fadeInUp}
               >
                 <Button 
                   size="lg" 
-                  className="group bg-gradient-to-r from-brand-primary via-brand-primary to-brand-primary/80 hover:from-brand-primary/90 hover:via-brand-primary/90 hover:to-brand-primary text-white px-8 py-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+                  variant="outline" 
+                  className="group bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 text-white hover:text-white px-8 py-6 rounded-2xl backdrop-blur-md shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
                   onClick={() => navigate("/retreats")}
                 >
-                  <span className="text-lg font-semibold">Browse Retreats</span>
+                  <span className="text-lg font-medium">Browse All Retreats</span>
                   <ArrowRight className="ml-3 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
                 </Button>
                 
@@ -189,12 +183,22 @@ const HomeHero = () => {
             </motion.div>
           </div>
           
+          {/* Trust Signals */}
+          <motion.div 
+            className="absolute bottom-32 left-6 lg:left-8 right-6 lg:right-8"
+            initial={{ opacity: 0, y: 40 }}
+            animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            <TrustSignals className="hidden md:flex" />
+          </motion.div>
+          
           {/* Feature Cards - Horizontal from Left Column */}
           <motion.div 
             className="absolute bottom-8 left-6 lg:left-8 right-6 lg:right-8"
             initial={{ opacity: 0, y: 40 }}
             animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
           >
             <div className="hidden md:grid md:grid-cols-3 gap-6">
               <motion.div 

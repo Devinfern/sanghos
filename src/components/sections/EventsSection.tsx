@@ -72,10 +72,13 @@ const EventsSection: React.FC<EventsSectionProps> = ({ showFeaturedOnly = false 
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
           <h2 className="text-3xl md:text-4xl font-semibold mb-4">
-            Featured Events
+            {showFeaturedOnly ? "Featured Events" : "All Events"}
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            A selection of curated wellness events for you to explore and book.
+            {showFeaturedOnly 
+              ? "Handpicked premium wellness experiences curated just for you."
+              : "A complete selection of wellness events for you to explore and book."
+            }
           </p>
         </div>
         <div className="flex justify-center mb-8">

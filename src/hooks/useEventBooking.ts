@@ -17,7 +17,15 @@ interface BookingFormData {
 export function useEventBooking() {
   const [isLoading, setIsLoading] = useState(false);
   const [bookingStep, setBookingStep] = useState(1);
+  const [bookingProgress, setBookingProgress] = useState(0);
   const { user } = useAuth();
+  
+  const bookingSteps = [
+    'Event Details',
+    'Personal Info', 
+    'Payment',
+    'Confirmation'
+  ];
 
   const initiateBooking = async (
     event: Event, 
@@ -93,14 +101,33 @@ export function useEventBooking() {
     }
   };
 
-  const nextStep = () => setBookingStep(prev => prev + 1);
-  const prevStep = () => setBookingStep(prev => Math.max(1, prev - 1));
-  const resetSteps = () => setBookingStep(1);
+  const nextStep = () => {
+    setBookingStep(prev => {
+      const newStep = prev + 1;
+      setBookingProgress((newStep / bookingSteps.length) * 100);
+      return newStep;
+    });
+  };
+  
+  const prevStep = () => {
+    setBookingStep(prev => {
+      const newStep = Math.max(1, prev - 1);
+      setBookingProgress((newStep / bookingSteps.length) * 100);
+      return newStep;
+    });
+  };
+  
+  const resetSteps = () => {
+    setBookingStep(1);
+    setBookingProgress(0);
+  };
 
   return {
     initiateBooking,
     isLoading,
     bookingStep,
+    bookingProgress,
+    bookingSteps,
     nextStep,
     prevStep,
     resetSteps
