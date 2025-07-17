@@ -4,6 +4,7 @@ import { Layout, Pointer, Zap } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import AIRetreatFinderWidget from "@/components/ai/AIRetreatFinderWidget";
 
 interface TabContent {
   badge: string;
@@ -116,9 +117,15 @@ const FeatureTabs = ({
                   <p className="text-brand-slate lg:text-lg leading-relaxed">
                     {tab.content.description}
                   </p>
-                  <Button className="mt-4 w-fit gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-full px-8 py-6 text-lg font-medium" size="lg">
-                    {tab.content.buttonText}
-                  </Button>
+                  {tab.value === "tab-1" ? (
+                    <div className="mt-4">
+                      <AIRetreatFinderWidget variant="inline" />
+                    </div>
+                  ) : (
+                    <Button className="mt-4 w-fit gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-full px-8 py-6 text-lg font-medium" size="lg">
+                      {tab.content.buttonText}
+                    </Button>
+                  )}
                 </div>
                 <div className="relative">
                   <img
