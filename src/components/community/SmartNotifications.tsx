@@ -1,25 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bell, X, MessageCircle, Users, Calendar, Heart, Reply, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 
 interface Notification {
   id: string;
-  type: 'message' | 'mention' | 'event' | 'like' | 'comment' | 'follow';
+  type: string;
   title: string;
-  content: string;
-  user?: {
-    name: string;
-    avatar?: string;
-  };
-  timestamp: string;
+  message: string;
+  created_at: string;
   read: boolean;
-  actionUrl?: string;
+  data: Record<string, any>;
 }
 
 interface SmartNotificationsProps {
@@ -27,91 +24,164 @@ interface SmartNotificationsProps {
 }
 
 const SmartNotifications = ({ className }: SmartNotificationsProps) => {
-  const [notifications, setNotifications] = useState<Notification[]>([
-    {
-      id: '1',
-      type: 'message',
-      title: 'New message from Sarah',
-      content: 'Hey! How was your meditation session today?',
-      user: { name: 'Sarah Johnson', avatar: '/placeholder.svg' },
-      timestamp: new Date().toISOString(),
-      read: false,
-      actionUrl: '/community/discussions'
-    },
-    {
-      id: '2',
-      type: 'like',
-      title: 'Someone liked your post',
-      content: 'Your post about mindfulness got a new like',
-      user: { name: 'Alex Chen', avatar: '/placeholder.svg' },
-      timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-      read: false,
-      actionUrl: '/community/discussions'
-    },
-    {
-      id: '3',
-      type: 'event',
-      title: 'Upcoming retreat reminder',
-      content: 'Mountain Wellness Retreat starts in 2 days',
-      timestamp: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
-      read: true,
-      actionUrl: '/community/events'
-    }
-  ]);
-
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   const unreadCount = notifications.filter(n => !n.read).length;
 
-  const getNotificationIcon = (type: Notification['type']) => {
+  const fetchNotifications = useCallback(async () => {
+    if (!currentUserId) return;
+
+    setIsLoading(true);
+    try {
+      const { data } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', currentUserId)
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+      if (data) {
+        const typedNotifications = data.map(notification => ({
+          ...notification,
+          data: (notification.data as any) || {}
+        }));
+        setNotifications(typedNotifications);
+      }
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [currentUserId]);
+
+  useEffect(() => {
+    // Get current user
+    const getCurrentUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setCurrentUserId(user?.id || null);
+    };
+    getCurrentUser();
+
+    if (currentUserId) {
+      fetchNotifications();
+      
+      // Set up real-time subscription for notifications
+      const channel = supabase
+        .channel('notifications')
+        .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'notifications',
+          filter: `user_id=eq.${currentUserId}`
+        }, (payload) => {
+          setNotifications(prev => [payload.new as Notification, ...prev]);
+        })
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    }
+  }, [currentUserId, fetchNotifications]);
+
+  const getNotificationIcon = (type: string) => {
     switch (type) {
-      case 'message':
+      case 'new_post':
         return MessageCircle;
-      case 'mention':
+      case 'comment':
         return Reply;
-      case 'event':
+      case 'event_reminder':
         return Calendar;
       case 'like':
         return Heart;
-      case 'comment':
-        return MessageCircle;
       case 'follow':
         return Users;
+      case 'welcome':
+        return Bell;
       default:
         return Bell;
     }
   };
 
-  const getNotificationColor = (type: Notification['type']) => {
+  const getNotificationColor = (type: string) => {
     switch (type) {
-      case 'message':
+      case 'new_post':
         return 'text-blue-500';
-      case 'mention':
+      case 'comment':
         return 'text-purple-500';
-      case 'event':
+      case 'event_reminder':
         return 'text-green-500';
       case 'like':
         return 'text-red-500';
-      case 'comment':
-        return 'text-blue-500';
       case 'follow':
+        return 'text-brand-primary';
+      case 'welcome':
         return 'text-brand-primary';
       default:
         return 'text-brand-primary';
     }
   };
 
-  const markAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(n => n.id === id ? { ...n, read: true } : n)
-    );
+  const markAsRead = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('notifications')
+        .update({ read: true })
+        .eq('id', id);
+
+      if (!error) {
+        setNotifications(prev => 
+          prev.map(n => n.id === id ? { ...n, read: true } : n)
+        );
+      }
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
   };
 
-  const markAllAsRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+  const markAllAsRead = async () => {
+    try {
+      const { error } = await supabase
+        .from('notifications')
+        .update({ read: true })
+        .eq('user_id', currentUserId)
+        .eq('read', false);
+
+      if (!error) {
+        setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+      }
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+    }
   };
 
-  const removeNotification = (id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
+  const removeNotification = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('notifications')
+        .delete()
+        .eq('id', id);
+
+      if (!error) {
+        setNotifications(prev => prev.filter(n => n.id !== id));
+      }
+    } catch (error) {
+      console.error('Error removing notification:', error);
+    }
+  };
+
+  const handleNotificationClick = (notification: Notification) => {
+    markAsRead(notification.id);
+    
+    // Handle navigation based on notification type
+    if (notification.data?.post_id) {
+      console.log('Navigate to post:', notification.data.post_id);
+    } else if (notification.data?.event_id) {
+      console.log('Navigate to event:', notification.data.event_id);
+    }
   };
 
   return (
@@ -180,7 +250,12 @@ const SmartNotifications = ({ className }: SmartNotificationsProps) => {
 
                 {/* Notifications List */}
                 <div className="max-h-96 overflow-y-auto">
-                  {notifications.length === 0 ? (
+                  {isLoading ? (
+                    <div className="p-8 text-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-primary mx-auto"></div>
+                      <p className="mt-4 text-sm text-muted-foreground">Loading notifications...</p>
+                    </div>
+                  ) : notifications.length === 0 ? (
                     <div className="p-8 text-center">
                       <Bell className="h-12 w-12 mx-auto mb-4 text-brand-subtle" />
                       <p className="text-muted-foreground">No notifications yet</p>
@@ -200,13 +275,7 @@ const SmartNotifications = ({ className }: SmartNotificationsProps) => {
                               "p-4 border-b border-brand-subtle/10 last:border-b-0 cursor-pointer hover:bg-brand-subtle/5 transition-colors group",
                               !notification.read && "bg-brand-primary/5"
                             )}
-                            onClick={() => {
-                              markAsRead(notification.id);
-                              if (notification.actionUrl) {
-                                // Navigate to action URL
-                                console.log('Navigate to:', notification.actionUrl);
-                              }
-                            }}
+                            onClick={() => handleNotificationClick(notification)}
                           >
                             <div className="flex items-start gap-3">
                               <div className={cn(
@@ -227,23 +296,13 @@ const SmartNotifications = ({ className }: SmartNotificationsProps) => {
                                 </div>
                                 
                                 <p className="text-sm text-muted-foreground line-clamp-2">
-                                  {notification.content}
+                                  {notification.message}
                                 </p>
                                 
                                 <div className="flex items-center justify-between mt-2">
-                                  <div className="flex items-center gap-2">
-                                    {notification.user && (
-                                      <Avatar className="h-4 w-4">
-                                        <AvatarImage src={notification.user.avatar} />
-                                        <AvatarFallback className="text-xs">
-                                          {notification.user.name[0]}
-                                        </AvatarFallback>
-                                      </Avatar>
-                                    )}
-                                    <span className="text-xs text-muted-foreground">
-                                      {format(new Date(notification.timestamp), 'HH:mm')}
-                                    </span>
-                                  </div>
+                                  <span className="text-xs text-muted-foreground">
+                                    {format(new Date(notification.created_at), 'MMM d, HH:mm')}
+                                  </span>
                                   
                                   <Button
                                     variant="ghost"

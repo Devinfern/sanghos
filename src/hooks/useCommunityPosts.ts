@@ -30,17 +30,10 @@ export const useCommunityPosts = (searchQuery = '', categoryFilter = 'all') => {
       const { data: { user } } = await supabase.auth.getUser();
       setCurrentUserId(user?.id || null);
 
-      // Build query with type assertion
-      let query = (supabase as any)
+      // Fetch posts
+      let query = supabase
         .from('community_posts')
-        .select(`
-          *,
-          user_profiles!community_posts_user_id_fkey (
-            username,
-            avatar_url,
-            is_wellness_practitioner
-          )
-        `)
+        .select('*')
         .order('created_at', { ascending: false });
 
       // Apply filters
@@ -52,14 +45,30 @@ export const useCommunityPosts = (searchQuery = '', categoryFilter = 'all') => {
         query = query.eq('category', categoryFilter);
       }
 
-      const { data, error } = await query;
+      const { data: postsData, error } = await query;
 
       if (error) {
         console.error('Error fetching posts:', error);
         return;
       }
 
-      setPosts(data || []);
+      if (postsData) {
+        // Get user profiles for all post authors
+        const userIds = [...new Set(postsData.map(post => post.user_id).filter(Boolean))];
+        
+        const { data: profilesData } = await supabase
+          .from('user_profiles')
+          .select('*')
+          .in('user_id', userIds);
+
+        // Combine posts with user profiles
+        const postsWithProfiles = postsData.map(post => ({
+          ...post,
+          user_profiles: profilesData?.find(profile => profile.user_id === post.user_id)
+        }));
+
+        setPosts(postsWithProfiles);
+      }
     } catch (error) {
       console.error('Error in fetchPosts:', error);
     } finally {

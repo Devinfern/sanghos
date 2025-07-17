@@ -13,12 +13,13 @@ interface Message {
   id: string;
   content: string;
   user_id: string;
+  channel_id: string;
   created_at: string;
+  reactions: Record<string, number>;
   user_profiles?: {
     username: string;
     avatar_url?: string;
   };
-  reactions?: { emoji: string; count: number; users: string[] }[];
 }
 
 interface UnifiedMessagingProps {
@@ -46,16 +47,61 @@ const UnifiedMessaging = ({
     };
     getCurrentUser();
 
+    // Fetch initial messages
+    const fetchMessages = async () => {
+      const { data: messagesData } = await supabase
+        .from('messages')
+        .select('*')
+        .eq('channel_id', channelId)
+        .order('created_at', { ascending: true });
+
+      if (messagesData) {
+        // Get user profiles for all message authors
+        const userIds = [...new Set(messagesData.map(msg => msg.user_id).filter(Boolean))];
+        
+        const { data: profilesData } = await supabase
+          .from('user_profiles')
+          .select('*')
+          .in('user_id', userIds);
+
+        // Combine messages with user profiles
+        const typedMessages = messagesData.map(msg => ({
+          ...msg,
+          reactions: (msg.reactions as any) || {},
+          user_profiles: profilesData?.find(profile => profile.user_id === msg.user_id)
+        }));
+        
+        setMessages(typedMessages);
+      }
+    };
+
+    fetchMessages();
+
     // Set up real-time subscription
     const channel = supabase
       .channel(`messages-${channelId}`)
       .on('postgres_changes', {
         event: 'INSERT',
         schema: 'public',
-        table: 'community_comments',
-        filter: `post_id=eq.${channelId}`
-      }, (payload) => {
-        setMessages(prev => [...prev, payload.new as Message]);
+        table: 'messages',
+        filter: `channel_id=eq.${channelId}`
+      }, async (payload) => {
+        const newMessage = payload.new as any;
+        
+        // Get user profile for the new message
+        const { data: profileData } = await supabase
+          .from('user_profiles')
+          .select('*')
+          .eq('user_id', newMessage.user_id)
+          .single();
+
+        const messageWithProfile = {
+          ...newMessage,
+          reactions: newMessage.reactions || {},
+          user_profiles: profileData
+        };
+
+        setMessages(prev => [...prev, messageWithProfile]);
       })
       .subscribe();
 
@@ -74,11 +120,11 @@ const UnifiedMessaging = ({
     setIsLoading(true);
     try {
       const { error } = await supabase
-        .from('community_comments')
+        .from('messages')
         .insert({
           content: newMessage,
           user_id: currentUserId,
-          post_id: channelId
+          channel_id: channelId
         });
 
       if (!error) {
@@ -98,9 +144,29 @@ const UnifiedMessaging = ({
     }
   };
 
-  const addReaction = (messageId: string, emoji: string) => {
-    // Implement reaction logic
-    console.log('Adding reaction:', messageId, emoji);
+  const addReaction = async (messageId: string, emoji: string) => {
+    try {
+      const message = messages.find(m => m.id === messageId);
+      if (!message) return;
+
+      const newReactions = { ...message.reactions };
+      newReactions[emoji] = (newReactions[emoji] || 0) + 1;
+
+      const { error } = await supabase
+        .from('messages')
+        .update({ reactions: newReactions })
+        .eq('id', messageId);
+
+      if (!error) {
+        setMessages(prev => prev.map(m => 
+          m.id === messageId 
+            ? { ...m, reactions: newReactions }
+            : m
+        ));
+      }
+    } catch (error) {
+      console.error('Error adding reaction:', error);
+    }
   };
 
   return (
@@ -169,16 +235,17 @@ const UnifiedMessaging = ({
                   </div>
                   
                   {/* Reactions */}
-                  {message.reactions && message.reactions.length > 0 && (
+                  {message.reactions && Object.keys(message.reactions).length > 0 && (
                     <div className="flex items-center gap-1 mt-2">
-                      {message.reactions.map((reaction, index) => (
+                      {Object.entries(message.reactions).map(([emoji, count]) => (
                         <Button
-                          key={index}
+                          key={emoji}
                           variant="ghost"
                           size="sm"
+                          onClick={() => addReaction(message.id, emoji)}
                           className="h-6 px-2 text-xs bg-brand-subtle/5 hover:bg-brand-subtle/10 rounded-full"
                         >
-                          {reaction.emoji} {reaction.count}
+                          {emoji} {count}
                         </Button>
                       ))}
                     </div>

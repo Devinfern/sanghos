@@ -431,6 +431,80 @@ export type Database = {
         }
         Relationships: []
       }
+      messages: {
+        Row: {
+          channel_id: string
+          content: string
+          created_at: string
+          id: string
+          reactions: Json | null
+          reply_to: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          channel_id?: string
+          content: string
+          created_at?: string
+          id?: string
+          reactions?: Json | null
+          reply_to?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          channel_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          reactions?: Json | null
+          reply_to?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_reply_to_fkey"
+            columns: ["reply_to"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          data: Json | null
+          id: string
+          message: string
+          read: boolean | null
+          title: string
+          type: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          data?: Json | null
+          id?: string
+          message: string
+          read?: boolean | null
+          title: string
+          type: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          data?: Json | null
+          id?: string
+          message?: string
+          read?: boolean | null
+          title?: string
+          type?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       premium_content: {
         Row: {
           content_id: string | null
