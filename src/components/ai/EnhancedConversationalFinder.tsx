@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Spinner } from '@/components/ui/spinner';
-import { Send, Sparkles, MapPin, RefreshCw, MessageCircle, ArrowRight, BookOpen, User, Settings } from 'lucide-react';
+import { Send, Sparkles, MapPin, RefreshCw, MessageCircle, ArrowRight, BookOpen, User, Settings, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useConversation } from '@/hooks/useConversation';
 import { AIRetreatFinderService } from '@/services/aiRetreatFinder';
@@ -33,6 +33,7 @@ const EnhancedConversationalFinder = ({
   const [showPreferences, setShowPreferences] = useState(false);
   const [userIntent, setUserIntent] = useState('browsing');
   const [conversationQuality, setConversationQuality] = useState(0);
+  const [scrapingInfo, setScrapingInfo] = useState<{ newRetreatsFound: number; sources: string[] } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   
@@ -51,12 +52,11 @@ const EnhancedConversationalFinder = ({
   }, [conversation.messages]);
 
   useEffect(() => {
-    // Initialize conversation with context if available
     if (conversation.messages.length === 0) {
-      let welcomeMessage = "Hi! I'm your AI retreat finder. I'll help you discover the perfect wellness retreat based on your needs and preferences.";
+      let welcomeMessage = "Hi! I'm your AI retreat finder with intelligent discovery. I'll help you find the perfect wellness retreat and can discover new ones in real-time if needed.";
       
       if (currentRetreatContext) {
-        welcomeMessage += ` I see you're looking at "${currentRetreatContext.title}". I can help you find similar retreats or explore other options based on your interests.`;
+        welcomeMessage += ` I see you're looking at "${currentRetreatContext.title}". I can help you find similar retreats or explore other options.`;
       }
       
       welcomeMessage += " What kind of wellness experience are you looking for?";
@@ -69,7 +69,6 @@ const EnhancedConversationalFinder = ({
   }, [addMessage, conversation.messages.length, currentRetreatContext]);
 
   useEffect(() => {
-    // Auto-send initial query if provided
     if (initialQuery && conversation.messages.length <= 1) {
       setCurrentInput(initialQuery);
       setTimeout(() => {
@@ -82,7 +81,6 @@ const EnhancedConversationalFinder = ({
     const message = messageContent || currentInput.trim();
     if (!message || conversation.isAnalyzing) return;
 
-    // Add user message
     addMessage({
       role: 'user',
       content: message
@@ -94,11 +92,9 @@ const EnhancedConversationalFinder = ({
     setAnalyzing(true);
 
     try {
-      // Get stored user preferences
       const storedPreferences = localStorage.getItem('userPreferences_current');
       const previousPreferences = storedPreferences ? JSON.parse(storedPreferences) : {};
 
-      // Enhanced conversation analysis with context
       const response = await aiService.analyzeConversationWithContext(
         [...conversation.messages, { 
           id: '', 
@@ -110,16 +106,13 @@ const EnhancedConversationalFinder = ({
         userLocation
       );
 
-      // Add AI response
       addMessage({
         role: 'assistant',
         content: response.message
       });
 
-      // Update state with enhanced data
       if (response.extractedPreferences) {
         updatePreferences(response.extractedPreferences);
-        // Save to localStorage for persistence
         localStorage.setItem('userPreferences_current', JSON.stringify(response.extractedPreferences));
       }
 
@@ -127,14 +120,22 @@ const EnhancedConversationalFinder = ({
       setFollowUpQuestions(response.followUpQuestions || []);
       setUserIntent(response.userIntent || 'browsing');
       setConversationQuality(response.conversationQuality || 0);
+      setScrapingInfo(response.scrapingInfo || null);
 
-      // Auto-navigate if user shows booking intent and we have good recommendations
+      // Show scraping success notification
+      if (response.scrapingInfo?.newRetreatsFound > 0) {
+        toast.success(`🔍 Discovered ${response.scrapingInfo.newRetreatsFound} new retreats for you!`, {
+          description: `Found from: ${response.scrapingInfo.sources.join(', ')}`,
+          duration: 4000
+        });
+      }
+
       if (response.userIntent === 'ready_to_book' && response.recommendations?.length > 0) {
         toast.success('Found great matches! These retreats are ready for booking.');
       }
 
     } catch (error) {
-      console.error('Error in conversation:', error);
+      console.error('Error in enhanced conversation:', error);
       toast.error('Sorry, I encountered an issue. Please try again.');
       
       addMessage({
@@ -184,7 +185,7 @@ const EnhancedConversationalFinder = ({
     <div className={containerClasses}>
       <Card className="border-none shadow-lg bg-white/90 backdrop-blur-sm rounded-xl overflow-hidden">
         <CardContent className="p-0">
-          {/* Header */}
+          {/* Enhanced Header */}
           <div className="bg-gradient-to-r from-brand-primary/10 to-brand-peach/10 p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-brand-primary/20 rounded-lg flex items-center justify-center">
@@ -198,7 +199,13 @@ const EnhancedConversationalFinder = ({
                   </Badge>
                   {conversationQuality > 0 && (
                     <Badge variant="outline" className="text-xs">
-                      {conversationQuality}% match quality
+                      {conversationQuality}% quality
+                    </Badge>
+                  )}
+                  {scrapingInfo && (
+                    <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                      <Search className="w-3 h-3 mr-1" />
+                      {scrapingInfo.newRetreatsFound} discovered
                     </Badge>
                   )}
                 </div>
@@ -279,7 +286,7 @@ const EnhancedConversationalFinder = ({
               >
                 <div className="bg-sage-100 text-sage-800 p-3 rounded-lg mr-4 flex items-center gap-2">
                   <Spinner className="w-4 h-4" />
-                  <span className="text-sm">Finding perfect retreats for you...</span>
+                  <span className="text-sm">Discovering perfect retreats for you...</span>
                 </div>
               </motion.div>
             )}
@@ -330,11 +337,16 @@ const EnhancedConversationalFinder = ({
               <div className="flex items-center gap-1 mt-2 text-xs text-sage-600">
                 <MapPin className="w-3 h-3" />
                 <span>Searching near {userLocation}</span>
+                {scrapingInfo && (
+                  <span className="text-green-600 ml-2">
+                    • 🔍 Intelligent discovery active
+                  </span>
+                )}
               </div>
             )}
           </div>
 
-          {/* Recommendations */}
+          {/* Enhanced Recommendations */}
           {recommendations.length > 0 && (
             <div className="border-t border-sage-100">
               <div className="p-4">
@@ -342,9 +354,17 @@ const EnhancedConversationalFinder = ({
                   <h3 className="text-sm font-semibold text-sage-800">
                     {userIntent === 'ready_to_book' ? 'Ready to Book' : 'Recommended Retreats'}
                   </h3>
-                  <Badge variant="secondary" className="text-xs">
-                    {recommendations.length} found
-                  </Badge>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" className="text-xs">
+                      {recommendations.length} found
+                    </Badge>
+                    {scrapingInfo && (
+                      <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                        <Search className="w-3 h-3 mr-1" />
+                        {scrapingInfo.newRetreatsFound} new
+                      </Badge>
+                    )}
+                  </div>
                 </div>
                 <div className="space-y-3 max-h-64 overflow-y-auto">
                   {recommendations.map((rec: any, index) => (
@@ -357,7 +377,10 @@ const EnhancedConversationalFinder = ({
                       onClick={() => handleRetreatClick(rec.retreatId)}
                     >
                       <div className="flex justify-between items-start mb-2">
-                        <h4 className="font-medium text-sage-800 text-sm group-hover:text-brand-primary transition-colors">
+                        <h4 className="font-medium text-sage-800 text-sm group-hover:text-brand-primary transition-colors flex items-center gap-2">
+                          {rec.isScraped && (
+                            <span className="text-green-600 text-xs">🔍</span>
+                          )}
                           {rec.title}
                         </h4>
                         <div className="flex items-center gap-2">
@@ -369,6 +392,12 @@ const EnhancedConversationalFinder = ({
                       </div>
                       <p className="text-xs text-sage-600 mb-3 line-clamp-2">{rec.reason}</p>
                       <div className="flex items-center gap-4 text-xs text-sage-500">
+                        {rec.instructor && (
+                          <div className="flex items-center gap-1">
+                            <User className="w-3 h-3" />
+                            <span className="truncate">{rec.instructor}</span>
+                          </div>
+                        )}
                         {rec.location && (
                           <div className="flex items-center gap-1">
                             <MapPin className="w-3 h-3" />
@@ -378,6 +407,13 @@ const EnhancedConversationalFinder = ({
                         {rec.date && <span>• {rec.date}</span>}
                         {rec.price && <span>• ${rec.price}</span>}
                       </div>
+                      {rec.isScraped && (
+                        <div className="mt-2 pt-2 border-t border-sage-100">
+                          <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                            Newly discovered retreat
+                          </Badge>
+                        </div>
+                      )}
                       {userIntent === 'ready_to_book' && (
                         <div className="mt-3 pt-3 border-t border-sage-100">
                           <Button 
@@ -385,11 +421,15 @@ const EnhancedConversationalFinder = ({
                             className="w-full bg-brand-primary hover:bg-brand-primary/90"
                             onClick={(e) => {
                               e.stopPropagation();
-                              navigate(`/retreat/${rec.retreatId}`);
+                              if (rec.isScraped && rec.bookingUrl) {
+                                window.open(rec.bookingUrl, '_blank');
+                              } else {
+                                navigate(`/retreat/${rec.retreatId}`);
+                              }
                             }}
                           >
                             <BookOpen className="w-4 h-4 mr-2" />
-                            View & Book
+                            {rec.isScraped ? 'Visit External Site' : 'View & Book'}
                           </Button>
                         </div>
                       )}

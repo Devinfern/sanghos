@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { ConversationMessage } from '@/hooks/useConversation';
 
@@ -18,6 +17,8 @@ export interface RetreatRecommendation {
   duration?: string;
   source?: string;
   bookingUrl?: string;
+  isScraped?: boolean;
+  instructor?: string;
 }
 
 export interface AIResponse {
@@ -36,6 +37,10 @@ export interface AIResponse {
   };
   userIntent?: string;
   conversationQuality?: number;
+  scrapingInfo?: {
+    newRetreatsFound: number;
+    sources: string[];
+  };
 }
 
 export class AIRetreatFinderService {
@@ -100,7 +105,7 @@ export class AIRetreatFinderService {
     }
   }
 
-  // Enhanced conversation analysis with context tracking
+  // Enhanced conversation analysis with intelligent scraping
   async analyzeConversationWithContext(
     messages: ConversationMessage[], 
     previousPreferences: any = {},
@@ -129,17 +134,22 @@ export class AIRetreatFinderService {
         data.recommendations = await this.enhanceRecommendations(data.recommendations);
       }
 
-      // Track conversation quality based on user engagement
+      // Track conversation quality and scraping success
       data.conversationQuality = this.calculateConversationQuality(messages, data);
+
+      // Log scraping success
+      if (data.scrapingInfo?.newRetreatsFound > 0) {
+        console.log(`🔍 Discovered ${data.scrapingInfo.newRetreatsFound} new retreats from: ${data.scrapingInfo.sources.join(', ')}`);
+      }
 
       return data;
     } catch (error) {
-      console.error('Error analyzing conversation with context:', error);
+      console.error('Error analyzing conversation with intelligent scraping:', error);
       throw new Error('Failed to analyze conversation with AI');
     }
   }
 
-  // Semantic search for retreats based on user preferences
+  // Semantic search with scraping fallback
   async semanticSearch(
     query: string,
     preferences: any = {},
@@ -185,26 +195,21 @@ export class AIRetreatFinderService {
 
   // Extract conversation context for better understanding
   private extractConversationContext(messages: ConversationMessage[]): string {
-    const recentMessages = messages.slice(-10); // Focus on recent conversation
+    const recentMessages = messages.slice(-10);
     const userMessages = recentMessages.filter(msg => msg.role === 'user');
     
     const extractedTopics = userMessages.map(msg => {
       const content = msg.content.toLowerCase();
       const topics = [];
       
-      // Extract mentioned interests
       if (content.includes('meditation') || content.includes('mindfulness')) topics.push('meditation');
       if (content.includes('yoga')) topics.push('yoga');
       if (content.includes('sound') || content.includes('healing')) topics.push('healing');
       if (content.includes('stress') || content.includes('anxiety')) topics.push('stress_relief');
       if (content.includes('beginner') || content.includes('new to')) topics.push('beginner_friendly');
       if (content.includes('advanced') || content.includes('experienced')) topics.push('advanced_level');
-      
-      // Extract budget indicators
       if (content.includes('budget') || content.includes('affordable') || content.includes('cheap')) topics.push('budget_conscious');
       if (content.includes('premium') || content.includes('luxury')) topics.push('premium_experience');
-      
-      // Extract urgency indicators
       if (content.includes('soon') || content.includes('asap') || content.includes('this week')) topics.push('urgent');
       if (content.includes('planning') || content.includes('future') || content.includes('maybe')) topics.push('planning_ahead');
       
@@ -216,24 +221,25 @@ export class AIRetreatFinderService {
 
   // Calculate conversation quality based on engagement
   private calculateConversationQuality(messages: ConversationMessage[], response: any): number {
-    let quality = 50; // Base quality
+    let quality = 50;
     
-    // More messages indicate better engagement
     if (messages.length > 5) quality += 20;
     if (messages.length > 10) quality += 10;
     
-    // User providing specific preferences indicates engagement
     if (response.extractedPreferences) {
       const prefCount = Object.keys(response.extractedPreferences).length;
       quality += prefCount * 5;
     }
     
-    // Recommendations provided indicate good matching
     if (response.recommendations && response.recommendations.length > 0) {
       quality += 15;
-      // High match scores indicate good recommendations
       const avgMatchScore = response.recommendations.reduce((sum: number, rec: any) => sum + rec.matchScore, 0) / response.recommendations.length;
       if (avgMatchScore > 80) quality += 10;
+    }
+
+    // Bonus for successful scraping
+    if (response.scrapingInfo?.newRetreatsFound > 0) {
+      quality += 15;
     }
     
     return Math.min(100, quality);
@@ -242,14 +248,19 @@ export class AIRetreatFinderService {
   // Enhanced method to enhance recommendations with additional metadata
   private async enhanceRecommendations(recommendations: RetreatRecommendation[]): Promise<RetreatRecommendation[]> {
     return recommendations.map(rec => {
-      // Add booking URLs and images based on source
-      if (rec.source === 'InsightLA') {
+      // Handle scraped retreats
+      if (rec.isScraped) {
+        rec.bookingUrl = rec.url || '#';
         rec.image = rec.image || this.getDefaultImageForCategory(rec.category);
-        rec.bookingUrl = rec.url || 'https://insightla.org';
       } else {
-        // For Sanghos retreats, generate appropriate URLs
-        rec.bookingUrl = rec.url || `/retreat/${rec.retreatId}`;
-        rec.image = rec.image || this.getDefaultImageForCategory(rec.category);
+        // Handle existing retreats
+        if (rec.source === 'InsightLA') {
+          rec.image = rec.image || this.getDefaultImageForCategory(rec.category);
+          rec.bookingUrl = rec.url || 'https://insightla.org';
+        } else {
+          rec.bookingUrl = rec.url || `/retreat/${rec.retreatId}`;
+          rec.image = rec.image || this.getDefaultImageForCategory(rec.category);
+        }
       }
       
       return rec;
